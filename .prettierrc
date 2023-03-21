@@ -1,0 +1,11 @@
+{
+    "useTabs": false,
+    "tabWidth": 4,
+    "singleQuote": true,
+    "trailingComma": "es5",
+    "printWidth": 100,
+    "htmlWhitespaceSensitivity": "ignore",
+    "importOrder": ["^@3d/(.*)$", "^@data/(.*)$", "^@components/(.*)$", "^[./]"],
+    "importOrderSeparation": true,
+    "importOrderSortSpecifiers": true
+}
