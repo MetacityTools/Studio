@@ -5,7 +5,7 @@
     "trailingComma": "es5",
     "printWidth": 100,
     "htmlWhitespaceSensitivity": "ignore",
-    "importOrder": ["^@3D/(.*)$", "^@redux/(.*)$", "^@app/(.*)$", "^[./]"],
+    "importOrder": ["^@3D/(.*)$", "^@redux/(.*)$", "^@components/(.*)$", "^@workers/(.*)$", "^[./]"],
     "importOrderSeparation": true,
     "importOrderSortSpecifiers": true
 }

@@ -19,7 +19,8 @@
     "paths": {
       "@3D/*": ["./3D/*"],
       "@redux/*": ["./Redux/*"],
-      "@app/*": ["./App/*"],
+      "@components/*": ["./Components/*"],
+      "@workers/*": ["./Workers/*"],
     }
   },
   "include": ["src"],

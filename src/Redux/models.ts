@@ -3,14 +3,14 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 export const modelSlice = createSlice({
     name: 'models',
     initialState: {
-        raw: [] as any[],
+        raw: [] as ArrayBuffer[],
     },
     reducers: {
-        addModel: (state, model: PayloadAction<any>) => {
+        addModel: (state, model: PayloadAction<ArrayBuffer>) => {
             state.raw.push(model.payload);
         },
 
-        addModels: (state, models: PayloadAction<any[]>) => {
+        addModels: (state, models: PayloadAction<ArrayBuffer[]>) => {
             state.raw.push(...models.payload);
         },
     },

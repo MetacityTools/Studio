@@ -7,8 +7,9 @@ export default defineConfig({
     resolve: {
         alias: {
             '@3D': path.resolve(__dirname, './src/3D'),
-            '@app': path.resolve(__dirname, './src/App'),
+            '@components': path.resolve(__dirname, './src/Components'),
             '@redux': path.resolve(__dirname, './src/Redux'),
+            '@workers': path.resolve(__dirname, './src/Workers'),
         },
     },
     plugins: [react()],
