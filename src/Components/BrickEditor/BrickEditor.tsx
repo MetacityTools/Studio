@@ -1,8 +1,8 @@
 import clsx from 'clsx';
 import React from 'react';
-import { BrickFace, BrickModel } from 'types';
+import { Brick, BrickFace, BrickModel, BrickRepr } from 'types';
 
-import { isValidFace, isValidModel, parseFace } from './parser';
+import { isValidFace, parseFace, serializeModel } from './parser';
 
 const initialCubeBrick: BrickModel = [
     [
@@ -78,14 +78,18 @@ interface ModelRendererProps {
     model?: BrickModel;
 }
 
-function SVGOutput(points: number[][][], grid = false) {
+function SVGOutput(points: number[][][], grid = false, xAxis = 'x', yAxis = 'y') {
     const flat = points.flat();
+    flat.forEach((point, index) => {
+        point[1] = -point[1];
+    });
     const minX = Math.min(...flat.map((point) => point[0]));
     const minY = Math.min(...flat.map((point) => point[1]));
     const maxX = Math.max(...flat.map((point) => point[0]));
     const maxY = Math.max(...flat.map((point) => point[1]));
 
     const gridLines = [];
+    const gridPointsCoordinates = [];
     if (grid) {
         for (let x = minX - 2; x <= maxX + 2; x++) {
             gridLines.push(
@@ -115,13 +119,33 @@ function SVGOutput(points: number[][][], grid = false) {
                 />
             );
         }
+
+        for (let x = minX - 2; x <= maxX + 2; x++) {
+            for (let y = minY - 2; y <= maxY + 2; y++) {
+                gridPointsCoordinates.push(
+                    <text
+                        key={`x${x}y${y}`}
+                        x={x + 0.05}
+                        y={y - 0.05}
+                        fill="white"
+                        fontSize="0.1"
+                        textAnchor="left"
+                        dominantBaseline="bottom"
+                    >
+                        {x}
+                        {xAxis}
+                        {-y}
+                        {yAxis}
+                    </text>
+                );
+            }
+        }
     }
 
     return (
         <svg
+            className="w-full"
             viewBox={`${minX - 1} ${minY - 1} ${maxX - minX + 2} ${maxY - minY + 2}`}
-            //transform to make y axis go upwards
-            transform="scale(1, -1)"
         >
             {points.map((face, index) => (
                 <polygon
@@ -133,6 +157,7 @@ function SVGOutput(points: number[][][], grid = false) {
                 />
             ))}
             {gridLines}
+            {gridPointsCoordinates}
         </svg>
     );
 }
@@ -141,7 +166,7 @@ function ModelTopView(props: ModelRendererProps) {
     const { model } = props;
     if (model) {
         const points = model.map((face) => face.map((point) => point.slice(0, 2))) ?? [];
-        return SVGOutput(points, true);
+        return SVGOutput(points, true, 'x', 'y');
     } else {
         return <div>no model</div>;
     }
@@ -151,7 +176,7 @@ function ModelSideViewXZ(props: ModelRendererProps) {
     const { model } = props;
     if (model) {
         const points = model.map((face) => face.map((point) => [point[0], point[2]])) ?? [];
-        return SVGOutput(points, true);
+        return SVGOutput(points, true, 'x', 'z');
     } else {
         return <div>no model</div>;
     }
@@ -160,8 +185,8 @@ function ModelSideViewXZ(props: ModelRendererProps) {
 function ModelSideViewYZ(props: ModelRendererProps) {
     const { model } = props;
     if (model) {
-        const points = model.map((face) => face.map((point) => [point[1], point[2]])) ?? [];
-        return SVGOutput(points, true);
+        const points = model.map((face) => face.map((point) => [-point[1], point[2]])) ?? [];
+        return SVGOutput(points, true, 'y', 'z');
     } else {
         return <div>no model</div>;
     }
@@ -188,30 +213,28 @@ function ModelAxonometryView(props: ModelRendererProps) {
 
 export function ModelRenderer(props: ModelRendererProps) {
     const { model } = props;
-
+    if (!model) return <div className="text-4xl text-neutral-500 m-auto">invalid model</div>;
+    const validModel = model.filter((face) => isValidFace(face));
     return (
-        <div className="w-full flex flex-row space-x-2">
-            {isValidModel(model) ? (
-                <>
-                    <ModelAxonometryView model={model} />
-                    <ModelTopView model={model} />
-                    <ModelSideViewYZ model={model} />
-                    <ModelSideViewXZ model={model} />
-                </>
-            ) : (
-                <div className="text-4xl text-neutral-500 m-auto">invalid model</div>
-            )}
+        <div className="relative p-4">
+            <div className="w-full flex flex-row space-x-2">
+                <ModelAxonometryView model={validModel} />
+                <ModelTopView model={validModel} />
+                <ModelSideViewYZ model={validModel} />
+                <ModelSideViewXZ model={validModel} />
+            </div>
         </div>
     );
 }
 
 interface FaceEditorProps {
+    repr: string;
     face: BrickFace;
-    updateFace: (face: BrickFace) => void;
+    updateFace: (repr: string, face: BrickFace) => void;
 }
 
 function FaceEditor(props: FaceEditorProps) {
-    const { face, updateFace } = props;
+    const { repr, face, updateFace } = props;
     return (
         <input
             className={clsx(
@@ -219,92 +242,109 @@ function FaceEditor(props: FaceEditorProps) {
                 isValidFace(face) ? 'bg-neutral-700' : 'bg-red-500/25'
             )}
             onChange={(event) => {
-                const newFace = event.target.value;
-                const face = parseFace(newFace, '/');
-                updateFace(face);
+                const repr = event.target.value;
+                const face = parseFace(repr, '/');
+                updateFace(repr, face);
             }}
-            defaultValue={face.map((point) => point.join(' ')).join(' / ')}
+            value={repr}
         />
     );
 }
 
-interface ModelEditorProps {
-    model?: BrickModel;
-    setModel: (model: BrickModel) => void;
+interface BrickEditorProps {
+    brick: Brick;
+    setBrick: (model: Brick) => void;
 }
 
-export function ModelEditor(props: ModelEditorProps) {
-    const { model, setModel } = props;
-    const modelCopy = model ? [...model.filter((face) => face.length > 0), []] : [];
+export function BrickEditor(props: BrickEditorProps) {
+    const { brick, setBrick } = props;
+    const model = brick.model;
+    const repr = brick.repr;
+    const copy = model ? [...model.filter((face) => face.length > 0), []] : [];
 
-    const updateFace = (face: BrickFace, index: number) => {
-        if (!model) {
-            return;
-        }
-        modelCopy[index] = face;
-        const copy = modelCopy.slice();
+    const updateFace = (repr: string, face: BrickFace, index: number) => {
+        brick.model[index] = face;
+        brick.repr[index] = repr;
         //remove empty faces at the end
-        while (copy.length > 0 && copy[copy.length - 1].length === 0) copy.pop();
-        setModel(copy);
+        while (brick.model.length > 0 && brick.model[brick.model.length - 1].length === 0) {
+            brick.model.pop();
+            brick.repr.pop();
+        }
+        setBrick(brick);
     };
 
     return (
         <div className="p-4">
-            {modelCopy.map((face, index) => (
+            {copy.map((face, index) => (
                 <FaceEditor
                     key={index}
                     face={face}
-                    updateFace={(face: BrickFace) => updateFace(face, index)}
+                    repr={repr[index]}
+                    updateFace={(repr: string, face: BrickFace) => updateFace(repr, face, index)}
                 />
             ))}
         </div>
     );
 }
 
-interface ModelRowProps {
-    model: BrickModel;
-    updateModel: (model: BrickModel) => void;
+interface BrickRowProps {
+    brick: Brick;
+    index: number;
+    updateBrick: (brick: Brick) => void;
+    removeBrick: () => void;
 }
 
-export function ModelRow(props: ModelRowProps) {
-    const [model, setModel] = React.useState<BrickModel>(
-        props.model.length > 0 ? props.model : initialCubeBrick
-    );
-
-    React.useEffect(() => {
-        if (model) props.updateModel(model);
-    }, [model]);
-
+export function BrickRow(props: BrickRowProps) {
+    const { brick, index, removeBrick, updateBrick } = props;
     return (
-        <div className="flex flex-row">
-            <ModelEditor model={model} setModel={setModel} />
-            <ModelRenderer model={model} />
+        <div className="mb-[5rem]">
+            <div className="p-4 flex flex-row space-between items-center justify-between">
+                <h2 className="text-4xl">Model #{index}</h2>
+                <button
+                    onClick={() => removeBrick()}
+                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                >
+                    remove model
+                </button>
+            </div>
+            <div className="flex flex-row">
+                <BrickEditor brick={brick} setBrick={updateBrick} />
+                <ModelRenderer model={brick.model} />
+            </div>
         </div>
     );
 }
 
-export function BrickEditor() {
-    const [models, setModels] = React.useState<BrickModel[]>([]);
+export function BrickSetEditor() {
+    const [bricks, setBricks] = React.useState<Brick[]>([]);
 
-    const updateModel = (model: BrickModel, index: number) => {
-        const copy = models.slice();
-        copy[index] = model;
-        setModels(copy);
+    const updateBrick = (brick: Brick, index: number) => {
+        const copy = bricks.slice();
+        copy[index] = {
+            model: brick.model,
+            repr: brick.repr,
+        };
+        setBricks(copy);
     };
 
-    const addModel = () => {
-        setModels([...models, []]);
+    const addBrick = () => {
+        setBricks([
+            ...bricks,
+            {
+                model: initialCubeBrick.slice(),
+                repr: serializeModel(initialCubeBrick),
+            },
+        ]);
     };
 
-    const removeModel = (index: number) => {
-        const copy = models.slice();
+    const removeBrick = (index: number) => {
+        const copy = bricks.slice();
         copy.splice(index, 1);
-        setModels(copy);
+        setBricks(copy);
     };
 
     const exportModels = () => {
-        //export models to json
-        const json = JSON.stringify(models);
+        const json = JSON.stringify(bricks);
         const blob = new Blob([json], { type: 'application/json' });
         const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
@@ -324,7 +364,13 @@ export function BrickEditor() {
                 const json = event.target?.result;
                 if (json) {
                     const models = JSON.parse(json as string);
-                    setModels(models);
+                    setBricks([
+                        ...bricks,
+                        ...models.map((model: Brick) => ({
+                            model: model.model,
+                            repr: model.repr,
+                        })),
+                    ]);
                 }
             };
             reader.readAsText(file);
@@ -332,23 +378,33 @@ export function BrickEditor() {
     };
 
     return (
-        <div>
+        <div className="max-w-[100rem] mx-auto">
             <form onSubmit={importModels}>
                 <label htmlFor="model">Model</label>
                 <input type="file" id="model" name="model" multiple={true} />
                 <input type="submit" value="Submit" />
             </form>
-            {models.map((model, index) => (
-                <div key={index}>
-                    <div className="p-4">
-                        <button onClick={() => removeModel(index)}>remove model</button>
-                    </div>
-
-                    <ModelRow model={model} updateModel={(model) => updateModel(model, index)} />
-                </div>
+            <button
+                onClick={exportModels}
+                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            >
+                export models
+            </button>
+            {bricks.map((brick, index) => (
+                <BrickRow
+                    key={index}
+                    index={index}
+                    brick={brick}
+                    removeBrick={() => removeBrick(index)}
+                    updateBrick={(brick) => updateBrick(brick, index)}
+                />
             ))}
-            <button onClick={addModel}>add model</button>
-            <button onClick={exportModels}>export models</button>
+            <button
+                onClick={addBrick}
+                className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+            >
+                add model
+            </button>
         </div>
     );
 }
