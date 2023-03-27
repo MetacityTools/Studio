@@ -2,10 +2,10 @@ import React from 'react';
 import { setTimeout } from 'timers/promises';
 
 import { Renderer, Scene } from '@3D/3D';
+import { Canvas } from '@3D/components/Canvas';
+import { View } from '@3D/components/View';
 
 import { Container } from '@components/Elements/Container';
-import { Canvas } from '@components/Renderer/Canvas';
-import { View } from '@components/Renderer/View';
 
 import { ModelInput } from './Input';
 
@@ -22,8 +22,8 @@ export function ModelParser() {
     return (
         <Container>
             <ModelInput onModelParsed={handleModelParsed} />
-            <Canvas renderer={renderer} debugLayout>
-                <View scene={scene} left={0} top={0} width={100} height={100} />
+            <Canvas renderer={renderer} debugLayout className="w-full h-screen">
+                <View scene={scene} left={0} bottom={50} width={50} height={100} />
             </Canvas>
         </Container>
     );

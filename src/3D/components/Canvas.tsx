@@ -3,13 +3,13 @@ import React from 'react';
 import { Renderer } from '@3D/3D';
 import { View as ViewClass } from '@3D/renderer/view';
 
-import { View, ViewProps } from './View';
+import { View as ViewComponent, ViewProps } from './View';
 
 interface CanvasProps {
     renderer: Renderer;
     children?:
-        | React.ReactElement<ViewProps, typeof View>
-        | React.ReactElement<ViewProps, typeof View>[];
+        | React.ReactElement<ViewProps, typeof ViewComponent>
+        | React.ReactElement<ViewProps, typeof ViewComponent>[];
     className?: string;
     options?: WebGLContextAttributes;
     debugLayout?: boolean;
@@ -25,7 +25,7 @@ export function Canvas(props: CanvasProps) {
             renderer.init(canvasRef.current, options);
             const viewArray = React.Children.toArray(children) as React.ReactElement<
                 ViewProps,
-                typeof View
+                typeof ViewComponent
             >[];
             for (const view of viewArray) {
                 const viewObject = new ViewClass(view.props.scene);
@@ -53,8 +53,9 @@ export function Canvas(props: CanvasProps) {
     }, [canvasRef, renderer]);
 
     return (
-        <div className={props.className}>
-            <canvas ref={canvasRef} className="w-full h-full" />
-        </div>
+        <>
+            <canvas ref={canvasRef} className={props.className} />
+            {props.children}
+        </>
     );
 }

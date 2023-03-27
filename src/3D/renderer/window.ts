@@ -21,7 +21,6 @@ export class Window {
         size: ViewSize;
         position: ViewPosition;
     }[] = [];
-    private canvasSize: { width: number; height: number } = { width: 0, height: 0 };
 
     constructor(private canvas: HTMLCanvasElement) {
         const observer = new ResizeObserver((entries) => {
@@ -39,16 +38,16 @@ export class Window {
     }
 
     resize(width: number, height: number) {
-        const dpr = window.devicePixelRatio;
-        this.canvas.width = width * dpr;
-        this.canvas.height = height * dpr;
+        console.log('resize', width, height);
+        //const dpr = window.devicePixelRatio;
+        this.canvas.width = width;
+        this.canvas.height = height;
         this.views.forEach(({ view, size, position }) => {
             const { x, y, w, h } = this.compute(
                 size,
                 position,
                 this.canvas.width,
-                this.canvas.height,
-                dpr
+                this.canvas.height
             );
             view.resize(x, y, w, h);
         });
@@ -58,13 +57,7 @@ export class Window {
         this.views.push({ view, size, position });
     }
 
-    private compute(
-        size: ViewSize,
-        position: ViewPosition,
-        width: number,
-        height: number,
-        dpr: number
-    ) {
+    private compute(size: ViewSize, position: ViewPosition, width: number, height: number) {
         const { mode: sizeMode } = size;
         const { mode: positionMode } = position;
 
@@ -75,10 +68,10 @@ export class Window {
         let y = 0;
 
         if (positionMode === 'absolute') {
-            if (position.left !== undefined) x = position.left * dpr;
-            if (position.right !== undefined) x = width - position.right * dpr - w;
-            if (position.bottom !== undefined) y = position.bottom * dpr;
-            if (position.top !== undefined) y = height - position.top * dpr - h;
+            if (position.left !== undefined) x = position.left;
+            if (position.right !== undefined) x = width - position.right - w;
+            if (position.bottom !== undefined) y = position.bottom;
+            if (position.top !== undefined) y = height - position.top - h;
         } else {
             //percent
             if (position.left !== undefined) x = position.left * 0.01 * width;
