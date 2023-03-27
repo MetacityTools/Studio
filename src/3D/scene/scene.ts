@@ -1,4 +1,4 @@
-import { Renderable } from '@bananagl/models/renderable';
+import { Renderable } from '@3D/models/renderable';
 
 export class Scene {
     objects: Renderable[] = [];

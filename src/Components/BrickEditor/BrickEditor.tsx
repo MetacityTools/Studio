@@ -1,6 +1,8 @@
 import clsx from 'clsx';
-import React from 'react';
-import { Brick, BrickFace, BrickModel, BrickRepr } from 'types';
+import React, { ReactElement } from 'react';
+import { Brick, BrickFace, BrickModel } from 'types';
+
+import { Container } from '@components/Elements/Container';
 
 import { isValidFace, parseFace, serializeModel } from './parser';
 
@@ -144,8 +146,8 @@ function SVGOutput(points: number[][][], grid = false, xAxis = 'x', yAxis = 'y')
 
     return (
         <svg
-            className="w-full"
-            viewBox={`${minX - 1} ${minY - 1} ${maxX - minX + 2} ${maxY - minY + 2}`}
+            className="w-full bg-neutral-700 rounded-sm"
+            viewBox={`${minX - 0.5} ${minY - 0.5} ${maxX - minX + 1} ${maxY - minY + 1}`}
         >
             {points.map((face, index) => (
                 <polygon
@@ -185,7 +187,7 @@ function ModelSideViewXZ(props: ModelRendererProps) {
 function ModelSideViewYZ(props: ModelRendererProps) {
     const { model } = props;
     if (model) {
-        const points = model.map((face) => face.map((point) => [-point[1], point[2]])) ?? [];
+        const points = model.map((face) => face.map((point) => [point[1], point[2]])) ?? [];
         return SVGOutput(points, true, 'y', 'z');
     } else {
         return <div>no model</div>;
@@ -216,10 +218,12 @@ export function ModelRenderer(props: ModelRendererProps) {
     if (!model) return <div className="text-4xl text-neutral-500 m-auto">invalid model</div>;
     const validModel = model.filter((face) => isValidFace(face));
     return (
-        <div className="relative p-4">
-            <div className="w-full flex flex-row space-x-2">
+        <div className="relative ml-2">
+            <div className="w-full flex flex-row space-x-2 mb-2">
                 <ModelAxonometryView model={validModel} />
                 <ModelTopView model={validModel} />
+            </div>
+            <div className="w-full flex flex-row space-x-2">
                 <ModelSideViewYZ model={validModel} />
                 <ModelSideViewXZ model={validModel} />
             </div>
@@ -235,10 +239,13 @@ interface FaceEditorProps {
 
 function FaceEditor(props: FaceEditorProps) {
     const { repr, face, updateFace } = props;
+
+    //TODO add timeout so it doesnt redrew all the time
+
     return (
         <input
             className={clsx(
-                'block w-[40rem] mb-2 py-2 px-4 font-mono text-xl',
+                'block w-[40rem] mb-2 py-2 px-4 font-mono text-xl rounded-sm',
                 isValidFace(face) ? 'bg-neutral-700' : 'bg-red-500/25'
             )}
             onChange={(event) => {
@@ -274,7 +281,7 @@ export function BrickEditor(props: BrickEditorProps) {
     };
 
     return (
-        <div className="p-4">
+        <div>
             {copy.map((face, index) => (
                 <FaceEditor
                     key={index}
@@ -291,21 +298,28 @@ interface BrickRowProps {
     brick: Brick;
     index: number;
     updateBrick: (brick: Brick) => void;
+    cloneBrick: () => void;
     removeBrick: () => void;
 }
 
 export function BrickRow(props: BrickRowProps) {
-    const { brick, index, removeBrick, updateBrick } = props;
+    const { brick, index, removeBrick, updateBrick, cloneBrick } = props;
+
+    const clearBrick = () => {
+        brick.model = [];
+        brick.repr = [];
+        updateBrick(brick);
+    };
+
     return (
         <div className="mb-[5rem]">
-            <div className="p-4 flex flex-row space-between items-center justify-between">
+            <div className="mb-4 flex flex-row space-between items-center justify-between">
                 <h2 className="text-4xl">Model #{index}</h2>
-                <button
-                    onClick={() => removeBrick()}
-                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-                >
-                    remove model
-                </button>
+                <div className="flex flex-row space-x-4">
+                    <button onClick={() => removeBrick()}>remove model</button>
+                    <button onClick={() => clearBrick()}>clear model</button>
+                    <button onClick={() => cloneBrick()}>clone model</button>
+                </div>
             </div>
             <div className="flex flex-row">
                 <BrickEditor brick={brick} setBrick={updateBrick} />
@@ -329,17 +343,29 @@ export function BrickSetEditor() {
 
     const addBrick = () => {
         setBricks([
-            ...bricks,
             {
                 model: initialCubeBrick.slice(),
                 repr: serializeModel(initialCubeBrick),
             },
+            ...bricks,
         ]);
     };
 
     const removeBrick = (index: number) => {
         const copy = bricks.slice();
         copy.splice(index, 1);
+        setBricks(copy);
+    };
+
+    const cloneBrick = (index: number) => {
+        const brick = bricks[index];
+        const repr = brick.repr.slice();
+        const model = repr.map((repr) => parseFace(repr, '/'));
+        const copy = bricks.slice();
+        copy.splice(index, 0, {
+            model,
+            repr,
+        });
         setBricks(copy);
     };
 
@@ -354,42 +380,57 @@ export function BrickSetEditor() {
         link.remove();
     };
 
-    const importModels = (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        const input = event.currentTarget.elements.namedItem('model') as HTMLInputElement;
-        if (input.files) {
-            const file = input.files[0];
+    const importModels = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const files = event.target.files;
+        if (files) {
+            const file = files[0];
             const reader = new FileReader();
             reader.onload = (event) => {
                 const json = event.target?.result;
                 if (json) {
                     const models = JSON.parse(json as string);
-                    setBricks([
-                        ...bricks,
-                        ...models.map((model: Brick) => ({
-                            model: model.model,
-                            repr: model.repr,
-                        })),
-                    ]);
+                    setBricks([...bricks, ...models]);
                 }
             };
             reader.readAsText(file);
         }
     };
 
+    const importStandardModels = async () => {
+        try {
+            const respons = await fetch('/models.json');
+            const models = await respons.json();
+            setBricks([...bricks, ...models]);
+        } catch (error) {
+            console.error("Couldn't load standard models.");
+            console.error(error);
+        }
+    };
+
     return (
-        <div className="max-w-[100rem] mx-auto">
-            <form onSubmit={importModels}>
-                <label htmlFor="model">Model</label>
-                <input type="file" id="model" name="model" multiple={true} />
-                <input type="submit" value="Submit" />
-            </form>
-            <button
-                onClick={exportModels}
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            >
-                export models
-            </button>
+        <Container>
+            <div className="flex felx-row my-4">
+                <input
+                    type="file"
+                    id="model"
+                    name="model"
+                    className="hidden"
+                    multiple={true}
+                    onChange={importModels}
+                />
+                <label htmlFor="model" className="pr-4 cursor-pointer">
+                    import local models
+                </label>
+                <button onClick={importStandardModels} className="pr-4">
+                    import standard models
+                </button>
+                <button onClick={exportModels} className="pr-4">
+                    export models
+                </button>
+                <button onClick={addBrick} className="pr-4">
+                    add model
+                </button>
+            </div>
             {bricks.map((brick, index) => (
                 <BrickRow
                     key={index}
@@ -397,14 +438,9 @@ export function BrickSetEditor() {
                     brick={brick}
                     removeBrick={() => removeBrick(index)}
                     updateBrick={(brick) => updateBrick(brick, index)}
+                    cloneBrick={() => cloneBrick(index)}
                 />
             ))}
-            <button
-                onClick={addBrick}
-                className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-            >
-                add model
-            </button>
-        </div>
+        </Container>
     );
 }

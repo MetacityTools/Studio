@@ -5,7 +5,6 @@ export function parseFace(face: string, separator: string): BrickFace {
         const s = vertex.trim().split(/\s+/);
 
         const triplet = s.map((number) => parseInt(number));
-        console.log(s, triplet);
 
         if (triplet.length !== 3 || triplet.some((number) => isNaN(number))) {
             console.error(`Invalid vertex: ${vertex}`);

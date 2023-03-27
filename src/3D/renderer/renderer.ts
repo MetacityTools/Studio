@@ -9,12 +9,12 @@ export class Renderer {
     }
 
     init(canvas: HTMLCanvasElement, options?: WebGLContextAttributes) {
-        if (!this.context || !this.window_) return;
+        if (this.context || this.window_) return;
         console.log('Renderer initialized');
 
         //init with highest performance settings
-        const context = canvas.getContext('webgl2', {
-            antialias: options?.antialias ?? false,
+        const gl = canvas.getContext('webgl2', {
+            antialias: options?.antialias ?? true,
             alpha: options?.alpha ?? false,
             depth: options?.depth ?? true,
             stencil: options?.stencil ?? false,
@@ -24,9 +24,12 @@ export class Renderer {
             failIfMajorPerformanceCaveat: options?.failIfMajorPerformanceCaveat ?? false,
         });
 
-        if (!context) throw new Error('WebGL2 not supported');
-        this.context = context;
+        if (!gl) throw new Error('WebGL2 not supported');
+        this.context = gl;
         this.window_ = new Window(canvas);
+
+        gl.enable(gl.SCISSOR_TEST);
+        gl.enable(gl.DEPTH_TEST);
     }
 
     get gl() {
@@ -41,5 +44,9 @@ export class Renderer {
 
     render() {
         this.views.render(this);
+    }
+
+    renderLayout() {
+        this.views.renderLayout(this);
     }
 }

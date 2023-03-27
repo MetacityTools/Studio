@@ -1,4 +1,4 @@
-import { Shader } from '@bananagl/shaders/shader';
+import { Shader } from '@3D/shaders/shader';
 
 type BufferData =
     | Float32Array

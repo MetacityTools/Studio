@@ -1,4 +1,7 @@
-import { Scene } from '@bananagl/scene/scene';
+import { Vec3 } from 'types';
+
+import { Scene } from '@3D/scene/scene';
+
 import { viewRenderPass } from './pass';
 import { Renderer } from './renderer';
 
@@ -7,7 +10,11 @@ export class View {
     private y: number = 0;
     private width: number = 0;
     private height: number = 0;
-    constructor(readonly scene: Scene) {}
+    private randomColor: Vec3;
+
+    constructor(readonly scene: Scene) {
+        this.randomColor = [Math.random(), Math.random(), Math.random()];
+    }
 
     resize(x: number, y: number, width: number, height: number) {
         this.x = x;
@@ -21,5 +28,13 @@ export class View {
         gl.viewport(this.x, this.y, this.width, this.height);
         gl.scissor(this.x, this.y, this.width, this.height);
         viewRenderPass(this.scene, renderer);
+    }
+
+    renderLayout(renderer: Renderer) {
+        const gl = renderer.gl;
+        gl.clearColor(this.randomColor[0], this.randomColor[1], this.randomColor[2], 1);
+        gl.viewport(this.x, this.y, this.width, this.height);
+        gl.scissor(this.x, this.y, this.width, this.height);
+        gl.clear(gl.COLOR_BUFFER_BIT);
     }
 }

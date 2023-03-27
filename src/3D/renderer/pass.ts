@@ -1,6 +1,7 @@
-import { Renderable } from '@bananagl/models/renderable';
-import { Scene } from '@bananagl/scene/scene';
-import { Shader } from '@bananagl/shaders/shader';
+import { Renderable } from '@3D/models/renderable';
+import { Scene } from '@3D/scene/scene';
+import { Shader } from '@3D/shaders/shader';
+
 import { Renderer } from './renderer';
 
 export function viewRenderPass(scene: Scene, renderer: Renderer) {

@@ -13,3 +13,11 @@ export interface Brick {
     model: BrickModel;
     repr: BrickRepr;
 }
+export type TypedArray =
+    | Float32Array
+    | Uint32Array
+    | Uint16Array
+    | Uint8Array
+    | Int32Array
+    | Int16Array
+    | Int8Array;
