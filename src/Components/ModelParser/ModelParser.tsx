@@ -22,8 +22,8 @@ export function ModelParser() {
     return (
         <Container>
             <ModelInput onModelParsed={handleModelParsed} />
-            <Canvas renderer={renderer} debugLayout className="w-full h-screen">
-                <View scene={scene} left={0} bottom={50} width={50} height={100} />
+            <Canvas renderer={renderer} debugLayout className="w-full h-[500px]">
+                <View scene={scene} left={0} top={0} width={50} height={100} />
             </Canvas>
         </Container>
     );
