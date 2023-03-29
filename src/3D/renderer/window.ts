@@ -16,7 +16,7 @@ interface ViewPosition {
 }
 
 export class Window {
-    private views: {
+    private views_: {
         view: View;
         size: ViewSize;
         position: ViewPosition;
@@ -33,6 +33,10 @@ export class Window {
         this.forceResize();
     }
 
+    get views() {
+        return this.views_;
+    }
+
     forceResize() {
         this.resize(this.canvas.clientWidth, this.canvas.clientHeight);
     }
@@ -42,7 +46,7 @@ export class Window {
         //const dpr = window.devicePixelRatio;
         this.canvas.width = width;
         this.canvas.height = height;
-        this.views.forEach(({ view, size, position }) => {
+        this.views_.forEach(({ view, size, position }) => {
             const { x, y, w, h } = this.compute(
                 size,
                 position,
@@ -54,7 +58,7 @@ export class Window {
     }
 
     add(view: View, size: ViewSize, position: ViewPosition) {
-        this.views.push({ view, size, position });
+        this.views_.push({ view, size, position });
     }
 
     private compute(size: ViewSize, position: ViewPosition, width: number, height: number) {
@@ -83,10 +87,10 @@ export class Window {
     }
 
     render(renderer: Renderer) {
-        this.views.forEach(({ view }) => view.render(renderer));
+        this.views_.forEach(({ view }) => view.render(renderer));
     }
 
     renderLayout(renderer: Renderer) {
-        this.views.forEach(({ view }) => view.renderLayout(renderer));
+        this.views_.forEach(({ view }) => view.renderLayout(renderer));
     }
 }

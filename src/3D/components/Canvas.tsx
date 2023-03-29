@@ -41,15 +41,24 @@ export function Canvas(props: CanvasProps) {
                     bottom: view.props.bottom,
                     mode: view.props.positionMode ?? 'relative',
                 };
-                renderer.views.add(viewObject, viewSize, viewPosition);
+                renderer.window.add(viewObject, viewSize, viewPosition);
             }
 
-            renderer.views.forceResize();
+            renderer.window.forceResize();
 
             if (props.debugLayout) {
                 renderer.renderLayout();
+            } else {
+                renderer.animationLoop();
             }
         }
+
+        return () => {
+            console.log('Canvas unmounted');
+            if (renderer) {
+                renderer.destroy();
+            }
+        };
     }, [canvasRef, renderer]);
 
     return (

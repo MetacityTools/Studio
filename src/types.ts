@@ -21,3 +21,10 @@ export type TypedArray =
     | Int32Array
     | Int16Array
     | Int8Array;
+
+export type IFCLoaderData = {
+    name: string;
+    data: {
+        [key: string]: TypedArray;
+    };
+};

@@ -39,14 +39,29 @@ export class Renderer {
 
     get views() {
         if (!this.window_) throw new Error('Renderer not initialized');
+        return this.window_.views;
+    }
+
+    get window() {
+        if (!this.window_) throw new Error('Renderer not initialized');
         return this.window_;
     }
 
     render() {
-        this.views.render(this);
+        this.window.render(this);
     }
 
     renderLayout() {
-        this.views.renderLayout(this);
+        this.window.renderLayout(this);
+    }
+
+    destroy() {
+        this.context = undefined;
+        this.window_ = undefined;
+    }
+
+    animationLoop() {
+        this.render();
+        requestAnimationFrame(() => this.animationLoop());
     }
 }

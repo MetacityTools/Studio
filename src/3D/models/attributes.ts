@@ -9,7 +9,7 @@ type BufferData =
     | Int32Array
     | Int8Array;
 
-class Buffer {
+export class Buffer {
     buffer: WebGLBuffer | null = null;
     constructor(public data: BufferData) {}
 
@@ -25,57 +25,78 @@ class Buffer {
         if (!this.buffer) this.setup(gl);
         else gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
     }
+
+    getDataType(gl: WebGL2RenderingContext) {
+        if (this.data instanceof Float32Array) return gl.FLOAT;
+        else if (this.data instanceof Uint16Array) return gl.UNSIGNED_SHORT;
+        else if (this.data instanceof Uint32Array) return gl.UNSIGNED_INT;
+        else if (this.data instanceof Uint8Array) return gl.UNSIGNED_BYTE;
+        else if (this.data instanceof Int16Array) return gl.SHORT;
+        else if (this.data instanceof Int32Array) return gl.INT;
+        else if (this.data instanceof Int8Array) return gl.BYTE;
+        else throw new Error('Unknown data type');
+    }
+
+    get BYTES_PER_ELEMENT() {
+        return this.data.BYTES_PER_ELEMENT;
+    }
+
+    get bytesAllocated() {
+        return this.data.length * this.data.BYTES_PER_ELEMENT;
+    }
 }
 
-class Attribute {
+export class Attribute {
     protected active = false;
+    public type?: number;
 
     constructor(
         public name: string,
         public buffer: Buffer,
         public size: number,
-        public type: number,
-        public normalized: boolean,
-        public stride: number,
-        public offset: number
+        public normalized: boolean = false,
+        public stride: number = 0,
+        public offset: number = 0
     ) {}
 
     protected setup(gl: WebGL2RenderingContext, location: number) {
         this.buffer.bind(gl);
+        this.type = this.buffer.getDataType(gl);
+        gl.enableVertexAttribArray(location);
         gl.vertexAttribPointer(
             location,
             this.size,
             this.type,
             this.normalized,
-            this.stride,
-            this.offset
+            this.stride * this.buffer.BYTES_PER_ELEMENT,
+            this.offset * this.buffer.BYTES_PER_ELEMENT
         );
+        this.active = true;
     }
 
     get count() {
-        return 0; //TODO
+        return this.buffer.data.length / this.size;
     }
 
     bind(gl: WebGL2RenderingContext, location: number) {
-        if (!this.active) this.setup(gl, location), (this.active = true);
-        this.buffer.bind(gl);
+        if (!this.active) this.setup(gl, location);
+        else this.buffer.bind(gl);
     }
 }
 
-class InstancedAttribute extends Attribute {
+export class InstancedAttribute extends Attribute {
     private divisor: number;
 
     constructor(
         name: string,
         buffer: Buffer,
         size: number,
-        type: number,
         normalized: boolean,
         stride: number,
         offset: number,
         divisor: number
     ) {
-        super(name, buffer, size, type, normalized, stride, offset);
+        super(name, buffer, size, normalized, stride, offset);
         this.divisor = divisor;
     }
 
@@ -85,7 +106,7 @@ class InstancedAttribute extends Attribute {
     }
 
     bind(gl: WebGL2RenderingContext, location: number) {
-        if (!this.active) this.setup(gl, location), (this.active = true);
+        if (!this.active) this.setup(gl, location);
         super.bind(gl, location);
     }
 }
@@ -117,6 +138,10 @@ export class Attributes {
 
     get count() {
         return this.attributes[0].count;
+    }
+
+    get buffers() {
+        return this.attributes.map((a) => a.buffer);
     }
 
     bind(gl: WebGL2RenderingContext, shader: Shader) {

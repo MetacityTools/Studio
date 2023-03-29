@@ -1,5 +1,6 @@
 import { Vec3 } from 'types';
 
+import { Camera } from '@3D/scene/camera';
 import { Scene } from '@3D/scene/scene';
 
 import { viewRenderPass } from './pass';
@@ -11,6 +12,7 @@ export class View {
     private width: number = 0;
     private height: number = 0;
     private randomColor: Vec3;
+    readonly camera: Camera = new Camera();
 
     constructor(readonly scene: Scene) {
         this.randomColor = [Math.random(), Math.random(), Math.random()];
@@ -25,9 +27,10 @@ export class View {
 
     render(renderer: Renderer) {
         const gl = renderer.gl;
+        gl.clearColor(this.randomColor[0], this.randomColor[1], this.randomColor[2], 1);
         gl.viewport(this.x, this.y, this.width, this.height);
         gl.scissor(this.x, this.y, this.width, this.height);
-        viewRenderPass(this.scene, renderer);
+        viewRenderPass(this.scene, renderer, this.camera);
     }
 
     renderLayout(renderer: Renderer) {

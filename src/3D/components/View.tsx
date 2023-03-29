@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { Camera } from '@3D/scene/camera';
 import { Scene } from '@3D/scene/scene';
 
 export interface ViewProps {

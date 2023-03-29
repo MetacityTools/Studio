@@ -20,6 +20,9 @@ export type UniformValue =
     | null;
 
 function iterEqual(a: any, b: any) {
+    if (a === b) return true;
+    if (a === null || b === null) return false;
+    if (!('length' in a) || !('length' in b)) false; //both of them are arrays => if not, end
     if (!a.length || !b.length) return false;
     if (a.length !== b.length) return false;
     for (let i = 0; i < a.length; i++) {
@@ -27,6 +30,8 @@ function iterEqual(a: any, b: any) {
     }
     return true;
 }
+
+const ROW_MAJOR = false;
 
 export class Shader {
     private gl_?: WebGL2RenderingContext;
@@ -121,16 +126,16 @@ export class Shader {
 
     set uniforms(values: { [name: string]: UniformValue }) {
         const gl = this.gl;
-        const program = this.program;
 
         for (const name in values) {
             const uniform = this.uniforms_[name];
-            if (!uniform) throw new Error(`No uniform with name ${name}`);
+            if (!uniform) continue;
 
             const value = values[name];
             if (value === uniform.value || iterEqual(value, uniform.value)) continue;
 
             const loc = uniform.loc;
+            console.log(`    Setting uniforms.${name}`);
             this.setValue(value, gl, loc);
             uniform.value = value;
         }
@@ -150,6 +155,10 @@ export class Shader {
                 gl.uniform3fv(loc, value);
             } else if (value.length === 4) {
                 gl.uniform4fv(loc, value);
+            } else if (value.length === 9) {
+                gl.uniformMatrix3fv(loc, ROW_MAJOR, value);
+            } else if (value.length === 16) {
+                gl.uniformMatrix4fv(loc, ROW_MAJOR, value);
             } else {
                 throw new Error(`Invalid uniform array length ${value.length}`);
             }
@@ -189,6 +198,10 @@ export class Shader {
                     gl.uniform3fv(loc, value as number[]);
                 } else if (value.length === 4) {
                     gl.uniform4fv(loc, value as number[]);
+                } else if (value.length === 9) {
+                    gl.uniformMatrix3fv(loc, ROW_MAJOR, value as number[]);
+                } else if (value.length === 16) {
+                    gl.uniformMatrix4fv(loc, ROW_MAJOR, value as number[]);
                 } else {
                     throw new Error(`Invalid uniform array length ${value.length}`);
                 }
