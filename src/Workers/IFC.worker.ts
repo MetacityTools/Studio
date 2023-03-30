@@ -16,6 +16,7 @@ class IFCLoader {
         const bufferui8 = new Uint8Array(buffer);
         console.log(`Loading IFC model ${name} with size ${bufferui8.length}`);
         this.modelID = await this.api.OpenModel(bufferui8);
+
         this.api.StreamAllMeshes(this.modelID, (mesh: FlatMesh) => {
             this.streamMesh(this.modelID, mesh);
         });

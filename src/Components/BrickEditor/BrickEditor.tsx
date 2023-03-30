@@ -240,7 +240,7 @@ interface FaceEditorProps {
 function FaceEditor(props: FaceEditorProps) {
     const { repr, face, updateFace } = props;
 
-    //TODO add timeout so it doesnt redrew all the time
+    //TODO add timeout so it doesn't redraw all the time
 
     return (
         <input
