@@ -1,7 +1,7 @@
+import { BufferAttribute, Mesh, MeshLambertMaterial } from 'three';
 import { UserInputModel } from 'types';
-
-import { IFCManager } from './IFC/components/IFCManager';
-import { IFCModel, IFCModelData } from './IFC/components/IFCModel';
+//this is probs much safer than using our custom implementation...
+import { IFCLoader } from 'web-ifc-three';
 
 self.onmessage = (e) => {
     parseIFC(e.data);
@@ -9,10 +9,17 @@ self.onmessage = (e) => {
 
 export function parseIFC(models: UserInputModel[]) {
     console.log(`Loading ${models.length} models`);
+
     models.forEach(async (model) => {
         if (model.name.endsWith('.ifc')) {
             console.log(`Loading IFC model ${model.name}`);
             const models = await loadIFC(model.buffer);
+
+            if (!models) {
+                console.error(`Failed to load model ${model.name}`);
+                return;
+            }
+
             const transferable = getTransferable(models);
             (self as any).postMessage(
                 {
@@ -28,19 +35,61 @@ export function parseIFC(models: UserInputModel[]) {
 const wasmPath = '/';
 
 async function loadIFC(buffer: ArrayBuffer) {
-    const manager = new IFCManager();
-    await manager.setWasmPath(wasmPath, true);
-    const model = await manager.parse(buffer);
-    const models = flattenModelTree(model);
-    return models;
+    const loader = new IFCLoader();
+    console.log('Loading IFC model');
+    //on our own risk
+    await loader.ifcManager.setWasmPath(wasmPath);
+    (loader.ifcManager.state.api as any).isWasmPathAbsolute = true;
+    console.log(loader.ifcManager.state.api);
+    loader.ifcManager.useWebWorkers(false);
+
+    //do the loading
+    try {
+        const model = await loader.parse(buffer);
+        const models = flattenModelTree(model);
+        return models;
+    } catch (e) {
+        console.error(e);
+    }
 }
 
-function flattenModelTree(model: IFCModel) {
-    const flat: IFCModelData[] = [model.toIFCModelData()];
+export interface IFCModelData {
+    geometry: {
+        expressID: Uint32Array;
+        position: Float32Array;
+        normal: Float32Array;
+        index: Uint32Array | Uint16Array;
+    };
+    materials: {
+        color: number[];
+        opacity: number;
+    }[];
+}
+
+function flattenModelTree(model: Mesh) {
+    const flat: IFCModelData[] = [toIFCModelData(model)];
     model.children.forEach((child) => {
-        flat.push(...flattenModelTree(child as IFCModel));
+        flat.push(...flattenModelTree(child as Mesh));
     });
     return flat;
+}
+
+function toIFCModelData(mesh: Mesh): IFCModelData {
+    const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+    return {
+        geometry: {
+            expressID: (mesh.geometry.attributes.expressID as BufferAttribute).array as Uint32Array,
+            position: (mesh.geometry.attributes.position as BufferAttribute).array as Float32Array,
+            normal: (mesh.geometry.attributes.normal as BufferAttribute).array as Float32Array,
+            index: (mesh.geometry.index as BufferAttribute).array as Uint32Array,
+        },
+        materials: mats.map((material) => {
+            return {
+                color: (material as MeshLambertMaterial).color.toArray(),
+                opacity: material.opacity,
+            };
+        }),
+    };
 }
 
 function getTransferable(models: IFCModelData[]) {

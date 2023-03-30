@@ -11,6 +11,7 @@
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.3",
     "@trivago/prettier-plugin-sort-imports": "^4.1.1",
+    "@types/three": "^0.150.0",
     "autoprefixer": "^10.4.14",
     "clsx": "^1.2.1",
     "gl-matrix": "^3.4.3",
@@ -21,8 +22,10 @@
     "react-redux": "^8.0.5",
     "react-router-dom": "^6.9.0",
     "tailwindcss": "^3.2.7",
+    "three": "^0.149.0",
     "vite": "^4.2.1",
-    "web-ifc": "^0.0.39"
+    "web-ifc": "^0.0.39",
+    "web-ifc-three": "0.0.123"
   },
   "devDependencies": {
     "@types/node": "^18.15.5",

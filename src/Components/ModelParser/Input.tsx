@@ -1,8 +1,6 @@
 import React from 'react';
 import { UserInputModel } from 'types';
 
-import { Container } from '@components/Elements/Container';
-
 import IFCWorker from '@workers/IFC.worker?worker';
 
 function parseIFC(contents: UserInputModel[]) {
