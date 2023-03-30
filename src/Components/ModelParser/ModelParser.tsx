@@ -34,13 +34,13 @@ export function ModelParser() {
 
     const handleModelParsed = (model: IFCLoaderData) => {
         console.log(model);
-        for (const mesh of Object.keys(model.data)) {
-            const glmodel = new GL.Model();
-            const vertices = new Float32Array(model.data[mesh]);
-            glmodel.shader = shader;
-            glmodel.attributes.add(new GL.Attribute('position', new GL.Buffer(vertices), 3));
-            scene.add(glmodel);
-        }
+        //for (const mesh of Object.keys(model.data)) {
+        //    const glmodel = new GL.Model();
+        //    const vertices = new Float32Array(model.data[mesh]);
+        //    glmodel.shader = shader;
+        //    glmodel.attributes.add(new GL.Attribute('position', new GL.Buffer(vertices), 3));
+        //    scene.add(glmodel);
+        //}
     };
 
     return (

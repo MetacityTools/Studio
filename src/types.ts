@@ -24,7 +24,5 @@ export type TypedArray =
 
 export type IFCLoaderData = {
     name: string;
-    data: {
-        [key: string]: TypedArray;
-    };
+    data: any;
 };

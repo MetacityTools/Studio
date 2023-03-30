@@ -2,11 +2,10 @@ import { mat4 } from 'gl-matrix';
 import * as WebIFC from 'web-ifc';
 import { LoaderSettings } from 'web-ifc';
 
-import { IfcState, JSONObject, SubsetConfig } from '../BaseDefinitions';
-import { IFCWorkerHandler } from '../web-workers/IFCWorkerHandler';
+import { IfcState, SubsetConfig } from '../BaseDefinitions';
 import { ContainerData, GeometryData, MaterialData } from './Data';
 import { IFCModel } from './IFCModel';
-import { IFCParser, ParserAPI, ParserProgress } from './IFCParser';
+import { IFCParser, ParserProgress } from './IFCParser';
 import { IFCUtils } from './IFCUtils';
 import { MemoryCleaner } from './MemoryCleaner';
 import { TypeManager } from './TypeManager';
@@ -23,10 +22,9 @@ export class IFCManager {
         models: [],
         api: new WebIFC.IfcAPI(),
         useJSON: false,
-        worker: { active: false, path: '' },
     };
 
-    parser: ParserAPI = new IFCParser(this.state);
+    parser = new IFCParser(this.state);
     subsets = new SubsetManager(this.state);
     utils = new IFCUtils(this.state);
     sequenceData = new Data(this.state);
@@ -36,7 +34,8 @@ export class IFCManager {
     useFragments = false;
 
     private cleaner = new MemoryCleaner(this.state);
-    private worker?: IFCWorkerHandler;
+
+    constructor() {}
 
     /**
      * Returns the underlying web-ifc API.
@@ -54,7 +53,7 @@ export class IFCManager {
         )) as IFCModel;
         model.setIFCManager(this);
         // this.state.useJSON ? await this.disposeMemory() : await this.types.getAllTypes(this.worker);
-        await this.types.getAllTypes(this.worker);
+        await this.types.getAllTypes();
         return model;
     }
 
@@ -72,9 +71,8 @@ export class IFCManager {
      *
      * @path Relative path to web-ifc.wasm.
      */
-    async setWasmPath(path: string) {
-        this.state.api.SetWasmPath(path);
-        this.state.wasmPath = path;
+    async setWasmPath(path: string, isAbsolute = false) {
+        this.state.api.SetWasmPath(path, isAbsolute);
     }
 
     /**
@@ -105,30 +103,6 @@ export class IFCManager {
      */
     async applyWebIfcConfig(settings: LoaderSettings) {
         this.state.webIfcSettings = settings;
-        if (this.state.worker.active && this.worker) {
-            await this.worker.workerState.updateStateWebIfcSettings();
-        }
-    }
-
-    /**
-     * Uses web workers, making the loader non-blocking.
-     * @active Wether to use web workers or not.
-     * @path Relative path to the web worker file. Necessary if active=true.
-     */
-    async useWebWorkers(active: boolean, path?: string) {
-        if (this.state.worker.active === active) return;
-        // @ts-ignore
-        this.state.api = null;
-        if (active) {
-            if (!path) throw new Error('You must provide a path to the web worker.');
-            this.state.worker.active = active;
-            this.state.worker.path = path;
-            await this.initializeWorkers();
-            const wasm = this.state.wasmPath;
-            if (wasm) await this.setWasmPath(wasm);
-        } else {
-            this.state.api = new WebIFC.IfcAPI();
-        }
     }
 
     /**
@@ -357,7 +331,6 @@ export class IFCManager {
         IFCModel.dispose();
         await this.cleaner.dispose();
         this.subsets.dispose();
-        if (this.worker && this.state.worker.active) await this.worker.terminate();
         (this.state as any) = null;
     }
 
@@ -366,15 +339,5 @@ export class IFCManager {
      */
     getAndClearErrors(modelID: number) {
         return this.parser.getAndClearErrors(modelID);
-    }
-
-    private async initializeWorkers() {
-        this.worker = new IFCWorkerHandler(this.state);
-        this.state.api = this.worker.webIfc;
-        this.properties = this.worker.properties;
-        await this.worker.parser.setupOptionalCategories(this.parser.optionalCategories);
-        this.parser = this.worker.parser;
-        await this.worker.workerState.updateStateUseJson();
-        await this.worker.workerState.updateStateWebIfcSettings();
     }
 }

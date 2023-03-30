@@ -23,16 +23,6 @@ export interface OptionalCategories {
     [category: number]: boolean;
 }
 
-export interface ParserAPI {
-    parse(buffer: any, coordinationMatrix?: number[]): Promise<IFCModel>;
-
-    getAndClearErrors(_modelId: number): void;
-
-    setupOptionalCategories(config: OptionalCategories): Promise<void>;
-
-    optionalCategories: OptionalCategories;
-}
-
 export interface GeometriesByMaterial {
     [materialID: string]: {
         material: MaterialData;
@@ -40,7 +30,7 @@ export interface GeometriesByMaterial {
     };
 }
 
-export class IFCParser implements ParserAPI {
+export class IFCParser {
     loadedModels = 0;
 
     optionalCategories: OptionalCategories = {
@@ -56,9 +46,9 @@ export class IFCParser implements ParserAPI {
         step: 0.1,
     };
 
-    // Represents the index of the model in webIfcAPI
+    // Represents the index of the model in IfcAPI
     private currentWebIfcID = -1;
-    // When using JSON data for optimization, webIfcAPI is reinitialized every time a model is loaded
+    // When using JSON data for optimization, IfcAPI is reinitialized every time a model is loaded
     // This means that currentID is always 0, while currentModelID is the real index of stored models
     private currentModelID = -1;
 
@@ -123,7 +113,6 @@ export class IFCParser implements ParserAPI {
             materials.push(this.geometriesByMaterials[key].material);
             geometries.push(merged);
         });
-
         const combinedGeometry = mergeBufferGeometries(geometries, true);
         this.cleanUpGeometryMemory(geometries);
         const model = new IFCModel(combinedGeometry, materials);

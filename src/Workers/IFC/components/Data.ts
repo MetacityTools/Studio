@@ -159,33 +159,43 @@ export function mergeBufferGeometries(geometries: GeometryData[], useGroups = fa
     const positionLengths = geometries.map((geometry) => geometry.position.length);
     const normalLengths = geometries.map((geometry) => geometry.normal.length);
     const indexLengths = geometries.map((geometry) => geometry.index.length);
-
+    const expressIDLengths = geometries.map((geometry) => geometry.expressID.length);
     //assert all attributes have same length
     if (
         positionLengths.length !== normalLengths.length ||
-        positionLengths.length !== indexLengths.length
+        positionLengths.length !== expressIDLengths.length
     )
-        throw new Error('Attribute lengths do not match');
+        throw new Error(
+            `Attribute lengths do not match: pos:${positionLengths.length} norm:${normalLengths.length} idx:${expressIDLengths.length}`
+        );
 
     for (let i = 0; i < positionLengths.length; i++) {
-        if (positionLengths[i] !== normalLengths[i] || positionLengths[i] !== 3 * indexLengths[i])
-            throw new Error('Attribute lengths do not match');
+        if (
+            positionLengths[i] !== normalLengths[i] ||
+            positionLengths[i] !== expressIDLengths[i] * 3
+        )
+            throw new Error(
+                `Attribute lengths do not match: pos:${positionLengths[i]} norm:${normalLengths[i]} idx:${expressIDLengths[i]} * 3`
+            );
     }
 
     //merge and recompute indices
     const positions = new Float32Array(positionLengths.reduce((a, b) => a + b, 0));
     const normals = new Float32Array(normalLengths.reduce((a, b) => a + b, 0));
     const indices = new Uint32Array(indexLengths.reduce((a, b) => a + b, 0));
+    const expressIDs = new Uint32Array(expressIDLengths.reduce((a, b) => a + b, 0));
 
     let poffset = 0;
     let noffset = 0;
     let ioffset = 0;
+    let eoffset = 0;
 
     for (let i = 0; i < geometries.length; i++) {
         const geometry = geometries[i];
         positions.set(geometry.position, poffset);
         normals.set(geometry.normal, noffset);
         indices.set(geometry.index, ioffset);
+        expressIDs.set(geometry.expressID, eoffset);
 
         const addIndex = poffset / 3;
         for (let j = 0; j < geometry.index.length; j++) {
@@ -203,11 +213,13 @@ export function mergeBufferGeometries(geometries: GeometryData[], useGroups = fa
         poffset += geometry.position.length;
         noffset += geometry.normal.length;
         ioffset += geometry.index.length;
+        eoffset += geometry.expressID.length;
     }
 
     mergedGeometry.position = positions;
     mergedGeometry.normal = normals;
     mergedGeometry.index = indices;
+    mergedGeometry.expressID = expressIDs;
 
     return mergedGeometry;
 }
