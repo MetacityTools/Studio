@@ -1,3 +1,5 @@
+import { WindowControls } from '@3D/controls/controls';
+
 import { Renderer } from './renderer';
 import { View } from './view';
 
@@ -22,6 +24,8 @@ export class Window {
         position: ViewPosition;
     }[] = [];
 
+    controls: WindowControls;
+
     constructor(private canvas: HTMLCanvasElement) {
         const observer = new ResizeObserver((entries) => {
             for (const entry of entries) {
@@ -31,6 +35,7 @@ export class Window {
         });
         observer.observe(canvas);
         this.forceResize();
+        this.controls = new WindowControls(canvas, this);
     }
 
     get views() {
@@ -92,5 +97,17 @@ export class Window {
 
     renderLayout(renderer: Renderer) {
         this.views_.forEach(({ view }) => view.renderLayout(renderer));
+    }
+
+    getViewAndPosition(event: MouseEvent) {
+        const { clientX, clientY } = event;
+        //TODO optimize this
+        for (const { view } of this.views_) {
+            const [x, y] = view.toLocal(clientX, clientY);
+            if (x >= 0 && x < view.width && y >= 0 && y < view.height) {
+                return { view, x, y };
+            }
+        }
+        return undefined;
     }
 }

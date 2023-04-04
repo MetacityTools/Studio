@@ -33,5 +33,14 @@ function render(renderer: Renderer, renderable: Renderable, shader: Shader, came
     shader.uniforms = camera.uniforms;
     shader.uniforms = renderable.uniforms;
     renderable.attributes.bind(gl, shader);
-    gl.drawArrays(gl.TRIANGLES, 0, renderable.attributes.count);
+
+    //todo instanced
+    if (renderable.attributes.isIndexed) {
+        gl.drawElements(
+            gl.TRIANGLES,
+            renderable.attributes.count,
+            renderable.attributes.elementType,
+            0
+        );
+    } else gl.drawArrays(gl.TRIANGLES, 0, renderable.attributes.count);
 }

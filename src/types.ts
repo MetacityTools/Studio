@@ -1,3 +1,5 @@
+import { mat4 } from 'gl-matrix';
+
 export interface UserInputModel {
     name: string;
     buffer: ArrayBuffer;
@@ -22,7 +24,21 @@ export type TypedArray =
     | Int16Array
     | Int8Array;
 
+export interface IFCModelData {
+    geometry: {
+        expressID: Uint32Array;
+        position: Float32Array;
+        normal: Float32Array;
+        index: Uint32Array | Uint16Array;
+    };
+    materials: {
+        color: number[];
+        opacity: number;
+    }[];
+    matrix: mat4;
+}
+
 export type IFCLoaderData = {
     name: string;
-    data: any;
+    data: IFCModelData[];
 };

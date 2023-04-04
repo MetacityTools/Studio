@@ -9,8 +9,8 @@ import { Renderer } from './renderer';
 export class View {
     private x: number = 0;
     private y: number = 0;
-    private width: number = 0;
-    private height: number = 0;
+    private width_: number = 0;
+    private height_: number = 0;
     private randomColor: Vec3;
     readonly camera: Camera = new Camera();
 
@@ -21,8 +21,8 @@ export class View {
     resize(x: number, y: number, width: number, height: number) {
         this.x = x;
         this.y = y;
-        this.width = width;
-        this.height = height;
+        this.width_ = width;
+        this.height_ = height;
     }
 
     render(renderer: Renderer) {
@@ -39,5 +39,17 @@ export class View {
         gl.viewport(this.x, this.y, this.width, this.height);
         gl.scissor(this.x, this.y, this.width, this.height);
         gl.clear(gl.COLOR_BUFFER_BIT);
+    }
+
+    toLocal(x: number, y: number) {
+        return [x - this.x, y - this.y];
+    }
+
+    get width() {
+        return this.width_;
+    }
+
+    get height() {
+        return this.height_;
     }
 }

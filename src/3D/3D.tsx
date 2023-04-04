@@ -1,7 +1,9 @@
 import { Canvas } from './components/Canvas';
 import { Profiler } from './components/Profiler';
 import { View } from './components/View';
-import { Attribute, Buffer, InstancedAttribute } from './models/attributes';
+import { Attribute, ElementAttribute, InstancedAttribute } from './models/attribute';
+import { Attributes } from './models/attributes';
+import { Buffer, ElementBuffer } from './models/buffer';
 import { Model } from './models/model';
 import { Renderable } from './models/renderable';
 import { Renderer } from './renderer/renderer';
@@ -14,9 +16,12 @@ export {
     Scene,
     Renderable,
     Model,
+    Attributes,
     Attribute,
+    ElementAttribute,
     InstancedAttribute,
     Buffer,
+    ElementBuffer,
     View,
     Profiler,
     Canvas,

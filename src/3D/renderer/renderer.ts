@@ -30,6 +30,7 @@ export class Renderer {
 
         gl.enable(gl.SCISSOR_TEST);
         gl.enable(gl.DEPTH_TEST);
+        gl.disable(gl.CULL_FACE);
     }
 
     get gl() {

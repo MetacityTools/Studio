@@ -1,5 +1,6 @@
+import { mat4 } from 'gl-matrix';
 import { BufferAttribute, Mesh, MeshLambertMaterial } from 'three';
-import { UserInputModel } from 'types';
+import { IFCModelData, UserInputModel } from 'types';
 //this is probs much safer than using our custom implementation...
 import { IFCLoader } from 'web-ifc-three';
 
@@ -53,23 +54,13 @@ async function loadIFC(buffer: ArrayBuffer) {
     }
 }
 
-export interface IFCModelData {
-    geometry: {
-        expressID: Uint32Array;
-        position: Float32Array;
-        normal: Float32Array;
-        index: Uint32Array | Uint16Array;
-    };
-    materials: {
-        color: number[];
-        opacity: number;
-    }[];
-}
-
-function flattenModelTree(model: Mesh) {
+function flattenModelTree(model: Mesh, parentMatrix: mat4 = mat4.create()): IFCModelData[] {
     const flat: IFCModelData[] = [toIFCModelData(model)];
+    const m = flat[0].matrix;
+    mat4.multiply(m, m, parentMatrix);
+
     model.children.forEach((child) => {
-        flat.push(...flattenModelTree(child as Mesh));
+        flat.push(...flattenModelTree(child as Mesh, m));
     });
     return flat;
 }
@@ -89,6 +80,7 @@ function toIFCModelData(mesh: Mesh): IFCModelData {
                 opacity: material.opacity,
             };
         }),
+        matrix: mesh.matrix.toArray() as mat4,
     };
 }
 

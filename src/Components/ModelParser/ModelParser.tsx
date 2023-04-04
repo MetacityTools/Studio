@@ -34,13 +34,18 @@ export function ModelParser() {
 
     const handleModelParsed = (model: IFCLoaderData) => {
         console.log(model);
-        //for (const mesh of Object.keys(model.data)) {
-        //    const glmodel = new GL.Model();
-        //    const vertices = new Float32Array(model.data[mesh]);
-        //    glmodel.shader = shader;
-        //    glmodel.attributes.add(new GL.Attribute('position', new GL.Buffer(vertices), 3));
-        //    scene.add(glmodel);
-        //}
+        for (let mesh of model.data) {
+            const glmodel = new GL.Model();
+            const vertices = mesh.geometry.position;
+            const indices = mesh.geometry.index;
+            glmodel.attributes.add(new GL.Attribute('position', new GL.Buffer(vertices), 3));
+            glmodel.attributes.add(
+                new GL.ElementAttribute('index', new GL.ElementBuffer(indices), 3)
+            );
+            glmodel.shader = shader;
+            scene.add(glmodel);
+            console.log(glmodel);
+        }
     };
 
     return (
@@ -50,8 +55,7 @@ export function ModelParser() {
                     <ModelInput onModelParsed={handleModelParsed} />
                 </div>
                 <GL.Canvas renderer={renderer} className="w-[80%]">
-                    <GL.View scene={scene} left={0} top={0} width={50} height={100} />
-                    <GL.View scene={scene} left={50} top={0} width={50} height={100} />
+                    <GL.View scene={scene} left={0} top={0} width={100} height={100} />
                 </GL.Canvas>
                 <GL.Profiler scenes={[scene]} />
             </div>
