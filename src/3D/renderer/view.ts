@@ -23,6 +23,7 @@ export class View {
         this.y = y;
         this.width_ = width;
         this.height_ = height;
+        this.camera.updateAspectRatio(width, height);
     }
 
     render(renderer: Renderer) {

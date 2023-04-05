@@ -1,4 +1,4 @@
-import { mat4, vec3 } from 'gl-matrix';
+import { mat4, quat, vec3 } from 'gl-matrix';
 
 import { UniformValue } from '@3D/shaders/shader';
 
@@ -13,7 +13,8 @@ export interface CameraOptions {
     up?: vec3;
     projectionType?: ProjectionType;
     fovYRadian?: number;
-    aspectRatio?: number;
+    width?: number;
+    height?: number;
     near?: number;
     far?: number;
 }
@@ -32,6 +33,8 @@ export class Camera {
     projectionViewMatrix: mat4 = mat4.create();
     private direction: vec3 = vec3.create();
     private uniforms_: { [uniform: string]: UniformValue } = {};
+    private width: number = 0;
+    private height: number = 0;
 
     get uniforms() {
         return this.uniforms_;
@@ -43,7 +46,9 @@ export class Camera {
         this.up = options.up ?? vec3.fromValues(0, 0, 1);
         this.type = options.projectionType ?? ProjectionType.PERSPECTIVE;
         this.fovYRadian = options.fovYRadian ?? Math.PI / 4;
-        this.aspectRatio = options.aspectRatio ?? 1;
+        this.width = options.width ?? 1;
+        this.height = options.height ?? 1;
+        this.aspectRatio = this.width / this.height;
         this.near = options.near ?? 1;
         this.far = options.far ?? 1000;
         this.uniforms_['uCameraPosition'] = this.position;
@@ -61,15 +66,21 @@ export class Camera {
         if (options.up) this.up = options.up;
         if (options.projectionType) this.projectionType = options.projectionType;
         if (options.fovYRadian) this.fovYRadian = options.fovYRadian;
-        if (options.aspectRatio) this.aspectRatio = options.aspectRatio;
+        if (options.width) this.width = options.width;
+        if (options.height) this.height = options.height;
+        this.aspectRatio = this.width / this.height;
         if (options.near) this.near = options.near;
         if (options.far) this.far = options.far;
         this.updateMatrices();
     }
 
-    private getFrustumHeightAtTarget(): number {
+    private getFrustrumWidthAtTarget(): number {
         const distance = vec3.dist(this.position, this.target);
         return 2 * distance * Math.tan(this.fovYRadian / 2);
+    }
+
+    private getFrustumHeightAtTarget(): number {
+        return this.getFrustrumWidthAtTarget() / this.aspectRatio;
     }
 
     private updatePositionForProjectionType(): void {
@@ -86,6 +97,13 @@ export class Camera {
             vec3.scale(direction, direction, this.near + (this.far - this.near) / 2);
             vec3.sub(this.position, this.target, direction);
         }
+    }
+
+    get dir() {
+        const direction = this.direction;
+        vec3.sub(direction, this.position, this.target);
+        vec3.normalize(direction, direction);
+        return direction;
     }
 
     private updateViewMatrix() {
@@ -135,26 +153,96 @@ export class Camera {
         mat4.multiply(this.projectionViewMatrix, this.projectionMatrix, this.viewMatrix);
     }
 
-    updateAspectRatio(aspectRatio: number) {
-        this.aspectRatio = aspectRatio;
+    updateAspectRatio(width: number, height: number) {
+        this.aspectRatio = width / height;
+        this.width = width;
+        this.height = height;
         this.updateMatrices();
     }
 
     zoomOut() {
-        const direction = this.direction;
-        vec3.sub(direction, this.position, this.target);
-        vec3.normalize(direction, direction);
+        const direction = this.dir;
         vec3.scale(direction, direction, 0.1);
         vec3.add(this.position, this.position, direction);
         this.updateMatrices();
     }
 
     zoomIn() {
-        const direction = this.direction;
-        vec3.sub(direction, this.position, this.target);
-        vec3.normalize(direction, direction);
+        const direction = this.dir;
         vec3.scale(direction, direction, 0.1);
         vec3.sub(this.position, this.position, direction);
+        this.updateMatrices();
+    }
+
+    scaleShiftToTargetPlane(shift: number, screenDimension: number) {
+        const targetWidth = this.getFrustrumWidthAtTarget();
+        const nearWidth = 2 * this.near * Math.tan(this.fovYRadian / 2);
+        const scale = targetWidth / nearWidth;
+        return (shift / screenDimension) * scale;
+    }
+
+    pan(x: number, y: number) {
+        const right = vec3.create();
+        const front = vec3.create();
+
+        const direction = this.dir;
+        vec3.cross(right, this.up, direction);
+        vec3.cross(front, right, this.up);
+
+        vec3.normalize(right, right);
+        vec3.normalize(front, front);
+
+        x = this.scaleShiftToTargetPlane(x, this.width);
+        y = this.scaleShiftToTargetPlane(y, this.height);
+
+        vec3.scale(right, right, -x);
+        vec3.scale(front, front, -y);
+
+        vec3.add(this.position, this.position, right);
+        vec3.add(this.position, this.position, front);
+        vec3.add(this.target, this.target, right);
+        vec3.add(this.target, this.target, front);
+
+        this.updateMatrices();
+    }
+
+    rotate(x: number, y: number) {
+        console.log('rotate', x, y);
+
+        const right = vec3.create();
+        const front = vec3.create();
+
+        const direction = this.dir;
+        vec3.cross(right, this.up, direction);
+        vec3.cross(front, right, this.up);
+
+        vec3.normalize(right, right);
+        vec3.normalize(front, front);
+
+        const angleX = (x / this.width) * Math.PI;
+        const angleY = (y / this.height) * Math.PI;
+
+        //rotate using quaternion around target
+        const q1 = quat.create();
+        const q2 = quat.create();
+
+        quat.setAxisAngle(q1, right, angleY);
+        quat.setAxisAngle(q2, this.up, angleX);
+        quat.multiply(q1, q1, q2);
+
+        vec3.sub(this.position, this.position, this.target);
+        vec3.transformQuat(this.position, this.position, q1);
+        vec3.add(this.position, this.position, this.target);
+
+        this.updateMatrices();
+    }
+
+    zoom(z: number) {
+        const direction = this.dir;
+        const fac = z > 0 ? 1 / 0.9 : 0.9;
+        const dist = vec3.dist(this.position, this.target);
+        vec3.scale(direction, direction, dist * fac);
+        vec3.add(this.position, this.target, direction);
         this.updateMatrices();
     }
 }

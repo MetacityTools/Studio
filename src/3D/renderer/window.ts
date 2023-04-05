@@ -100,12 +100,12 @@ export class Window {
     }
 
     getViewAndPosition(event: MouseEvent) {
-        const { clientX, clientY } = event;
+        const { offsetX, offsetY } = event;
         //TODO optimize this
         for (const { view } of this.views_) {
-            const [x, y] = view.toLocal(clientX, clientY);
+            const [x, y] = view.toLocal(offsetX, offsetY);
             if (x >= 0 && x < view.width && y >= 0 && y < view.height) {
-                return { view, x, y };
+                return { view, x: offsetX, y: offsetY };
             }
         }
         return undefined;

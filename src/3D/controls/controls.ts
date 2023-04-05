@@ -7,6 +7,7 @@ export class WindowControls {
     private activeView_: View | null = null;
     private lastX_: number = 0;
     private lastY_: number = 0;
+    private altKey_: boolean = false;
 
     constructor(private canvas: HTMLCanvasElement, private window: Window) {
         canvas.addEventListener('mousedown', this.onMouseDown.bind(this));
@@ -14,6 +15,9 @@ export class WindowControls {
         canvas.addEventListener('mouseup', this.onMouseUp.bind(this));
         canvas.addEventListener('wheel', this.onMouseWheel.bind(this));
         canvas.addEventListener('contextmenu', this.onContextMenu.bind(this));
+        document.addEventListener('keydown', this.onKeyDown.bind(this));
+        document.addEventListener('keyup', this.onKeyUp.bind(this));
+        console.log('WindowControls', this);
     }
 
     onMouseDown(event: MouseEvent) {
@@ -21,21 +25,52 @@ export class WindowControls {
         if (!local) return;
         const { view, x, y } = local;
         this.activeView_ = view;
+        this.lastX_ = x;
+        this.lastY_ = y;
     }
 
     onMouseMove(event: MouseEvent) {
-        //TODO
+        if (!this.activeView_) return;
+        const { offsetX, offsetY } = event;
+        const dx = offsetX - this.lastX_;
+        const dy = offsetY - this.lastY_;
+        this.lastX_ = offsetX;
+        this.lastY_ = offsetY;
+
+        if (this.altKey_) {
+            this.activeView_.camera.rotate(dx, dy);
+        } else {
+            this.activeView_.camera.pan(dx, dy);
+        }
     }
 
     onMouseUp(event: MouseEvent) {
-        //TODO
+        if (!this.activeView_) return;
+        this.activeView_ = null;
     }
 
     onMouseWheel(event: WheelEvent) {
-        //TODO
+        const local = this.window.getViewAndPosition(event);
+        if (!local) return;
+        const { view } = local;
+        view.camera.zoom(event.deltaY);
+    }
+
+    onKeyDown(event: KeyboardEvent) {
+        const { key } = event;
+        if (key === 'Meta' || key === 'Alt') {
+            this.altKey_ = true;
+        }
+    }
+
+    onKeyUp(event: KeyboardEvent) {
+        const { key } = event;
+        if (key === 'Meta' || key === 'Alt') {
+            this.altKey_ = false;
+        }
     }
 
     onContextMenu(event: MouseEvent) {
-        //TODO
+        //None yet
     }
 }

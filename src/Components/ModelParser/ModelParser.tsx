@@ -38,6 +38,17 @@ export function ModelParser() {
             const glmodel = new GL.Model();
             const vertices = mesh.geometry.position;
             const indices = mesh.geometry.index;
+
+            let min = Infinity;
+            let max = -Infinity;
+
+            for (let i = 0; i < vertices.length; i += 3) {
+                min = Math.min(min, vertices[i + 2]);
+                max = Math.max(max, vertices[i + 2]);
+            }
+
+            console.log(min, max);
+
             glmodel.attributes.add(new GL.Attribute('position', new GL.Buffer(vertices), 3));
             glmodel.attributes.add(
                 new GL.ElementAttribute('index', new GL.ElementBuffer(indices), 3)

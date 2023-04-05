@@ -1,3 +1,5 @@
+import { TypedArray } from 'types';
+
 import { handleErrors } from './errors';
 
 const PRE = `#version 300 es
@@ -5,30 +7,52 @@ precision highp float;
 precision highp int;
 `;
 
-export type UniformValue =
-    | number
-    | number[]
-    | boolean
-    | boolean[]
-    | Float32Array
-    | Int32Array
-    | Int16Array
-    | Int8Array
-    | Uint32Array
-    | Uint16Array
-    | Uint8Array
-    | null;
+export type UniformValue = number | number[] | boolean | boolean[] | TypedArray | null;
 
-function iterEqual(a: any, b: any) {
-    if (a === b) return true;
-    if (a === null || b === null) return false;
-    if (!('length' in a) || !('length' in b)) false; //both of them are arrays => if not, end
-    if (!a.length || !b.length) return false;
-    if (a.length !== b.length) return false;
-    for (let i = 0; i < a.length; i++) {
-        if (a[i] !== b[i]) return false;
+function isArray(a: any): a is any[] {
+    return Array.isArray(a);
+}
+
+function isTypedArray(a: any): a is TypedArray {
+    return (
+        a instanceof Float32Array ||
+        a instanceof Int32Array ||
+        a instanceof Int16Array ||
+        a instanceof Int8Array ||
+        a instanceof Uint32Array ||
+        a instanceof Uint16Array ||
+        a instanceof Uint8Array
+    );
+}
+
+function isEqual(a: any, b: any) {
+    const aIsArray = isArray(a) || isTypedArray(a);
+    const bIsArray = isArray(b) || isTypedArray(b);
+
+    if (aIsArray !== bIsArray) return false;
+
+    if (aIsArray && bIsArray) {
+        if (a.length !== b.length) return false;
+        for (let i = 0; i < a.length; i++) {
+            if (a[i] !== b[i]) return false;
+        }
+    } else {
+        if ((a === null) !== (b === null)) return false;
+        if (a === b) return true;
     }
     return true;
+}
+
+function cloneValue(value: UniformValue) {
+    if (isArray(value)) return value.slice();
+    if (value instanceof Float32Array) return new Float32Array(value);
+    if (value instanceof Int32Array) return new Int32Array(value);
+    if (value instanceof Int16Array) return new Int16Array(value);
+    if (value instanceof Int8Array) return new Int8Array(value);
+    if (value instanceof Uint32Array) return new Uint32Array(value);
+    if (value instanceof Uint16Array) return new Uint16Array(value);
+    if (value instanceof Uint8Array) return new Uint8Array(value);
+    return value;
 }
 
 const ROW_MAJOR = false;
@@ -132,12 +156,12 @@ export class Shader {
             if (!uniform) continue;
 
             const value = values[name];
-            if (value === uniform.value || iterEqual(value, uniform.value)) continue;
+            if (isEqual(value, uniform.value)) continue;
 
             const loc = uniform.loc;
             console.log(`    Setting uniforms.${name}`);
             this.setValue(value, gl, loc);
-            uniform.value = value;
+            uniform.value = cloneValue(value);
         }
     }
 
