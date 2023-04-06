@@ -17,7 +17,6 @@ export class WindowControls {
         canvas.addEventListener('contextmenu', this.onContextMenu.bind(this));
         document.addEventListener('keydown', this.onKeyDown.bind(this));
         document.addEventListener('keyup', this.onKeyUp.bind(this));
-        console.log('WindowControls', this);
     }
 
     onMouseDown(event: MouseEvent) {
@@ -52,8 +51,9 @@ export class WindowControls {
     onMouseWheel(event: WheelEvent) {
         const local = this.window.getViewAndPosition(event);
         if (!local) return;
-        const { view } = local;
-        view.camera.zoom(event.deltaY);
+        const { view, lx, ly } = local;
+        const factor = event.deltaY > 0 ? 1.1 : 0.9;
+        view.camera.zoom(factor, lx, ly);
     }
 
     onKeyDown(event: KeyboardEvent) {

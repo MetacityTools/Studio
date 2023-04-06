@@ -7,8 +7,8 @@ import { viewRenderPass } from './pass';
 import { Renderer } from './renderer';
 
 export class View {
-    private x: number = 0;
-    private y: number = 0;
+    x: number = 0;
+    y: number = 0;
     private width_: number = 0;
     private height_: number = 0;
     private randomColor: Vec3;
@@ -42,6 +42,7 @@ export class View {
         gl.clear(gl.COLOR_BUFFER_BIT);
     }
 
+    //all coords from bottom left
     toLocal(x: number, y: number) {
         return [x - this.x, y - this.y];
     }

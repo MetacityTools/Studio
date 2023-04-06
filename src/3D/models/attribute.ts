@@ -31,7 +31,7 @@ export class Attribute {
     }
 
     get count() {
-        return this.buffer.data.length / this.size;
+        return this.buffer.data.length;
     }
 
     bind(gl: WebGL2RenderingContext, location: number) {

@@ -1,10 +1,15 @@
-import { mat4, quat, vec3 } from 'gl-matrix';
+import { mat4, quat, vec2, vec3, vec4 } from 'gl-matrix';
 
 import { UniformValue } from '@3D/shaders/shader';
 
 export enum ProjectionType {
     PERSPECTIVE,
     ORTHOGRAPHIC,
+}
+
+function unproject(out: vec3, source: vec3, modelViewProjectionInverse: mat4): vec3 {
+    vec3.transformMat4(out, source, modelViewProjectionInverse);
+    return out;
 }
 
 export interface CameraOptions {
@@ -29,12 +34,20 @@ export class Camera {
     near: number;
     far: number;
     projectionMatrix: mat4 = mat4.create();
+    viewProjectionInverse: mat4 = mat4.create();
     viewMatrix: mat4 = mat4.create();
     projectionViewMatrix: mat4 = mat4.create();
     private direction: vec3 = vec3.create();
     private uniforms_: { [uniform: string]: UniformValue } = {};
     private width: number = 0;
     private height: number = 0;
+    private maxangle: number = Math.PI / 2;
+    private minangle: number = 0.01;
+
+    private left: number = 0;
+    private right: number = 0;
+    private bottom: number = 0;
+    private top: number = 0;
 
     get uniforms() {
         return this.uniforms_;
@@ -57,7 +70,15 @@ export class Camera {
         this.uniforms_['uProjectionMatrix'] = this.projectionMatrix;
         this.uniforms_['uViewMatrix'] = this.viewMatrix;
         this.uniforms_['uProjectionViewMatrix'] = this.projectionViewMatrix;
+        this.updateOrthoBounds();
         this.updateMatrices();
+    }
+
+    updateOrthoBounds() {
+        this.left = this.width / -2;
+        this.right = this.width / 2;
+        this.bottom = this.height / -2;
+        this.top = this.height / 2;
     }
 
     set(options: CameraOptions) {
@@ -71,6 +92,7 @@ export class Camera {
         this.aspectRatio = this.width / this.height;
         if (options.near) this.near = options.near;
         if (options.far) this.far = options.far;
+        this.updateOrthoBounds();
         this.updateMatrices();
     }
 
@@ -124,10 +146,10 @@ export class Camera {
             const width = height * this.aspectRatio;
             mat4.ortho(
                 this.projectionMatrix,
-                -width / 2,
-                width / 2,
-                -height / 2,
-                height / 2,
+                this.left,
+                this.right,
+                this.bottom,
+                this.top,
                 this.near,
                 this.far
             );
@@ -150,81 +172,69 @@ export class Camera {
     }
 
     updateProjectionViewMatrix() {
-        mat4.multiply(this.projectionViewMatrix, this.projectionMatrix, this.viewMatrix);
+        this.updateMatrices();
+        mat4.multiply(this.projectionViewMatrix, this.viewMatrix, this.projectionMatrix);
+        mat4.invert(this.viewProjectionInverse, this.projectionViewMatrix);
     }
 
     updateAspectRatio(width: number, height: number) {
         this.aspectRatio = width / height;
         this.width = width;
         this.height = height;
-        this.updateMatrices();
-    }
-
-    zoomOut() {
-        const direction = this.dir;
-        vec3.scale(direction, direction, 0.1);
-        vec3.add(this.position, this.position, direction);
-        this.updateMatrices();
-    }
-
-    zoomIn() {
-        const direction = this.dir;
-        vec3.scale(direction, direction, 0.1);
-        vec3.sub(this.position, this.position, direction);
-        this.updateMatrices();
-    }
-
-    scaleShiftToTargetPlane(shift: number, screenDimension: number) {
-        const targetWidth = this.getFrustrumWidthAtTarget();
-        const nearWidth = 2 * this.near * Math.tan(this.fovYRadian / 2);
-        const scale = targetWidth / nearWidth;
-        return (shift / screenDimension) * scale;
+        this.updateProjectionViewMatrix();
     }
 
     pan(x: number, y: number) {
         const right = vec3.create();
         const front = vec3.create();
 
-        const direction = this.dir;
+        const offset = vec3.create();
+        vec3.sub(offset, this.position, this.target);
+        let distance = Math.max(vec3.length(offset), 50);
+
+        distance *= Math.tan(this.fovYRadian / 2);
+
+        const left = (2 * x * distance) / this.height;
+        const up = (2 * y * distance) / this.height;
+
+        const direction = this.direction;
+        vec3.normalize(direction, offset);
         vec3.cross(right, this.up, direction);
         vec3.cross(front, right, this.up);
 
         vec3.normalize(right, right);
         vec3.normalize(front, front);
 
-        x = this.scaleShiftToTargetPlane(x, this.width);
-        y = this.scaleShiftToTargetPlane(y, this.height);
-
-        vec3.scale(right, right, -x);
-        vec3.scale(front, front, -y);
+        vec3.scale(right, right, -left);
+        vec3.scale(front, front, -up);
 
         vec3.add(this.position, this.position, right);
         vec3.add(this.position, this.position, front);
         vec3.add(this.target, this.target, right);
         vec3.add(this.target, this.target, front);
 
-        this.updateMatrices();
+        this.updateProjectionViewMatrix();
     }
 
     rotate(x: number, y: number) {
-        console.log('rotate', x, y);
-
         const right = vec3.create();
-        const front = vec3.create();
-
-        const direction = this.dir;
-        vec3.cross(right, this.up, direction);
-        vec3.cross(front, right, this.up);
-
+        const front = this.dir;
+        vec3.cross(right, this.up, front);
         vec3.normalize(right, right);
-        vec3.normalize(front, front);
 
-        const angleX = (x / this.width) * Math.PI;
-        const angleY = (y / this.height) * Math.PI;
+        const angleX = -(x / this.width) * 2 * Math.PI;
+        let angleY = (-(y / this.height) * Math.PI) / 2;
 
         //rotate using quaternion around target
         const q1 = quat.create();
         const q2 = quat.create();
+
+        const currentYAngle = Math.acos(vec3.dot(front, this.up));
+        if (currentYAngle + angleY > this.maxangle) {
+            angleY = this.maxangle - currentYAngle;
+        } else if (currentYAngle + angleY < this.minangle) {
+            angleY = this.minangle - currentYAngle;
+        }
 
         quat.setAxisAngle(q1, right, angleY);
         quat.setAxisAngle(q2, this.up, angleX);
@@ -234,15 +244,35 @@ export class Camera {
         vec3.transformQuat(this.position, this.position, q1);
         vec3.add(this.position, this.position, this.target);
 
-        this.updateMatrices();
+        this.updateProjectionViewMatrix();
     }
 
-    zoom(z: number) {
-        const direction = this.dir;
-        const fac = z > 0 ? 1 / 0.9 : 0.9;
-        const dist = vec3.dist(this.position, this.target);
-        vec3.scale(direction, direction, dist * fac);
-        vec3.add(this.position, this.target, direction);
-        this.updateMatrices();
+    get isOrthographic() {
+        return this.projectionType === ProjectionType.ORTHOGRAPHIC;
+    }
+
+    zoom(factor: number, cursorPxX: number, cursorPxY: number) {
+        if (this.isOrthographic) {
+            this.zoomOrthographic(factor, cursorPxX, cursorPxY);
+        } else {
+            this.zoomPerspective(factor, cursorPxX, cursorPxY);
+        }
+    }
+
+    private zoomOrthographic(factor: number, cursorPxX: number, cursorPxY: number) {
+        this.left = this.left * factor;
+        this.right = this.right * factor;
+        this.top = this.top * factor;
+        this.bottom = this.bottom * factor;
+        this.updateProjectionViewMatrix();
+    }
+
+    private zoomPerspective(factor: number, cursorPxX: number, cursorPxY: number) {
+        const offset = this.direction;
+        vec3.sub(offset, this.position, this.target);
+        vec3.scale(offset, offset, factor);
+
+        vec3.add(this.position, this.target, offset);
+        this.updateProjectionViewMatrix();
     }
 }

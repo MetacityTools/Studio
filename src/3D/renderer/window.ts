@@ -25,7 +25,6 @@ export class Window {
     }[] = [];
 
     controls: WindowControls;
-
     constructor(private canvas: HTMLCanvasElement) {
         const observer = new ResizeObserver((entries) => {
             for (const entry of entries) {
@@ -47,7 +46,6 @@ export class Window {
     }
 
     resize(width: number, height: number) {
-        console.log('resize', width, height);
         //const dpr = window.devicePixelRatio;
         this.canvas.width = width;
         this.canvas.height = height;
@@ -101,11 +99,13 @@ export class Window {
 
     getViewAndPosition(event: MouseEvent) {
         const { offsetX, offsetY } = event;
-        //TODO optimize this
+        //recompute offestY from bottom
+        const { height } = this.canvas;
+        const offsetYbottom = height - offsetY;
         for (const { view } of this.views_) {
-            const [x, y] = view.toLocal(offsetX, offsetY);
+            const [x, y] = view.toLocal(offsetX, offsetYbottom);
             if (x >= 0 && x < view.width && y >= 0 && y < view.height) {
-                return { view, x: offsetX, y: offsetY };
+                return { view, x: offsetX, y: offsetY, lx: x, ly: y };
             }
         }
         return undefined;
