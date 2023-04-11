@@ -3,18 +3,12 @@ import { UserInputModel } from 'types';
 
 import IFCWorker from '@workers/IFC.worker?worker';
 
-function parseIFC(contents: UserInputModel[]) {
+function parseIFC(contents: UserInputModel) {
     return new Promise((resolve, reject) => {
         const worker = new IFCWorker();
         worker.onmessage = (e) => {
             worker.terminate();
             resolve(e.data);
-        };
-        worker.onerror = (e) => {
-            worker.terminate();
-            console.error('Error received from IFC worker');
-            console.error(e);
-            reject(e);
         };
         worker.postMessage(contents);
     });
@@ -23,13 +17,10 @@ function parseIFC(contents: UserInputModel[]) {
 async function loadFiles(event: React.FormEvent<HTMLFormElement>) {
     const formData = new FormData(event.currentTarget);
     const files = formData.getAll('model') as File[];
-    const contents = [] as UserInputModel[];
-    for (const file of files) {
-        contents.push({
-            name: file.name,
-            buffer: await file.arrayBuffer(),
-        });
-    }
+    const contents = {
+        name: files[0].name,
+        buffer: await files[0].arrayBuffer(),
+    };
     return contents;
 }
 
@@ -49,7 +40,7 @@ export function ModelInput(props: ModelInputProps) {
         <div>
             <form onSubmit={handleSubmit}>
                 <label htmlFor="model">Model</label>
-                <input type="file" id="model" name="model" multiple={true} />
+                <input type="file" id="model" name="model" />
                 <input type="submit" value="Submit" />
             </form>
         </div>

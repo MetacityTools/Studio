@@ -6,7 +6,6 @@ import { defineConfig } from 'vite';
 export default defineConfig({
     resolve: {
         alias: {
-            '@3D': path.resolve(__dirname, './src/3D'),
             '@components': path.resolve(__dirname, './src/Components'),
             '@redux': path.resolve(__dirname, './src/Redux'),
             '@workers': path.resolve(__dirname, './src/Workers'),

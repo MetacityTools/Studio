@@ -17,7 +17,6 @@
     "jsx": "react-jsx",
     "baseUrl": "./src",
     "paths": {
-      "@3D/*": ["./3D/*"],
       "@redux/*": ["./Redux/*"],
       "@components/*": ["./Components/*"],
       "@workers/*": ["./Workers/*"],
