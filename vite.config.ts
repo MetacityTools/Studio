@@ -7,8 +7,9 @@ export default defineConfig({
     resolve: {
         alias: {
             '@components': path.resolve(__dirname, './src/Components'),
-            '@redux': path.resolve(__dirname, './src/Redux'),
-            '@workers': path.resolve(__dirname, './src/Workers'),
+            '@utils': path.resolve(__dirname, './src/Utils'),
+            '@elements': path.resolve(__dirname, './src/Elements'),
+            '@bananagl': path.resolve(__dirname, './src/bananagl'),
         },
     },
     plugins: [react()],

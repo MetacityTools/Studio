@@ -11,7 +11,13 @@ export function ErrorPage() {
             <Link to="/">
                 <div className="text-xl font-semibold mb-8 underline">Go back to the main page</div>
             </Link>
+            <div className="text-xl font-semibold mb-2">
+                Please contact the system administrator with the following message:
+            </div>
             <p className="font-semibold font-mono">{error.statusText || error.message}</p>
+            <p className="font-mono text-xs whitespace-pre mt-4 bg-neutral-800 p-4 rounded">
+                {error.stack}
+            </p>
         </div>
     );
 }

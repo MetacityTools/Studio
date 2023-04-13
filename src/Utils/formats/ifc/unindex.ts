@@ -1,36 +1,24 @@
 import { vec3 } from 'gl-matrix';
-import { IFCLoaderData } from 'types';
+import { IFCModelData } from 'types';
 
-self.onmessage = (e) => {
-    console.log(e.data);
-    computeIdealGrid(e.data);
-};
-
-function computeIdealGrid(model: IFCLoaderData) {
-    unindexModel(model);
-}
-
-function unindexModel(model: IFCLoaderData) {
+export function unindexModel(model: IFCModelData[]) {
     applyMatricesToPositions(model);
-
     let count = countVertices(model);
     const vertices = new Float32Array(count * 3);
-
     unindexModelVertices(model, vertices);
-
-    console.log(vertices);
+    return vertices;
 }
 
-function countVertices(model: IFCLoaderData) {
+function countVertices(models: IFCModelData[]) {
     let countVertices = 0;
-    model.data.forEach((model) => {
+    models.forEach((model) => {
         countVertices += model.geometry.position.length / 3;
     });
     return countVertices;
 }
 
-function applyMatricesToPositions(model: IFCLoaderData) {
-    model.data.forEach((model) => {
+function applyMatricesToPositions(models: IFCModelData[]) {
+    models.forEach((model) => {
         const position = model.geometry.position;
         const matrix = model.matrix;
         const vec = vec3.create();
@@ -47,9 +35,9 @@ function applyMatricesToPositions(model: IFCLoaderData) {
     });
 }
 
-function unindexModelVertices(model: IFCLoaderData, vertices: Float32Array) {
+function unindexModelVertices(models: IFCModelData[], vertices: Float32Array) {
     let outBufferIndex = 0;
-    model.data.forEach((model) => {
+    models.forEach((model) => {
         const position = model.geometry.position;
         const index = model.geometry.index;
 

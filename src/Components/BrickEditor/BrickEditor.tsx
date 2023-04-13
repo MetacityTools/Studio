@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import React, { ReactElement } from 'react';
 import { Brick, BrickFace, BrickModel } from 'types';
 
-import { Container } from '@components/Elements/Container';
+import { Container } from '@elements/Container';
 
 import { isValidFace, parseFace, serializeModel } from './parser';
 

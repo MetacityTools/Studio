@@ -24,6 +24,12 @@ export type TypedArray =
     | Int16Array
     | Int8Array;
 
+export interface GLTFModelData {
+    geometry: {
+        position: Float32Array;
+    };
+}
+
 export interface IFCModelData {
     geometry: {
         expressID: Uint32Array;
@@ -38,7 +44,15 @@ export interface IFCModelData {
     matrix: mat4;
 }
 
-export type IFCLoaderData = {
+export interface ModelGeometry {
+    position: Float32Array;
+}
+
+export interface ModelData {
     name: string;
-    data: IFCModelData[];
-};
+    geometry: ModelGeometry;
+}
+
+export interface EditorModel {
+    name: string;
+}

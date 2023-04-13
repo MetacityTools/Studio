@@ -3,7 +3,7 @@ import { Link, RouterProvider, createBrowserRouter } from 'react-router-dom';
 
 import { BrickSetEditor } from './BrickEditor/BrickEditor';
 import { ErrorPage } from './Error';
-import { ModelParser } from './ModelParser/ModelParser';
+import { ModelEditor } from './ModelEditor/Editor';
 
 function AppButon(props: { title: string; app: string }) {
     return (
@@ -35,23 +35,11 @@ const router = createBrowserRouter([
     },
     {
         path: '/modelparser',
-        element: <ModelParser />,
+        element: <ModelEditor />,
         errorElement: <ErrorPage />,
     },
 ]);
 
 export function App() {
-    /*
-    switch (runningApp) {
-        case 'brickset':
-            return <BrickSetEditor />;
-        case 'modelparser':
-            return <ModelParser />;
-        default:
-            return <MainScreen setRunningApp={setRunningApp} />;
-    }*/
-
     return <RouterProvider router={router} />;
 }
-
-//<ModelParser />

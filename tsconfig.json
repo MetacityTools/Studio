@@ -17,9 +17,10 @@
     "jsx": "react-jsx",
     "baseUrl": "./src",
     "paths": {
-      "@redux/*": ["./Redux/*"],
+      "@utils/*": ["./Utils/*"],
       "@components/*": ["./Components/*"],
-      "@workers/*": ["./Workers/*"],
+      "@elements/*": ["./Elements/*"],
+      "@bananagl/*": ["./bananagl/*"],
     }
   },
   "include": ["src"],

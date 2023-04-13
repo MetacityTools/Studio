@@ -5,7 +5,13 @@
     "trailingComma": "es5",
     "printWidth": 100,
     "htmlWhitespaceSensitivity": "ignore",
-    "importOrder": ["^@redux/(.*)$", "^@components/(.*)$", "^@workers/(.*)$", "^[./]"],
+    "importOrder": [
+        "^@utils/(.*)$",
+        "^@bananagl/(.*)$",
+        "^@components/(.*)$",
+        "^@elements/(.*)$",
+        "^[./]"
+    ],
     "importOrderSeparation": true,
     "importOrderSortSpecifiers": true
 }
