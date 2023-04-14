@@ -18,13 +18,13 @@ const fragmentShader = `
 out vec4 fragColor;
 
 void main() {
-    fragColor = vec4(0.5, 0.5, 0.5, 1.0);
+    fragColor = vec4(0.8);
 }
 `;
 
 const shader = new GL.Shader(vertexShader, fragmentShader);
 
-export function gridModel(span: number = 100000, step: number = 100) {
+export function gridModel(span: number = 100000, step: number = 1000) {
     const vertices = gridXY([-span, -span], [span, span], 0, step, 10);
 
     const glmodel = new GL.Model();
@@ -44,8 +44,8 @@ export function gridModel(span: number = 100000, step: number = 100) {
     return glmodel;
 }
 
-const MAJOR_WIDTH = 1;
-const MINOR_WIDTH = 0.1;
+const MAJOR_WIDTH = 2;
+const MINOR_WIDTH = 1;
 
 export function gridXY(
     from: number[],

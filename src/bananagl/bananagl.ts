@@ -7,6 +7,7 @@ import { Buffer, ElementBuffer } from './models/buffer';
 import { Model } from './models/model';
 import { Renderable } from './models/renderable';
 import { Renderer } from './renderer/renderer';
+import { ProjectionType } from './scene/camera';
 import { Scene } from './scene/scene';
 import { Shader } from './shaders/shader';
 
@@ -22,6 +23,7 @@ export {
     InstancedAttribute,
     Buffer,
     ElementBuffer,
+    ProjectionType,
     View,
     Profiler,
     Canvas,

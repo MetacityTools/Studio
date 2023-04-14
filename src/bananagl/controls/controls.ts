@@ -56,6 +56,7 @@ export class WindowControls {
         const { view, lx, ly } = local;
         const factor = event.deltaY > 0 ? 1.1 : 0.9;
         view.camera.zoom(factor, lx, ly);
+        event.preventDefault();
     }
 
     onKeyDown(event: KeyboardEvent) {

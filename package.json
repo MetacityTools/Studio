@@ -13,6 +13,7 @@
         "@loaders.gl/gltf": "^3.3.3",
         "@trivago/prettier-plugin-sort-imports": "^4.1.1",
         "@types/three": "^0.150.0",
+        "allotment": "^1.18.1",
         "autoprefixer": "^10.4.14",
         "bananagl": "^2.0.2",
         "clsx": "^1.2.1",

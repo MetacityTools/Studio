@@ -1,10 +1,10 @@
+import { Allotment } from 'allotment';
+import 'allotment/dist/style.css';
 import React from 'react';
 
 import { gridModel } from '@utils/geometry/gridModel';
 
 import * as GL from '@bananagl/bananagl';
-
-import { Container } from '@elements/Container';
 
 import { Controls } from './Controls';
 import { EditorMenu } from './Menu';
@@ -16,16 +16,21 @@ export function ModelEditor() {
     React.useEffect(() => {
         const grid = gridModel();
         scene.add(grid);
+        renderer.clearColor = [1, 1, 1, 1];
     }, [scene]);
 
     return (
-        <Container full className="h-full">
-            <EditorMenu scene={scene} renderer={renderer} />
-            <Controls scene={scene} />
-            <GL.Canvas renderer={renderer} className="w-full h-full">
-                <GL.View scene={scene} left={0} top={0} width={100} height={100} />
-            </GL.Canvas>
-            <GL.Profiler scenes={[scene]} />
-        </Container>
+        <Allotment>
+            <Allotment.Pane minSize={200}>
+                <EditorMenu scene={scene} renderer={renderer} />
+                <GL.Canvas renderer={renderer} className="w-full h-full">
+                    <GL.View scene={scene} left={0} top={0} width={100} height={100} />
+                </GL.Canvas>
+                <GL.Profiler scenes={[scene]} />
+            </Allotment.Pane>
+            <Allotment.Pane minSize={200} preferredSize={400}>
+                <Controls scene={scene} />
+            </Allotment.Pane>
+        </Allotment>
     );
 }

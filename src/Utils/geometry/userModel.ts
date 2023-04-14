@@ -21,7 +21,7 @@ uniform mat4 uProjectionMatrix;
 uniform mat4 uViewMatrix;
 
 void main() {
-    color = dots * vec3(1.0, 1.0, 1.0) * 0.8 + vec3(0.2);
+    color = dots * vec3(1.0, 1.0, 1.0) * 0.98;
     gl_Position = uProjectionMatrix * uViewMatrix * uModelMatrix * vec4(position, 1.0);
 }
 `;
@@ -32,7 +32,7 @@ in vec3 color;
 out vec4 fragColor;
 
 void main() {
-    fragColor = vec4(color, 0.1);
+    fragColor = vec4(color, 1.0);
 }
 `;
 

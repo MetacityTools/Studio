@@ -17,7 +17,7 @@ export function Controls(props: ControlsProps) {
     }, [scene]);
 
     return (
-        <div className="absolute top-0 right-0 m-4 text-xs rounded-sm bg-neutral-900">
+        <div className="text-xs bg-neutral-900">
             {models
                 .filter((model) => model.data.imported)
                 .map((model, index) => (
