@@ -33,28 +33,10 @@ export function EditorMenu(props: EditorMenuProps) {
         setProjection(GL.ProjectionType.ORTHOGRAPHIC);
     };
 
-    const setTop = () => {
+    const setView = (viewMode: GL.CameraView) => {
         const view = renderer.views[props.view].view;
-        view.cameraLock.mode = GL.CameraView.Top;
-        setMode(GL.CameraView.Top);
-    };
-
-    const setFront = () => {
-        const view = renderer.views[props.view].view;
-        view.cameraLock.mode = GL.CameraView.Front;
-        setMode(GL.CameraView.Front);
-    };
-
-    const setSide = () => {
-        const view = renderer.views[props.view].view;
-        view.cameraLock.mode = GL.CameraView.Side;
-        setMode(GL.CameraView.Side);
-    };
-
-    const setFree = () => {
-        const view = renderer.views[props.view].view;
-        view.cameraLock.mode = GL.CameraView.Free;
-        setMode(GL.CameraView.Free);
+        view.cameraLock.mode = viewMode;
+        setMode(viewMode);
     };
 
     const updateCamTargetZ = (value: number) => {
@@ -66,66 +48,82 @@ export function EditorMenu(props: EditorMenuProps) {
     };
 
     return (
-        <div className="absolute m-4 space-y-2 right-0 bottom-0 z-100">
-            <div className="flex flex-row justify-end">
-                <div className="space-y-2">
-                    <MenuGroup>
-                        <MenuButton
-                            onClick={setOrtho}
-                            tipTitle="Orthographic Camera"
-                            tipPosition="right"
-                            active={projection === GL.ProjectionType.ORTHOGRAPHIC}
-                        >
-                            <BiRectangle className="text-2xl" />
-                        </MenuButton>
-                        <MenuButton
-                            onClick={setPerspective}
-                            tipTitle="Perspective Camera"
-                            tipPosition="right"
-                            active={projection === GL.ProjectionType.PERSPECTIVE}
-                        >
-                            <TbPerspective className="text-2xl" />
-                        </MenuButton>
-                    </MenuGroup>
-                    <MenuGroup>
-                        <MenuButton
-                            tipTitle="Free View"
-                            tipPosition="right"
-                            onClick={setFree}
-                            active={mode === GL.CameraView.Free}
-                        >
-                            <CubeEmpty className="text-2xl" />
-                        </MenuButton>
-                        <MenuButton
-                            tipTitle="Top View"
-                            tipPosition="right"
-                            onClick={setTop}
-                            active={mode === GL.CameraView.Top}
-                        >
-                            <CubeTop className="text-2xl" />
-                        </MenuButton>
-                        <MenuButton
-                            tipTitle="Front View"
-                            tipPosition="right"
-                            onClick={setFront}
-                            active={mode === GL.CameraView.Front}
-                        >
-                            <CubeLeft className="text-2xl" />
-                        </MenuButton>
-                        <MenuButton
-                            tipTitle="Side View"
-                            tipPosition="right"
-                            onClick={setSide}
-                            active={mode === GL.CameraView.Side}
-                        >
-                            <CubeRight className="text-2xl" />
-                        </MenuButton>
-                    </MenuGroup>
-                </div>
+        <>
+            <div className="absolute m-4 space-x-2 left-0 top-0 z-100 flex flex-row ">
+                <MenuGroup>
+                    <MenuButton
+                        onClick={setOrtho}
+                        tipTitle="Orthographic Camera"
+                        tipPosition="top"
+                        active={projection === GL.ProjectionType.ORTHOGRAPHIC}
+                    >
+                        <BiRectangle className="text-2xl" />
+                    </MenuButton>
+                    <MenuButton
+                        onClick={setPerspective}
+                        tipTitle="Perspective Camera"
+                        tipPosition="top"
+                        active={projection === GL.ProjectionType.PERSPECTIVE}
+                    >
+                        <TbPerspective className="text-2xl" />
+                    </MenuButton>
+                </MenuGroup>
+                <MenuGroup>
+                    <MenuButton
+                        tipTitle="Free View"
+                        tipPosition="top"
+                        onClick={setView.bind(null, GL.CameraView.Free)}
+                        active={mode === GL.CameraView.Free}
+                    >
+                        <CubeEmpty className="text-2xl" />
+                    </MenuButton>
+                    <MenuButton
+                        tipTitle="Top View"
+                        tipPosition="top"
+                        onClick={setView.bind(null, GL.CameraView.Top)}
+                        active={mode === GL.CameraView.Top}
+                    >
+                        <CubeTop className="text-2xl" />
+                    </MenuButton>
+                    <MenuButton
+                        tipTitle="Front View"
+                        tipPosition="top"
+                        onClick={setView.bind(null, GL.CameraView.Front)}
+                        active={mode === GL.CameraView.Front}
+                    >
+                        <CubeLeft className="text-2xl" />
+                    </MenuButton>
+                    <MenuButton
+                        tipTitle="Right View"
+                        tipPosition="top"
+                        onClick={setView.bind(null, GL.CameraView.Right)}
+                        active={mode === GL.CameraView.Right}
+                    >
+                        <CubeRight className="text-2xl" />
+                    </MenuButton>
+                    <MenuButton
+                        tipTitle="Left View"
+                        tipPosition="top"
+                        onClick={setView.bind(null, GL.CameraView.Left)}
+                        active={mode === GL.CameraView.Left}
+                    >
+                        <CubeLeft className="text-2xl scale-y-[-100%]" />
+                    </MenuButton>
+                    <MenuButton
+                        tipTitle="Back View"
+                        tipPosition="top"
+                        onClick={setView.bind(null, GL.CameraView.Back)}
+                        active={mode === GL.CameraView.Back}
+                    >
+                        <CubeRight className="text-2xl scale-y-[-100%]" />
+                    </MenuButton>
+                </MenuGroup>
             </div>
-            <MenuGroup>
-                <MenuInput label="Ground Level" value={0} onChange={updateCamTargetZ} />
-            </MenuGroup>
-        </div>
+            <div className="absolute m-4 space-x-2 right-0 top-0 z-100 flex flex-row ">
+                <MenuGroup>
+                    <MenuInput label="Ground Level" value={0} onChange={updateCamTargetZ} />
+                </MenuGroup>
+            </div>
+        </>
     );
 }

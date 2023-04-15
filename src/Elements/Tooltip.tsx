@@ -28,7 +28,7 @@ export function Tooltip(props: TooltipProps) {
                 <div
                     className={`absolute ${
                         position === 'top'
-                            ? 'top-full left-2'
+                            ? 'top-full left-[-4px] text-left'
                             : position === 'left'
                             ? 'left-full top-0'
                             : position === 'right'

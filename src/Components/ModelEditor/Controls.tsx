@@ -2,10 +2,12 @@ import React from 'react';
 
 import * as GL from '@bananagl/bananagl';
 
-import { ModelControls } from './ControlsModel';
+import { ModelControls } from './Controls/ControlsModel';
+import { Vitals } from './Controls/Vitals';
 
 export interface ControlsProps {
     scene: GL.Scene;
+    renderer: GL.Renderer;
 }
 
 export function Controls(props: ControlsProps) {
@@ -17,12 +19,10 @@ export function Controls(props: ControlsProps) {
     }, [scene]);
 
     return (
-        <div className="text-xs bg-neutral-100 w-full h-full shadow-inner">
-            {models
-                .filter((model) => model.data.imported)
-                .map((model, index) => (
-                    <ModelControls key={index} model={model} />
-                ))}
+        <div className="text-xs bg-neutral-100 w-full h-full">
+            <Vitals scenes={[scene]} renderer={props.renderer} />
+            <div className="h-[10rem] m-4 rounded-2xl hover:shadow-even bg-white"></div>
+            <div className="h-[10rem] m-4 rounded-2xl bg-white"></div>
         </div>
     );
 }

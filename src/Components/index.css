@@ -56,4 +56,8 @@ body,
     input[type='range']::-ms-track {
         @apply bg-neutral-700 rounded-full;
     }
+
+    .shadow-even {
+        box-shadow: 0 4px 15px 0 rgba(0, 0, 0, 0.15);
+    }
 }

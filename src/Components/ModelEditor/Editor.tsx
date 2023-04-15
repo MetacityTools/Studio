@@ -25,11 +25,10 @@ export function ModelEditor() {
                 <GL.Canvas renderer={renderer} className="w-full h-full">
                     <GL.View scene={scene} left={0} top={0} width={100} height={100} />
                 </GL.Canvas>
-                <GL.Profiler scenes={[scene]} />
                 <EditorMenu scene={scene} renderer={renderer} view={0} />
             </Allotment.Pane>
             <Allotment.Pane minSize={200} preferredSize={400}>
-                <Controls scene={scene} />
+                <Controls scene={scene} renderer={renderer} />
             </Allotment.Pane>
         </Allotment>
     );
