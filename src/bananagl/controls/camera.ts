@@ -297,4 +297,36 @@ export class Camera {
         vec3.add(this.position, this.target, offset);
         this.updateProjectionViewMatrix();
     }
+
+    topView() {
+        const distance = vec3.distance(this.position, this.target);
+        vec3.set(this.position, this.target[0], this.target[1], this.target[2] + distance);
+        vec3.set(this.rightV, 1, 0, 0);
+        this.updateProjectionViewMatrix();
+    }
+
+    frontView() {
+        const distance = vec3.distance(this.position, this.target);
+        vec3.set(this.position, this.target[0], this.target[1] - distance, this.target[2]);
+        this.updateRightVector();
+        this.updateProjectionViewMatrix();
+    }
+
+    sideView() {
+        const distance = vec3.distance(this.position, this.target);
+        vec3.set(this.position, this.target[0] + distance, this.target[1], this.target[2]);
+        this.updateRightVector();
+        this.updateProjectionViewMatrix();
+    }
+
+    get z() {
+        return this.target[2];
+    }
+
+    set z(z: number) {
+        const delta = z - this.target[2];
+        this.target[2] += delta;
+        this.position[2] += delta;
+        this.updateProjectionViewMatrix();
+    }
 }

@@ -15,9 +15,7 @@ export function ErrorPage() {
                 Please contact the system administrator with the following message:
             </div>
             <p className="font-semibold font-mono">{error.statusText || error.message}</p>
-            <p className="font-mono text-xs whitespace-pre mt-4 bg-neutral-800 p-4 rounded">
-                {error.stack}
-            </p>
+            <p className="font-mono text-xs whitespace-pre mt-4 p-4 rounded">{error.stack}</p>
         </div>
     );
 }

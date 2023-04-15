@@ -1,5 +1,5 @@
+import { Camera } from '@bananagl/controls/camera';
 import { Renderable } from '@bananagl/models/renderable';
-import { Camera } from '@bananagl/scene/camera';
 import { Scene } from '@bananagl/scene/scene';
 import { Shader } from '@bananagl/shaders/shader';
 

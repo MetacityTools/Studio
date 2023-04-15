@@ -1,6 +1,7 @@
 import { vec3 } from 'gl-matrix';
 
-import { Camera } from '@bananagl/scene/camera';
+import { Camera } from '@bananagl/controls/camera';
+import { CameraLock } from '@bananagl/controls/cameraLock';
 import { Scene } from '@bananagl/scene/scene';
 
 import { viewRenderPass } from './pass';
@@ -13,6 +14,7 @@ export class View {
     private height_: number = 0;
     private randomColor: vec3;
     readonly camera: Camera = new Camera();
+    readonly cameraLock = new CameraLock(this.camera);
 
     constructor(readonly scene: Scene) {
         this.randomColor = [Math.random(), Math.random(), Math.random()];

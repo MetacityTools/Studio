@@ -1,6 +1,6 @@
-# Metacity Tables
+# Metacity Studio
 
-Metacity Tables is an online tool for integrating spatial and tabular data, visualizing it and converting it to a fun, grid-like format.
+Metacity Studio is an online tool for integrating spatial and tabular data, visualizing it and converting it to a fun, grid-like format.
 
 ## How does it work?
 
@@ -22,6 +22,7 @@ but we are working on adding formats such as:
 -   GeoJSON
 -   Shapefiles
 -   IFC
+-   GLTF
 
 ## Inspiration
 

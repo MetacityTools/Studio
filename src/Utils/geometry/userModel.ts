@@ -6,22 +6,35 @@ import { alignToOrigin } from '@utils/gridify/grid';
 
 import * as GL from '@bananagl/bananagl';
 
-import { computeDots } from './normals';
+import { computeNormals } from './normals';
 
 const vertexShader = `
 in vec3 position;
-in float dots;
+in vec3 normal;
 
-const vec3 light = normalize(vec3(0.0, 0.0, 1.0));
-
+const vec3 lightDirection = normalize(vec3(0.25, 0.25, 1.0));
 out vec3 color;
 
 uniform mat4 uModelMatrix;
 uniform mat4 uProjectionMatrix;
 uniform mat4 uViewMatrix;
 
+uniform vec3 uCameraPosition;
+uniform vec3 uCameraTarget;
+
+const float zMin = 200.0;
+const float zMax = 350.0;
+
 void main() {
-    color = dots * vec3(1.0, 1.0, 1.0) * 0.98;
+    vec3 invNormal = -normal;
+    vec3 direction = normalize(uCameraPosition - uCameraTarget);
+    float factorA = dot(normal, lightDirection);
+    float factorB = dot(invNormal, lightDirection);
+
+    float factor = max(factorA, factorB);
+    color = vec3(factor) * 0.2 + vec3(0.7);
+    color = mix(vec3(0.5), color, smoothstep(zMin, zMax, position.z));
+
     gl_Position = uProjectionMatrix * uViewMatrix * uModelMatrix * vec4(position, 1.0);
 }
 `;
@@ -46,9 +59,9 @@ export async function addUserModels(scene: GL.Scene, models: UserInputModel[]) {
         const glmodel = new GL.Model();
         const vertices = model.geometry.position;
         alignToOrigin([vertices]);
-        const dots = computeDots(vertices);
+        const normals = computeNormals(vertices);
         glmodel.attributes.add(new GL.Attribute('position', new GL.Buffer(vertices), 3));
-        glmodel.attributes.add(new GL.Attribute('dots', new GL.Buffer(dots), 1));
+        glmodel.attributes.add(new GL.Attribute('normal', new GL.Buffer(normals), 3));
         glmodel.shader = shader;
 
         glmodel.data = {
