@@ -49,7 +49,7 @@ export function EditorMenu(props: EditorMenuProps) {
 
     return (
         <>
-            <div className="absolute m-4 space-x-2 left-0 top-0 z-100 flex flex-row ">
+            <div className="absolute m-4 space-x-2 left-0 top-0 z-40 flex flex-row ">
                 <MenuGroup>
                     <MenuButton
                         onClick={setOrtho}
@@ -119,7 +119,7 @@ export function EditorMenu(props: EditorMenuProps) {
                     </MenuButton>
                 </MenuGroup>
             </div>
-            <div className="absolute m-4 space-x-2 right-0 top-0 z-100 flex flex-row ">
+            <div className="absolute m-4 space-x-2 right-0 top-0 z-40 flex flex-row ">
                 <MenuGroup>
                     <MenuInput label="Ground Level" value={0} onChange={updateCamTargetZ} />
                 </MenuGroup>
