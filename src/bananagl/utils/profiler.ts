@@ -22,7 +22,6 @@ export class Profiler {
         if (!this.renderer) return;
 
         const renderTimes = this.renderer.frameTimeLog;
-        console.log(renderTimes);
         const avgTime = renderTimes.reduce((a, b) => a + b, 0) / renderTimes.length;
         const avgFPS = 1000 / avgTime;
 

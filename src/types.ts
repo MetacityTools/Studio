@@ -1,10 +1,5 @@
 import { mat4 } from 'gl-matrix';
 
-export interface UserInputModel {
-    name: string;
-    buffer: ArrayBuffer;
-}
-
 export type Vec3 = [number, number, number];
 
 export type BrickFace = Vec3[];
@@ -15,6 +10,10 @@ export interface Brick {
     model: BrickModel;
     repr: BrickRepr;
 }
+
+//------------------------------------------------------------
+//General
+
 export type TypedArray =
     | Float32Array
     | Uint32Array
@@ -24,17 +23,48 @@ export type TypedArray =
     | Int16Array
     | Int8Array;
 
-export interface GLTFModelData {
-    geometry: {
-        position: Float32Array;
-    };
+//------------------------------------------------------------
+//GLTF MODEL INTERFACE
+
+export interface GLTFParsedData {
+    nodes: GLTFNode[];
 }
+
+export interface GLTFNode {
+    id: string;
+    mesh?: GLTFMesh;
+    name: string;
+    matrix?: number[];
+    rotation?: [number, number, number, number];
+    scale?: [number, number, number];
+    translation?: [number, number, number];
+    camera?: any;
+    extras?: any;
+}
+
+export interface GLTFMesh {
+    id: string;
+    name: string;
+    primitives: {
+        attributes: {
+            POSITION: {
+                value: Float32Array;
+                type: string;
+            };
+        };
+        indices?: {
+            value: Uint16Array | Uint32Array;
+        };
+    }[];
+}
+
+//------------------------------------------------------------
+//IFC MODEL INTERFACE
 
 export interface IFCModelData {
     geometry: {
         expressID: Uint32Array;
         position: Float32Array;
-        normal: Float32Array;
         index: Uint32Array | Uint16Array;
     };
     materials: {
@@ -44,15 +74,26 @@ export interface IFCModelData {
     matrix: mat4;
 }
 
-export interface ModelGeometry {
-    position: Float32Array;
+//------------------------------------------------------------
+//MAIN MODEL INTERFACE
+
+export interface UserInputModel {
+    name: string;
+    buffer: ArrayBuffer;
 }
 
 export interface ModelData {
-    name: string;
     geometry: ModelGeometry;
+    metadata: ModelMetadata;
 }
 
-export interface EditorModel {
+export interface ModelGeometry {
+    position: Float32Array;
+    submodel: Uint32Array;
+}
+
+export interface ModelMetadata {
     name: string;
+    data: { [submodel: number]: any };
+    file?: ArrayBuffer;
 }

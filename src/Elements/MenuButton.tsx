@@ -17,8 +17,8 @@ export function MenuButton(props: MenuButtonProps) {
             className={clsx(
                 'text-xs last:rounded-r-md first:rounded-l-md transition-colors',
                 props.active
-                    ? 'text-green-500 bg-green-100 hover:bg-green-200'
-                    : 'text-neutral-500 bg-neutral-200 hover:bg-neutral-300'
+                    ? 'text-green-600 bg-green-100 hover:bg-green-200'
+                    : 'text-neutral-600 bg-neutral-200 hover:bg-neutral-300'
             )}
             onClick={props.onClick}
         >

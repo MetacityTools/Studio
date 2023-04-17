@@ -4,15 +4,16 @@ import { IFCModelData } from 'types';
 export function unindexModel(model: IFCModelData[]) {
     applyMatricesToPositions(model);
     let count = countVertices(model);
-    const vertices = new Float32Array(count * 3);
-    unindexModelVertices(model, vertices);
-    return vertices;
+    const position = new Float32Array(count * 3);
+    const submodel = new Uint32Array(count);
+    unindexModelData(model, position, submodel);
+    return { position, submodel };
 }
 
 function countVertices(models: IFCModelData[]) {
     let countVertices = 0;
     models.forEach((model) => {
-        countVertices += model.geometry.position.length / 3;
+        countVertices += model.geometry.index.length;
     });
     return countVertices;
 }
@@ -35,18 +36,26 @@ function applyMatricesToPositions(models: IFCModelData[]) {
     });
 }
 
-function unindexModelVertices(models: IFCModelData[], vertices: Float32Array) {
-    let outBufferIndex = 0;
+function unindexModelData(
+    models: IFCModelData[],
+    positionOut: Float32Array,
+    submodels: Uint32Array
+) {
+    let outVertexIndex = 0;
+    let outModelIndex = 0;
     models.forEach((model) => {
         const position = model.geometry.position;
+        const expressID = model.geometry.expressID;
         const index = model.geometry.index;
 
         for (let i = 0; i < index.length; i++) {
             const indexValue = index[i] * 3;
-            vertices[outBufferIndex] = position[indexValue];
-            vertices[outBufferIndex + 1] = position[indexValue + 1];
-            vertices[outBufferIndex + 2] = position[indexValue + 2];
-            outBufferIndex += 3;
+            positionOut[outVertexIndex] = position[indexValue];
+            positionOut[outVertexIndex + 1] = position[indexValue + 1];
+            positionOut[outVertexIndex + 2] = position[indexValue + 2];
+            outVertexIndex += 3;
+            submodels[outModelIndex] = expressID[i];
+            outModelIndex++;
         }
     });
 }

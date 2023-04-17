@@ -1,20 +1,28 @@
-import { ModelGeometry, UserInputModel } from 'types';
+import { ModelData, UserInputModel } from 'types';
 import { IFCLoader } from 'web-ifc-three';
 
+import { retrieveMetadata } from './metadata';
 import { flattenModelTree } from './transform';
 import { unindexModel } from './unindex';
 
-export async function parse(model: UserInputModel): Promise<ModelGeometry> {
+export async function parse(model: UserInputModel): Promise<ModelData> {
     console.log(`Loading IFC ${model.name}`);
 
-    const vertices = await load(model.buffer);
+    const parsedData = await load(model.buffer);
 
-    if (!vertices) {
+    if (!parsedData) {
         throw new Error(`Failed to load model ${model.name}`);
     }
 
+    const { geometry, metadata } = parsedData;
+
     return {
-        position: vertices,
+        geometry,
+        metadata: {
+            name: model.name,
+            data: metadata,
+            file: model.buffer,
+        },
     };
 }
 
@@ -23,9 +31,12 @@ const wasmPath = '/';
 async function load(buffer: ArrayBuffer) {
     const loader = await setupLoader();
     try {
-        const models = await loadModel(loader, buffer);
-        const vertices = unindexModel(models);
-        return vertices;
+        const { metadata, flatModels } = await loadModel(loader, buffer);
+        const data = unindexModel(flatModels);
+        return {
+            geometry: data,
+            metadata,
+        };
     } catch (e) {
         console.error(e);
     }
@@ -33,8 +44,10 @@ async function load(buffer: ArrayBuffer) {
 
 async function loadModel(loader: IFCLoader, buffer: ArrayBuffer) {
     const model = await loader.parse(buffer);
-    const models = flattenModelTree(model);
-    return models;
+    const flatModels = flattenModelTree(model);
+    const metadata = retrieveMetadata(flatModels);
+    model.ifcManager?.close(model.modelID);
+    return { metadata, flatModels };
 }
 
 async function setupLoader() {
@@ -43,7 +56,6 @@ async function setupLoader() {
     //at our own risk
     await loader.ifcManager.setWasmPath(wasmPath);
     (loader.ifcManager.state.api as any).isWasmPathAbsolute = true;
-    console.log(loader.ifcManager.state.api);
     loader.ifcManager.useWebWorkers(false);
     return loader;
 }

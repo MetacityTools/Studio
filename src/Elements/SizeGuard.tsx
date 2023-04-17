@@ -28,14 +28,12 @@ export function SizeGuard(props: SizeGuardProps) {
             if (ref.current) {
                 setWidth(ref.current.clientWidth);
                 setHeight(ref.current.clientHeight);
-                console.log(ref.current.clientWidth, ref.current.clientHeight);
             }
         };
 
         resize();
 
         window.addEventListener('resize', resize);
-
         return () => {
             window.removeEventListener('resize', resize);
         };

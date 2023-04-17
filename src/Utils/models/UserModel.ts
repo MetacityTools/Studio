@@ -2,11 +2,12 @@ import { mat4 } from 'gl-matrix';
 import { UserInputModel } from 'types';
 
 import { loadModels } from '@utils/formats/loader';
-import { alignToOrigin } from '@utils/gridify/grid';
+import { alignToOrigin } from '@utils/geometry/grid';
 
 import * as GL from '@bananagl/bananagl';
 
-import { computeNormals } from './normals';
+import { computeNormals } from '../geometry/normals';
+import { EditorModel } from './EditorModel';
 
 const vertexShader = `
 in vec3 position;
@@ -22,8 +23,8 @@ uniform mat4 uViewMatrix;
 uniform vec3 uCameraPosition;
 uniform vec3 uCameraTarget;
 
-const float zMin = 200.0;
-const float zMax = 350.0;
+const float zMin = 0.0;
+const float zMax = 30.0;
 
 void main() {
     vec3 invNormal = -normal;
@@ -33,7 +34,7 @@ void main() {
 
     float factor = max(factorA, factorB);
     color = vec3(factor) * 0.2 + vec3(0.7);
-    color = mix(vec3(0.5), color, smoothstep(zMin, zMax, position.z));
+    color *= mix(vec3(0.5), vec3(1.0), smoothstep(zMin, zMax, position.z));
 
     gl_Position = uProjectionMatrix * uViewMatrix * uModelMatrix * vec4(position, 1.0);
 }
@@ -51,23 +52,20 @@ void main() {
 
 const shader = new GL.Shader(vertexShader, fragmentShader);
 
-export async function addUserModels(scene: GL.Scene, models: UserInputModel[]) {
+export async function UserModels(scene: GL.Scene, models: UserInputModel[]) {
     const modelData = await loadModels(models);
-    console.log(modelData);
 
     modelData.forEach((model) => {
-        const glmodel = new GL.Model();
+        //TODO replace with local class with typed model.data
+        const glmodel = new EditorModel();
         const vertices = model.geometry.position;
         alignToOrigin([vertices]);
         const normals = computeNormals(vertices);
         glmodel.attributes.add(new GL.Attribute('position', new GL.Buffer(vertices), 3));
         glmodel.attributes.add(new GL.Attribute('normal', new GL.Buffer(normals), 3));
         glmodel.shader = shader;
-
-        glmodel.data = {
-            name: model.name,
-            imported: true,
-        };
+        glmodel.data = model.metadata.data;
+        glmodel.name = model.metadata.name;
 
         glmodel.uniforms = {
             uModelMatrix: mat4.identity(mat4.create()),

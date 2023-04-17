@@ -24,7 +24,7 @@ void main() {
 
 const shader = new GL.Shader(vertexShader, fragmentShader);
 
-export function gridModel(span: number = 100000, step: number = 1000) {
+export function GridModel(span: number = 100000, step: number = 1000) {
     const vertices = gridXY([-span, -span], [span, span], 0, step, 10);
 
     const glmodel = new GL.Model();
@@ -38,8 +38,6 @@ export function gridModel(span: number = 100000, step: number = 1000) {
     glmodel.uniforms = {
         uUnit: step,
     };
-
-    console.log(glmodel);
 
     return glmodel;
 }

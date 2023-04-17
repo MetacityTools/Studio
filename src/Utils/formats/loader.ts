@@ -22,10 +22,12 @@ function loadGLTF(model: UserInputModel): Promise<ModelData> {
         const worker = new GLTFWorker();
         worker.onmessage = (e) => {
             resolve(e.data);
+            worker.terminate();
         };
         worker.onerror = (e) => {
             console.error(e);
             reject(e);
+            worker.terminate();
         };
         worker.postMessage(model);
     });
@@ -36,10 +38,12 @@ function loadIFC(model: UserInputModel): Promise<ModelData> {
         const worker = new IFCWorker();
         worker.onmessage = (e) => {
             resolve(e.data);
+            worker.terminate();
         };
         worker.onerror = (e) => {
             console.error(e);
             reject(e);
+            worker.terminate();
         };
         worker.postMessage(model);
     });

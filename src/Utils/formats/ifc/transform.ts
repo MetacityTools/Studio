@@ -20,12 +20,6 @@ function swapFromYupToZup(model: IFCModelData) {
         position[i + 2] = y;
     }
 
-    const normal = model.geometry.normal;
-    for (let i = 0; i < normal.length; i += 3) {
-        const y = normal[i + 1];
-        normal[i + 1] = -normal[i + 2];
-        normal[i + 2] = y;
-    }
     return model;
 }
 
@@ -35,7 +29,6 @@ function toIFCModelData(mesh: Mesh): IFCModelData {
         geometry: {
             expressID: (mesh.geometry.attributes.expressID as BufferAttribute).array as Uint32Array,
             position: (mesh.geometry.attributes.position as BufferAttribute).array as Float32Array,
-            normal: (mesh.geometry.attributes.normal as BufferAttribute).array as Float32Array,
             index: (mesh.geometry.index as BufferAttribute).array as Uint32Array,
         },
         materials: mats.map((material) => {

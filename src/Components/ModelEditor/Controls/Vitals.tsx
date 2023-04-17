@@ -45,7 +45,7 @@ export function Vitals(props: VitalsProps) {
     }, []);
 
     return (
-        <div className="flex flex-row place-content-between text-xs w-full">
+        <div className="flex flex-row place-content-between text-xs w-full p-4">
             <div>{fps.toFixed(0)} FPS</div>
             <div>{formatByteSize(mem)} on GPU</div>
         </div>

@@ -70,7 +70,7 @@ export function ModelControls(props: ModelControlsProps) {
     return (
         <div className="flex flex-col items-start border-b last:border-b-0 border-neutral-800">
             <div className="p-2">
-                <span className="text-neutral-400">Model:</span> {model.data.name}
+                <span className="text-neutral-400">Model:</span> {model.name}
             </div>
             <div className="flex flex-row">
                 <div className="p-2 w-16">Shift</div>

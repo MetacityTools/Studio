@@ -6,12 +6,9 @@ self.onmessage = (e) => {
 };
 
 async function process(data: any) {
-    const geometry = await parse(data);
-    (self as any).postMessage(
-        {
-            name: data.name,
-            geometry: geometry,
-        },
-        [geometry.position.buffer]
-    );
+    const model = await parse(data);
+    (self as any).postMessage(model, [
+        model.geometry.position.buffer,
+        model.geometry.submodel.buffer,
+    ]);
 }
