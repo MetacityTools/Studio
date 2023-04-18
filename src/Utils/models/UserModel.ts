@@ -23,8 +23,8 @@ uniform mat4 uViewMatrix;
 uniform vec3 uCameraPosition;
 uniform vec3 uCameraTarget;
 
-const float zMin = 0.0;
-const float zMax = 30.0;
+uniform float uZMin;
+uniform float uZMax;
 
 void main() {
     vec3 invNormal = -normal;
@@ -34,7 +34,7 @@ void main() {
 
     float factor = max(factorA, factorB);
     color = vec3(factor) * 0.2 + vec3(0.7);
-    color *= mix(vec3(0.5), vec3(1.0), smoothstep(zMin, zMax, position.z));
+    color *= mix(vec3(0.5), vec3(1.0), smoothstep(uZMin, uZMax, position.z));
 
     gl_Position = uProjectionMatrix * uViewMatrix * uModelMatrix * vec4(position, 1.0);
 }
@@ -56,7 +56,6 @@ export async function UserModels(scene: GL.Scene, models: UserInputModel[]) {
     const modelData = await loadModels(models);
 
     modelData.forEach((model) => {
-        //TODO replace with local class with typed model.data
         const glmodel = new EditorModel();
         const vertices = model.geometry.position;
         alignToOrigin([vertices]);
@@ -69,8 +68,10 @@ export async function UserModels(scene: GL.Scene, models: UserInputModel[]) {
 
         glmodel.uniforms = {
             uModelMatrix: mat4.identity(mat4.create()),
+            uZMin: 15,
+            uZMax: 40,
         };
 
-        scene.add(glmodel);
+        scene.add(glmodel, true);
     });
 }

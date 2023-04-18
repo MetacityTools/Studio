@@ -55,6 +55,15 @@ export function MenuInput(props: MenuInputProps) {
     );
 }
 
-export function MenuGroup(props: { children: React.ReactNode }) {
-    return <div className="flex flex-row rounded-md">{props.children}</div>;
+export function MenuGroup(props: { children: React.ReactNode; row?: boolean; column?: boolean }) {
+    return (
+        <div
+            className={clsx(
+                'flex rounded-md',
+                (!props.column && 'flex-row') || (!props.row && 'flex-col space-y-2')
+            )}
+        >
+            {props.children}
+        </div>
+    );
 }

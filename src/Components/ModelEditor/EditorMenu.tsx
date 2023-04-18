@@ -20,6 +20,8 @@ export function EditorMenu(props: EditorMenuProps) {
     );
     const [mode, setMode] = React.useState<GL.CameraView>(GL.CameraView.Free);
     const [camTargetZ, setCamTargetZ] = React.useState<number>(0);
+    const [zmin, setZmin] = React.useState<number>(0);
+    const [zmax, setZmax] = React.useState<number>(50);
 
     const setPerspective = () => {
         const view = renderer.views[props.view].view;
@@ -45,6 +47,24 @@ export function EditorMenu(props: EditorMenuProps) {
         const view = renderer.views[props.view].view;
         view.camera.z = value;
         setCamTargetZ(value);
+    };
+
+    const updateZmin = (value: number) => {
+        if (isNaN(value)) return;
+
+        scene.objects.forEach((obj) => {
+            obj.uniforms.uZMin = value;
+        });
+        setZmin(value);
+    };
+
+    const updateZmax = (value: number) => {
+        if (isNaN(value)) return;
+
+        scene.objects.forEach((obj) => {
+            obj.uniforms.uZMax = value;
+        });
+        setZmax(value);
     };
 
     return (
@@ -119,9 +139,13 @@ export function EditorMenu(props: EditorMenuProps) {
                     </MenuButton>
                 </MenuGroup>
             </div>
-            <div className="absolute m-4 space-x-2 right-0 top-0 z-40 flex flex-row ">
-                <MenuGroup>
-                    <MenuInput label="Ground Level" value={0} onChange={updateCamTargetZ} />
+            <div className="absolute m-4 space-x-2 right-0 top-0 z-40 flex flex-row">
+                <MenuGroup column>
+                    <MenuInput
+                        label="Ground Level"
+                        value={camTargetZ}
+                        onChange={updateCamTargetZ}
+                    />
                 </MenuGroup>
             </div>
         </>
