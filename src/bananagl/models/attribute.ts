@@ -1,5 +1,5 @@
 import { mat2, mat3, mat4 } from 'gl-matrix';
-import { TypedArray } from 'types';
+import { TypedArray } from '@bananagl/shaders/shader';
 
 import { Buffer, ElementBuffer, cloneTypedArrayWithSize } from './buffer';
 

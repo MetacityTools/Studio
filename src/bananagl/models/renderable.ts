@@ -1,10 +1,13 @@
 import { mat4 } from 'gl-matrix';
 
+import { BVH } from '@bananagl/scene/bvh';
 import { Shader, UniformValue } from '@bananagl/shaders/shader';
 
 import { Attributes } from './attributes';
 
 export abstract class Renderable {
+    private bvh_?: BVH;
+
     private uniforms_: { [name: string]: UniformValue } = {
         uModelMatrix: mat4.identity(mat4.create()),
     };
@@ -28,6 +31,14 @@ export abstract class Renderable {
 
     get transform(): mat4 {
         return this.uniforms_.uModelMatrix as mat4;
+    }
+
+    set BVH(bvh: BVH | undefined) {
+        this.bvh_ = bvh;
+    }
+
+    get BVH() {
+        return this.bvh_;
     }
 
     abstract get shader(): Shader;

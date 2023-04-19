@@ -1,14 +1,6 @@
 import { mat2, mat3, mat4, vec2, vec3, vec4 } from 'gl-matrix';
-import { TypedArray } from 'types';
 
-type BufferData =
-    | Float32Array
-    | Uint16Array
-    | Uint32Array
-    | Uint8Array
-    | Int16Array
-    | Int32Array
-    | Int8Array;
+import { TypedArray } from '@bananagl/shaders/shader';
 
 export function cloneTypedArrayWithSize(arr: TypedArray, size: number) {
     const newArr = new (arr.constructor as any)(size);
@@ -17,7 +9,7 @@ export function cloneTypedArrayWithSize(arr: TypedArray, size: number) {
 
 export class Buffer {
     buffer: WebGLBuffer | null = null;
-    constructor(public data: BufferData) {}
+    constructor(public data: TypedArray) {}
 
     protected setup(gl: WebGL2RenderingContext) {
         const buffer = gl.createBuffer();

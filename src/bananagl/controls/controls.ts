@@ -9,6 +9,7 @@ export class WindowControls {
     private middleMouse_: boolean = false;
     private rightMouse_: boolean = false;
     private dpr_: number = window.devicePixelRatio;
+    private downTime_: number = 0;
 
     constructor(private canvas: HTMLCanvasElement, private window: Window) {
         canvas.addEventListener('mousedown', this.onMouseDown.bind(this));
@@ -37,6 +38,7 @@ export class WindowControls {
             this.rightMouse_ = true;
         }
 
+        this.downTime_ = Date.now();
         event.preventDefault();
     }
 
@@ -58,6 +60,15 @@ export class WindowControls {
     }
 
     onMouseUp(event: MouseEvent) {
+        if (Date.now() - this.downTime_ < 200) {
+            if (!this.activeView_) return;
+            console.log('click');
+            const { offsetX, offsetY } = event;
+            const ndc = this.activeView_.toNDC(offsetX, offsetY);
+            const ray = this.activeView_.camera.primaryRay(ndc[0], ndc[1]);
+            const hit = this.activeView_.scene.tracing.trace(ray);
+        }
+
         this.finish(event.button);
     }
 
