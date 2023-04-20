@@ -2,7 +2,7 @@ import { ModelMetadata } from 'types';
 
 import * as GL from '@bananagl/bananagl';
 
-export class EditorModel extends GL.Model {
+export class EditorModel extends GL.Pickable {
     protected data_: ModelMetadata = {
         name: 'Default Model Name',
         data: {},

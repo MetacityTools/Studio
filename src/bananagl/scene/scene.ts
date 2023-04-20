@@ -1,11 +1,12 @@
 import { Buffer } from '@bananagl/models/buffer';
+import { Pickable } from '@bananagl/models/pickable';
 import { Renderable } from '@bananagl/models/renderable';
 import { TriangleBVH } from '@bananagl/picking/bvh.triangle';
-import { BVHContainer } from '@bananagl/picking/container';
+import { PickerBVH } from '@bananagl/picking/pickerBVH';
 
 export class Scene {
     readonly objects: Renderable[] = [];
-    readonly tracing: BVHContainer = new BVHContainer();
+    readonly pickerBVH: PickerBVH = new PickerBVH();
     private onChanges: (() => void)[] = [];
     private dirtyShaderOrder_ = false;
 
@@ -13,16 +14,17 @@ export class Scene {
         this.objects.push(object);
         this.onChanges.forEach((callback) => callback());
 
-        if (pickable) {
+        if (pickable) this.initTracing(object);
+        this.dirtyShaderOrder_ = true;
+    }
+
+    private initTracing(object: Renderable) {
+        if (object instanceof Pickable) {
             //TODO: make this more generic
             const bvh = new TriangleBVH(object);
-
             object.BVH = bvh;
-            this.tracing.add(object);
-            bvh.validate();
+            this.pickerBVH.add(object);
         }
-
-        this.dirtyShaderOrder_ = true;
     }
 
     sortByShader() {

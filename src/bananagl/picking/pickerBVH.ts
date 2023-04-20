@@ -1,19 +1,16 @@
 import { mat4 } from 'gl-matrix';
 
-import { Renderable } from '@bananagl/bananagl';
+import { Pickable } from '@bananagl/models/pickable';
 
 import { BVH } from './bvh';
 import { Ray } from './ray';
 
 const inverseTransform = mat4.create();
 
-export type OnPickCallback = (object: Renderable, primitiveIndex: number, t: number) => void;
+export class PickerBVH {
+    private objects: Pickable[] = [];
 
-export class BVHContainer {
-    private objects: Renderable[] = [];
-    private callbacks: OnPickCallback[] = [];
-
-    add(renderable: Renderable) {
+    add(renderable: Pickable) {
         if (!renderable.BVH) return;
         this.objects.push(renderable);
     }
@@ -39,14 +36,7 @@ export class BVHContainer {
 
         if (bestObjectIndex === -1) return null;
 
-        console.log('Picked object', this.objects[bestObjectIndex], 'at', bestT);
-
-        this.callbacks.forEach((callback) =>
-            callback(this.objects[bestObjectIndex], bestPrimitiveIndex, bestT)
-        );
-    }
-
-    set onPick(callback: OnPickCallback) {
-        this.callbacks.push(callback);
+        const object = this.objects[bestObjectIndex];
+        if (object.onPick) object.onPick(object, bestPrimitiveIndex, ray, bestT);
     }
 }

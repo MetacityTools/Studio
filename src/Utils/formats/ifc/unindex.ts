@@ -43,6 +43,7 @@ function unindexModelData(
 ) {
     let outVertexIndex = 0;
     let outModelIndex = 0;
+
     models.forEach((model) => {
         const position = model.geometry.position;
         const expressID = model.geometry.expressID;
@@ -54,7 +55,7 @@ function unindexModelData(
             positionOut[outVertexIndex + 1] = position[indexValue + 1];
             positionOut[outVertexIndex + 2] = position[indexValue + 2];
             outVertexIndex += 3;
-            submodels[outModelIndex] = expressID[i];
+            submodels[outModelIndex] = expressID[index[i]];
             outModelIndex++;
         }
     });

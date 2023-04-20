@@ -7,8 +7,13 @@ export function cloneTypedArrayWithSize(arr: TypedArray, size: number) {
     return newArr;
 }
 
+interface ConstructableTypedArray {
+    new (buffer: ArrayBuffer): TypedArray;
+}
+
 export class Buffer {
     buffer: WebGLBuffer | null = null;
+    private partsToUpdate_: [number, number][] = [];
     constructor(public data: TypedArray) {}
 
     protected setup(gl: WebGL2RenderingContext) {
@@ -24,15 +29,40 @@ export class Buffer {
         else gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
     }
 
+    toUpdate(start?: number, end?: number) {
+        if (start === undefined) start = 0;
+        if (end === undefined) end = this.data.length;
+        this.partsToUpdate_.push([start, end]);
+    }
+
+    get needsUpdate() {
+        return this.partsToUpdate_.length > 0;
+    }
+
+    update(gl: WebGL2RenderingContext) {
+        if (!this.buffer) throw new Error('Buffer not setup');
+        gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
+        for (const [start, end] of this.partsToUpdate_) {
+            gl.bufferSubData(
+                gl.ARRAY_BUFFER,
+                start * this.data.BYTES_PER_ELEMENT,
+                this.data.subarray(start, end)
+            );
+        }
+        this.partsToUpdate_.length = 0;
+    }
+
     getDataType(gl: WebGL2RenderingContext) {
         if (this.data instanceof Float32Array) return gl.FLOAT;
-        else if (this.data instanceof Uint16Array) return gl.UNSIGNED_SHORT;
-        else if (this.data instanceof Uint32Array) return gl.UNSIGNED_INT;
         else if (this.data instanceof Uint8Array) return gl.UNSIGNED_BYTE;
         else if (this.data instanceof Int16Array) return gl.SHORT;
         else if (this.data instanceof Int32Array) return gl.INT;
         else if (this.data instanceof Int8Array) return gl.BYTE;
-        else throw new Error('Unknown data type');
+        else throw new Error('Unsupported data type');
+    }
+
+    getView(typeConstructor: ConstructableTypedArray) {
+        return new typeConstructor(this.data.buffer);
     }
 
     get BYTES_PER_ELEMENT() {

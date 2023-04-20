@@ -53,6 +53,10 @@ export class Window {
         this.controls = new WindowControls(canvas, this);
     }
 
+    dispose() {
+        this.controls.dispose();
+    }
+
     get views() {
         return this.views_;
     }
