@@ -14,6 +14,9 @@ import { EditorMenu } from './EditorMenu';
 export function ModelEditor() {
     const [renderer, setRenderer] = React.useState(new GL.Renderer());
     const [scene, setScene] = React.useState(new GL.Scene());
+    const [selection, setSelection] = React.useState<GL.SelectionManager>(
+        new GL.SelectionManager()
+    );
 
     React.useEffect(() => {
         const grid = GridModel();
@@ -31,7 +34,7 @@ export function ModelEditor() {
                     </GL.Canvas>
                 </Allotment.Pane>
                 <Allotment.Pane minSize={200} preferredSize={400}>
-                    <ControlPanel scene={scene} renderer={renderer} />
+                    <ControlPanel scene={scene} renderer={renderer} selection={selection} />
                 </Allotment.Pane>
             </Allotment>
         </SizeGuard>

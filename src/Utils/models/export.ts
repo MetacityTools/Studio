@@ -20,7 +20,6 @@ export function modelToGltf(model: Model) {
     exporter.parse(
         mesh,
         (result) => {
-            console.log(result);
             const data = result as ArrayBuffer;
 
             //to file and download

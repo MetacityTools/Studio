@@ -1,8 +1,8 @@
+import { Allotment } from 'allotment';
 import React from 'react';
 
-import { loadModels } from '@utils/formats/loader';
 import { EditorModel } from '@utils/models/EditorModel';
-import { UserModels } from '@utils/models/UserModel';
+import { addUserModels } from '@utils/models/addUserModel';
 
 import * as GL from '@bananagl/bananagl';
 
@@ -10,11 +10,11 @@ import { EmptyDataPanel } from '@elements/Empty';
 
 import { ActionMenu } from './Controls/Actions';
 import { ModelList } from './Controls/ModelList';
-import { Vitals } from './Controls/Vitals';
 
 export interface ControlsProps {
     scene: GL.Scene;
     renderer: GL.Renderer;
+    selection: GL.SelectionManager;
 }
 
 async function loadFiles(event: React.ChangeEvent<HTMLInputElement>) {
@@ -32,7 +32,7 @@ async function loadFiles(event: React.ChangeEvent<HTMLInputElement>) {
 }
 
 export function ControlPanel(props: ControlsProps) {
-    const { scene } = props;
+    const { scene, renderer, selection } = props;
 
     const [models, setModels] = React.useState<EditorModel[]>([]);
 
@@ -46,16 +46,23 @@ export function ControlPanel(props: ControlsProps) {
     const handleChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
         event.preventDefault();
         const models = await loadFiles(event);
-        UserModels(scene, models);
+        addUserModels(scene, selection, models);
     };
 
     return (
         <div className="text-xs bg-neutral-100 w-full h-full flex flex-col items-start">
-            <ActionMenu onChange={handleChange} />
-            <div className="overflow-x-auto w-full h-full">
-                {models.length === 0 && <EmptyDataPanel />}
-                {models.length > 0 && <ModelList models={models} />}
-            </div>
+            <ActionMenu onChange={handleChange} scene={scene} renderer={renderer} />
+            <Allotment separator={false} vertical>
+                <Allotment.Pane minSize={200} preferredSize={300}>
+                    <div className="overflow-x-auto w-full h-full">
+                        {models.length === 0 && <EmptyDataPanel />}
+                        {models.length > 0 && <ModelList models={models} />}
+                    </div>
+                </Allotment.Pane>
+                <Allotment.Pane minSize={200} className="border-t border-white">
+                    <div>model detail</div>
+                </Allotment.Pane>
+            </Allotment>
         </div>
     );
 }

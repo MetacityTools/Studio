@@ -8,6 +8,9 @@ export class Scene {
     readonly objects: Renderable[] = [];
     readonly pickerBVH: PickerBVH = new PickerBVH();
     private onChanges: (() => void)[] = [];
+
+    private opaqueObjects_: Renderable[] = [];
+    private transparentObjects_: Renderable[] = [];
     private dirtyShaderOrder_ = false;
 
     add(object: Renderable, pickable = false) {
@@ -28,10 +31,24 @@ export class Scene {
     }
 
     sortByShader() {
-        this.objects.sort((a, b) => {
-            if (a.shader === b.shader) return 0;
-            return a.shader < b.shader ? -1 : 1;
-        });
+        this.opaqueObjects_ = this.objects
+            .filter((object) => !object.shader.transparency)
+            .sort((a, b) => {
+                const shaderA = a.shader;
+                const shaderB = b.shader;
+                if (shaderA === shaderB) return 0;
+                return shaderA < shaderB ? -1 : 1;
+            });
+
+        this.transparentObjects_ = this.objects
+            .filter((object) => object.shader.transparency)
+            .sort((a, b) => {
+                const shaderA = a.shader;
+                const shaderB = b.shader;
+                if (shaderA === shaderB) return 0;
+                return shaderA < shaderB ? -1 : 1;
+            });
+
         this.dirtyShaderOrder_ = false;
     }
 
@@ -39,8 +56,20 @@ export class Scene {
         return this.dirtyShaderOrder_;
     }
 
+    get opaqueObjects() {
+        return this.opaqueObjects_;
+    }
+
+    get transparentObjects() {
+        return this.transparentObjects_;
+    }
+
     set onChange(callback: () => void) {
         this.onChanges.push(callback);
+    }
+
+    set shadersChanged(value: boolean) {
+        this.dirtyShaderOrder_ = value;
     }
 
     get bytesAllocated() {

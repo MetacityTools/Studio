@@ -39,6 +39,10 @@ export class Buffer {
         return this.partsToUpdate_.length > 0;
     }
 
+    get active() {
+        return this.buffer !== null;
+    }
+
     update(gl: WebGL2RenderingContext) {
         if (!this.buffer) throw new Error('Buffer not setup');
         gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);

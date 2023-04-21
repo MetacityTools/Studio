@@ -1,5 +1,13 @@
-interface ActionMenuProps {
+import * as React from 'react';
+
+import * as GL from '@bananagl/bananagl';
+
+import { Vitals } from './Vitals';
+
+export interface ActionMenuProps {
     onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    renderer: GL.Renderer;
+    scene: GL.Scene;
 }
 
 export function ActionMenu(props: ActionMenuProps) {
@@ -18,6 +26,7 @@ export function ActionMenu(props: ActionMenuProps) {
                 id="modelInputFiles"
                 multiple
             />
+            <Vitals scenes={[props.scene]} renderer={props.renderer} />
         </div>
     );
 }

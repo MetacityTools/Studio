@@ -37,6 +37,10 @@ export class PickerBVH {
         if (bestObjectIndex === -1) return null;
 
         const object = this.objects[bestObjectIndex];
-        if (object.onPick) object.onPick(object, bestPrimitiveIndex, ray, bestT);
+        return {
+            object,
+            primitiveIndex: bestPrimitiveIndex,
+            t: bestT,
+        };
     }
 }
