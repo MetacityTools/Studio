@@ -8,8 +8,8 @@ import * as GL from '@bananagl/bananagl';
 
 import { computeNormals } from '../geometry/normals';
 import { EditorModel } from './EditorModel';
+import { solidShader, wireframeShader } from './EditorModelShader';
 import { modelToGltf } from './export';
-import { solidShader, wireframeShader } from './shaders';
 
 export async function addUserModels(
     scene: GL.Scene,
@@ -45,9 +45,8 @@ export async function addUserModels(
         glmodel.name = model.metadata.name;
 
         glmodel.uniforms = {
-            uModelMatrix: mat4.identity(mat4.create()),
-            uZMin: 15,
-            uZMax: 40,
+            uZMin: 0,
+            uZMax: 10,
         };
 
         glmodel.onPick = (object, idx, ray, t, addToSelection) => {
@@ -55,13 +54,11 @@ export async function addUserModels(
             const submodelBuffer = submodel.buffer.getView(Uint32Array);
             if (!submodel) return;
             const id = submodelBuffer[idx * 3];
+
             if (!addToSelection) selection.clearSelection();
             selection.toggleSelection(id, object as EditorModel);
         };
 
-        //modelToGltf(glmodel);
-
-        console.log('Adding model', glmodel);
         scene.add(glmodel, true);
     });
 }

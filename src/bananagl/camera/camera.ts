@@ -44,6 +44,7 @@ export class Camera {
 
     private width: number = 0;
     private height: number = 0;
+    private screenSize: vec2 = vec2.create();
     private maxangle: number = Math.PI / 2;
     private minangle: number = 0.01;
 
@@ -75,6 +76,7 @@ export class Camera {
         this.uniforms_['uProjectionMatrix'] = this.projectionMatrix;
         this.uniforms_['uViewMatrix'] = this.viewMatrix;
         this.uniforms_['uProjectionViewMatrix'] = this.projectionViewMatrix;
+        this.uniforms_['uScreenSize'] = this.screenSize;
 
         this.updateOrthoBounds();
         this.updateMatrices();
@@ -205,6 +207,7 @@ export class Camera {
         this.aspectRatio = width / height;
         this.width = width;
         this.height = height;
+        vec2.set(this.screenSize, width, height);
         this.updateOrthoBounds();
         this.updateProjectionViewMatrix();
     }

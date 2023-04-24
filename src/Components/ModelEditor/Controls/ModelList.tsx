@@ -1,58 +1,54 @@
+import clsx from 'clsx';
 import React from 'react';
-import { GrCubes } from 'react-icons/gr';
-import { HiOutlineCubeTransparent } from 'react-icons/hi';
 import { RiBuilding2Fill } from 'react-icons/ri';
-import { TbTriangleFilled } from 'react-icons/tb';
 
 import { EditorModel } from '@utils/models/EditorModel';
 
-function ModelPanel(props: { model: EditorModel }): JSX.Element {
-    const { model } = props;
-    const [showSub, setShowSub] = React.useState(false);
+interface ModelPanelProps {
+    selected: boolean;
+    onSelect: () => void;
+    model: EditorModel;
+}
+
+function ModelPanel(props: ModelPanelProps): JSX.Element {
+    const { model, onSelect, selected } = props;
 
     return (
-        <div>
-            <div
-                className="text-lg bg-white px-4 py-2 rounded-md text-black hover:shadow-even hover:-translate-y-1 transition-all cursor-pointer"
-                onClick={() => {
-                    setShowSub(!showSub);
-                }}
-            >
-                <div className="flex flex-row items-center">
-                    <RiBuilding2Fill className="mr-4 text-neutral-600" /> {model.name}
-                </div>
-                {showSub && (
-                    <div className="space-y-1 my-4">
-                        {Object.keys(model.data).map((key) => (
-                            <div
-                                key={key}
-                                className="text-sm bg-neutral-100 px-4 py-2 ml-2 rounded-md hover:bg-neutral-200 transition-all cursor-pointer"
-                                onClick={(event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-                                    console.log(key);
-                                    event.stopPropagation();
-                                }}
-                            >
-                                <div className="flex flex-row items-center">
-                                    <TbTriangleFilled className="mr-4 text-neutral-600" /> {key}
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                )}
-            </div>
+        <div
+            className={clsx(
+                'text-lg px-4 py-2 rounded-md hover:shadow-even hover:-translate-y-1 transition-all cursor-pointer flex flex-row items-center',
+                selected ? 'bg-amber-300 text-amber-900' : 'bg-white text-black'
+            )}
+            onClick={onSelect}
+        >
+            <RiBuilding2Fill
+                className={clsx('mr-4', selected ? 'text-amber-900' : 'text-neutral-600')}
+            />{' '}
+            {model.name}
         </div>
     );
 }
 
 interface ModelListProps {
     models: EditorModel[];
+    selectedModel: EditorModel | null;
+    selectModel: (model: EditorModel | null) => void;
 }
 
 export function ModelList(props: ModelListProps) {
+    const { models, selectedModel, selectModel } = props;
+
     return (
         <div className="flex flex-col p-4 space-y-2">
-            {props.models.map((model) => (
-                <ModelPanel model={model} key={model.name} />
+            {models.map((model) => (
+                <ModelPanel
+                    model={model}
+                    key={model.name}
+                    selected={selectedModel === model}
+                    onSelect={() =>
+                        selectedModel === model ? selectModel(null) : selectModel(model)
+                    }
+                />
             ))}
         </div>
     );

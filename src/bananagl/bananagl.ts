@@ -12,6 +12,7 @@ import { Model } from './models/model';
 import { Pickable } from './models/pickable';
 import { Renderable } from './models/renderable';
 import { Selectable } from './models/selectable';
+import { Ray } from './picking/ray';
 import { Renderer } from './renderer/renderer';
 import { Scene } from './scene/scene';
 import { Selection, SelectionManager } from './scene/selection';
@@ -22,6 +23,7 @@ export {
     Renderer,
     Shader,
     Scene,
+    Ray,
     Renderable,
     Model,
     Pickable,

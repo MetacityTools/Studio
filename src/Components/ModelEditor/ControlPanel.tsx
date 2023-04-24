@@ -3,12 +3,14 @@ import React from 'react';
 
 import { EditorModel } from '@utils/models/EditorModel';
 import { addUserModels } from '@utils/models/addUserModel';
+import { transform } from '@utils/transforms/transform';
 
 import * as GL from '@bananagl/bananagl';
 
-import { EmptyDataPanel } from '@elements/Empty';
+import { EmptyDataPanel, EmptyDetialPanel } from '@elements/Empty';
 
 import { ActionMenu } from './Controls/Actions';
+import { ModelDetailPanel } from './Controls/ModelDetail';
 import { ModelList } from './Controls/ModelList';
 
 export interface ControlsProps {
@@ -35,6 +37,7 @@ export function ControlPanel(props: ControlsProps) {
     const { scene, renderer, selection } = props;
 
     const [models, setModels] = React.useState<EditorModel[]>([]);
+    const [selectedModel, setSelectedModel] = React.useState<EditorModel | null>(null);
 
     React.useEffect(() => {
         scene.onChange = () => {
@@ -43,30 +46,44 @@ export function ControlPanel(props: ControlsProps) {
         };
     }, [scene]);
 
-    const handleChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleModelsSelected = async (event: React.ChangeEvent<HTMLInputElement>) => {
         event.preventDefault();
         const models = await loadFiles(event);
         addUserModels(scene, selection, models);
     };
 
+    const handleTransformCompute = () => {
+        transform(scene);
+    };
+
     return (
         <div className="text-xs bg-neutral-100 w-full h-full flex flex-col items-start">
-            <ActionMenu onChange={handleChange} scene={scene} renderer={renderer} />
+            <ActionMenu
+                onModelsSelected={handleModelsSelected}
+                onTransformComputed={handleTransformCompute}
+                scene={scene}
+                renderer={renderer}
+            />
             <Allotment separator={false} vertical>
                 <Allotment.Pane minSize={200} preferredSize={300}>
                     <div className="overflow-x-auto w-full h-full">
                         {models.length === 0 && <EmptyDataPanel />}
-                        {models.length > 0 && <ModelList models={models} />}
+                        {models.length > 0 && (
+                            <ModelList
+                                models={models}
+                                selectedModel={selectedModel}
+                                selectModel={setSelectedModel}
+                            />
+                        )}
                     </div>
                 </Allotment.Pane>
                 <Allotment.Pane minSize={200} className="border-t border-white">
-                    <div>model detail</div>
+                    {!selectedModel && <EmptyDetialPanel />}
+                    {selectedModel && (
+                        <ModelDetailPanel scene={scene} renderer={renderer} model={selectedModel} />
+                    )}
                 </Allotment.Pane>
             </Allotment>
         </div>
     );
 }
-
-//<Vitals scenes={[scene]} renderer={props.renderer} />
-//<div className="h-[10rem] m-4 rounded-2xl hover:shadow-even bg-white"></div>
-//<div className="h-[10rem] m-4 rounded-2xl bg-white"></div>

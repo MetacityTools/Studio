@@ -24,6 +24,7 @@ export class Scene {
     private initTracing(object: Renderable) {
         if (object instanceof Pickable) {
             //TODO: make this more generic
+            console.warn('Assuming triangle mesh');
             const bvh = new TriangleBVH(object);
             object.BVH = bvh;
             this.pickerBVH.add(object);

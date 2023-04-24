@@ -98,6 +98,8 @@ export class WindowControls {
 
     onKeyDown = (event: KeyboardEvent) => {
         const { key } = event;
+        console.log(`Pressed key ${key}`);
+
         if (key === 'Meta' || key === 'Alt') {
             this.altKey_ = true;
         }

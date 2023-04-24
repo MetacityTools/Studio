@@ -191,7 +191,7 @@ export function EditorMenu(props: EditorMenuProps) {
             <div className="absolute m-4 space-x-2 right-0 top-0 z-40 flex flex-row">
                 <MenuGroup column>
                     <MenuInput
-                        label="Ground Level"
+                        label="Camera Ground Level"
                         value={camTargetZ}
                         onChange={updateCamTargetZ}
                     />
