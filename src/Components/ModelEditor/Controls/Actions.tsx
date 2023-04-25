@@ -5,9 +5,7 @@ import * as GL from '@bananagl/bananagl';
 import { Vitals } from './Vitals';
 
 export interface ActionMenuProps {
-    onModelsSelected: (event: React.ChangeEvent<HTMLInputElement>) => void;
-    onTransformComputed: () => void;
-
+    onModelsAdd: (event: React.ChangeEvent<HTMLInputElement>) => void;
     renderer: GL.Renderer;
     scene: GL.Scene;
 }
@@ -24,15 +22,12 @@ export function ActionMenu(props: ActionMenuProps) {
             <input
                 className="hidden"
                 type="file"
-                onChange={props.onModelsSelected}
+                onChange={props.onModelsAdd}
                 id="modelInputFiles"
                 multiple
             />
-            <button
-                onClick={props.onTransformComputed}
-                className="py-2 px-4 bg-neutral-200 hover:bg-neutral-300 rounded-md transition-colors cursor-pointer"
-            >
-                Transform
+            <button className="py-2 px-4 bg-neutral-200 hover:bg-neutral-300 rounded-md transition-colors cursor-pointer">
+                Export
             </button>
             <Vitals scenes={[props.scene]} renderer={props.renderer} />
         </div>

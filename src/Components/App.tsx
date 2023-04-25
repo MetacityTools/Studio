@@ -1,14 +1,13 @@
 import React from 'react';
 import { Link, RouterProvider, createBrowserRouter } from 'react-router-dom';
 
-import { BrickSetEditor } from './BrickEditor/BrickEditor';
 import { ErrorPage } from './Error';
 import { ModelEditor } from './ModelEditor/Editor';
 
 function AppButon(props: { title: string; app: string }) {
     return (
         <Link to={props.app}>
-            <div className="p-4 text-xl rounded-sm">{props.title}</div>
+            <div className="p-4 text-xl rounded-sm bg">{props.title}</div>
         </Link>
     );
 }
@@ -16,8 +15,7 @@ function AppButon(props: { title: string; app: string }) {
 function MainScreen() {
     return (
         <div className="flex flex-col items-center justify-center h-full">
-            <AppButon title="Brick Editor" app="brickset" />
-            <AppButon title="IFC Parser" app="modelparser" />
+            <AppButon title="IFC Parser" app="editor" />
         </div>
     );
 }
@@ -29,12 +27,7 @@ const router = createBrowserRouter([
         errorElement: <ErrorPage />,
     },
     {
-        path: '/brickset',
-        element: <BrickSetEditor />,
-        errorElement: <ErrorPage />,
-    },
-    {
-        path: '/modelparser',
+        path: '/editor',
         element: <ModelEditor />,
         errorElement: <ErrorPage />,
     },

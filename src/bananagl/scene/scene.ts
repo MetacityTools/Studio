@@ -75,12 +75,12 @@ export class Scene {
 
     get bytesAllocated() {
         const bufferSet = new Set<Buffer>();
+        let total = 0;
         for (const object of this.objects) {
             for (const buffer of object.attributes.buffers) {
                 bufferSet.add(buffer);
             }
         }
-        let total = 0;
         for (const buffer of bufferSet) {
             total += buffer.bytesAllocated;
         }

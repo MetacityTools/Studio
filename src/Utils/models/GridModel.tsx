@@ -25,7 +25,7 @@ void main() {
 const shader = new GL.Shader(vertexShader, fragmentShader);
 
 export function GridModel(span: number = 100000, step: number = 1000) {
-    const vertices = gridXY([-span, -span], [span, span], 0, step, 10);
+    const vertices = gridXY([-span, -span], [span, span], -1, step, 10);
 
     const glmodel = new GL.Model();
     glmodel.attributes.add(new GL.Attribute('position', new GL.Buffer(vertices), 3));

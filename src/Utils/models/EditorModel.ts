@@ -11,6 +11,12 @@ export class EditorModel extends GL.Pickable implements GL.Selectable {
         data: {},
     };
 
+    private baseColor_ = [255, 255, 255];
+    private selectedColor_ = [255, 180, 50];
+    //private highlitColor_ = [255, 236, 203];
+    private highlitColor_ = [255, 245, 229];
+    private white_ = [255, 255, 255];
+
     set data(data: { [name: number]: any }) {
         for (const name in data) {
             const value = data[name];
@@ -54,12 +60,18 @@ export class EditorModel extends GL.Pickable implements GL.Selectable {
 
     onSelect(selection: Selection) {
         const id = selection.identifier;
-        this.colorForId(id, 255, 180, 50, 255);
+        this.colorForId(
+            id,
+            this.selectedColor_[0],
+            this.selectedColor_[1],
+            this.selectedColor_[2],
+            255
+        );
     }
 
     onDeselect(selection: Selection) {
         const id = selection.identifier;
-        this.colorForId(id, 255, 255, 255, 0);
+        this.colorForId(id, this.baseColor_[0], this.baseColor_[1], this.baseColor_[2], 0);
     }
 
     private colorForId(id: number, r: number, g: number, b: number, s: number = 1) {
@@ -98,5 +110,19 @@ export class EditorModel extends GL.Pickable implements GL.Selectable {
 
         color.buffer.toUpdate(updateStart, updateEnd);
         selected.buffer.toUpdate(updateStart / 3, updateEnd / 3);
+    }
+
+    set selected(flag: boolean) {
+        const color = flag ? this.highlitColor_ : this.white_;
+        const baseColor = this.attributes.getAttribute('color');
+        if (!baseColor) return;
+        for (let i = 0; i < baseColor.buffer.data.length; i += 3) {
+            if (baseColor.buffer.data[i + 2] === this.selectedColor_[2]) continue;
+            baseColor.buffer.data[i] = color[0];
+            baseColor.buffer.data[i + 1] = color[1];
+            baseColor.buffer.data[i + 2] = color[2];
+        }
+        baseColor.buffer.toUpdate(0, baseColor.buffer.data.length);
+        this.baseColor_ = color;
     }
 }

@@ -11,10 +11,11 @@ import { EditorModel } from './EditorModel';
 import { solidShader, wireframeShader } from './EditorModelShader';
 import { modelToGltf } from './export';
 
-export async function addUserModels(
+export async function addEditorModels(
     scene: GL.Scene,
     selection: GL.SelectionManager,
-    models: UserInputModel[]
+    models: UserInputModel[],
+    selectionCallabck: (model: EditorModel) => void
 ) {
     const modelData = await loadModels(models);
 
@@ -57,6 +58,7 @@ export async function addUserModels(
 
             if (!addToSelection) selection.clearSelection();
             selection.toggleSelection(id, object as EditorModel);
+            selectionCallabck(object as EditorModel);
         };
 
         scene.add(glmodel, true);

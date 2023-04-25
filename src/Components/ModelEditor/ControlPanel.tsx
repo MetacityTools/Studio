@@ -2,7 +2,7 @@ import { Allotment } from 'allotment';
 import React from 'react';
 
 import { EditorModel } from '@utils/models/EditorModel';
-import { addUserModels } from '@utils/models/addUserModel';
+import { addEditorModels } from '@utils/models/addEditorModel';
 import { transform } from '@utils/transforms/transform';
 
 import * as GL from '@bananagl/bananagl';
@@ -46,10 +46,19 @@ export function ControlPanel(props: ControlsProps) {
         };
     }, [scene]);
 
-    const handleModelsSelected = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const onModelSelection = (model: EditorModel | null) => {
+        setSelectedModel((prev) => {
+            if (prev !== null && prev !== model) prev.selected = false;
+            if (model !== null && prev !== model) model.selected = true;
+            if (model === null) selection.clearSelection();
+            return model;
+        });
+    };
+
+    const handleModelsAdded = async (event: React.ChangeEvent<HTMLInputElement>) => {
         event.preventDefault();
         const models = await loadFiles(event);
-        addUserModels(scene, selection, models);
+        addEditorModels(scene, selection, models, onModelSelection);
     };
 
     const handleTransformCompute = () => {
@@ -58,12 +67,7 @@ export function ControlPanel(props: ControlsProps) {
 
     return (
         <div className="text-xs bg-neutral-100 w-full h-full flex flex-col items-start">
-            <ActionMenu
-                onModelsSelected={handleModelsSelected}
-                onTransformComputed={handleTransformCompute}
-                scene={scene}
-                renderer={renderer}
-            />
+            <ActionMenu onModelsAdd={handleModelsAdded} scene={scene} renderer={renderer} />
             <Allotment separator={false} vertical>
                 <Allotment.Pane minSize={200} preferredSize={300}>
                     <div className="overflow-x-auto w-full h-full">
@@ -72,16 +76,23 @@ export function ControlPanel(props: ControlsProps) {
                             <ModelList
                                 models={models}
                                 selectedModel={selectedModel}
-                                selectModel={setSelectedModel}
+                                selectModel={onModelSelection}
                             />
                         )}
                     </div>
                 </Allotment.Pane>
                 <Allotment.Pane minSize={200} className="border-t border-white">
-                    {!selectedModel && <EmptyDetialPanel />}
-                    {selectedModel && (
-                        <ModelDetailPanel scene={scene} renderer={renderer} model={selectedModel} />
-                    )}
+                    <div className="overflow-x-auto w-full h-full">
+                        {!selectedModel && <EmptyDetialPanel />}
+                        {selectedModel && (
+                            <ModelDetailPanel
+                                scene={scene}
+                                renderer={renderer}
+                                model={selectedModel}
+                                selection={selection}
+                            />
+                        )}
+                    </div>
                 </Allotment.Pane>
             </Allotment>
         </div>
