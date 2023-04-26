@@ -1,9 +1,6 @@
-import { Profiler as ProfilerClass } from '@bananagl/utils/profiler';
-
 import { ProjectionType } from './camera/camera';
 import { CameraView } from './camera/cameraLock';
 import { Canvas } from './components/Canvas';
-import { Profiler } from './components/Profiler';
 import { View } from './components/View';
 import { Attribute, ElementAttribute, InstancedAttribute } from './models/attribute';
 import { Attributes } from './models/attributes';
@@ -17,6 +14,8 @@ import { Renderer } from './renderer/renderer';
 import { Scene } from './scene/scene';
 import { Selection, SelectionManager } from './scene/selection';
 import { Shader } from './shaders/shader';
+import { Profiler } from './utils/profiler';
+import { Shortcut, ShortcutOnMouseMove, ShortcutOnPress } from './window/shortcuts';
 import { View as ViewClass } from './window/view';
 
 export {
@@ -36,12 +35,13 @@ export {
     ProjectionType,
     ViewClass,
     CameraView,
-    ProfilerClass,
+    Profiler,
     SelectionManager,
     Selection,
+    ShortcutOnPress,
+    ShortcutOnMouseMove,
     View,
-    Profiler,
     Canvas,
 };
 
-export type { Selectable };
+export type { Selectable, Shortcut };

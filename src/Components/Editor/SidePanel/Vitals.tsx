@@ -2,7 +2,7 @@ import React from 'react';
 import { AiFillVideoCamera } from 'react-icons/ai';
 import { BsGpuCard } from 'react-icons/bs';
 
-import { ProfilerClass, Renderer, Scene } from '@bananagl/bananagl';
+import { Profiler, Renderer, Scene } from '@bananagl/bananagl';
 
 function formatByteSize(bytes: number) {
     if (bytes < 1024) {
@@ -22,7 +22,7 @@ export interface VitalsProps {
 }
 
 export function Vitals(props: VitalsProps) {
-    const [profiler] = React.useState(new ProfilerClass());
+    const [profiler] = React.useState(new Profiler());
     const [fps, setFps] = React.useState(0);
     const [mem, setMem] = React.useState(0);
 

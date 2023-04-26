@@ -49,7 +49,7 @@ export function MenuInput(props: MenuInputProps) {
                 type="number"
                 className="text-xs text-neutral-600 bg-neutral-200 rounded-md p-2 ml-2 w-16 text-right"
                 onChange={(e) => props.onChange(parseFloat(e.target.value))}
-                defaultValue={props.value}
+                value={props.value}
             />
         </div>
     );

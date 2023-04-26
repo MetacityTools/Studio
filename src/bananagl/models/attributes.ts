@@ -113,4 +113,8 @@ export class Attributes {
             if (attrs[i].buffer.needsUpdate && attrs[i].buffer.active) attrs[i].buffer.update(gl);
         }
     }
+
+    list() {
+        return this.attributes.map((a) => a.name);
+    }
 }

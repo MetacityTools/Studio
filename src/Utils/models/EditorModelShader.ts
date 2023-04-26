@@ -23,6 +23,7 @@ uniform float uZMax;
 
 
 void main() {
+    vec3 transformed = (uModelMatrix * vec4(position, 1.0)).xyz;
     vec3 invNormal = -normal;
     vec3 direction = normalize(uCameraPosition - uCameraTarget);
     float factorA = dot(normal, lightDirection);
@@ -30,7 +31,7 @@ void main() {
 
     float factor = max(factorA, factorB);
     oColor = vec3(factor) * 0.2 + vec3(0.7);
-    oColor *= mix(vec3(0.5), vec3(1.0), smoothstep(uZMin, uZMax, position.z));
+    oColor *= mix(vec3(0.5), vec3(1.0), smoothstep(uZMin, uZMax, transformed.z));
     oColor *= color;
     
     int b = int(barCoord);
@@ -39,7 +40,7 @@ void main() {
     else if (b == 2) oVbc = vec3(0.0, 0.0, 1.0);
 
 
-    gl_Position = uProjectionMatrix * uViewMatrix * uModelMatrix * vec4(position, 1.0);
+    gl_Position = uProjectionMatrix * uViewMatrix * vec4(transformed, 1.0);
 }
 `;
 
@@ -92,6 +93,7 @@ uniform float uZMax;
 
 
 void main() {
+    vec3 transformed = (uModelMatrix * vec4(position, 1.0)).xyz;
     vec3 invNormal = -normal;
     vec3 direction = normalize(uCameraPosition - uCameraTarget);
     float factorA = dot(normal, lightDirection);
@@ -99,7 +101,7 @@ void main() {
 
     float factor = max(factorA, factorB);
     oColor = vec3(factor) * 0.2 + vec3(0.7);
-    oColor *= mix(vec3(0.5), vec3(1.0), smoothstep(uZMin, uZMax, position.z));
+    oColor *= mix(vec3(0.5), vec3(1.0), smoothstep(uZMin, uZMax, transformed.z));
     oColor *= color;
     
     int b = int(barCoord);
@@ -108,7 +110,7 @@ void main() {
     else if (b == 2) oVbc = vec3(0.0, 0.0, 1.0);
     oSelected = selected;
 
-    gl_Position = uProjectionMatrix * uViewMatrix * uModelMatrix * vec4(position, 1.0);
+    gl_Position = uProjectionMatrix * uViewMatrix * vec4(transformed, 1.0);
 }
 `;
 

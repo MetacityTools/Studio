@@ -2,6 +2,7 @@ import { ModelMetadata } from 'types';
 
 import { Selection } from '@bananagl/bananagl';
 import * as GL from '@bananagl/bananagl';
+import { OnPickCallback } from '@bananagl/models/pickable';
 
 import { GeometryMode } from './geometry';
 
@@ -13,7 +14,7 @@ export class EditorModel extends GL.Pickable implements GL.Selectable {
 
     private baseColor_ = [255, 255, 255];
     private selectedColor_ = [255, 180, 50];
-    //private highlitColor_ = [255, 236, 203];
+
     private highlitColor_ = [255, 245, 229];
     private white_ = [255, 255, 255];
 

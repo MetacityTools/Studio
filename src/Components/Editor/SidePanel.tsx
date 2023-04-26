@@ -2,18 +2,17 @@ import { Allotment } from 'allotment';
 import React from 'react';
 
 import { EditorModel } from '@utils/models/EditorModel';
-import { addEditorModels } from '@utils/models/addEditorModel';
-import { transform } from '@utils/transforms/transform';
+import { loadAndAddEditorModels } from '@utils/models/addEditorModel';
 
 import * as GL from '@bananagl/bananagl';
 
 import { EmptyDataPanel, EmptyDetialPanel } from '@elements/Empty';
 
-import { ActionMenu } from './Controls/Actions';
-import { ModelDetailPanel } from './Controls/ModelDetail';
-import { ModelList } from './Controls/ModelList';
+import { ActionMenu } from './SidePanel/Actions';
+import { ModelDetailPanel } from './SidePanel/ModelDetail';
+import { ModelList } from './SidePanel/ModelList';
 
-export interface ControlsProps {
+export interface SidePanelProps {
     scene: GL.Scene;
     renderer: GL.Renderer;
     selection: GL.SelectionManager;
@@ -33,36 +32,40 @@ async function loadFiles(event: React.ChangeEvent<HTMLInputElement>) {
     return fileData;
 }
 
-export function ControlPanel(props: ControlsProps) {
+export function SidePanel(props: SidePanelProps) {
     const { scene, renderer, selection } = props;
 
     const [models, setModels] = React.useState<EditorModel[]>([]);
     const [selectedModel, setSelectedModel] = React.useState<EditorModel | null>(null);
+
+    const onModelSelection = (model: EditorModel | null) => {
+        setSelectedModel((prev) => {
+            if (prev !== null && prev !== model) prev.selected = false;
+            if (model !== null && prev !== model) model.selected = true;
+            if (model === null || prev !== model) selection.clearSelection();
+            return model;
+        });
+    };
 
     React.useEffect(() => {
         scene.onChange = () => {
             const copy = scene.objects.filter((obj) => obj instanceof EditorModel) as EditorModel[];
             setModels(copy);
         };
-    }, [scene]);
 
-    const onModelSelection = (model: EditorModel | null) => {
-        setSelectedModel((prev) => {
-            if (prev !== null && prev !== model) prev.selected = false;
-            if (model !== null && prev !== model) model.selected = true;
-            if (model === null) selection.clearSelection();
-            return model;
-        });
-    };
+        renderer.onInit = () => {
+            const controls = renderer.window.controls;
+            controls.onPick = (m: GL.Pickable) => {
+                const model = m as EditorModel;
+                onModelSelection(model);
+            };
+        };
+    }, [scene]);
 
     const handleModelsAdded = async (event: React.ChangeEvent<HTMLInputElement>) => {
         event.preventDefault();
         const models = await loadFiles(event);
-        addEditorModels(scene, selection, models, onModelSelection);
-    };
-
-    const handleTransformCompute = () => {
-        transform(scene);
+        loadAndAddEditorModels(scene, models, selection);
     };
 
     return (
