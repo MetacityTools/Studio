@@ -2,7 +2,6 @@ import { ModelData } from 'types';
 
 import { EditorModel } from '@utils/models/EditorModel';
 import { addEditorModels } from '@utils/models/addEditorModel';
-import { makeModelPickable } from '@utils/models/makePickable';
 
 import * as GL from '@bananagl/bananagl';
 import { TypedArray } from '@bananagl/shaders/shader';
@@ -87,8 +86,16 @@ export function splitModel(scene: GL.Scene, model: EditorModel, selection: GL.Se
         }
     }
 
-    //TODO apply transform bwfore splitting
+    addEditorModels(
+        [originalModelData, newModelData],
+        selection,
+        scene,
+        false,
+        model.position,
+        model.rotation,
+        model.scale,
+        model.uniforms
+    );
 
-    addEditorModels([originalModelData, newModelData], selection, scene);
     scene.remove(model);
 }

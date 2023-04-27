@@ -1,7 +1,6 @@
-import { mat4 } from 'gl-matrix';
-import { ModelData, UserInputModel } from 'types';
+import { mat4, vec3 } from 'gl-matrix';
+import { ModelData } from 'types';
 
-import { loadModels } from '@utils/formats/loader';
 import { alignToCenter } from '@utils/geometry/align';
 
 import * as GL from '@bananagl/bananagl';
@@ -9,22 +8,21 @@ import * as GL from '@bananagl/bananagl';
 import { computeNormals } from '../geometry/normals';
 import { EditorModel } from './EditorModel';
 import { solidShader, wireframeShader } from './EditorModelShader';
-import { makeModelPickable } from './makePickable';
 
-export async function loadAndAddEditorModels(
-    scene: GL.Scene,
-    models: UserInputModel[],
-    selection: GL.SelectionManager
-) {
-    const modelData = await loadModels(models);
-    addEditorModels(modelData, selection, scene, true);
-}
+const DEFAULT_UNIFORMS = {
+    uZMin: 0,
+    uZMax: 10,
+};
 
 export function addEditorModels(
     modelData: ModelData[],
     selection: GL.SelectionManager,
     scene: GL.Scene,
-    align: boolean = false
+    align: boolean = false,
+    position: vec3 = [0, 0, 0],
+    rotation: vec3 = [0, 0, 0],
+    scale: vec3 = [1, 1, 1],
+    uniforms?: { [name: string]: any }
 ) {
     modelData.forEach((model) => {
         const glmodel = new EditorModel();
@@ -52,12 +50,22 @@ export function addEditorModels(
         glmodel.data = model.metadata.data;
         glmodel.name = model.metadata.name;
 
-        glmodel.uniforms = {
-            uZMin: 0,
-            uZMax: 10,
+        glmodel.uniforms = uniforms || DEFAULT_UNIFORMS;
+
+        glmodel.position = position;
+        glmodel.rotation = rotation;
+        glmodel.scale = scale;
+
+        glmodel.onPick = (object, idx, ray, t, addToSelection) => {
+            const submodel = object.attributes.getAttribute('submodel') as GL.Attribute;
+            const submodelBuffer = submodel.buffer.getView(Uint32Array);
+            if (!submodel) return;
+            const id = submodelBuffer[idx * 3];
+
+            if (!addToSelection) selection.clearSelection();
+            selection.toggleSelection(id, object as EditorModel);
         };
 
-        makeModelPickable(glmodel, selection);
         scene.add(glmodel, true);
     });
 }

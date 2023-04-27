@@ -79,7 +79,23 @@ export interface IFCModelData {
 
 export interface UserInputModel {
     name: string;
+    data: IFCData | GLTFData | ShapefileData;
+}
+
+export interface IFCData {
     buffer: ArrayBuffer;
+}
+
+export interface GLTFData {
+    buffer: ArrayBuffer;
+}
+
+export interface ShapefileData {
+    shp: ArrayBuffer;
+    shx?: ArrayBuffer;
+    dbf?: ArrayBuffer;
+    prj?: ArrayBuffer;
+    cpg?: ArrayBuffer;
 }
 
 export interface ModelData {

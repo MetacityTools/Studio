@@ -1,6 +1,6 @@
 import { parse as parseGLTF } from '@loaders.gl/core';
 import { GLTFLoader } from '@loaders.gl/gltf';
-import { GLTFParsedData, ModelData, UserInputModel } from 'types';
+import { GLTFData, GLTFParsedData, ModelData, UserInputModel } from 'types';
 
 import { swapFromYupToZup } from './transform';
 import { unindexGeometry } from './unindex';
@@ -24,7 +24,8 @@ export async function parse(model: UserInputModel): Promise<ModelData> {
 }
 
 async function loadModel(model: UserInputModel) {
-    return (await parseGLTF(model.buffer, GLTFLoader, {
+    const data = model.data as GLTFData;
+    return (await parseGLTF(data.buffer, GLTFLoader, {
         worker: false,
     })) as GLTFParsedData;
 }

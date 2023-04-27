@@ -4,6 +4,7 @@ import { EditorModel } from '@utils/models/EditorModel';
 
 import * as GL from '@bananagl/bananagl';
 
+import { DeleteModelWidget } from './Widgets/DeleteModel';
 import { SnapVerticesWidget } from './Widgets/SnapVertices';
 import { SplitModelWidget } from './Widgets/SplitModel';
 import { ModelTransformationWidget } from './Widgets/Transformation';
@@ -23,6 +24,7 @@ export function ModelDetailPanel(props: ModelDetialProps) {
             <ModelTransformationWidget model={model} renderer={renderer} />
             <SnapVerticesWidget model={model} />
             <SplitModelWidget model={model} scene={scene} selection={selection} />
+            <DeleteModelWidget model={model} scene={scene} />
         </div>
     );
 }

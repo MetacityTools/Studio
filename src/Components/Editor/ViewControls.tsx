@@ -3,7 +3,7 @@ import { BiRectangle } from 'react-icons/bi';
 import { TbPerspective, TbVectorTriangle } from 'react-icons/tb';
 
 import { EditorModel } from '@utils/models/EditorModel';
-import { GeometryMode } from '@utils/models/geometry';
+import { GeometryMode } from '@utils/models/GeometryMode';
 
 import * as GL from '@bananagl/bananagl';
 
@@ -14,6 +14,7 @@ import { CameraZControls } from './ViewControls/CameraZ';
 import { DirectionControls } from './ViewControls/Direction';
 import { ProjectionControls } from './ViewControls/Projection';
 import { ShaderControls } from './ViewControls/Shader';
+import { Shading } from './ViewControls/Shading';
 
 export interface EditorMenuProps {
     scene: GL.Scene;
@@ -33,6 +34,7 @@ export function ViewControls(props: EditorMenuProps) {
             </div>
             <div className="absolute m-4 space-x-2 right-0 top-0 z-40 flex flex-row">
                 <CameraZControls {...props} />
+                <Shading {...props} />
             </div>
         </>
     );

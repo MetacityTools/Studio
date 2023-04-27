@@ -11,6 +11,7 @@ export function viewRenderPass(scene: Scene, renderer: Renderer, camera: Camera)
     gl.enable(gl.DEPTH_TEST);
     gl.disable(gl.BLEND);
 
+    scene.removeDisposed(gl);
     if (scene.dirtyShaderOrder) scene.sortByShader();
     const opaque = scene.opaqueObjects;
     renderObjectGroup(opaque, renderer, camera);
@@ -21,10 +22,10 @@ export function viewRenderPass(scene: Scene, renderer: Renderer, camera: Camera)
     renderObjectGroup(transparent, renderer, camera);
 }
 
-function renderObjectGroup(opaque: Renderable[], renderer: Renderer, camera: Camera) {
-    //render by shader class type
+function renderObjectGroup(objects: Renderable[], renderer: Renderer, camera: Camera) {
     let shader: Shader | null = null;
-    for (const renderable of opaque) {
+    for (const renderable of objects) {
+        if (!renderable.visible) continue;
         if (shader === null || renderable.shader !== shader) {
             shader = renderable.shader;
             if (!shader.active) shader.setup(renderer.gl);
@@ -42,10 +43,9 @@ function render(renderer: Renderer, renderable: Renderable, shader: Shader, came
     renderable.attributes.update(gl);
     renderable.attributes.bind(gl, shader);
 
-    //todo instanced
     if (renderable.attributes.isIndexed) {
         if (renderable.attributes.isInstanced) {
-            console.warn('instanced indexed rendering not supported');
+            console.warn('Instanced indexed rendering not supported');
         } else {
             gl.drawElements(
                 gl.TRIANGLES,

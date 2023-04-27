@@ -18,14 +18,14 @@ export function WidgetDescription(props: { children?: React.ReactNode }) {
     return <div className="py-2 px-4 w-full text-neutral-500 text-xs">{props.children}</div>;
 }
 
-export function WidgetApplyButton(props: { onApply: () => void }) {
+export function WidgetApplyButton(props: { onApply: () => void; text?: string }) {
     const { onApply } = props;
     return (
         <button
             className="py-2 px-4 hover:bg-neutral-300 rounded-tr-md transition-colors cursor-pointer font-heavy"
             onClick={onApply}
         >
-            Apply
+            {props.text || 'Apply'}
         </button>
     );
 }

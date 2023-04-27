@@ -1,16 +1,28 @@
 import * as React from 'react';
 
+import { load } from '@utils/formats/loader';
+import { addEditorModels } from '@utils/models/addEditorModel';
+
 import * as GL from '@bananagl/bananagl';
 
 import { Vitals } from './Vitals';
 
 export interface ActionMenuProps {
-    onModelsAdd: (event: React.ChangeEvent<HTMLInputElement>) => void;
     renderer: GL.Renderer;
     scene: GL.Scene;
+    selection: GL.SelectionManager;
 }
 
 export function ActionMenu(props: ActionMenuProps) {
+    const { scene, selection } = props;
+
+    const handleModelsAdded = async (event: React.ChangeEvent<HTMLInputElement>) => {
+        const models = await load(event);
+        addEditorModels(models, selection, scene, true);
+        event.target.value = '';
+        event.preventDefault();
+    };
+
     return (
         <div className="flex flex-row p-4 border-b w-full border-b border-white space-x-2">
             <label
@@ -22,7 +34,7 @@ export function ActionMenu(props: ActionMenuProps) {
             <input
                 className="hidden"
                 type="file"
-                onChange={props.onModelsAdd}
+                onChange={handleModelsAdded}
                 id="modelInputFiles"
                 multiple
             />

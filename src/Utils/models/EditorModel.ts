@@ -4,7 +4,7 @@ import { Selection } from '@bananagl/bananagl';
 import * as GL from '@bananagl/bananagl';
 import { OnPickCallback } from '@bananagl/models/pickable';
 
-import { GeometryMode } from './geometry';
+import { GeometryMode } from './GeometryMode';
 
 export class EditorModel extends GL.Pickable implements GL.Selectable {
     protected data_: ModelMetadata = {
@@ -76,6 +76,8 @@ export class EditorModel extends GL.Pickable implements GL.Selectable {
     }
 
     private colorForId(id: number, r: number, g: number, b: number, s: number = 1) {
+        if (this.disposed) return;
+
         const color = this.attributes.getAttribute('color');
         const selected = this.attributes.getAttribute('selected');
         const submodel = this.attributes.getAttribute('submodel');
@@ -114,6 +116,8 @@ export class EditorModel extends GL.Pickable implements GL.Selectable {
     }
 
     set selected(flag: boolean) {
+        if (this.disposed) return;
+
         const color = flag ? this.highlitColor_ : this.white_;
         const baseColor = this.attributes.getAttribute('color');
         if (!baseColor) return;

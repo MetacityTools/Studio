@@ -11,12 +11,14 @@ function AppButon(props: { title: string; app: string }) {
 
 export function IntroScreen() {
     return (
-        <Link to="editor" className="flex flex-col items-center justify-center h-full">
-            <div className="bg-white w-[80%] h-[80%] flex flex-col items-center justify-center rounded-b-md transition-all">
-                <h1 className="text-2xl lg:text-4xl tracking-widest uppercase text-neutral-500 mt-4 mb-8">
-                    Open Studio todo intro screen
-                </h1>
+        <div className="bg-white w-full h-full flex flex-col items-center justify-center rounded-b-md transition-all">
+            <h1 className="text-2xl lg:text-4xl tracking-widest uppercase text-black mt-4 mb-8 z-10">
+                Metacity Studio
+            </h1>
+
+            <div className="flex flex-row space-x-2 z-10">
+                <AppButon title="Open Editor" app="/editor" />
             </div>
-        </Link>
+        </div>
     );
 }

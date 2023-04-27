@@ -2,7 +2,6 @@ import { Allotment } from 'allotment';
 import React from 'react';
 
 import { EditorModel } from '@utils/models/EditorModel';
-import { loadAndAddEditorModels } from '@utils/models/addEditorModel';
 
 import * as GL from '@bananagl/bananagl';
 
@@ -18,25 +17,42 @@ export interface SidePanelProps {
     selection: GL.SelectionManager;
 }
 
-async function loadFiles(event: React.ChangeEvent<HTMLInputElement>) {
-    const files = event.target.files;
-    if (!files) {
-        return [];
-    }
-    const fileData = [];
-    for (let i = 0; i < files.length; i++) {
-        const file = files[i];
-        const buffer = await file.arrayBuffer();
-        fileData.push({ name: file.name, buffer });
-    }
-    return fileData;
-}
-
 export function SidePanel(props: SidePanelProps) {
     const { scene, renderer, selection } = props;
 
     const [models, setModels] = React.useState<EditorModel[]>([]);
     const [selectedModel, setSelectedModel] = React.useState<EditorModel | null>(null);
+
+    React.useEffect(() => {
+        const onChange = () => {
+            const copy = scene.objects.filter((obj) => obj instanceof EditorModel) as EditorModel[];
+            setModels(copy);
+
+            if (selectedModel !== null && !copy.includes(selectedModel)) {
+                setSelectedModel(null);
+            }
+        };
+
+        scene.onChange = onChange;
+
+        return () => {
+            scene.removeChange = onChange;
+        };
+    }, [scene, selectedModel]);
+
+    React.useEffect(() => {
+        renderer.onInit = () => {
+            const controls = renderer.window.controls;
+            controls.onPick = (m: GL.Pickable) => {
+                const model = m as EditorModel;
+                onModelSelection(model);
+            };
+        };
+    }, [renderer]);
+
+    React.useEffect(() => {
+        console.log('model selection changed', selectedModel);
+    }, [selectedModel]);
 
     const onModelSelection = (model: EditorModel | null) => {
         setSelectedModel((prev) => {
@@ -47,30 +63,9 @@ export function SidePanel(props: SidePanelProps) {
         });
     };
 
-    React.useEffect(() => {
-        scene.onChange = () => {
-            const copy = scene.objects.filter((obj) => obj instanceof EditorModel) as EditorModel[];
-            setModels(copy);
-        };
-
-        renderer.onInit = () => {
-            const controls = renderer.window.controls;
-            controls.onPick = (m: GL.Pickable) => {
-                const model = m as EditorModel;
-                onModelSelection(model);
-            };
-        };
-    }, [scene]);
-
-    const handleModelsAdded = async (event: React.ChangeEvent<HTMLInputElement>) => {
-        event.preventDefault();
-        const models = await loadFiles(event);
-        loadAndAddEditorModels(scene, models, selection);
-    };
-
     return (
         <div className="text-xs bg-neutral-100 w-full h-full flex flex-col items-start">
-            <ActionMenu onModelsAdd={handleModelsAdded} scene={scene} renderer={renderer} />
+            <ActionMenu scene={scene} renderer={renderer} selection={selection} />
             <Allotment separator={false} vertical>
                 <Allotment.Pane minSize={200} preferredSize={300}>
                     <div className="overflow-x-auto w-full h-full">

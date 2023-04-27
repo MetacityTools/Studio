@@ -6,6 +6,7 @@ import { PickerBVH } from '@bananagl/picking/pickerBVH';
 
 export class Scene {
     readonly objects: Renderable[] = [];
+    readonly toDispose: Renderable[] = [];
     readonly pickerBVH = new PickerBVH(this);
     private onChanges: (() => void)[] = [];
 
@@ -24,9 +25,15 @@ export class Scene {
     remove(object: Renderable) {
         const idx = this.objects.indexOf(object);
         if (idx === -1) return;
-        this.objects.splice(idx, 1);
+        this.toDispose.push(...this.objects.splice(idx, 1));
+
         this.onChanges.forEach((callback) => callback());
         this.dirtyShaderOrder_ = true;
+    }
+
+    removeDisposed(gl: WebGL2RenderingContext) {
+        this.toDispose.forEach((object) => object.dispose(gl));
+        this.toDispose.length = 0;
     }
 
     private initTracing(object: Renderable) {
@@ -76,6 +83,12 @@ export class Scene {
         this.onChanges.push(callback);
     }
 
+    set removeChange(callback: () => void) {
+        const idx = this.onChanges.indexOf(callback);
+        if (idx === -1) return;
+        this.onChanges.splice(idx, 1);
+    }
+
     set shadersChanged(value: boolean) {
         this.dirtyShaderOrder_ = value;
     }
@@ -88,6 +101,7 @@ export class Scene {
                 bufferSet.add(buffer);
             }
         }
+
         for (const buffer of bufferSet) {
             total += buffer.bytesAllocated;
         }

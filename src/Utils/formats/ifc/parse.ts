@@ -1,4 +1,4 @@
-import { ModelData, UserInputModel } from 'types';
+import { IFCData, ModelData, UserInputModel } from 'types';
 import { IFCLoader } from 'web-ifc-three';
 
 import { retrieveMetadata } from './metadata';
@@ -7,8 +7,9 @@ import { unindexModel } from './unindex';
 
 export async function parse(model: UserInputModel): Promise<ModelData> {
     console.log(`Loading IFC ${model.name}`);
+    const data = model.data as IFCData;
 
-    const parsedData = await load(model.buffer);
+    const parsedData = await load(data.buffer);
 
     if (!parsedData) {
         throw new Error(`Failed to load model ${model.name}`);
@@ -21,7 +22,7 @@ export async function parse(model: UserInputModel): Promise<ModelData> {
         metadata: {
             name: model.name,
             data: metadata,
-            file: model.buffer,
+            file: data.buffer,
         },
     };
 }
