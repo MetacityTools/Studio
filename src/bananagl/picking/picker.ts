@@ -3,13 +3,12 @@ import { mat4, vec3 } from 'gl-matrix';
 import { Pickable } from '@bananagl/models/pickable';
 import { Scene } from '@bananagl/scene/scene';
 
-import { BVH } from './bvh';
 import { Ray } from './ray';
 
 const inverseTransform = mat4.create();
 const intersectionPoint = vec3.create();
 
-export class PickerBVH {
+export class Picker {
     constructor(private readonly scene: Scene) {}
 
     trace(ray: Ray) {
@@ -46,7 +45,8 @@ export class PickerBVH {
     }
 
     traceObject(ray: Ray, object: Pickable) {
-        const bvh = object.BVH as BVH;
+        const bvh = object.BVH;
+        if (!bvh) return null;
 
         //to object space
         ray.transform(mat4.invert(inverseTransform, object.transform));

@@ -65,7 +65,7 @@ function shootRaysUp(scene: GL.Scene, samplePoints: Float32Array) {
     for (let i = 0; i < samplePoints.length; i += 3) {
         ray.origin = samplePoints.subarray(i, i + 3);
         ray.direction = [0, 0, 1];
-        const hit = scene.pickerBVH.trace(ray);
+        const hit = scene.picker.trace(ray);
         if (hit) {
             results[i / 3] = 0;
         }

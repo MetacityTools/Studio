@@ -1,24 +1,21 @@
 import { Buffer } from '@bananagl/models/buffer';
-import { Pickable } from '@bananagl/models/pickable';
 import { Renderable } from '@bananagl/models/renderable';
-import { TriangleBVH } from '@bananagl/picking/bvh.triangle';
-import { PickerBVH } from '@bananagl/picking/pickerBVH';
+import { Picker } from '@bananagl/picking/picker';
 
 export class Scene {
     readonly objects: Renderable[] = [];
     readonly toDispose: Renderable[] = [];
-    readonly pickerBVH = new PickerBVH(this);
+    readonly picker = new Picker(this);
     private onChanges: (() => void)[] = [];
 
     private opaqueObjects_: Renderable[] = [];
     private transparentObjects_: Renderable[] = [];
+    private noDepthObjects_: Renderable[] = [];
     private dirtyShaderOrder_ = false;
 
-    add(object: Renderable, pickable = false) {
+    add(object: Renderable) {
         this.objects.push(object);
         this.onChanges.forEach((callback) => callback());
-
-        if (pickable) this.initTracing(object);
         this.dirtyShaderOrder_ = true;
     }
 
@@ -36,18 +33,9 @@ export class Scene {
         this.toDispose.length = 0;
     }
 
-    private initTracing(object: Renderable) {
-        if (object instanceof Pickable) {
-            //TODO: make this more generic
-            console.warn('Assuming triangle mesh');
-            const bvh = new TriangleBVH(object);
-            object.BVH = bvh;
-        }
-    }
-
     sortByShader() {
         this.opaqueObjects_ = this.objects
-            .filter((object) => !object.shader.transparency)
+            .filter((object) => !object.shader.transparency && object.shader.depth)
             .sort((a, b) => {
                 const shaderA = a.shader;
                 const shaderB = b.shader;
@@ -56,7 +44,16 @@ export class Scene {
             });
 
         this.transparentObjects_ = this.objects
-            .filter((object) => object.shader.transparency)
+            .filter((object) => object.shader.transparency && object.shader.depth)
+            .sort((a, b) => {
+                const shaderA = a.shader;
+                const shaderB = b.shader;
+                if (shaderA === shaderB) return 0;
+                return shaderA < shaderB ? -1 : 1;
+            });
+
+        this.noDepthObjects_ = this.objects
+            .filter((object) => object.shader.depth === false)
             .sort((a, b) => {
                 const shaderA = a.shader;
                 const shaderB = b.shader;
@@ -77,6 +74,10 @@ export class Scene {
 
     get transparentObjects() {
         return this.transparentObjects_;
+    }
+
+    get noDepthObjects() {
+        return this.noDepthObjects_;
     }
 
     set onChange(callback: () => void) {

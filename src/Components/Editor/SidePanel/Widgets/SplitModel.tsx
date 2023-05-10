@@ -6,6 +6,8 @@ import { splitModel } from '@utils/transforms/modelSplit';
 
 import * as GL from '@bananagl/bananagl';
 
+import { EditorContext } from '@components/Editor/Editor';
+
 import {
     DetailWidget,
     WidgetApplyButton,
@@ -22,9 +24,12 @@ interface SnapVerticesProps {
 
 export function SplitModelWidget(props: SnapVerticesProps) {
     const { scene, model, selection } = props;
+    const context = React.useContext(EditorContext);
 
-    const apply = () => {
-        splitModel(scene, model, selection);
+    const apply = async () => {
+        context?.setProcessing(true);
+        await splitModel(scene, model, selection);
+        context?.setProcessing(false);
     };
 
     return (

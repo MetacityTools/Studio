@@ -24,15 +24,15 @@ function ModelPanel(props: ModelPanelProps): JSX.Element {
     return (
         <div
             className={clsx(
-                'text-lg rounded-md hover:shadow-even hover:-translate-y-1 transition-all cursor-pointer flex flex-row items-stretch',
+                'text-lg rounded-md hover:shadow-even hover:-translate-y-1 transition-all cursor-pointer flex flex-row items-stretch ',
                 selected ? 'bg-amber-300 text-amber-900' : 'bg-white text-black'
             )}
             onClick={onSelect}
         >
-            <div className="px-4 py-2 flex flex-row items-center flex-1">
+            <div className="px-4 py-2 flex flex-row items-center flex-1 truncate">
                 <RiBuilding2Fill
                     className={clsx('mr-4', selected ? 'text-amber-900' : 'text-neutral-600')}
-                />{' '}
+                />
                 <div className="flex-1">{model.name}</div>
             </div>
             <button

@@ -1,3 +1,4 @@
+import { Tab } from '@headlessui/react';
 import { Allotment } from 'allotment';
 import React from 'react';
 

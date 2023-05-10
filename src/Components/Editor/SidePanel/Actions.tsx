@@ -5,6 +5,7 @@ import { addEditorModels } from '@utils/models/addEditorModel';
 
 import * as GL from '@bananagl/bananagl';
 
+import { EditorContext } from '../Editor';
 import { Vitals } from './Vitals';
 
 export interface ActionMenuProps {
@@ -15,10 +16,13 @@ export interface ActionMenuProps {
 
 export function ActionMenu(props: ActionMenuProps) {
     const { scene, selection } = props;
+    const context = React.useContext(EditorContext);
 
     const handleModelsAdded = async (event: React.ChangeEvent<HTMLInputElement>) => {
+        context?.setProcessing(true);
         const models = await load(event);
-        addEditorModels(models, selection, scene, true);
+        await addEditorModels(models, selection, scene, true);
+        context?.setProcessing(false);
         event.target.value = '';
         event.preventDefault();
     };

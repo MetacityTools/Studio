@@ -22,7 +22,7 @@ void main() {
 }
 `;
 
-const shader = new GL.Shader(vertexShader, fragmentShader);
+const shader = new GL.Shader(vertexShader, fragmentShader, false, false);
 
 export function GridModel(span: number = 100000, step: number = 1000) {
     const vertices = gridXY([-span, -span], [span, span], -1, step, 10);

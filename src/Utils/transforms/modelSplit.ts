@@ -6,7 +6,11 @@ import { addEditorModels } from '@utils/models/addEditorModel';
 import * as GL from '@bananagl/bananagl';
 import { TypedArray } from '@bananagl/shaders/shader';
 
-export function splitModel(scene: GL.Scene, model: EditorModel, selection: GL.SelectionManager) {
+export async function splitModel(
+    scene: GL.Scene,
+    model: EditorModel,
+    selection: GL.SelectionManager
+) {
     const selected = selection.selected.filter((s) => s.object === model);
     if (selected.length === 0) return;
     const idsToRemove = new Set(selected.map((s) => s.identifier));
@@ -86,7 +90,7 @@ export function splitModel(scene: GL.Scene, model: EditorModel, selection: GL.Se
         }
     }
 
-    addEditorModels(
+    await addEditorModels(
         [originalModelData, newModelData],
         selection,
         scene,

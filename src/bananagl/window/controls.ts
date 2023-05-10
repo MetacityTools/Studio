@@ -114,7 +114,7 @@ export class WindowControls {
         const { offsetX, offsetY } = event;
         const ndc = this.activeView_.toNDC(offsetX, offsetY);
         const ray = this.activeView_.camera.primaryRay(ndc[0], ndc[1]);
-        const hit = this.activeView_.scene.pickerBVH.trace(ray);
+        const hit = this.activeView_.scene.picker.trace(ray);
         if (hit && hit.object.onPick) {
             hit.object.onPick(hit.object, hit.primitiveIndex, ray, hit.t, this.shiftKey_);
             if (this.onPick_) this.onPick_(hit.object);
