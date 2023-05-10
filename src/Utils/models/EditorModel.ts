@@ -18,6 +18,10 @@ export class EditorModel extends GL.Pickable implements GL.Selectable {
     private highlitColor_ = [255, 245, 229];
     private white_ = [255, 255, 255];
 
+    constructor() {
+        super();
+    }
+
     set data(data: { [name: number]: any }) {
         for (const name in data) {
             const value = data[name];

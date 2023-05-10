@@ -5,10 +5,6 @@ import { ModelEditor } from './Editor/Editor';
 import { ErrorPage } from './Error';
 import { IntroScreen } from './Intro';
 
-function randomGen() {
-    return Math.random().toString(36).substring(7);
-}
-
 const router = createBrowserRouter([
     {
         path: '/',

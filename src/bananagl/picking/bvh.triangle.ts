@@ -76,14 +76,14 @@ export class TriangleBVH implements BVH {
         const max = this.computeLengths(from, to, lens, axis);
         const count = this.countBiggerThanHalf(lens, max);
 
-        console.log(`${count} out of ${to - from}`);
+        //console.log(`${count} out of ${to - from}`);
         if (count < SIZE_PERCT * (to - from))
             return this.largeTrianglesStrategy(from, to, bbox, lens);
         else return this.medianSpatialSplitStrategy(from, to, bbox, center);
     }
 
     private largeTrianglesStrategy(from: number, to: number, bbox: BBox, lensPerct: Float32Array) {
-        console.log('Using large triangles strategy');
+        //console.log('Using large triangles strategy');
 
         const { firstRight, left, right } = this.classifyLargeTriangles(from, to, lensPerct);
 
@@ -99,7 +99,7 @@ export class TriangleBVH implements BVH {
     }
 
     private medianSpatialSplitStrategy(from: number, to: number, bbox: BBox, center: number) {
-        console.log('Using median spatial split strategy');
+        //console.log('Using median spatial split strategy');
         const axis = bbox.longestDim();
         const { firstRight, left, right } = this.classify(from, to, axis, center);
 

@@ -14,6 +14,10 @@ export abstract class Pickable extends Model {
     protected bvh_?: BVH;
     protected onPick_?: OnPickCallback;
 
+    constructor() {
+        super();
+    }
+
     set BVH(bvh: BVH | undefined) {
         this.bvh_ = bvh;
     }

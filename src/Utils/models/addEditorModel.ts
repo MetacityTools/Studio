@@ -50,11 +50,12 @@ export function addEditorModels(
         glmodel.data = model.metadata.data;
         glmodel.name = model.metadata.name;
 
-        glmodel.uniforms = uniforms || DEFAULT_UNIFORMS;
+        //glmodel.uniforms = uniforms || DEFAULT_UNIFORMS; //TODO fix this, needs deep cyop of the uniforms
+        glmodel.uniforms = DEFAULT_UNIFORMS;
 
-        glmodel.position = position;
-        glmodel.rotation = rotation;
-        glmodel.scale = scale;
+        glmodel.position = position.slice() as vec3;
+        glmodel.rotation = rotation.slice() as vec3;
+        glmodel.scale = scale.slice() as vec3;
 
         glmodel.onPick = (object, idx, ray, t, addToSelection) => {
             const submodel = object.attributes.getAttribute('submodel') as GL.Attribute;

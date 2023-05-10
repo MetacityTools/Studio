@@ -43,6 +43,10 @@ function render(renderer: Renderer, renderable: Renderable, shader: Shader, came
     renderable.attributes.update(gl);
     renderable.attributes.bind(gl, shader);
 
+    //if ((renderable as any).name && (renderable as any).position) {
+    //    console.log(renderable.name, renderable.position);
+    //}
+
     if (renderable.attributes.isIndexed) {
         if (renderable.attributes.isInstanced) {
             console.warn('Instanced indexed rendering not supported');

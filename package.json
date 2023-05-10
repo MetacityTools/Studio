@@ -21,6 +21,7 @@
         "react-dom": "^18.2.0",
         "react-icons": "^4.8.0",
         "react-router-dom": "^6.9.0",
+        "shpts": "^1.0.4",
         "web-ifc": "^0.0.39",
         "web-ifc-three": "0.0.123"
     },

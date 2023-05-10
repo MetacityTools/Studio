@@ -59,7 +59,7 @@ export function ModelTransformationWidget(props: ModelControlsProps) {
     const [scale, setScale] = React.useState(model.scale);
 
     const [tmpPosition, setTmpPosition] = React.useState(model.position);
-    const [tmpRotation, setTmpRotation] = React.useState(model.rotation);
+    const [tmpScale, setTmpScale] = React.useState(model.scale);
 
     const [moveShortcut, setMoveShortcut] = React.useState(new GL.ShortcutOnMouseMove('KeyG'));
     const [scaleShortcut, setScaleShortcut] = React.useState(new GL.ShortcutOnMouseMove('KeyS'));
@@ -93,20 +93,19 @@ export function ModelTransformationWidget(props: ModelControlsProps) {
         };
 
         scaleShortcut.onTrigger = (view, dx, dy) => {
-            console.log(dx);
             let fact = dx > 0 ? 1.01 : 1;
             fact = dx < 0 ? 0.99 : fact;
             setScale((s) => vec3.scale(s, s, fact).slice() as vec3);
         };
 
         scaleShortcut.onStartCall = () => {
-            setTmpRotation(rotation.slice() as vec3);
+            setTmpScale(scale.slice() as vec3);
         };
 
         scaleShortcut.onCancelCall = () => {
-            setRotation(tmpRotation.slice() as vec3);
+            setScale(tmpScale.slice() as vec3);
         };
-    }, [model]);
+    }, [model, moveShortcut, scaleShortcut]);
 
     React.useEffect(() => {
         setPosition(model.position);
@@ -117,17 +116,17 @@ export function ModelTransformationWidget(props: ModelControlsProps) {
     React.useEffect(() => {
         if (position.some((v) => isNaN(v))) return;
         model.position = position;
-    }, [position]);
+    }, [position, model]);
 
     React.useEffect(() => {
         if (rotation.some((v) => isNaN(v))) return;
         model.rotation = rotation;
-    }, [rotation]);
+    }, [rotation, model]);
 
     React.useEffect(() => {
         if (scale.some((v) => isNaN(v))) return;
         model.scale = scale;
-    }, [scale]);
+    }, [scale, model]);
 
     return (
         <DetailWidget>
