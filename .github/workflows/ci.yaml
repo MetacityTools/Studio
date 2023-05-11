@@ -1,0 +1,23 @@
+name: Metacity Studio CI
+
+on:
+    push:
+        branches: [release, dev]
+    pull_request:
+        branches: [dev]
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v3
+            - name: 'Setup Node.js'
+              uses: 'actions/setup-node@v3'
+              with:
+                  node-version: 18
+            - name: Install dependencies
+              run: |
+                  npm i
+            - name: Build library
+              run: |
+                  npm run build
