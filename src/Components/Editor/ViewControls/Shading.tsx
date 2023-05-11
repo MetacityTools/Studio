@@ -4,12 +4,15 @@ import { EditorModel } from '@utils/models/EditorModel';
 
 import * as GL from '@bananagl/bananagl';
 
+import { EditorContext } from '@components/Editor/Context';
+
 import { MenuGroup, MenuInput } from '@elements/MenuButton';
 
-import { EditorMenuProps } from '../ViewControls';
+export function Shading() {
+    const ctx = React.useContext(EditorContext);
+    if (!ctx) return null;
+    const { scene } = ctx;
 
-export function Shading(props: EditorMenuProps) {
-    const { scene } = props;
     const [minShade, setMinShade] = React.useState<number>(0);
     const [maxShade, setMaxShade] = React.useState<number>(10);
 

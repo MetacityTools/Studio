@@ -5,6 +5,8 @@ import { RiBuilding2Fill } from 'react-icons/ri';
 
 import { EditorModel } from '@utils/models/EditorModel';
 
+import { EmptyDataPanel } from '@elements/Empty';
+
 interface ModelPanelProps {
     selected: boolean;
     onSelect: () => void;
@@ -58,17 +60,22 @@ export function ModelList(props: ModelListProps) {
     const { models, selectedModel, selectModel } = props;
 
     return (
-        <div className="flex flex-col p-4 space-y-2">
-            {models.map((model) => (
-                <ModelPanel
-                    model={model}
-                    key={model.name}
-                    selected={selectedModel === model}
-                    onSelect={() =>
-                        selectedModel === model ? selectModel(null) : selectModel(model)
-                    }
-                />
-            ))}
+        <div className="overflow-x-auto w-full h-full bg-neutral-100">
+            {models.length === 0 && <EmptyDataPanel />}
+            {models.length >= 0 && (
+                <div className="flex flex-col p-4 space-y-2">
+                    {models.map((model) => (
+                        <ModelPanel
+                            model={model}
+                            key={model.name}
+                            selected={selectedModel === model}
+                            onSelect={() =>
+                                selectedModel === model ? selectModel(null) : selectModel(model)
+                            }
+                        />
+                    ))}
+                </div>
+            )}
         </div>
     );
 }

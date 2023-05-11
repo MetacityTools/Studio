@@ -19,7 +19,7 @@ export function Tooltip(props: TooltipProps) {
 
     return (
         <div
-            className="relative"
+            className="relative overflow-visible"
             onMouseEnter={() => setShow(true)}
             onMouseLeave={() => setShow(false)}
         >
@@ -32,7 +32,7 @@ export function Tooltip(props: TooltipProps) {
                             : position === 'left'
                             ? 'left-full top-0'
                             : position === 'right'
-                            ? 'right-[calc(100%+8px)] top-0 text-right'
+                            ? 'right-full top-0 text-right'
                             : 'bottom-full left-2'
                     } p-2 text-neutral-600 rounded-md`}
                 >

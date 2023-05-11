@@ -1,14 +1,13 @@
 import { Attribute } from '@bananagl/models/attribute';
 import { Buffer } from '@bananagl/models/buffer';
 
-import { BuilderOutput, TriangleBuildInput, getTrasferables, toTransferable } from './build';
 import { TriangleBVHBuilder } from './builder';
+import { BuilderOutput, TriangleBuildInput, getTrasferables, toTransferable } from './transform';
 
 self.onmessage = (e) => {
     const data = e.data as TriangleBuildInput;
     const { position, attrs } = toAttributes(data);
     const builder = new TriangleBVHBuilder(position, attrs);
-
     const returnedAttrs = toTransferable(position, attrs);
     const transferables = getTrasferables(returnedAttrs);
     const result: BuilderOutput = {

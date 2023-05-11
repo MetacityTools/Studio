@@ -21,6 +21,7 @@
       "@components/*": ["./Components/*"],
       "@elements/*": ["./Elements/*"],
       "@bananagl/*": ["./bananagl/*"],
+      "@assets/*": ["./assets/*"],
     }
   },
   "include": ["src"],

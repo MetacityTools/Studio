@@ -3,37 +3,31 @@ import * as React from 'react';
 import { load } from '@utils/formats/loader';
 import { addEditorModels } from '@utils/models/addEditorModel';
 
-import * as GL from '@bananagl/bananagl';
+import { EditorContext } from '@components/Editor/Context';
 
-import { EditorContext } from '../Editor';
 import { Vitals } from './Vitals';
 
-export interface ActionMenuProps {
-    renderer: GL.Renderer;
-    scene: GL.Scene;
-    selection: GL.SelectionManager;
-}
-
-export function ActionMenu(props: ActionMenuProps) {
-    const { scene, selection } = props;
-    const context = React.useContext(EditorContext);
+export function ActionMenu() {
+    const ctx = React.useContext(EditorContext);
+    if (!ctx) return null;
+    const { renderer, scene, selection, setProcessing } = ctx;
 
     const handleModelsAdded = async (event: React.ChangeEvent<HTMLInputElement>) => {
-        context?.setProcessing(true);
+        setProcessing(true);
         const models = await load(event);
         await addEditorModels(models, selection, scene, true);
-        context?.setProcessing(false);
+        setProcessing(false);
         event.target.value = '';
         event.preventDefault();
     };
 
     return (
-        <div className="flex flex-row p-4 border-b w-full border-b border-white space-x-2">
+        <div className="flex flex-row p-4 w-full space-x-2 bg-neutral-100">
             <label
                 htmlFor="modelInputFiles"
                 className="py-2 px-4 bg-neutral-200 hover:bg-neutral-300 rounded-md transition-colors cursor-pointer"
             >
-                Load Models
+                Import
             </label>
             <input
                 className="hidden"
@@ -45,7 +39,7 @@ export function ActionMenu(props: ActionMenuProps) {
             <button className="py-2 px-4 bg-neutral-200 hover:bg-neutral-300 rounded-md transition-colors cursor-pointer">
                 Export
             </button>
-            <Vitals scenes={[props.scene]} renderer={props.renderer} />
+            <Vitals scenes={[scene]} renderer={renderer} />
         </div>
     );
 }
