@@ -19,7 +19,7 @@ export function ModelEditor() {
                         <ViewControls />
                         <Canvas />
                     </Allotment.Pane>
-                    <Allotment.Pane minSize={200} preferredSize={400} className="bg-neutral-100/25">
+                    <Allotment.Pane minSize={200} preferredSize={400} className="bg-neutral-100">
                         <SidePanel />
                     </Allotment.Pane>
                 </Allotment>
