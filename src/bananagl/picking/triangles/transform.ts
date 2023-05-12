@@ -2,6 +2,7 @@ import { TypedArray } from 'types';
 
 import { Attribute } from '@bananagl/bananagl';
 
+import { BBox } from '../bbox';
 import { BVHNode } from '../bvh';
 
 interface BufferData {
@@ -63,4 +64,13 @@ export function fromTransferable(position: Attribute, attr: Attribute[], data: T
     attr.forEach((a, i) => {
         a.buffer.data = data.attrs[i].buffer.data;
     });
+}
+
+export function reconstructBBoxes(node: BVHNode) {
+    const bbox = new BBox();
+    bbox.min = node.bbox.min;
+    bbox.max = node.bbox.max;
+    node.bbox = bbox;
+    if (node.left) reconstructBBoxes(node.left);
+    if (node.right) reconstructBBoxes(node.right);
 }

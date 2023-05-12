@@ -18,7 +18,7 @@ export function MenuButton(props: MenuButtonProps) {
                 'text-xs last:rounded-r-md first:rounded-l-md transition-colors',
                 props.active
                     ? 'text-green-600 bg-green-100 hover:bg-green-200'
-                    : 'text-neutral-600 bg-neutral-200 hover:bg-neutral-300'
+                    : 'text-neutral-600 bg-white hover:bg-neutral-300'
             )}
             onClick={props.onClick}
         >
@@ -33,33 +33,11 @@ export function MenuButton(props: MenuButtonProps) {
     );
 }
 
-interface MenuInputProps {
-    tipTitle?: string;
-    tipPosition?: 'top' | 'left' | 'right' | 'bottom';
-    label: string;
-    onChange: (value: number) => void;
-    value: number;
-}
-
-export function MenuInput(props: MenuInputProps) {
-    return (
-        <div className="flex flex-row items-center">
-            <label className="text-xs text-neutral-600 mr-2">{props.label}</label>
-            <input
-                type="number"
-                className="text-xs text-neutral-600 bg-neutral-200 rounded-md p-2 ml-2 w-16 text-right"
-                onChange={(e) => props.onChange(parseFloat(e.target.value))}
-                value={props.value}
-            />
-        </div>
-    );
-}
-
 export function MenuGroup(props: { children: React.ReactNode; row?: boolean; column?: boolean }) {
     return (
         <div
             className={clsx(
-                'flex rounded-md',
+                'flex rounded-md shadow-even border',
                 (!props.column && 'flex-row') || (!props.row && 'flex-col space-y-2')
             )}
         >

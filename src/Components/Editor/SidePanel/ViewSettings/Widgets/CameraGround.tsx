@@ -1,17 +1,17 @@
 import React from 'react';
+import { TbCircuitGround } from 'react-icons/tb';
 
 import * as GL from '@bananagl/bananagl';
 
 import { EditorContext } from '@components/Editor/Context';
 
-import { MenuGroup, MenuInput } from '@elements/MenuButton';
+import { Range } from '@elements/Range';
+import { DetailWidget, WidgetDescription, WidgetLine, WidgetTitle } from '@elements/Widgets';
 
-export function CameraZControls() {
+export function CameraGroundWidget() {
     const ctx = React.useContext(EditorContext);
     if (!ctx) return null;
-    const { renderer, activeView } = ctx;
-
-    const [camTargetZ, setCamTargetZ] = React.useState<number>(0);
+    const { renderer, activeView, camTargetZ, setCamTargetZ } = ctx;
 
     const [upShortcut, setUpShortcut] = React.useState<GL.ShortcutOnPress>(
         new GL.ShortcutOnPress('ArrowUp', () => {})
@@ -47,8 +47,20 @@ export function CameraZControls() {
     }, [camTargetZ]);
 
     return (
-        <MenuGroup column>
-            <MenuInput label="Camera Ground Level" value={camTargetZ} onChange={updateCamTargetZ} />
-        </MenuGroup>
+        <DetailWidget>
+            <WidgetLine>
+                <WidgetTitle>
+                    <TbCircuitGround className="mr-2" />
+                    Camera Ground Level
+                </WidgetTitle>
+            </WidgetLine>
+            <WidgetLine>
+                <WidgetDescription>Set Ground Level for the camera</WidgetDescription>
+            </WidgetLine>
+            <WidgetLine className="py-2 px-4">Camera ground is at {camTargetZ}</WidgetLine>
+            <WidgetLine className="px-4 mb-4">
+                <Range min={-1000} max={1000} value={camTargetZ} onChange={updateCamTargetZ} />
+            </WidgetLine>
+        </DetailWidget>
     );
 }

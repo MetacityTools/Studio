@@ -33,6 +33,7 @@ export function GridModel(span: number = 100000, step: number = 1000) {
 
     glmodel.data = {
         name: 'Grid',
+        type: 'editor_internal_grid',
     };
 
     glmodel.uniforms = {

@@ -26,7 +26,7 @@ function ModelPanel(props: ModelPanelProps): JSX.Element {
     return (
         <div
             className={clsx(
-                'text-lg rounded-md hover:shadow-even hover:-translate-y-1 transition-all cursor-pointer flex flex-row items-stretch ',
+                'text-lg rounded-md hover:shadow-even hover:bg-amber-300 hover:-translate-y-1 transition-all cursor-pointer flex flex-row items-stretch ',
                 selected ? 'bg-amber-300 text-amber-900' : 'bg-white text-black'
             )}
             onClick={onSelect}
@@ -60,7 +60,7 @@ export function ModelList(props: ModelListProps) {
     const { models, selectedModel, selectModel } = props;
 
     return (
-        <div className="overflow-x-auto w-full h-full bg-neutral-100">
+        <div className="overflow-x-auto w-full h-full">
             {models.length === 0 && <EmptyDataPanel />}
             {models.length >= 0 && (
                 <div className="flex flex-col p-4 space-y-2">

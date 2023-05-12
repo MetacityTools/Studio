@@ -13,11 +13,10 @@ import * as GL from '@bananagl/bananagl';
 
 import { EditorContext } from '@components/Editor/Context';
 
-import { Tooltip } from '@elements/Tooltip';
-
 import { ActionMenu } from './SidePanel/Actions';
 import { ModelDetailPanel } from './SidePanel/Details/ModelDetail';
 import { ModelList } from './SidePanel/ModelList';
+import { ViewSettings } from './SidePanel/ViewSettings/ViewSettings';
 
 export function SidePanel() {
     const ctx = React.useContext(EditorContext);
@@ -65,7 +64,7 @@ export function SidePanel() {
     };
 
     return (
-        <div className="text-xs w-full h-full flex flex-col items-start">
+        <div className="w-[calc(100%-16px)] h-[calc(100%-16px)] flex flex-col items-start shadow-even rounded-lg m-[8px] bg-white">
             <ActionMenu />
             <Allotment separator={false} vertical>
                 <Allotment.Pane minSize={200} preferredSize={300}>
@@ -75,28 +74,23 @@ export function SidePanel() {
                         selectModel={onModelSelection}
                     />
                 </Allotment.Pane>
-                <Allotment.Pane
-                    minSize={200}
-                    className="flex flex-row bg-white border-t border-white"
-                >
+                <Allotment.Pane minSize={200} className="flex flex-col border-t border-neutral-100">
                     <Tab.Group>
-                        <Tab.List className="flex flex-col bg-neutral-100/25">
+                        <Tab.List className="flex flex-row bg-white bg-opacity-50 absolute w-full backdrop-blur">
                             <TabButton>
-                                <TiArrowMove className="text-2xl w-full" />
+                                <TiArrowMove className="text-xl w-full" />
                             </TabButton>
                             <TabButton>
-                                <IoInformationOutline className="text-2xl w-full" />
-                            </TabButton>
-                            <TabButton>
-                                <GoSettings className="text-2xl w-full" />
+                                <GoSettings className="text-xl w-full" />
                             </TabButton>
                         </Tab.List>
-                        <Tab.Panels className="flex-1 bg-neutral-100">
-                            <Tab.Panel className="overflow-x-auto w-full h-full">
+                        <Tab.Panels className="w-full h-full">
+                            <TabPanel>
                                 <ModelDetailPanel />
-                            </Tab.Panel>
-                            <Tab.Panel>TODO</Tab.Panel>
-                            <Tab.Panel>TODO</Tab.Panel>
+                            </TabPanel>
+                            <TabPanel>
+                                <ViewSettings />
+                            </TabPanel>
                         </Tab.Panels>
                     </Tab.Group>
                 </Allotment.Pane>
@@ -106,16 +100,20 @@ export function SidePanel() {
 }
 
 function TabButton(props: { children: React.ReactNode }) {
-    const base = 'outline-none px-4 py-4 text-center';
+    const base = 'outline-none p-2 m-2 text-center transition-colors flex-1 rounded';
     return (
         <Tab
             className={({ selected }) =>
                 selected
-                    ? clsx('bg-neutral-100 text-neutral-600 transition-colors', base)
-                    : clsx('text-neutral-400 hover:bg-neutral-200 transition-colors', base)
+                    ? clsx('text-green-600 bg-green-100 hover:bg-green-200', base)
+                    : clsx('text-neutral-600 bg-none hover:bg-neutral-300', base)
             }
         >
             {props.children}
         </Tab>
     );
+}
+
+function TabPanel(props: { children: React.ReactNode }) {
+    return <Tab.Panel className="overflow-x-auto w-full h-full pt-12">{props.children}</Tab.Panel>;
 }

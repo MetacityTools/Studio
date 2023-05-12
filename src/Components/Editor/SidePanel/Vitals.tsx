@@ -47,7 +47,7 @@ export function Vitals(props: VitalsProps) {
     }, []);
 
     return (
-        <div className="flex flex-row place-content-end space-x-4 text-xs p-2 flex-1">
+        <div className="flex flex-row place-content-end space-x-4 p-2 flex-1">
             <div className="flex flex-row items-center w-[5rem] place-content-end">
                 <AiFillVideoCamera className="text-lg text-neutral-500 mr-2" />
                 {fps.toFixed(0)} FPS

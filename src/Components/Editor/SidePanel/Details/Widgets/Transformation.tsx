@@ -16,19 +16,19 @@ function VectorComponentInput(props: {
     const { label, value, onChange } = props;
 
     return (
-        <div className="flex flex-row items-center bg-white">
-            <label className="p-2 text-neutral-400">{label}</label>
+        <td className="bg-white">
             <input
                 type="number"
-                className="p-2 bg-transparent border-0 text-right focus:outline-none w-24"
+                className="p-2 bg-transparent border-0 text-right focus:outline-none w-full"
                 value={isNaN(value) ? '' : value}
                 onChange={(e) => onChange(parseFloat(e.target.value))}
             />
-        </div>
+        </td>
     );
 }
 
 interface VectorControlsProps {
+    title: string;
     value: vec3;
     onChange: (value: vec3) => void;
 }
@@ -38,11 +38,12 @@ function VectorControls(props: VectorControlsProps) {
     const [x, y, z] = value;
 
     return (
-        <div className="flex flex-row ">
+        <tr>
+            <td className="py-2 px-4 text-neutral-400">{props.title}</td>
             <VectorComponentInput label="X" value={x} onChange={(v) => onChange([v, y, z])} />
             <VectorComponentInput label="Y" value={y} onChange={(v) => onChange([x, v, z])} />
             <VectorComponentInput label="Z" value={z} onChange={(v) => onChange([x, y, v])} />
-        </div>
+        </tr>
     );
 }
 
@@ -140,18 +141,13 @@ export function ModelTransformationWidget(props: ModelControlsProps) {
             <WidgetLine>
                 <WidgetDescription>Shift, Scale and Rotate the model</WidgetDescription>
             </WidgetLine>
-            <WidgetLine>
-                <div className="p-2 flex-1">Shift</div>
-                <VectorControls value={position} onChange={setPosition} />
-            </WidgetLine>
-            <WidgetLine>
-                <div className="p-2 flex-1">Rotate</div>
-                <VectorControls value={rotation} onChange={setRotation} />
-            </WidgetLine>
-            <WidgetLine>
-                <div className="p-2 flex-1">Scale</div>
-                <VectorControls value={scale} onChange={setScale} />
-            </WidgetLine>
+            <table className="table-auto">
+                <tbody>
+                    <VectorControls title="Shift" value={position} onChange={setPosition} />
+                    <VectorControls title="Rotate" value={rotation} onChange={setRotation} />
+                    <VectorControls title="Scale" value={scale} onChange={setScale} />
+                </tbody>
+            </table>
         </DetailWidget>
     );
 }

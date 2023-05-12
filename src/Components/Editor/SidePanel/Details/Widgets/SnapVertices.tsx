@@ -38,20 +38,20 @@ export function SnapVerticesWidget(props: SnapVerticesProps) {
             <WidgetLine>
                 <WidgetTitle>
                     <TbRulerMeasure className="mr-2" />
-                    Snap Vertices
+                    Collapse Vertices
                 </WidgetTitle>
                 <WidgetApplyButton onApply={applySnap} />
             </WidgetLine>
             <WidgetLine>
                 <WidgetDescription>
-                    Snap vertices that are within the specified distance to each other.
+                    Collapse vertices that are within the specified distance to each other.
                 </WidgetDescription>
             </WidgetLine>
             <WidgetLine>
                 <div className="py-2 px-4">Distance</div>
                 <input
                     type="number"
-                    className="py-2 px-4 text-right flex-1 rounded-br-md"
+                    className="py-2 px-4 text-right w-full rounded-br-md"
                     step={0.1}
                     defaultValue={snapDistance}
                     onChange={updateSnapValue}

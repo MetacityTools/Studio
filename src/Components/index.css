@@ -38,23 +38,23 @@ body,
 
 @layer components {
     input[type='range'] {
-        @apply appearance-none bg-transparent cursor-pointer;
+        @apply appearance-none bg-transparent cursor-pointer outline-none;
     }
 
     input[type='range']::-webkit-slider-runnable-track {
-        @apply bg-neutral-700 rounded-full;
+        @apply bg-neutral-200 rounded-full;
     }
 
     input[type='range']::-webkit-slider-thumb {
-        @apply appearance-none bg-neutral-200 rounded-full w-4 h-4;
+        @apply appearance-none bg-neutral-400 rounded-full w-4 h-4;
     }
 
     input[type='range']::-moz-range-track {
-        @apply bg-neutral-700 rounded-full;
+        @apply bg-neutral-200 rounded-full;
     }
 
     input[type='range']::-ms-track {
-        @apply bg-neutral-700 rounded-full;
+        @apply bg-neutral-200 rounded-full;
     }
 
     .shadow-even {

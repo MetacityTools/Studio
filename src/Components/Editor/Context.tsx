@@ -15,6 +15,14 @@ export const EditorContext = React.createContext<{
     setModels: React.Dispatch<React.SetStateAction<EditorModel[]>>;
     selectedModel: EditorModel | null;
     setSelectedModel: React.Dispatch<React.SetStateAction<EditorModel | null>>;
+    camTargetZ: number;
+    setCamTargetZ: React.Dispatch<React.SetStateAction<number>>;
+    minShade: number;
+    setMinShade: React.Dispatch<React.SetStateAction<number>>;
+    maxShade: number;
+    setMaxShade: React.Dispatch<React.SetStateAction<number>>;
+    gridVisible: boolean;
+    setGridVisible: React.Dispatch<React.SetStateAction<boolean>>;
 } | null>(null);
 
 export function ContextComponent(props: { children: React.ReactNode }) {
@@ -25,6 +33,11 @@ export function ContextComponent(props: { children: React.ReactNode }) {
     const [models, setModels] = React.useState<EditorModel[]>([]);
     const [selectedModel, setSelectedModel] = React.useState<EditorModel | null>(null);
     console.log('rendering context');
+
+    const [camTargetZ, setCamTargetZ] = React.useState<number>(0);
+    const [minShade, setMinShade] = React.useState<number>(0);
+    const [maxShade, setMaxShade] = React.useState<number>(10);
+    const [gridVisible, setGridVisible] = React.useState<boolean>(true);
 
     return (
         <EditorContext.Provider
@@ -39,6 +52,14 @@ export function ContextComponent(props: { children: React.ReactNode }) {
                 setModels,
                 selectedModel,
                 setSelectedModel,
+                camTargetZ,
+                setCamTargetZ,
+                minShade,
+                setMinShade,
+                maxShade,
+                setMaxShade,
+                gridVisible,
+                setGridVisible,
             }}
         >
             {props.children}
