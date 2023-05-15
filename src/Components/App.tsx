@@ -8,11 +8,6 @@ import { IntroScreen } from './Intro';
 const router = createBrowserRouter([
     {
         path: '/',
-        element: <IntroScreen />,
-        errorElement: <ErrorPage />,
-    },
-    {
-        path: '/editor',
         element: <ModelEditor />,
         errorElement: <ErrorPage />,
     },

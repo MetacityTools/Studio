@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { EditorContext } from '@components/Editor/Context';
+import { EditorContext } from '@components/Editor/Utils/Context';
 
-import { EmptyDetialPanel } from '@elements/Empty';
+import { EmptyDetailPanel } from '@elements/Empty';
 
 import { DeleteModelWidget } from './Widgets/DeleteModel';
 import { SnapVerticesWidget } from './Widgets/SnapVertices';
@@ -14,7 +14,7 @@ export function ModelDetailPanel() {
     if (!ctx) return null;
     const { scene, renderer, selectedModel, selection } = ctx;
 
-    if (selectedModel === null) return <EmptyDetialPanel />;
+    if (selectedModel === null) return <EmptyDetailPanel />;
 
     return (
         <div className="p-4 space-y-4">

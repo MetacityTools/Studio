@@ -1,24 +1,58 @@
 import * as React from 'react';
+import { ModelData } from 'types';
 
 import { load } from '@utils/formats/loader';
-import { addEditorModels } from '@utils/models/addEditorModel';
+import { CoordinateMode, addEditorModels } from '@utils/models/addEditorModel';
 
-import { EditorContext } from '@components/Editor/Context';
+import { EditorContext } from '@components/Editor/Utils/Context';
 
+import { ImportDialog } from './Actions/ImportDialog';
 import { Vitals } from './Vitals';
 
 export function ActionMenu() {
     const ctx = React.useContext(EditorContext);
     if (!ctx) return null;
-    const { renderer, scene, selection, setProcessing } = ctx;
+    const {
+        renderer,
+        scene,
+        selection,
+        setProcessing,
+        globalShift,
+        setGlobalShift,
+        setLoadingStatus,
+    } = ctx;
 
-    const handleModelsAdded = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const [importOpen, setImportOpen] = React.useState(false);
+    const [selectedModels, setSelectedModels] = React.useState<ModelData[]>([]);
+
+    const onModelsSelected = async (event: React.ChangeEvent<HTMLInputElement>) => {
         setProcessing(true);
-        const models = await load(event);
-        await addEditorModels(models, selection, scene, true);
+        const models = await load(event, setLoadingStatus);
+        setSelectedModels(models);
+        setImportOpen(true);
         setProcessing(false);
         event.target.value = '';
         event.preventDefault();
+    };
+
+    const handleModelsAdded = async (mode: CoordinateMode) => {
+        setProcessing(true);
+        setImportOpen(false);
+        const shift = await addEditorModels(
+            selectedModels,
+            selection,
+            scene,
+            mode,
+            globalShift,
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            setLoadingStatus
+        );
+        setProcessing(false);
+        setSelectedModels([]);
+        setGlobalShift(shift);
     };
 
     return (
@@ -32,12 +66,13 @@ export function ActionMenu() {
             <input
                 className="hidden"
                 type="file"
-                onChange={handleModelsAdded}
+                onChange={onModelsSelected}
                 id="modelInputFiles"
                 multiple
             />
 
             <Vitals scenes={[scene]} renderer={renderer} />
+            <ImportDialog isOpen={importOpen} onClose={handleModelsAdded} />
         </div>
     );
 }

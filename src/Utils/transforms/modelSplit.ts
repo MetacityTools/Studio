@@ -1,7 +1,7 @@
 import { ModelData } from 'types';
 
 import { EditorModel } from '@utils/models/EditorModel';
-import { addEditorModels } from '@utils/models/addEditorModel';
+import { CoordinateMode, addEditorModels } from '@utils/models/addEditorModel';
 
 import * as GL from '@bananagl/bananagl';
 import { TypedArray } from '@bananagl/shaders/shader';
@@ -94,7 +94,8 @@ export async function splitModel(
         [originalModelData, newModelData],
         selection,
         scene,
-        false,
+        CoordinateMode.None,
+        null,
         model.position,
         model.rotation,
         model.scale,

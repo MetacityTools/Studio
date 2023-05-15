@@ -4,7 +4,7 @@ import { TbPerspective } from 'react-icons/tb';
 
 import * as GL from '@bananagl/bananagl';
 
-import { EditorContext } from '@components/Editor/Context';
+import { EditorContext } from '@components/Editor/Utils/Context';
 
 import { MenuButton, MenuGroup } from '@elements/MenuButton';
 

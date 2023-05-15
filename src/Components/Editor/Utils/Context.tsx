@@ -1,3 +1,4 @@
+import { vec3 } from 'gl-matrix';
 import React from 'react';
 
 import { EditorModel } from '@utils/models/EditorModel';
@@ -23,6 +24,10 @@ export const EditorContext = React.createContext<{
     setMaxShade: React.Dispatch<React.SetStateAction<number>>;
     gridVisible: boolean;
     setGridVisible: React.Dispatch<React.SetStateAction<boolean>>;
+    globalShift: vec3 | null;
+    setGlobalShift: React.Dispatch<React.SetStateAction<vec3 | null>>;
+    loadingStatus: string;
+    setLoadingStatus: React.Dispatch<React.SetStateAction<string>>;
 } | null>(null);
 
 export function ContextComponent(props: { children: React.ReactNode }) {
@@ -38,6 +43,8 @@ export function ContextComponent(props: { children: React.ReactNode }) {
     const [minShade, setMinShade] = React.useState<number>(0);
     const [maxShade, setMaxShade] = React.useState<number>(10);
     const [gridVisible, setGridVisible] = React.useState<boolean>(true);
+    const [globalShift, setGlobalShift] = React.useState<vec3 | null>(null);
+    const [loadingStatus, setLoadingStatus] = React.useState<string>('');
 
     return (
         <EditorContext.Provider
@@ -60,6 +67,10 @@ export function ContextComponent(props: { children: React.ReactNode }) {
                 setMaxShade,
                 gridVisible,
                 setGridVisible,
+                globalShift,
+                setGlobalShift,
+                loadingStatus,
+                setLoadingStatus,
             }}
         >
             {props.children}

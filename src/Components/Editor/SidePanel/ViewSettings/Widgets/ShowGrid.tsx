@@ -3,7 +3,7 @@ import { MdOutlineGrid3X3 } from 'react-icons/md';
 
 import * as GL from '@bananagl/bananagl';
 
-import { EditorContext } from '@components/Editor/Context';
+import { EditorContext } from '@components/Editor/Utils/Context';
 
 import { DetailWidget, WidgetDescription, WidgetLine, WidgetTitle } from '@elements/Widgets';
 

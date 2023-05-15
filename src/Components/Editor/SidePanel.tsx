@@ -3,18 +3,19 @@ import { Allotment } from 'allotment';
 import 'allotment/dist/style.css';
 import clsx from 'clsx';
 import React from 'react';
+import { BiMessageSquareDetail } from 'react-icons/bi';
 import { GoSettings } from 'react-icons/go';
-import { IoInformationOutline } from 'react-icons/io5';
 import { TiArrowMove } from 'react-icons/ti';
 
 import { EditorModel } from '@utils/models/EditorModel';
 
 import * as GL from '@bananagl/bananagl';
 
-import { EditorContext } from '@components/Editor/Context';
+import { EditorContext } from '@components/Editor/Utils/Context';
 
 import { ActionMenu } from './SidePanel/Actions';
 import { ModelDetailPanel } from './SidePanel/Details/ModelDetail';
+import { ModelMetaPanel } from './SidePanel/Meta/ModelMeta';
 import { ModelList } from './SidePanel/ModelList';
 import { ViewSettings } from './SidePanel/ViewSettings/ViewSettings';
 
@@ -78,6 +79,9 @@ export function SidePanel() {
                     <Tab.Group>
                         <Tab.List className="flex flex-row bg-white bg-opacity-50 absolute w-full backdrop-blur">
                             <TabButton>
+                                <BiMessageSquareDetail className="text-xl w-full" />
+                            </TabButton>
+                            <TabButton>
                                 <TiArrowMove className="text-xl w-full" />
                             </TabButton>
                             <TabButton>
@@ -85,6 +89,9 @@ export function SidePanel() {
                             </TabButton>
                         </Tab.List>
                         <Tab.Panels className="w-full h-full">
+                            <TabPanel>
+                                <ModelMetaPanel />
+                            </TabPanel>
                             <TabPanel>
                                 <ModelDetailPanel />
                             </TabPanel>

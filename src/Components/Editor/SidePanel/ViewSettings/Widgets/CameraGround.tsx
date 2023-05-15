@@ -3,7 +3,7 @@ import { TbCircuitGround } from 'react-icons/tb';
 
 import * as GL from '@bananagl/bananagl';
 
-import { EditorContext } from '@components/Editor/Context';
+import { EditorContext } from '@components/Editor/Utils/Context';
 
 import { Range } from '@elements/Range';
 import { DetailWidget, WidgetDescription, WidgetLine, WidgetTitle } from '@elements/Widgets';

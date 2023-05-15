@@ -4,9 +4,14 @@ import GLTFWorker from '@utils/formats/gltf?worker';
 import IFCWorker from '@utils/formats/ifc?worker';
 import ShapefileWorker from '@utils/formats/shapefile?worker';
 
-export async function load(event: React.ChangeEvent<HTMLInputElement>) {
+import { WorkerPool } from './pool';
+
+export async function load(
+    event: React.ChangeEvent<HTMLInputElement>,
+    updateStatus?: (status: string) => void
+) {
     const files = await loadFiles(event);
-    const models = await loadModels(files);
+    const models = await loadModels(files, updateStatus);
     return models;
 }
 
@@ -92,15 +97,20 @@ async function getFile(files: FileList, name: string) {
     return undefined;
 }
 
-export async function loadModels(models: UserInputModel[]) {
+const pool = new WorkerPool<UserInputModel, ModelData>(10);
+
+export async function loadModels(
+    models: UserInputModel[],
+    updateStatus?: (status: string) => void
+) {
     const jobs: Promise<ModelData>[] = [];
     for (const model of models) {
         if (model.name.endsWith('gltf') || model.name.endsWith('glb')) {
-            jobs.push(loadWorker(model, new GLTFWorker()));
+            jobs.push(loadWorker(model, GLTFWorker, updateStatus));
         } else if (model.name.endsWith('ifc')) {
-            jobs.push(loadWorker(model, new IFCWorker()));
+            jobs.push(loadWorker(model, IFCWorker, updateStatus));
         } else if (model.name.endsWith('shp')) {
-            jobs.push(loadWorker(model, new ShapefileWorker()));
+            jobs.push(loadWorker(model, ShapefileWorker, updateStatus));
         }
     }
 
@@ -108,17 +118,19 @@ export async function loadModels(models: UserInputModel[]) {
     return results;
 }
 
-function loadWorker(model: UserInputModel, worker: Worker): Promise<ModelData> {
+function loadWorker(
+    model: UserInputModel,
+    worker: new () => Worker,
+    updateStatus?: (status: string) => void
+): Promise<ModelData> {
     return new Promise((resolve, reject) => {
-        worker.onmessage = (e) => {
-            resolve(e.data);
-            worker.terminate();
-        };
-        //worker.onerror = (e) => {
-        //    console.error(e);
-        //    reject(e);
-        //    worker.terminate();
-        //};
-        worker.postMessage(model);
+        pool.process(
+            model,
+            (data) => {
+                resolve(data);
+                updateStatus && updateStatus(`Loaded ${model.name}`);
+            },
+            worker
+        );
     });
 }
