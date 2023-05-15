@@ -29,7 +29,7 @@ export function SpashScreen() {
             <div className="mx-6">
                 <p className="text-neutral-500">v{APP_VERSION} - ⚠️ alpha release</p>
             </div>
-            <div className="mx-6 mt-6">
+            <div className="mx-6 mt-4">
                 <p className="text-sm">
                     View, transform, and split models in your browser. Currently supported formats:
                 </p>
