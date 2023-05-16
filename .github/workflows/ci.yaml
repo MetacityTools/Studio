@@ -21,3 +21,50 @@ jobs:
             - name: Build library
               run: |
                   npm run build
+
+    tag-and-release:
+        runs-on: ubuntu-latest
+        if: github.event_name == 'push' && contains(github.ref, 'release')
+        needs: build
+        steps:
+            - uses: actions/checkout@v3
+            - name: 'Setup Node.js'
+              uses: actions/setup-node@v3
+              with:
+                  node-version: 18
+            - name: Install dependencies
+              run: |
+                  npm i
+            - name: 'Get release version'
+              run: |
+                  CURRENT_VERSION=$(node -p "require('./package.json').version") 
+                  echo "Current version: $CURRENT_VERSION"
+                  echo "CURRENT_VERSION=v$CURRENT_VERSION" >> $GITHUB_ENV
+            - name: Build library
+              run: |
+                  npm run build
+            - name: Create Release ZIP file
+              run: |
+                  zip -r studio.zip dist
+            - uses: rickstaa/action-create-tag@v1
+              with:
+                  tag: ${{ env.CURRENT_VERSION }}
+            - uses: ncipollo/release-action@v1
+              with:
+                  artifacts: 'studio.zip'
+                  token: ${{ secrets.GITHUB_TOKEN }}
+                  generateReleaseNotes: true
+                  tag: ${{ env.CURRENT_VERSION }}
+            - name: Deploying to server
+              with:
+                  host: ${{ secrets.SERVER_HOST }}
+                  username: ${{ secrets.SERVER_USERNAME }}
+                  key: ${{ secrets.SERVER_SSH_KEY }}
+                  port: ${{ secrets.PORT }}
+                  script: |
+                      rm -rf Studio
+                      git clone https://github.com/MetacityTools/Studio.git
+                      cd Studio
+                      npm i
+                      npm run build
+                  
