@@ -18,6 +18,8 @@ export class EditorModel extends GL.Pickable implements GL.Selectable {
     private highlitColor_ = [255, 245, 229];
     private white_ = [255, 255, 255];
 
+    private file_: ArrayBuffer | null = null;
+
     constructor() {
         super();
     }
@@ -38,12 +40,20 @@ export class EditorModel extends GL.Pickable implements GL.Selectable {
         return this.data_.name;
     }
 
+    set file(file: ArrayBuffer | null) {
+        this.file_ = file;
+    }
+
     get data() {
         return this.data_.data;
     }
 
     get imported() {
         return true;
+    }
+
+    get file() {
+        return this.file_;
     }
 
     private geometryMode_ = GeometryMode.SOLID;

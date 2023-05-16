@@ -2,18 +2,20 @@ import React from 'react';
 
 import * as GL from '@bananagl/bananagl';
 
-import { CubeEmpty, CubeLeft, CubeRight, CubeTop, TriangleFull } from '@elements/Icons';
-import { MenuButton, MenuGroup, MenuInput } from '@elements/MenuButton';
+import { EditorContext } from '@components/Editor/Utils/Context';
 
-import { EditorMenuProps } from '../ViewControls';
+import { CubeEmpty, CubeLeft, CubeRight, CubeTop } from '@elements/Icons';
+import { MenuButton, MenuGroup } from '@elements/MenuButton';
 
-export function DirectionControls(props: EditorMenuProps) {
-    const { renderer } = props;
+export function DirectionControls() {
+    const ctx = React.useContext(EditorContext);
+    if (!ctx) return null;
+    const { renderer, activeView } = ctx;
 
     const [mode, setMode] = React.useState<GL.CameraView>(GL.CameraView.Free);
 
     const setView = (viewMode: GL.CameraView) => {
-        const view = renderer.views[props.view].view;
+        const view = renderer.views[activeView].view;
         view.cameraLock.mode = viewMode;
         setMode(viewMode);
     };
@@ -22,25 +24,25 @@ export function DirectionControls(props: EditorMenuProps) {
         renderer.onInit = () => {
             const controls = renderer.window.controls;
             controls.addShortcut(
-                new GL.ShortcutOnPress('Digit7', (view: GL.ViewClass) => {
+                new GL.ShortcutOnPress('Digit7', (view: GL.View) => {
                     setView(GL.CameraView.Top);
                 })
             );
 
             controls.addShortcut(
-                new GL.ShortcutOnPress('Digit1', (view: GL.ViewClass) => {
+                new GL.ShortcutOnPress('Digit1', (view: GL.View) => {
                     setView(GL.CameraView.Front);
                 })
             );
 
             controls.addShortcut(
-                new GL.ShortcutOnPress('Digit3', (view: GL.ViewClass) => {
+                new GL.ShortcutOnPress('Digit3', (view: GL.View) => {
                     setView(GL.CameraView.Right);
                 })
             );
 
             controls.addShortcut(
-                new GL.ShortcutOnPress('Digit5', (view: GL.ViewClass) => {
+                new GL.ShortcutOnPress('Digit5', (view: GL.View) => {
                     setView(GL.CameraView.Free);
                 })
             );

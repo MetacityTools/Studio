@@ -1,6 +1,8 @@
 import { IFCModelData } from 'types';
+import { IFCLoader } from 'web-ifc-three';
+import { IFCModel } from 'web-ifc-three/IFC/components/IFCModel';
 
-export function retrieveMetadata(models: IFCModelData[]) {
+/*export function retrieveMetadata(models: IFCModelData[]) {
     const uniqueSubmodels = new Set<number>();
     models.forEach((m) => m.geometry.expressID.forEach((id) => uniqueSubmodels.add(id)));
     const uniqueSubArray = Array.from(uniqueSubmodels);
@@ -11,9 +13,8 @@ export function retrieveMetadata(models: IFCModelData[]) {
     });
 
     return metadata;
-}
+}*/
 
-/*
 export async function retrieveMetadata(model: IFCModel, loader: IFCLoader, models: IFCModelData[]) {
     const ifc = loader.ifcManager;
     const modelID = model.modelID;
@@ -24,7 +25,7 @@ export async function retrieveMetadata(model: IFCModel, loader: IFCLoader, model
 
     const submodelMetadata = await Promise.all(
         uniqueSubArray.map((id) => {
-            return ifc.getItemProperties(modelID, id, true);
+            return ifc.getPropertySets(modelID, id, true);
         })
     );
 
@@ -47,4 +48,3 @@ export async function retrieveMetadata(model: IFCModel, loader: IFCLoader, model
 function declass(data: any) {
     return JSON.parse(JSON.stringify(data, null, 0));
 }
-*/

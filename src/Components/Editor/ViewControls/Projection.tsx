@@ -4,26 +4,27 @@ import { TbPerspective } from 'react-icons/tb';
 
 import * as GL from '@bananagl/bananagl';
 
-import { CubeEmpty, CubeLeft, CubeRight, CubeTop, TriangleFull } from '@elements/Icons';
-import { MenuButton, MenuGroup, MenuInput } from '@elements/MenuButton';
+import { EditorContext } from '@components/Editor/Utils/Context';
 
-import { EditorMenuProps } from '../ViewControls';
+import { MenuButton, MenuGroup } from '@elements/MenuButton';
 
-export function ProjectionControls(props: EditorMenuProps) {
-    const { renderer } = props;
+export function ProjectionControls() {
+    const ctx = React.useContext(EditorContext);
+    if (!ctx) return null;
+    const { renderer, activeView } = ctx;
 
     const [projection, setProjection] = React.useState<GL.ProjectionType>(
         GL.ProjectionType.ORTHOGRAPHIC
     );
 
     const setPerspective = () => {
-        const view = renderer.views[props.view].view;
+        const view = renderer.views[activeView].view;
         view.camera.projectionType = GL.ProjectionType.PERSPECTIVE;
         setProjection(GL.ProjectionType.PERSPECTIVE);
     };
 
     const setOrtho = () => {
-        const view = renderer.views[props.view].view;
+        const view = renderer.views[activeView].view;
         view.camera.projectionType = GL.ProjectionType.ORTHOGRAPHIC;
         setProjection(GL.ProjectionType.ORTHOGRAPHIC);
     };

@@ -1,9 +1,15 @@
+import clsx from 'clsx';
+
 export function DetailWidget(props: { children?: React.ReactNode }) {
-    return <div className="flex flex-col bg-neutral-200 rounded-md">{props.children}</div>;
+    return <div className="flex flex-col border rounded-md">{props.children}</div>;
 }
 
-export function WidgetLine(props: { children?: React.ReactNode }) {
-    return <div className="flex flex-row items-center w-full text-base">{props.children}</div>;
+export function WidgetLine(props: { children?: React.ReactNode; className?: string }) {
+    return (
+        <div className={clsx('flex flex-row items-center w-full text-base', props.className)}>
+            {props.children}
+        </div>
+    );
 }
 
 export function WidgetTitle(props: { children?: React.ReactNode }) {

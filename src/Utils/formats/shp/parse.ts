@@ -5,7 +5,8 @@ import { ShapefileData, UserInputModel } from 'types';
 export async function parse(model: UserInputModel) {
     const data = model.data as ShapefileData;
 
-    if (!data.shp || !data.shx || !data.dbf || !data.cpg) throw new Error('Missing required files');
+    if (!data.shp || !data.shx || !data.dbf)
+        throw new Error(`Missing required files: ${model.name}`);
     const collection = await FeatureReader.fromArrayBuffers(data.shp, data.shx, data.dbf, data.cpg);
     const features = collection.readFeatureCollection();
     const { buffers, submodelIdx, coordType, metadata } = getBuffersAndMeta(features);

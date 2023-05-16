@@ -1,4 +1,4 @@
-import { mat4, vec3 } from 'gl-matrix';
+import { mat4, quat, vec3 } from 'gl-matrix';
 import { GLTFMesh, GLTFNode, GLTFParsedData } from 'types';
 
 export function unindexGeometry(gltf: GLTFParsedData) {
@@ -21,7 +21,7 @@ export function unindexGeometry(gltf: GLTFParsedData) {
         metadata[submodelCounter] = {
             name: node.name,
             id: node.id,
-            ...node.extras,
+            node: node,
         };
 
         if (mesh) {
@@ -98,15 +98,14 @@ function countVertices(gltf: GLTFParsedData) {
         .reduce((a, b) => a + b, 0);
 }
 
-const tmpQuat = mat4.create();
-
 function getTransformation(node: GLTFNode, mat: mat4) {
+    console.log(node);
     if (node.matrix) return mat4.copy(mat, node.matrix as mat4);
     else {
         mat4.identity(mat);
-        if (node.scale) mat4.scale(mat, mat, node.scale as vec3);
-        if (node.rotation) mat4.multiply(mat, mat4.fromQuat(tmpQuat, node.rotation), mat);
-        if (node.translation) mat4.translate(mat, mat, node.translation as vec3);
+        if (node.translation) mat4.translate(mat, mat, node.translation);
+        if (node.rotation) mat4.multiply(mat, mat, mat4.fromQuat(mat4.create(), node.rotation));
+        if (node.scale) mat4.scale(mat, mat, node.scale);
         return mat;
     }
 }

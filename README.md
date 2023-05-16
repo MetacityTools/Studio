@@ -1,10 +1,12 @@
 # 🏡 Metacity Studio
 
+![Screenshot](src/assets/splash/screen.png)
+
 Metacity Studio is an online tool for integrating and visualizing spatial and tabular data.
 
 ## How does it work?
 
-Open the app, upload your data, mess around, save it and download the result to your computer. That's it.
+Open the app, upload your data, see what's there. That's it.
 
 The application is front-end only, all the data processing is done in the browser.
 
@@ -16,17 +18,6 @@ Only time will tell if this is a good idea.
 
 Currently:
 
--   GLTF (triangles only)
--   IFC
 -   SHP (Polygons and MultiPatch only)
-
-but we are working on adding formats such as:
-
--   CSV
--   GeoJSON
-
-## Inspiration
-
--   https://turfjs.org/
--   https://www.papaparse.com/
--   https://ifcjs.github.io/info/
+-   IFC
+-   GLTF (triangles only)

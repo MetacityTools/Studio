@@ -1,51 +1,78 @@
 import * as React from 'react';
+import { ModelData } from 'types';
 
 import { load } from '@utils/formats/loader';
-import { addEditorModels } from '@utils/models/addEditorModel';
+import { CoordinateMode, addEditorModels } from '@utils/models/addEditorModel';
 
-import * as GL from '@bananagl/bananagl';
+import { EditorContext } from '@components/Editor/Utils/Context';
 
-import { EditorContext } from '../Editor';
+import { ImportDialog } from './Actions/ImportDialog';
 import { Vitals } from './Vitals';
 
-export interface ActionMenuProps {
-    renderer: GL.Renderer;
-    scene: GL.Scene;
-    selection: GL.SelectionManager;
-}
+export function ActionMenu() {
+    const ctx = React.useContext(EditorContext);
+    if (!ctx) return null;
+    const {
+        renderer,
+        scene,
+        selection,
+        setProcessing,
+        globalShift,
+        setGlobalShift,
+        setLoadingStatus,
+    } = ctx;
 
-export function ActionMenu(props: ActionMenuProps) {
-    const { scene, selection } = props;
-    const context = React.useContext(EditorContext);
+    const [importOpen, setImportOpen] = React.useState(false);
+    const [selectedModels, setSelectedModels] = React.useState<ModelData[]>([]);
 
-    const handleModelsAdded = async (event: React.ChangeEvent<HTMLInputElement>) => {
-        context?.setProcessing(true);
-        const models = await load(event);
-        await addEditorModels(models, selection, scene, true);
-        context?.setProcessing(false);
+    const onModelsSelected = async (event: React.ChangeEvent<HTMLInputElement>) => {
+        setProcessing(true);
+        const models = await load(event, setLoadingStatus);
+        setSelectedModels(models);
+        setImportOpen(true);
+        setProcessing(false);
         event.target.value = '';
         event.preventDefault();
     };
 
+    const handleModelsAdded = async (mode: CoordinateMode) => {
+        setProcessing(true);
+        setImportOpen(false);
+        const shift = await addEditorModels(
+            selectedModels,
+            selection,
+            scene,
+            mode,
+            globalShift,
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            setLoadingStatus
+        );
+        setProcessing(false);
+        setSelectedModels([]);
+        setGlobalShift(shift);
+    };
+
     return (
-        <div className="flex flex-row p-4 border-b w-full border-b border-white space-x-2">
+        <div className="flex flex-row p-4 w-full space-x-2 text-xs">
             <label
                 htmlFor="modelInputFiles"
-                className="py-2 px-4 bg-neutral-200 hover:bg-neutral-300 rounded-md transition-colors cursor-pointer"
+                className="py-2 px-4 hover:bg-neutral-300 rounded-md transition-colors cursor-pointer"
             >
-                Load Models
+                Import
             </label>
             <input
                 className="hidden"
                 type="file"
-                onChange={handleModelsAdded}
+                onChange={onModelsSelected}
                 id="modelInputFiles"
                 multiple
             />
-            <button className="py-2 px-4 bg-neutral-200 hover:bg-neutral-300 rounded-md transition-colors cursor-pointer">
-                Export
-            </button>
-            <Vitals scenes={[props.scene]} renderer={props.renderer} />
+
+            <Vitals scenes={[scene]} renderer={renderer} />
+            <ImportDialog isOpen={importOpen} onClose={handleModelsAdded} />
         </div>
     );
 }

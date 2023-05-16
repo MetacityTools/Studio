@@ -5,6 +5,8 @@ import { RiBuilding2Fill } from 'react-icons/ri';
 
 import { EditorModel } from '@utils/models/EditorModel';
 
+import { EmptyDataPanel } from '@elements/Empty';
+
 interface ModelPanelProps {
     selected: boolean;
     onSelect: () => void;
@@ -24,7 +26,7 @@ function ModelPanel(props: ModelPanelProps): JSX.Element {
     return (
         <div
             className={clsx(
-                'text-lg rounded-md hover:shadow-even hover:-translate-y-1 transition-all cursor-pointer flex flex-row items-stretch ',
+                'text-lg rounded-md hover:shadow-even hover:bg-amber-300 hover:-translate-y-1 transition-all cursor-pointer flex flex-row items-stretch ',
                 selected ? 'bg-amber-300 text-amber-900' : 'bg-white text-black'
             )}
             onClick={onSelect}
@@ -58,17 +60,22 @@ export function ModelList(props: ModelListProps) {
     const { models, selectedModel, selectModel } = props;
 
     return (
-        <div className="flex flex-col p-4 space-y-2">
-            {models.map((model) => (
-                <ModelPanel
-                    model={model}
-                    key={model.name}
-                    selected={selectedModel === model}
-                    onSelect={() =>
-                        selectedModel === model ? selectModel(null) : selectModel(model)
-                    }
-                />
-            ))}
+        <div className="overflow-x-auto w-full h-full">
+            {models.length === 0 && <EmptyDataPanel />}
+            {models.length >= 0 && (
+                <div className="flex flex-col p-4 space-y-2">
+                    {models.map((model) => (
+                        <ModelPanel
+                            model={model}
+                            key={model.name}
+                            selected={selectedModel === model}
+                            onSelect={() =>
+                                selectedModel === model ? selectModel(null) : selectModel(model)
+                            }
+                        />
+                    ))}
+                </div>
+            )}
         </div>
     );
 }

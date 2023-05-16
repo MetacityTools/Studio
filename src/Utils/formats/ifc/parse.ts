@@ -46,7 +46,7 @@ async function load(buffer: ArrayBuffer) {
 async function loadModel(loader: IFCLoader, buffer: ArrayBuffer) {
     const model = await loader.parse(buffer);
     const flatModels = flattenModelTree(model);
-    const metadata = retrieveMetadata(flatModels);
+    const metadata = await retrieveMetadata(model, loader, flatModels);
     model.ifcManager?.close(model.modelID);
     return { metadata, flatModels };
 }

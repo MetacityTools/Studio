@@ -1,28 +1,28 @@
 import { Tab } from '@headlessui/react';
 import { Allotment } from 'allotment';
+import 'allotment/dist/style.css';
+import clsx from 'clsx';
 import React from 'react';
+import { BiMessageSquareDetail } from 'react-icons/bi';
+import { GoSettings } from 'react-icons/go';
+import { TiArrowMove } from 'react-icons/ti';
 
 import { EditorModel } from '@utils/models/EditorModel';
 
 import * as GL from '@bananagl/bananagl';
 
-import { EmptyDataPanel, EmptyDetialPanel } from '@elements/Empty';
+import { EditorContext } from '@components/Editor/Utils/Context';
 
 import { ActionMenu } from './SidePanel/Actions';
-import { ModelDetailPanel } from './SidePanel/ModelDetail';
+import { ModelDetailPanel } from './SidePanel/Details/ModelDetail';
+import { ModelMetaPanel } from './SidePanel/Meta/ModelMeta';
 import { ModelList } from './SidePanel/ModelList';
+import { ViewSettings } from './SidePanel/ViewSettings/ViewSettings';
 
-export interface SidePanelProps {
-    scene: GL.Scene;
-    renderer: GL.Renderer;
-    selection: GL.SelectionManager;
-}
-
-export function SidePanel(props: SidePanelProps) {
-    const { scene, renderer, selection } = props;
-
-    const [models, setModels] = React.useState<EditorModel[]>([]);
-    const [selectedModel, setSelectedModel] = React.useState<EditorModel | null>(null);
+export function SidePanel() {
+    const ctx = React.useContext(EditorContext);
+    if (!ctx) return null;
+    const { renderer, scene, selectedModel, models, selection, setModels, setSelectedModel } = ctx;
 
     React.useEffect(() => {
         const onChange = () => {
@@ -65,35 +65,62 @@ export function SidePanel(props: SidePanelProps) {
     };
 
     return (
-        <div className="text-xs bg-neutral-100 w-full h-full flex flex-col items-start">
-            <ActionMenu scene={scene} renderer={renderer} selection={selection} />
+        <div className="w-[calc(100%-16px)] h-[calc(100%-16px)] flex flex-col items-start shadow-even rounded-lg m-[8px] bg-white">
+            <ActionMenu />
             <Allotment separator={false} vertical>
                 <Allotment.Pane minSize={200} preferredSize={300}>
-                    <div className="overflow-x-auto w-full h-full">
-                        {models.length === 0 && <EmptyDataPanel />}
-                        {models.length > 0 && (
-                            <ModelList
-                                models={models}
-                                selectedModel={selectedModel}
-                                selectModel={onModelSelection}
-                            />
-                        )}
-                    </div>
+                    <ModelList
+                        models={models}
+                        selectedModel={selectedModel}
+                        selectModel={onModelSelection}
+                    />
                 </Allotment.Pane>
-                <Allotment.Pane minSize={200} className="border-t border-white">
-                    <div className="overflow-x-auto w-full h-full">
-                        {!selectedModel && <EmptyDetialPanel />}
-                        {selectedModel && (
-                            <ModelDetailPanel
-                                scene={scene}
-                                renderer={renderer}
-                                model={selectedModel}
-                                selection={selection}
-                            />
-                        )}
-                    </div>
+                <Allotment.Pane minSize={200} className="flex flex-col border-t border-neutral-100">
+                    <Tab.Group>
+                        <Tab.List className="flex flex-row bg-white bg-opacity-50 absolute w-full backdrop-blur">
+                            <TabButton>
+                                <BiMessageSquareDetail className="text-xl w-full" />
+                            </TabButton>
+                            <TabButton>
+                                <TiArrowMove className="text-xl w-full" />
+                            </TabButton>
+                            <TabButton>
+                                <GoSettings className="text-xl w-full" />
+                            </TabButton>
+                        </Tab.List>
+                        <Tab.Panels className="w-full h-full">
+                            <TabPanel>
+                                <ModelMetaPanel />
+                            </TabPanel>
+                            <TabPanel>
+                                <ModelDetailPanel />
+                            </TabPanel>
+                            <TabPanel>
+                                <ViewSettings />
+                            </TabPanel>
+                        </Tab.Panels>
+                    </Tab.Group>
                 </Allotment.Pane>
             </Allotment>
         </div>
     );
+}
+
+function TabButton(props: { children: React.ReactNode }) {
+    const base = 'outline-none p-2 m-2 text-center transition-colors flex-1 rounded';
+    return (
+        <Tab
+            className={({ selected }) =>
+                selected
+                    ? clsx('text-green-600 bg-green-100 hover:bg-green-200', base)
+                    : clsx('text-neutral-600 bg-none hover:bg-neutral-300', base)
+            }
+        >
+            {props.children}
+        </Tab>
+    );
+}
+
+function TabPanel(props: { children: React.ReactNode }) {
+    return <Tab.Panel className="overflow-x-auto w-full h-full pt-12">{props.children}</Tab.Panel>;
 }

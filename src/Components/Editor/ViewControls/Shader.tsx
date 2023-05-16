@@ -4,13 +4,15 @@ import { TbVectorTriangle } from 'react-icons/tb';
 import { EditorModel } from '@utils/models/EditorModel';
 import { GeometryMode } from '@utils/models/GeometryMode';
 
+import { EditorContext } from '@components/Editor/Utils/Context';
+
 import { TriangleFull } from '@elements/Icons';
 import { MenuButton, MenuGroup } from '@elements/MenuButton';
 
-import { EditorMenuProps } from '../ViewControls';
-
-export function ShaderControls(props: EditorMenuProps) {
-    const { scene } = props;
+export function ShaderControls() {
+    const ctx = React.useContext(EditorContext);
+    if (!ctx) return null;
+    const { scene } = ctx;
 
     const [geometryMode, setGeometryMode] = React.useState<GeometryMode>(GeometryMode.SOLID);
 

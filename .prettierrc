@@ -10,6 +10,7 @@
         "^@bananagl/(.*)$",
         "^@components/(.*)$",
         "^@elements/(.*)$",
+        "^@assets/(.*)$",
         "^[./]"
     ],
     "importOrderSeparation": true,

@@ -10,7 +10,11 @@ export default defineConfig({
             '@utils': path.resolve(__dirname, './src/Utils'),
             '@elements': path.resolve(__dirname, './src/Elements'),
             '@bananagl': path.resolve(__dirname, './src/bananagl'),
+            '@assets': path.resolve(__dirname, './src/assets'),
         },
     },
     plugins: [react()],
+    define: {
+        APP_VERSION: JSON.stringify(process.env.npm_package_version),
+    },
 });

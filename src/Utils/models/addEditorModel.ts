@@ -1,7 +1,8 @@
 import { mat4, vec3 } from 'gl-matrix';
 import { ModelData } from 'types';
+import { IFCLoader } from 'web-ifc-three';
 
-import { alignToCenter } from '@utils/geometry/align';
+import { alignToCenter, shiftModel } from '@utils/geometry/align';
 
 import * as GL from '@bananagl/bananagl';
 
@@ -14,23 +15,42 @@ const DEFAULT_UNIFORMS = {
     uZMax: 10,
 };
 
+export enum CoordinateMode {
+    Keep,
+    Center,
+    None,
+}
+
 export async function addEditorModels(
     modelData: ModelData[],
     selection: GL.SelectionManager,
     scene: GL.Scene,
-    align: boolean = false,
+    coordMode: CoordinateMode,
+    globalShift: vec3 | null,
     position: vec3 = [0, 0, 0],
     rotation: vec3 = [0, 0, 0],
     scale: vec3 = [1, 1, 1],
-    uniforms?: { [name: string]: any }
+    uniforms?: { [name: string]: any },
+    updateStatus?: (status: string) => void
 ) {
+    let i = 0;
     for (const model of modelData) {
+        i++;
         const glmodel = new EditorModel();
         const vertices = model.geometry.position;
         const submodel = model.geometry.submodel;
 
         const byteSubmodel = new Uint8Array(submodel.buffer);
-        if (align) alignToCenter([vertices]);
+
+        if (coordMode === CoordinateMode.Center) alignToCenter(vertices);
+        if (coordMode === CoordinateMode.Keep) {
+            if (globalShift === null) {
+                globalShift = vec3.create();
+                alignToCenter(vertices, globalShift);
+            } else {
+                shiftModel(vertices, globalShift);
+            }
+        }
 
         const colors = new Uint8Array(vertices.length).fill(255);
         const selected = new Uint8Array(vertices.length).fill(0);
@@ -67,7 +87,11 @@ export async function addEditorModels(
             selection.toggleSelection(id, object as EditorModel);
         };
 
+        if (updateStatus) updateStatus(`Building BVH for ${i}/${modelData.length}...`);
+
         await glmodel.initTrianglePicking();
         scene.add(glmodel);
     }
+
+    return globalShift;
 }
