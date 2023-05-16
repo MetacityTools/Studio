@@ -21,7 +21,7 @@ export function unindexGeometry(gltf: GLTFParsedData) {
         metadata[submodelCounter] = {
             name: node.name,
             id: node.id,
-            node: node,
+            ...node.extras
         };
 
         if (mesh) {
@@ -99,7 +99,6 @@ function countVertices(gltf: GLTFParsedData) {
 }
 
 function getTransformation(node: GLTFNode, mat: mat4) {
-    console.log(node);
     if (node.matrix) return mat4.copy(mat, node.matrix as mat4);
     else {
         mat4.identity(mat);
