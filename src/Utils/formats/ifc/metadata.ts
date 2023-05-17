@@ -1,6 +1,7 @@
-import { IFCModelData } from 'types';
 import { IFCLoader } from 'web-ifc-three';
 import { IFCModel } from 'web-ifc-three/IFC/components/IFCModel';
+
+import { IFCModelData } from '@utils/types';
 
 export function retrieveMetadata(model: IFCModel, loader: IFCLoader, models: IFCModelData[]) {
     const uniqueSubmodels = new Set<number>();
@@ -10,7 +11,7 @@ export function retrieveMetadata(model: IFCModel, loader: IFCLoader, models: IFC
     const metadata: { [submodel: number]: any } = {};
     uniqueSubArray.forEach((id) => {
         metadata[id] = {
-            metadata: "IFC metadata TBA"
+            metadata: 'IFC metadata TBA',
         };
     });
 
@@ -27,7 +28,7 @@ export function retrieveMetadata(model: IFCModel, loader: IFCLoader, models: IFC
 
     const submodelMetadata = await Promise.all(
         uniqueSubArray.map((id) => {
-            return ifc.getPropertySets(modelID, id, true);
+            return ifc.getMaterialsProperties(modelID, id, true);
         })
     );
 
@@ -49,4 +50,5 @@ export function retrieveMetadata(model: IFCModel, loader: IFCLoader, models: IFC
 //this is extremely dirty
 function declass(data: any) {
     return JSON.parse(JSON.stringify(data, null, 0));
-}*/
+}
+*/

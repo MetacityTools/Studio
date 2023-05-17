@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { ModelData } from 'types';
 
 import { load } from '@utils/formats/loader';
 import { CoordinateMode, addEditorModels } from '@utils/models/addEditorModel';
+import { ModelData } from '@utils/types';
 
 import { EditorContext } from '@components/Editor/Utils/Context';
 
@@ -39,15 +39,13 @@ export function ActionMenu() {
         setProcessing(true);
         setImportOpen(false);
         const shift = await addEditorModels(
-            selectedModels,
-            selection,
-            scene,
-            mode,
-            globalShift,
-            undefined,
-            undefined,
-            undefined,
-            undefined,
+            {
+                modelData: selectedModels,
+                selection: selection,
+                scene: scene,
+                coordMode: mode,
+                globalShift: globalShift,
+            },
             setLoadingStatus
         );
         setProcessing(false);
@@ -70,7 +68,6 @@ export function ActionMenu() {
                 id="modelInputFiles"
                 multiple
             />
-
             <Vitals scenes={[scene]} renderer={renderer} />
             <ImportDialog isOpen={importOpen} onClose={handleModelsAdded} />
         </div>

@@ -3,7 +3,7 @@ import React from 'react';
 import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
 import { RiBuilding2Fill } from 'react-icons/ri';
 
-import { EditorModel } from '@utils/models/EditorModel';
+import { EditorModel } from '@utils/models/models/EditorModel';
 
 import { EmptyDataPanel } from '@elements/Empty';
 

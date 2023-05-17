@@ -108,8 +108,16 @@ export interface ModelGeometry {
     submodel: Uint32Array;
 }
 
+export type PrimitiveType = 'triangle' | 'line' | 'point';
+
 export interface ModelMetadata {
     name: string;
     data: { [submodel: number]: any };
     file?: ArrayBuffer;
+    primitive: PrimitiveType;
+}
+
+export enum GeometryMode {
+    WIREFRAME,
+    SOLID,
 }

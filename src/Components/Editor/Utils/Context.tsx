@@ -1,7 +1,7 @@
 import { vec3 } from 'gl-matrix';
 import React from 'react';
 
-import { EditorModel } from '@utils/models/EditorModel';
+import { EditorModel } from '@utils/models/models/EditorModel';
 
 import * as GL from '@bananagl/bananagl';
 

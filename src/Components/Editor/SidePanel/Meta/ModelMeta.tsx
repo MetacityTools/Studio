@@ -2,7 +2,7 @@ import React from 'react';
 import JsonView from 'react18-json-view';
 import 'react18-json-view/src/style.css';
 
-import { EditorModel } from '@utils/models/EditorModel';
+import { EditorModel } from '@utils/models/models/EditorModel';
 
 import { EditorContext } from '@components/Editor/Utils/Context';
 

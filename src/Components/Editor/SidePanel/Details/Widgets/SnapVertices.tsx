@@ -1,7 +1,7 @@
 import React from 'react';
 import { TbRulerMeasure } from 'react-icons/tb';
 
-import { EditorModel } from '@utils/models/EditorModel';
+import { EditorModel } from '@utils/models/models/EditorModel';
 import { snapVertices } from '@utils/transforms/vertexSnap';
 
 import * as GL from '@bananagl/bananagl';

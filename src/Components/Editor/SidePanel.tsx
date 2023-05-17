@@ -7,7 +7,7 @@ import { BiMessageSquareDetail } from 'react-icons/bi';
 import { GoSettings } from 'react-icons/go';
 import { TiArrowMove } from 'react-icons/ti';
 
-import { EditorModel } from '@utils/models/EditorModel';
+import { EditorModel } from '@utils/models/models/EditorModel';
 
 import * as GL from '@bananagl/bananagl';
 
@@ -50,10 +50,6 @@ export function SidePanel() {
             };
         };
     }, [renderer]);
-
-    React.useEffect(() => {
-        console.log('model selection changed', selectedModel);
-    }, [selectedModel]);
 
     const onModelSelection = (model: EditorModel | null) => {
         setSelectedModel((prev) => {

@@ -1,4 +1,4 @@
-import { TypedArray } from 'types';
+import { TypedArray } from '@utils/types';
 
 import { Attribute } from '@bananagl/bananagl';
 
