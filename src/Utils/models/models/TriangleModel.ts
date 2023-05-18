@@ -17,7 +17,7 @@ export class TriangleModel extends EditorModel {
 }
 
 export async function addTriangleModel(model: ModelData, ctx: EditorModelData) {
-    let { coordMode, globalShift, position, rotation, scale, selection, scene } = ctx;
+    let { coordMode, globalShift, position, rotation, scale, selection, scene, uniforms } = ctx;
 
     position = position || vec3.create();
     rotation = rotation || vec3.create();
@@ -56,8 +56,8 @@ export async function addTriangleModel(model: ModelData, ctx: EditorModelData) {
     glmodel.wireframeShader = wireframeShader;
     glmodel.data = model.metadata.data;
     glmodel.name = model.metadata.name;
-    //glmodel.uniforms = uniforms || DEFAULT_UNIFORMS; //TODO fix this, needs deep copy of the uniforms
-    glmodel.uniforms = DEFAULT_UNIFORMS;
+    if (uniforms) glmodel.uniforms = GL.cloneUniforms(uniforms);
+    else glmodel.uniforms = DEFAULT_UNIFORMS;
     glmodel.position = position.slice() as vec3;
     glmodel.rotation = rotation.slice() as vec3;
     glmodel.scale = scale.slice() as vec3;

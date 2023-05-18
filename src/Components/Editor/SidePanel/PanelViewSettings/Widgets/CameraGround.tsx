@@ -13,13 +13,6 @@ export function CameraGroundWidget() {
     if (!ctx) return null;
     const { renderer, activeView, camTargetZ, setCamTargetZ } = ctx;
 
-    const [upShortcut, setUpShortcut] = React.useState<GL.ShortcutOnPress>(
-        new GL.ShortcutOnPress('ArrowUp', () => {})
-    );
-    const [downShortcut, setDownShortcut] = React.useState<GL.ShortcutOnPress>(
-        new GL.ShortcutOnPress('ArrowDown', () => {})
-    );
-
     const updateCamTargetZ = (value: number) => {
         if (isNaN(value)) return;
 
@@ -27,24 +20,6 @@ export function CameraGroundWidget() {
         view.camera.z = value;
         setCamTargetZ(value);
     };
-
-    React.useEffect(() => {
-        renderer.onInit = () => {
-            const controls = renderer.window.controls;
-            controls.addShortcut(upShortcut);
-            controls.addShortcut(downShortcut);
-        };
-    }, []);
-
-    React.useEffect(() => {
-        upShortcut.onTrigger = (view) => {
-            updateCamTargetZ(camTargetZ + 1);
-        };
-
-        downShortcut.onTrigger = (view) => {
-            updateCamTargetZ(camTargetZ - 1);
-        };
-    }, [camTargetZ]);
 
     return (
         <DetailWidget>
