@@ -22,7 +22,7 @@
       "@elements/*": ["./Elements/*"],
       "@bananagl/*": ["./bananagl/*"],
       "@assets/*": ["./assets/*"],
-    }
+    },
   },
   "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }]

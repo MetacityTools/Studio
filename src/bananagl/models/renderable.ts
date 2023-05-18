@@ -4,6 +4,10 @@ import { Shader, UniformValue } from '@bananagl/shaders/shader';
 
 import { Attributes } from './attributes';
 
+export type RenderingMode =
+    | WebGLRenderingContextBase['TRIANGLES']
+    | WebGLRenderingContextBase['LINES'];
+
 export abstract class Renderable {
     private attributes_: Attributes = new Attributes();
     private position_: vec3 = [0, 0, 0];
@@ -11,8 +15,7 @@ export abstract class Renderable {
     private scale_: vec3 = [1, 1, 1];
     private disposed_ = false;
     private visible_ = true;
-    public mode: WebGLRenderingContextBase['TRIANGLES'] | WebGLRenderingContextBase['LINES'] = 4;
-
+    public mode: RenderingMode = 4;
 
     private uniforms_: { [name: string]: UniformValue } = {
         uModelMatrix: mat4.identity(mat4.create()),

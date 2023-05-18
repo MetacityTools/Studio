@@ -86,7 +86,7 @@ export class ElementAttribute extends Attribute {
 }
 
 export class InstancedAttribute extends Attribute {
-    private divisor: number;
+    public divisor: number;
 
     constructor(
         name: string,

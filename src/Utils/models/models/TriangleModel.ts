@@ -56,6 +56,8 @@ export async function addTriangleModel(model: ModelData, ctx: EditorModelData) {
     glmodel.wireframeShader = wireframeShader;
     glmodel.data = model.metadata.data;
     glmodel.name = model.metadata.name;
+    glmodel.mode = 4;
+    glmodel.primitive = 'triangle';
 
     //glmodel.uniforms = uniforms || DEFAULT_UNIFORMS; //TODO fix this, needs deep copy of the uniforms
     glmodel.uniforms = DEFAULT_UNIFORMS;

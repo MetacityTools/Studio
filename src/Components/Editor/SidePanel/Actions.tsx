@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import { load } from '@utils/formats/loader';
+import { exportModels } from '@utils/formats/metacity/io';
 import { CoordinateMode, addEditorModels } from '@utils/models/addEditorModel';
 import { ModelData } from '@utils/types';
 
@@ -18,6 +19,7 @@ export function ActionMenu() {
         selection,
         setProcessing,
         globalShift,
+        models,
         setGlobalShift,
         setLoadingStatus,
     } = ctx;
@@ -53,6 +55,10 @@ export function ActionMenu() {
         setGlobalShift(shift);
     };
 
+    const handleExport = () => {
+        exportModels(models);
+    };
+
     return (
         <div className="flex flex-row p-4 w-full space-x-2 text-xs">
             <label
@@ -73,3 +79,12 @@ export function ActionMenu() {
         </div>
     );
 }
+
+/*
+<button
+    className="py-2 px-4 hover:bg-neutral-300 rounded-md transition-colors"
+    onClick={handleExport}
+>
+    Export
+</button>
+*/

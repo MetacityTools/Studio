@@ -44,10 +44,10 @@ export function ModelMetaPanel() {
     return (
         <div className="p-4 space-y-4">
             {selected.map((id) => (
-                <>
+                <div key={id}>
                     <div className="text-2xl text-neutral-300">Part {id}</div>
                     <JsonView src={getModelMeta(selectedModel, id)} />
-                </>
+                </div>
             ))}
         </div>
     );
