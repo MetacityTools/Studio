@@ -9,7 +9,7 @@ import { SnapVerticesWidget } from './Widgets/SnapVertices';
 import { SplitModelWidget } from './Widgets/SplitModel';
 import { ModelTransformationWidget } from './Widgets/Transformation';
 
-export function ModelDetailPanel() {
+export function ModelTransformPanel() {
     const ctx = React.useContext(EditorContext);
     if (!ctx) return null;
     const { scene, renderer, selectedModel, selection } = ctx;

@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { DirectionControls } from './ViewControls/Direction';
-import { ProjectionControls } from './ViewControls/Projection';
-import { ShaderControls } from './ViewControls/Shader';
+import { DirectionControls } from './Direction';
+import { ProjectionControls } from './Projection';
+import { ShaderControls } from './Shader';
 
 export function ViewControls() {
     return (

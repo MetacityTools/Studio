@@ -6,10 +6,10 @@ import { SizeGuard } from '@elements/SizeGuard';
 
 import { Canvas } from './Canvas';
 import { ContextComponent } from './Context';
-import { SidePanel } from './SidePanel';
+import { SidePanel } from './SidePanel/SidePanel';
 import { ProcessingScreen } from './Utils/Processing';
 import { SpashScreen } from './Utils/Splash';
-import { ViewControls } from './ViewControls';
+import { ViewControls } from './ViewControls/ViewControls';
 
 export function ModelEditor() {
     return (

@@ -6,8 +6,8 @@ import { ModelData } from '@utils/types';
 
 import { EditorContext } from '@components/Editor/Context';
 
-import { ImportDialog } from './Actions/ImportDialog';
-import { Vitals } from './Actions/Vitals';
+import { ImportDialog } from './ImportDialog';
+import { Vitals } from './Vitals';
 
 export function ActionMenu() {
     const ctx = React.useContext(EditorContext);

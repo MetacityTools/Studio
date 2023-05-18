@@ -2,8 +2,8 @@ import React from 'react';
 
 import { EmptyDataPanel } from '@elements/Empty';
 
-import { EditorContext } from '../Context';
-import { ModelPanel } from './ModelList/ModelPanel';
+import { EditorContext } from '../../Context';
+import { ModelPanel } from './ModelPanel';
 
 export function ModelList() {
     const ctx = React.useContext(EditorContext);

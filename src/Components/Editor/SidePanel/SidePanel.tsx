@@ -8,11 +8,11 @@ import { TiArrowMove } from 'react-icons/ti';
 
 import { TabButton, TabPanel } from '@elements/Tabs';
 
-import { ActionMenu } from './SidePanel/Actions';
-import { ModelDetailPanel } from './SidePanel/Details/ModelDetail';
-import { ModelMetaPanel } from './SidePanel/Meta/ModelMeta';
-import { ModelList } from './SidePanel/ModelList';
-import { ViewSettings } from './SidePanel/ViewSettings/ViewSettings';
+import { ActionMenu } from './Actions/Actions';
+import { ModelList } from './ModelList/ModelList';
+import { ModelMetaPanel } from './PanelMeta/ModelMeta';
+import { ModelTransformPanel } from './PanelTransform/ModelTransform';
+import { ViewSettings } from './PanelViewSettings/ViewSettings';
 
 export function SidePanel() {
     return (
@@ -40,7 +40,7 @@ export function SidePanel() {
                                 <ModelMetaPanel />
                             </TabPanel>
                             <TabPanel>
-                                <ModelDetailPanel />
+                                <ModelTransformPanel />
                             </TabPanel>
                             <TabPanel>
                                 <ViewSettings />
