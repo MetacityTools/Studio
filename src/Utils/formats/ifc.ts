@@ -9,6 +9,5 @@ async function process(data: any) {
     (self as any).postMessage(model, [
         model.geometry.position.buffer,
         model.geometry.submodel.buffer,
-        model.metadata.file,
     ]);
 }
