@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { ModelData } from 'types';
 
 import { load } from '@utils/formats/loader';
 import { CoordinateMode, addEditorModels } from '@utils/models/addEditorModel';
+import { ModelData } from '@utils/types';
 
-import { EditorContext } from '@components/Editor/Utils/Context';
+import { EditorContext } from '@components/Editor/Context';
 
-import { ImportDialog } from './Actions/ImportDialog';
+import { ImportDialog } from './ImportDialog';
 import { Vitals } from './Vitals';
 
 export function ActionMenu() {
@@ -23,12 +23,12 @@ export function ActionMenu() {
     } = ctx;
 
     const [importOpen, setImportOpen] = React.useState(false);
-    const [selectedModels, setSelectedModels] = React.useState<ModelData[]>([]);
+    const [importedModels, setImportedModels] = React.useState<ModelData[]>([]);
 
     const onModelsSelected = async (event: React.ChangeEvent<HTMLInputElement>) => {
         setProcessing(true);
         const models = await load(event, setLoadingStatus);
-        setSelectedModels(models);
+        setImportedModels(models);
         setImportOpen(true);
         setProcessing(false);
         event.target.value = '';
@@ -39,19 +39,17 @@ export function ActionMenu() {
         setProcessing(true);
         setImportOpen(false);
         const shift = await addEditorModels(
-            selectedModels,
-            selection,
-            scene,
-            mode,
-            globalShift,
-            undefined,
-            undefined,
-            undefined,
-            undefined,
+            {
+                modelData: importedModels,
+                selection: selection,
+                scene: scene,
+                coordMode: mode,
+                globalShift: globalShift,
+            },
             setLoadingStatus
         );
         setProcessing(false);
-        setSelectedModels([]);
+        setImportedModels([]);
         setGlobalShift(shift);
     };
 
@@ -70,7 +68,6 @@ export function ActionMenu() {
                 id="modelInputFiles"
                 multiple
             />
-
             <Vitals scenes={[scene]} renderer={renderer} />
             <ImportDialog isOpen={importOpen} onClose={handleModelsAdded} />
         </div>

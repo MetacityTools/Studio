@@ -1,5 +1,6 @@
 import { mat4, quat, vec3 } from 'gl-matrix';
-import { GLTFMesh, GLTFNode, GLTFParsedData } from 'types';
+
+import { GLTFMesh, GLTFNode, GLTFParsedData } from '@utils/types';
 
 export function unindexGeometry(gltf: GLTFParsedData) {
     const vertexCount = countVertices(gltf);
@@ -21,7 +22,7 @@ export function unindexGeometry(gltf: GLTFParsedData) {
         metadata[submodelCounter] = {
             name: node.name,
             id: node.id,
-            ...node.extras
+            ...node.extras,
         };
 
         if (mesh) {

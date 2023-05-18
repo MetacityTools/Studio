@@ -1,9 +1,9 @@
-import { Dialog, Transition } from '@headlessui/react';
+import { Dialog } from '@headlessui/react';
 import React from 'react';
 
 import { OverlayDialog } from '@elements/Dialog';
 
-import splash from '@assets/splash/office3.png';
+import splash from '@assets/splash/office.png';
 
 export function SpashScreen() {
     let [isOpen, setIsOpen] = React.useState(true);

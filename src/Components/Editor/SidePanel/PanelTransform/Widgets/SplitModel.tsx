@@ -1,12 +1,12 @@
 import React from 'react';
 import { TbLayersDifference } from 'react-icons/tb';
 
-import { EditorModel } from '@utils/models/EditorModel';
+import { EditorModel } from '@utils/models/models/EditorModel';
 import { splitModel } from '@utils/transforms/modelSplit';
 
 import * as GL from '@bananagl/bananagl';
 
-import { EditorContext } from '@components/Editor/Utils/Context';
+import { EditorContext } from '@components/Editor/Context';
 
 import {
     DetailWidget,

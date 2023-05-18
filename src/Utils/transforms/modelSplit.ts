@@ -1,10 +1,8 @@
-import { ModelData } from 'types';
-
-import { EditorModel } from '@utils/models/EditorModel';
 import { CoordinateMode, addEditorModels } from '@utils/models/addEditorModel';
+import { EditorModel } from '@utils/models/models/EditorModel';
+import { ModelData } from '@utils/types';
 
 import * as GL from '@bananagl/bananagl';
-import { TypedArray } from '@bananagl/shaders/shader';
 
 export async function splitModel(
     scene: GL.Scene,
@@ -38,6 +36,7 @@ export async function splitModel(
         metadata: {
             name: 'partA_' + model.name,
             data: {},
+            primitive: model.primitive,
         },
     };
 
@@ -49,6 +48,7 @@ export async function splitModel(
         metadata: {
             name: 'partB_' + model.name,
             data: {},
+            primitive: model.primitive,
         },
     };
 
@@ -90,17 +90,17 @@ export async function splitModel(
         }
     }
 
-    await addEditorModels(
-        [originalModelData, newModelData],
-        selection,
-        scene,
-        CoordinateMode.None,
-        null,
-        model.position,
-        model.rotation,
-        model.scale,
-        model.uniforms
-    );
+    await addEditorModels({
+        modelData: [originalModelData, newModelData],
+        coordMode: CoordinateMode.None,
+        scene: scene,
+        globalShift: null,
+        rotation: model.rotation,
+        scale: model.scale,
+        position: model.position,
+        uniforms: model.uniforms,
+        selection: selection,
+    });
 
     scene.remove(model);
 }

@@ -1,6 +1,7 @@
 import { mat4 } from 'gl-matrix';
 import { BufferAttribute, Mesh, MeshLambertMaterial } from 'three';
-import { IFCModelData } from 'types';
+
+import { IFCModelData } from '@utils/types';
 
 export function flattenModelTree(model: Mesh, parentMatrix: mat4 = mat4.create()): IFCModelData[] {
     const flat: IFCModelData[] = [swapFromYupToZup(toIFCModelData(model))];

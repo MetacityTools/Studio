@@ -49,7 +49,6 @@ export class WindowControls {
     removeShortcut(shortcut: Shortcut) {
         const index = this.shortcuts_.indexOf(shortcut);
         if (index >= 0) {
-            //console.log('Shortcut removed', index, this.shortcuts_, shortcut);
             this.shortcuts_.splice(index, 1);
         } else {
             console.warn('Shortcut not found', this.shortcuts_, shortcut);
@@ -78,7 +77,6 @@ export class WindowControls {
         }
 
         this.downTime_ = Date.now();
-        //event.preventDefault();
     };
 
     onMouseMove = (event: MouseEvent) => {

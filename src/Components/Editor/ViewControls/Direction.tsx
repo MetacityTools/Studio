@@ -2,7 +2,7 @@ import React from 'react';
 
 import * as GL from '@bananagl/bananagl';
 
-import { EditorContext } from '@components/Editor/Utils/Context';
+import { EditorContext } from '@components/Editor/Context';
 
 import { CubeEmpty, CubeLeft, CubeRight, CubeTop } from '@elements/Icons';
 import { MenuButton, MenuGroup } from '@elements/MenuButton';

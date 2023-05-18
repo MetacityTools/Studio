@@ -3,9 +3,7 @@ import React from 'react';
 import { AiFillEye, AiFillEyeInvisible } from 'react-icons/ai';
 import { RiBuilding2Fill } from 'react-icons/ri';
 
-import { EditorModel } from '@utils/models/EditorModel';
-
-import { EmptyDataPanel } from '@elements/Empty';
+import { EditorModel } from '@utils/models/models/EditorModel';
 
 interface ModelPanelProps {
     selected: boolean;
@@ -13,7 +11,7 @@ interface ModelPanelProps {
     model: EditorModel;
 }
 
-function ModelPanel(props: ModelPanelProps): JSX.Element {
+export function ModelPanel(props: ModelPanelProps): JSX.Element {
     const { model, onSelect, selected } = props;
     const [visible, setVisible] = React.useState<boolean>(model.visible);
 
@@ -46,36 +44,6 @@ function ModelPanel(props: ModelPanelProps): JSX.Element {
             >
                 {visible ? <AiFillEye /> : <AiFillEyeInvisible />}
             </button>
-        </div>
-    );
-}
-
-interface ModelListProps {
-    models: EditorModel[];
-    selectedModel: EditorModel | null;
-    selectModel: (model: EditorModel | null) => void;
-}
-
-export function ModelList(props: ModelListProps) {
-    const { models, selectedModel, selectModel } = props;
-
-    return (
-        <div className="overflow-x-auto w-full h-full">
-            {models.length === 0 && <EmptyDataPanel />}
-            {models.length >= 0 && (
-                <div className="flex flex-col p-4 space-y-2">
-                    {models.map((model) => (
-                        <ModelPanel
-                            model={model}
-                            key={model.name}
-                            selected={selectedModel === model}
-                            onSelect={() =>
-                                selectedModel === model ? selectModel(null) : selectModel(model)
-                            }
-                        />
-                    ))}
-                </div>
-            )}
         </div>
     );
 }

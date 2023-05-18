@@ -1,6 +1,18 @@
 //worker to parse models
-import { CoordType, FeatureCollection, FeatureReader, PolygonRecord, triangulate } from 'shpts';
-import { ShapefileData, UserInputModel } from 'types';
+import {
+    Coord,
+    CoordType,
+    FeatureCollection,
+    FeatureReader,
+    MultiPointRecord,
+    PointRecord,
+    PolyLineRecord,
+    PolygonRecord,
+    triangulate,
+} from 'shpts';
+import { BaseRecord } from 'shpts/dist/geometry/base';
+
+import { PrimitiveType, ShapefileData, UserInputModel } from '@utils/types';
 
 export async function parse(model: UserInputModel) {
     const data = model.data as ShapefileData;
@@ -20,6 +32,7 @@ export async function parse(model: UserInputModel) {
         metadata: {
             name: model.name,
             data: metadata,
+            primitive: PrimitiveType.TRIANGLES,
         },
     };
 }
@@ -27,25 +40,109 @@ export async function parse(model: UserInputModel) {
 function getBuffersAndMeta(features: FeatureCollection) {
     const buffers: Float32Array[] = [];
     const submodelIdx: number[] = [];
-    let coordType: CoordType = 0;
     let metadata: { [submodel: number]: any } = {};
+    let type: PrimitiveType | undefined = getType(features.features[0]?.geom.type);
+    let coordType: CoordType = features.features[0]?.geom.coordType;
     let idx = 0;
 
     for (const feature of features.features) {
         const geometry = feature.geom;
         metadata[idx] = feature.properties;
-        if (geometry.type === 'Polygon' || geometry.type === 'MultiPolygon') {
-            const g = geometry as PolygonRecord;
-            for (const ring of g.coords) {
-                const triangles = triangulate(ring, g.coordType, true);
-                buffers.push(triangles);
-                submodelIdx.push(idx);
-                coordType = g.coordType;
-            }
+        switch (geometry.type) {
+            case 'Polygon':
+            case 'MultiPolygon':
+                processPolygons(geometry, buffers, submodelIdx, idx);
+                break;
+            case 'LineString':
+            case 'MultiLineString':
+                processLine(geometry, buffers, submodelIdx, idx);
+                break;
+            case 'Point':
+                processPoint(geometry, buffers, submodelIdx, idx);
+                break;
+            case 'MultiPoint':
+                processMultiPoint(geometry, buffers, submodelIdx, idx);
+                break;
         }
         idx++;
     }
+
     return { buffers, submodelIdx, coordType, metadata };
+}
+
+function processMultiPoint(
+    geometry: BaseRecord,
+    buffers: Float32Array[],
+    submodelIdx: number[],
+    idx: number
+) {
+    const g = geometry as MultiPointRecord;
+    for (const coord of g.coords) {
+        buffers.push(new Float32Array(coord));
+        submodelIdx.push(idx);
+    }
+}
+
+function processPoint(
+    geometry: BaseRecord,
+    buffers: Float32Array[],
+    submodelIdx: number[],
+    idx: number
+) {
+    const g = geometry as PointRecord;
+    buffers.push(new Float32Array(g.coords));
+    submodelIdx.push(idx);
+}
+
+function processLine(
+    geometry: BaseRecord,
+    buffers: Float32Array[],
+    submodelIdx: number[],
+    idx: number
+) {
+    const g = geometry as PolyLineRecord;
+    for (const ring of g.coords) {
+        buffers.push(ringToSegments(ring));
+        submodelIdx.push(idx);
+    }
+}
+
+function processPolygons(
+    geometry: BaseRecord,
+    buffers: Float32Array[],
+    submodelIdx: number[],
+    idx: number
+) {
+    const g = geometry as PolygonRecord;
+    for (const ring of g.coords) {
+        const triangles = triangulate(ring, g.coordType, true);
+        buffers.push(triangles);
+        submodelIdx.push(idx);
+    }
+}
+
+function ringToSegments(ring: Coord[]) {
+    const points = [];
+    for (let i = 0; i < ring.length - 1; i++) {
+        points.push(...ring[i], ...ring[i + 1]);
+    }
+    return new Float32Array(points);
+}
+
+function getType(type: string) {
+    switch (type) {
+        case 'Polygon':
+        case 'MultiPolygon':
+            return PrimitiveType.TRIANGLES;
+        case 'LineString':
+        case 'MultiLineString':
+            return PrimitiveType.LINES;
+        case 'Point':
+        case 'MultiPoint':
+            return PrimitiveType.POINTS;
+        default:
+            return PrimitiveType.UNDEFINED;
+    }
 }
 
 function unifyBuffers(buffers: Float32Array[], submodelIdx: number[], coordType: CoordType) {
@@ -58,6 +155,7 @@ function unifyBuffers(buffers: Float32Array[], submodelIdx: number[], coordType:
 
     let posoffset = 0;
     let suboffset = 0;
+
     for (let i = 0; i < buffers.length; i++) {
         const b = buffers[i];
         const s = submodelIdx[i];

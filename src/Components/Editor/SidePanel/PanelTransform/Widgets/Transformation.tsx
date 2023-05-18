@@ -2,7 +2,7 @@ import { mat4, vec3 } from 'gl-matrix';
 import React from 'react';
 import { TiArrowMove } from 'react-icons/ti';
 
-import { EditorModel } from '@utils/models/EditorModel';
+import { EditorModel } from '@utils/models/models/EditorModel';
 
 import * as GL from '@bananagl/bananagl';
 
@@ -70,7 +70,7 @@ export function ModelTransformationWidget(props: ModelControlsProps) {
             const controls = renderer.window.controls;
             controls.addShortcut(moveShortcut);
             controls.addShortcut(scaleShortcut);
-            console.log(controls);
+            //TODO cleanup shortcuts in strict mode
         };
 
         return () => {

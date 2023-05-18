@@ -1,24 +1,17 @@
-import { ModelMetadata } from 'types';
+import { GeometryMode, ModelMetadata, PrimitiveType } from '@utils/types';
 
-import { Selection } from '@bananagl/bananagl';
 import * as GL from '@bananagl/bananagl';
-import { OnPickCallback } from '@bananagl/models/pickable';
-
-import { GeometryMode } from './GeometryMode';
 
 export class EditorModel extends GL.Pickable implements GL.Selectable {
-    protected data_: ModelMetadata = {
-        name: 'Default Model Name',
-        data: {},
-    };
+    protected data_: { [submodel: number]: any } = {};
+    public name = 'Default Model Name';
+    public primitive: PrimitiveType = PrimitiveType.UNDEFINED;
 
     private baseColor_ = [255, 255, 255];
     private selectedColor_ = [255, 180, 50];
 
     private highlitColor_ = [255, 245, 229];
     private white_ = [255, 255, 255];
-
-    private file_: ArrayBuffer | null = null;
 
     constructor() {
         super();
@@ -27,38 +20,18 @@ export class EditorModel extends GL.Pickable implements GL.Selectable {
     set data(data: { [name: number]: any }) {
         for (const name in data) {
             const value = data[name];
-            if (value === this.data_.data[name]) continue;
-            this.data_.data[name] = value;
+            if (value === this.data_[name]) continue;
+            this.data_[name] = value;
         }
     }
 
-    set name(name: string) {
-        this.data_.name = name;
-    }
-
-    get name() {
-        return this.data_.name;
-    }
-
-    set file(file: ArrayBuffer | null) {
-        this.file_ = file;
-    }
-
     get data() {
-        return this.data_.data;
-    }
-
-    get imported() {
-        return true;
-    }
-
-    get file() {
-        return this.file_;
+        return this.data_;
     }
 
     private geometryMode_ = GeometryMode.SOLID;
-    solidShader?: GL.Shader;
-    wireframeShader?: GL.Shader;
+    public solidShader?: GL.Shader;
+    public wireframeShader?: GL.Shader;
 
     get geometryMode() {
         return this.geometryMode_;
@@ -73,7 +46,7 @@ export class EditorModel extends GL.Pickable implements GL.Selectable {
         }
     }
 
-    onSelect(selection: Selection) {
+    onSelect(selection: GL.Selection) {
         const id = selection.identifier;
         this.colorForId(
             id,
@@ -84,7 +57,7 @@ export class EditorModel extends GL.Pickable implements GL.Selectable {
         );
     }
 
-    onDeselect(selection: Selection) {
+    onDeselect(selection: GL.Selection) {
         const id = selection.identifier;
         this.colorForId(id, this.baseColor_[0], this.baseColor_[1], this.baseColor_[2], 0);
     }
@@ -145,3 +118,8 @@ export class EditorModel extends GL.Pickable implements GL.Selectable {
         this.baseColor_ = color;
     }
 }
+
+export const DEFAULT_UNIFORMS = {
+    uZMin: 0,
+    uZMax: 10,
+};

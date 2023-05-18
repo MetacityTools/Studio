@@ -1,5 +1,6 @@
-import { IFCData, ModelData, UserInputModel } from 'types';
 import { IFCLoader } from 'web-ifc-three';
+
+import { IFCData, ModelData, PrimitiveType, UserInputModel } from '@utils/types';
 
 import { retrieveMetadata } from './metadata';
 import { flattenModelTree } from './transform';
@@ -22,7 +23,7 @@ export async function parse(model: UserInputModel): Promise<ModelData> {
         metadata: {
             name: model.name,
             data: metadata,
-            file: data.buffer,
+            primitive: PrimitiveType.TRIANGLES,
         },
     };
 }

@@ -21,3 +21,44 @@ Currently:
 -   SHP (Polygons and MultiPatch only)
 -   IFC
 -   GLTF (triangles only)
+
+## Roadmap
+
+-   [x] Grid in the background
+-   [x] Translucent models to see wirefame in the background
+-   [x] Snap vertices
+-   [x] Translation - scale - rotate
+-   [x] Split models
+-   [x] Hide models
+-   [x] Delete model
+-   [x] Loading SHP - _needs our own library to load, noone supports multipatch_
+-   [x] BVH build into worker
+-   [x] Loading screen + Add chicken
+-   [x] Add React Context
+-   [x] Tabs in sidepanel
+-   [x] Redesign
+-   [x] Sidepanel view settings
+-   [x] Intro screen
+-   [x] Selecting alignment for loaded models
+-   [x] Worker pool for loading
+-   [x] Status - counter, update global loading status
+-   [x] Reading metadata from IFC files - inspeciton of metadata?
+-   [x] CI na githubu autodeploy
+-   [x] Uniforms copy on model add
+-   [x] Rotate Splash screen bug
+-   [ ] Loading points and lines from SHP
+-   [ ] Loading GeoJSON
+-   [ ] Project export
+-   [ ] Project import
+-   [ ] Allow labeling geometry
+-   [ ] delete selected submodel
+-   [ ] merge submodels
+
+### Backlog
+
+-   [ ] IFC metadata loading (memory-efficiency???)
+-   [ ] BVH
+-   [ ] remesh models - intersection of triangles
+-   [ ] delete submodel - _for now as (split + delete)_
+-   [ ] frustum culling
+-   [ ] rectangular select

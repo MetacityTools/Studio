@@ -1,7 +1,7 @@
 import { Transition } from '@headlessui/react';
 import React from 'react';
 
-import { EditorContext } from '@components/Editor/Utils/Context';
+import { EditorContext } from '@components/Editor/Context';
 
 import chicken1 from '@assets/chicken/Chicken_Run.gif';
 import chicken3 from '@assets/chicken/Chicken_Strut.gif';

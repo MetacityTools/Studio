@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { GridModel } from '@utils/models/GridModel';
+import { GridModel } from '@utils/models/models/GridModel';
 
 import * as GL from '@bananagl/bananagl';
 
