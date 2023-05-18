@@ -1,16 +1,14 @@
 import { parse as parseGLTF } from '@loaders.gl/core';
 import { GLTFLoader } from '@loaders.gl/gltf';
 
-import { GLTFData, GLTFParsedData, ModelData, UserInputModel } from '@utils/types';
+import { GLTFData, GLTFParsedData, ModelData, PrimitiveType, UserInputModel } from '@utils/types';
 
-import { swapFromYupToZup } from './transform';
 import { unindexGeometry } from './unindex';
 
 export async function parse(model: UserInputModel): Promise<ModelData> {
     const gltf = await loadModel(model);
 
     const { position, submodel, metadata } = unindexGeometry(gltf);
-    //swapFromYupToZup(position);
 
     return {
         geometry: {
@@ -20,7 +18,7 @@ export async function parse(model: UserInputModel): Promise<ModelData> {
         metadata: {
             name: model.name,
             data: metadata,
-            primitive: 'triangle',
+            primitive: PrimitiveType.TRIANGLES,
         },
     };
 }

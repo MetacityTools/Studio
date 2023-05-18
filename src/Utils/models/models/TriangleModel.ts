@@ -2,7 +2,7 @@ import { vec3 } from 'gl-matrix';
 
 import { alignToCenter, shiftModel } from '@utils/geometry/align';
 import { computeNormals } from '@utils/geometry/normals';
-import { ModelData } from '@utils/types';
+import { ModelData, PrimitiveType } from '@utils/types';
 
 import * as GL from '@bananagl/bananagl';
 
@@ -23,7 +23,7 @@ export async function addTriangleModel(model: ModelData, ctx: EditorModelData) {
     rotation = rotation || vec3.create();
     scale = scale || vec3.fromValues(1, 1, 1);
 
-    const glmodel = new EditorModel();
+    const glmodel = new TriangleModel();
     const vertices = model.geometry.position;
     const submodel = model.geometry.submodel;
 
@@ -56,13 +56,13 @@ export async function addTriangleModel(model: ModelData, ctx: EditorModelData) {
     glmodel.wireframeShader = wireframeShader;
     glmodel.data = model.metadata.data;
     glmodel.name = model.metadata.name;
-
     //glmodel.uniforms = uniforms || DEFAULT_UNIFORMS; //TODO fix this, needs deep copy of the uniforms
     glmodel.uniforms = DEFAULT_UNIFORMS;
-
     glmodel.position = position.slice() as vec3;
     glmodel.rotation = rotation.slice() as vec3;
     glmodel.scale = scale.slice() as vec3;
+    glmodel.primitive = PrimitiveType.TRIANGLES;
+    glmodel.mode = 4;
 
     glmodel.onPick = (object, idx, ray, t, addToSelection) => {
         const submodel = object.attributes.getAttribute('submodel') as GL.Attribute;

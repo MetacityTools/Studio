@@ -1,6 +1,6 @@
 import { vec3 } from 'gl-matrix';
 
-import { ModelData } from '@utils/types';
+import { ModelData, PrimitiveType } from '@utils/types';
 
 import * as GL from '@bananagl/bananagl';
 
@@ -32,7 +32,7 @@ export async function addEditorModels(
     let { modelData } = ctx;
 
     for (const model of modelData) {
-        if (model.metadata.primitive === 'triangle')
+        if (model.metadata.primitive === PrimitiveType.TRIANGLES)
             ctx.globalShift = await addTriangleModel(model, ctx);
         if (updateStatus) updateStatus(`Building BVH for ${i++}/${modelData.length}...`);
     }

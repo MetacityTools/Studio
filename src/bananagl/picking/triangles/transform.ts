@@ -1,4 +1,4 @@
-import { TypedArray } from '@utils/types';
+import { TypedArray } from '@bananagl/shaders/shader';
 
 import { Attribute } from '@bananagl/bananagl';
 

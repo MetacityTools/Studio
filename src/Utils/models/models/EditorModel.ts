@@ -3,11 +3,9 @@ import { GeometryMode, ModelMetadata, PrimitiveType } from '@utils/types';
 import * as GL from '@bananagl/bananagl';
 
 export class EditorModel extends GL.Pickable implements GL.Selectable {
-    protected data_: ModelMetadata = {
-        name: 'Default Model Name',
-        primitive: 'triangle',
-        data: {},
-    };
+    protected data_: { [submodel: number]: any } = {};
+    public name = 'Default Model Name';
+    public primitive: PrimitiveType = PrimitiveType.UNDEFINED;
 
     private baseColor_ = [255, 255, 255];
     private selectedColor_ = [255, 180, 50];
@@ -22,38 +20,18 @@ export class EditorModel extends GL.Pickable implements GL.Selectable {
     set data(data: { [name: number]: any }) {
         for (const name in data) {
             const value = data[name];
-            if (value === this.data_.data[name]) continue;
-            this.data_.data[name] = value;
+            if (value === this.data_[name]) continue;
+            this.data_[name] = value;
         }
     }
 
-    set name(name: string) {
-        this.data_.name = name;
-    }
-
-    get name() {
-        return this.data_.name;
-    }
-
     get data() {
-        return this.data_.data;
-    }
-
-    get imported() {
-        return true;
-    }
-
-    set primitive(primitive: PrimitiveType) {
-        this.data_.primitive = primitive;
-    }
-
-    get primitive() {
-        return this.data_.primitive;
+        return this.data_;
     }
 
     private geometryMode_ = GeometryMode.SOLID;
-    solidShader?: GL.Shader;
-    wireframeShader?: GL.Shader;
+    public solidShader?: GL.Shader;
+    public wireframeShader?: GL.Shader;
 
     get geometryMode() {
         return this.geometryMode_;
