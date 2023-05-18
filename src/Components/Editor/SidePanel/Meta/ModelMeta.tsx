@@ -2,7 +2,7 @@ import React from 'react';
 import JsonView from 'react18-json-view';
 import 'react18-json-view/src/style.css';
 
-import { EditorContext } from '@components/Editor/Utils/Context';
+import { EditorContext } from '@components/Editor/Context';
 
 import { EmptyDetailPanel, EmptyMetaPanel } from '@elements/Empty';
 

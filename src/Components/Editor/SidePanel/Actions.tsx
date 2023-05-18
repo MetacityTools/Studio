@@ -4,10 +4,10 @@ import { load } from '@utils/formats/loader';
 import { CoordinateMode, addEditorModels } from '@utils/models/addEditorModel';
 import { ModelData } from '@utils/types';
 
-import { EditorContext } from '@components/Editor/Utils/Context';
+import { EditorContext } from '@components/Editor/Context';
 
 import { ImportDialog } from './Actions/ImportDialog';
-import { Vitals } from './Vitals';
+import { Vitals } from './Actions/Vitals';
 
 export function ActionMenu() {
     const ctx = React.useContext(EditorContext);

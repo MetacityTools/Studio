@@ -4,7 +4,7 @@ import { TbVectorTriangle } from 'react-icons/tb';
 import { EditorModel } from '@utils/models/models/EditorModel';
 import { GeometryMode } from '@utils/types';
 
-import { EditorContext } from '@components/Editor/Utils/Context';
+import { EditorContext } from '@components/Editor/Context';
 
 import { TriangleFull } from '@elements/Icons';
 import { MenuButton, MenuGroup } from '@elements/MenuButton';

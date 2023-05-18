@@ -70,7 +70,7 @@ export function ModelTransformationWidget(props: ModelControlsProps) {
             const controls = renderer.window.controls;
             controls.addShortcut(moveShortcut);
             controls.addShortcut(scaleShortcut);
-            console.log(controls);
+            //TODO cleanup shortcuts in strict mode
         };
 
         return () => {

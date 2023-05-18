@@ -4,9 +4,9 @@ import React from 'react';
 
 import { SizeGuard } from '@elements/SizeGuard';
 
+import { Canvas } from './Canvas';
+import { ContextComponent } from './Context';
 import { SidePanel } from './SidePanel';
-import { Canvas } from './Utils/Canvas';
-import { ContextComponent } from './Utils/Context';
 import { ProcessingScreen } from './Utils/Processing';
 import { SpashScreen } from './Utils/Splash';
 import { ViewControls } from './ViewControls';

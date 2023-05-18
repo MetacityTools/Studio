@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { EditorContext } from '@components/Editor/Utils/Context';
+import { EditorContext } from '@components/Editor/Context';
 
 import { EmptyDetailPanel } from '@elements/Empty';
 

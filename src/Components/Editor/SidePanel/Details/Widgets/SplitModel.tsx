@@ -6,7 +6,7 @@ import { splitModel } from '@utils/transforms/modelSplit';
 
 import * as GL from '@bananagl/bananagl';
 
-import { EditorContext } from '@components/Editor/Utils/Context';
+import { EditorContext } from '@components/Editor/Context';
 
 import {
     DetailWidget,
