@@ -23,12 +23,12 @@ export function ActionMenu() {
     } = ctx;
 
     const [importOpen, setImportOpen] = React.useState(false);
-    const [selectedModels, setSelectedModels] = React.useState<ModelData[]>([]);
+    const [importedModels, setImportedModels] = React.useState<ModelData[]>([]);
 
     const onModelsSelected = async (event: React.ChangeEvent<HTMLInputElement>) => {
         setProcessing(true);
         const models = await load(event, setLoadingStatus);
-        setSelectedModels(models);
+        setImportedModels(models);
         setImportOpen(true);
         setProcessing(false);
         event.target.value = '';
@@ -40,7 +40,7 @@ export function ActionMenu() {
         setImportOpen(false);
         const shift = await addEditorModels(
             {
-                modelData: selectedModels,
+                modelData: importedModels,
                 selection: selection,
                 scene: scene,
                 coordMode: mode,
@@ -49,7 +49,7 @@ export function ActionMenu() {
             setLoadingStatus
         );
         setProcessing(false);
-        setSelectedModels([]);
+        setImportedModels([]);
         setGlobalShift(shift);
     };
 
