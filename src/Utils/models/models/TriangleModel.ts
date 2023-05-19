@@ -19,6 +19,7 @@ export class TriangleModel extends EditorModel {
 export async function addTriangleModel(model: ModelData, ctx: EditorModelData) {
     let { coordMode, globalShift, position, rotation, scale, selection, scene, uniforms } = ctx;
 
+    console.log(model);
     position = position || vec3.create();
     rotation = rotation || vec3.create();
     scale = scale || vec3.fromValues(1, 1, 1);
@@ -76,5 +77,6 @@ export async function addTriangleModel(model: ModelData, ctx: EditorModelData) {
 
     await glmodel.initTrianglePicking();
     scene.add(glmodel);
+    console.log(glmodel);
     return globalShift;
 }
