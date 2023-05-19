@@ -5,6 +5,7 @@ import { EditorContext } from '@components/Editor/Context';
 import { EmptyDetailPanel } from '@elements/Empty';
 
 import { DeleteModelWidget } from './Widgets/DeleteModel';
+import { JoinModelWidget } from './Widgets/JoinModels';
 import { SnapVerticesWidget } from './Widgets/SnapVertices';
 import { SplitModelWidget } from './Widgets/SplitModel';
 import { ModelTransformationWidget } from './Widgets/Transformation';
@@ -21,6 +22,7 @@ export function ModelTransformPanel() {
             <ModelTransformationWidget model={selectedModel} renderer={renderer} />
             <SnapVerticesWidget model={selectedModel} />
             <SplitModelWidget model={selectedModel} scene={scene} selection={selection} />
+            <JoinModelWidget model={selectedModel} scene={scene} selection={selection} />
             <DeleteModelWidget model={selectedModel} scene={scene} />
         </div>
     );

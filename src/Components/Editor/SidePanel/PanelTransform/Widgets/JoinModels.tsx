@@ -1,8 +1,8 @@
 import React from 'react';
-import { TbLayersIntersect } from 'react-icons/tb';
+import { TbLayersDifference } from 'react-icons/tb';
 
 import { EditorModel } from '@utils/models/models/EditorModel';
-import { splitModel } from '@utils/transforms/modelSplit';
+import { joinModel } from '@utils/transforms/joinSubmodels';
 
 import * as GL from '@bananagl/bananagl';
 
@@ -22,7 +22,7 @@ interface SnapVerticesProps {
     selection: GL.SelectionManager;
 }
 
-export function SplitModelWidget(props: SnapVerticesProps) {
+export function JoinModelWidget(props: SnapVerticesProps) {
     const { scene, model, selection } = props;
     const ctx = React.useContext(EditorContext);
     if (!ctx) return null;
@@ -30,7 +30,7 @@ export function SplitModelWidget(props: SnapVerticesProps) {
 
     const apply = async () => {
         setProcessing(true);
-        await splitModel(scene, model, selection);
+        await joinModel(model, selection);
         setProcessing(false);
     };
 
@@ -38,15 +38,14 @@ export function SplitModelWidget(props: SnapVerticesProps) {
         <DetailWidget>
             <WidgetLine>
                 <WidgetTitle>
-                    <TbLayersIntersect className="mr-2" />
-                    Split Model
+                    <TbLayersDifference className="mr-2" />
+                    Join Model
                 </WidgetTitle>
                 <WidgetApplyButton onApply={apply} />
             </WidgetLine>
             <WidgetLine>
                 <WidgetDescription>
-                    Split the model based on the current selection, the selected parts will be
-                    removed from the original model and placed into a new model.
+                    Join selected submodels into a single submodel.
                 </WidgetDescription>
             </WidgetLine>
         </DetailWidget>

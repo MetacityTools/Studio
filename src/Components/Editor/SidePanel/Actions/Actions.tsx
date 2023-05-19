@@ -57,7 +57,7 @@ export function ActionMenu() {
         <div className="flex flex-row p-4 w-full space-x-2 text-xs">
             <label
                 htmlFor="modelInputFiles"
-                className="py-2 px-4 hover:bg-neutral-300 rounded-md transition-colors cursor-pointer"
+                className="py-2 px-4 hover:bg-neutral-300 rounded-md transition-colors cursor-pointer border"
             >
                 Import
             </label>
@@ -68,6 +68,9 @@ export function ActionMenu() {
                 id="modelInputFiles"
                 multiple
             />
+            <button className="py-2 px-4 hover:bg-neutral-300 rounded-md transition-colors border">
+                Convert
+            </button>
             <Vitals scenes={[scene]} renderer={renderer} />
             <ImportDialog isOpen={importOpen} onClose={handleModelsAdded} />
         </div>
