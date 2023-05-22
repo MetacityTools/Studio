@@ -1,4 +1,4 @@
-import { GeometryMode, ModelMetadata, PrimitiveType } from '@utils/types';
+import { GeometryMode, PrimitiveType } from '@utils/types';
 
 import * as GL from '@bananagl/bananagl';
 

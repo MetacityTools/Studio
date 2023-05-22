@@ -1,11 +1,10 @@
 import { Model } from '@bananagl/models/model';
 import { BVH } from '@bananagl/picking/bvh';
-import { Ray } from '@bananagl/picking/ray';
 import { TriangleBVH } from '@bananagl/picking/triangles/bvh.triangle';
 
 export type OnPickCallback = (
     object: Pickable,
-    primitiveIndex: number,
+    primitiveIndex: number | number[],
     addToSelection?: boolean
 ) => void;
 

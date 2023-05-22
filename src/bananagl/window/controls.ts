@@ -7,6 +7,8 @@ import { Window } from '@bananagl/window/window';
 
 import { Shortcut } from './shortcuts';
 
+//TODO
+//Refactor this wild west into something more comprehensible
 export class WindowControls {
     private activeView: View | null = null;
     private lastX: number = 0;
@@ -90,8 +92,9 @@ export class WindowControls {
         if (this.activeShortcut && this.activeShortcut.onMove) {
             this.activeShortcut.onMove(this.activeView, dx, dy);
         } else if (this.mouseDown) {
+            //TODO fix this
             if (this.selectMode) {
-                //update rectangle selection on screen
+                //??
             } else if (this.altKeyPressed || this.middleMouse || this.rightMouse) {
                 this.activeView.cameraLock.restrictRotate(dx, dy);
                 const { coords } = this.activeView.cameraLock;
@@ -104,10 +107,11 @@ export class WindowControls {
 
     private onMouseUp = (event: MouseEvent) => {
         if (this.activeShortcut) this.activeShortcut = null;
+        else if (this.clickDuration < 200) this.trace(event);
         else if (this.selectMode) {
             this.rectTrace(event);
             this.selectMode = false;
-        } else if (this.clickDuration < 200) this.trace(event);
+        }
         this.finish(event);
     };
 
@@ -170,11 +174,10 @@ export class WindowControls {
         if (!this.activeView) return;
         const { offsetX, offsetY } = event;
         const ndc = this.activeView.toNDC(offsetX, offsetY);
-        console.log('rect trace', this.offsetOnDown, ndc);
         const rect = new RectSelector(this.activeView.camera, this.offsetOnDown, ndc);
         const hits = this.activeView.scene.picker.traceRect(rect);
         if (hits && hits.object.onPick) {
-            for (const index of hits.primitiveIndices) hits.object.onPick(hits.object, index, true);
+            hits.object.onPick(hits.object, hits.primitiveIndices, true);
             if (this.onPick) this.onPick(hits.object);
         }
     }

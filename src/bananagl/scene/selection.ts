@@ -1,4 +1,3 @@
-import { Renderable } from '@bananagl/bananagl';
 import { Selectable } from '@bananagl/models/selectable';
 
 export class Selection {
@@ -34,6 +33,13 @@ export class SelectionManager {
             this.select(identifier, object);
         } else {
             this.deselect(identifier, index);
+        }
+    }
+
+    addSelection(identifier: number, object: Selectable) {
+        const index = this.selected.findIndex((selection) => selection.identifier === identifier);
+        if (index === -1) {
+            this.select(identifier, object);
         }
     }
 

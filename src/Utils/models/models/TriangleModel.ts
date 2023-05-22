@@ -69,14 +69,26 @@ export async function addTriangleModel(model: ModelData, ctx: EditorModelData) {
         const submodel = object.attributes.getAttribute('submodel') as GL.Attribute;
         const submodelBuffer = submodel.buffer.getView(Uint32Array);
         if (!submodel) return;
-        const id = submodelBuffer[idx * 3];
-
-        if (!addToSelection) selection.clearSelection();
-        selection.toggleSelection(id, object as EditorModel);
+        if (!Array.isArray(idx)) {
+            //case only a single triangle is selected
+            const id = submodelBuffer[idx * 3];
+            if (!addToSelection) selection.clearSelection();
+            selection.toggleSelection(id, object as EditorModel);
+        } else {
+            //case multiple triangles are selected
+            const ids = new Set<number>();
+            let id;
+            for (let i = 0; i < idx.length; i++) {
+                id = submodelBuffer[idx[i] * 3];
+                if (!ids.has(id)) {
+                    selection.addSelection(id, object as EditorModel);
+                    ids.add(id);
+                }
+            }
+        }
     };
 
     await glmodel.initTrianglePicking();
     scene.add(glmodel);
-    console.log(glmodel);
     return globalShift;
 }

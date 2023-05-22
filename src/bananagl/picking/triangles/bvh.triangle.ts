@@ -140,7 +140,7 @@ export class TriangleBVH implements BVH {
         const stack = new Array<BVHNode>();
         stack.push(this.root);
 
-        const indices: number[] = [];
+        const indices = new Set<number>();
 
         while (stack.length > 0) {
             const node = stack.pop();
@@ -157,14 +157,14 @@ export class TriangleBVH implements BVH {
             }
         }
 
-        return indices;
+        return Array.from(indices);
     }
 
-    private traverseLeafRect(node: BVHNode, rect: RectSelector, indices: number[]) {
+    private traverseLeafRect(node: BVHNode, rect: RectSelector, indices: Set<number>) {
         let hit;
         for (let i = node.from!; i < node.to!; i++) {
             hit = rect.triangleInside(this.position.buffer.data, i);
-            if (hit) indices.push(i * 3);
+            if (hit) indices.add(i);
         }
     }
 }
