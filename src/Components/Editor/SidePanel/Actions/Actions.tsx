@@ -6,6 +6,8 @@ import { ModelData } from '@utils/types';
 
 import { EditorContext } from '@components/Editor/Context';
 
+import { Input } from '@elements/Input';
+
 import { ImportDialog } from './ImportDialog';
 import { Vitals } from './Vitals';
 
@@ -61,7 +63,7 @@ export function ActionMenu() {
             >
                 Import
             </label>
-            <input
+            <Input
                 className="hidden"
                 type="file"
                 onChange={onModelsSelected}

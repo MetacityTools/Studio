@@ -1,23 +1,27 @@
+import { vec2 } from 'gl-matrix';
+
 import { Pickable } from '@bananagl/bananagl';
+import { RectSelector } from '@bananagl/picking/rect';
 import { View } from '@bananagl/window/view';
 import { Window } from '@bananagl/window/window';
 
 import { Shortcut } from './shortcuts';
 
 export class WindowControls {
-    private activeView_: View | null = null;
-    private lastX_: number = 0;
-    private lastY_: number = 0;
-    private altKey_: boolean = false;
-    private shiftKey_: boolean = false;
-    private mouseDown_: boolean = false;
-    private middleMouse_: boolean = false;
-    private rightMouse_: boolean = false;
-    private dpr_: number = window.devicePixelRatio;
-    private downTime_: number = 0;
-    private shortcuts_: Shortcut[] = [];
-    private activeShortcut_: Shortcut | null = null;
-    private onPick_: (object: Pickable) => void = () => {};
+    private activeView: View | null = null;
+    private lastX: number = 0;
+    private lastY: number = 0;
+    private keyMap: { [key: string]: boolean } = {};
+    private mouseDown: boolean = false;
+    private middleMouse: boolean = false;
+    private rightMouse: boolean = false;
+    private selectMode: boolean = false;
+    private dpr: number = window.devicePixelRatio;
+    private downTime: number = 0;
+    private offsetOnDown: vec2 = [Infinity, Infinity];
+    private shortcuts: Shortcut[] = [];
+    private activeShortcut: Shortcut | null = null;
+    private onPick: (object: Pickable) => void = () => {};
 
     constructor(private canvas: HTMLCanvasElement, private window: Window) {
         canvas.addEventListener('mousedown', this.onMouseDown);
@@ -26,8 +30,8 @@ export class WindowControls {
         canvas.addEventListener('wheel', this.onMouseWheel);
         canvas.addEventListener('mouseout', this.onMouseOut);
         canvas.addEventListener('contextmenu', this.onContextMenu);
-        canvas.addEventListener('keydown', this.onKeyDown);
-        canvas.addEventListener('keyup', this.onKeyUp);
+        document.addEventListener('keydown', this.onKeyDown);
+        document.addEventListener('keyup', this.onKeyUp);
     }
 
     dispose() {
@@ -38,162 +42,166 @@ export class WindowControls {
         canvas.removeEventListener('wheel', this.onMouseWheel);
         canvas.removeEventListener('mouseout', this.onMouseOut);
         canvas.removeEventListener('contextmenu', this.onContextMenu);
-        canvas.removeEventListener('keydown', this.onKeyDown);
-        canvas.removeEventListener('keyup', this.onKeyUp);
+        document.removeEventListener('keydown', this.onKeyDown);
+        document.removeEventListener('keyup', this.onKeyUp);
     }
 
     addShortcut(shortcut: Shortcut) {
-        this.shortcuts_.push(shortcut);
+        this.shortcuts.push(shortcut);
     }
 
     removeShortcut(shortcut: Shortcut) {
-        const index = this.shortcuts_.indexOf(shortcut);
-        if (index >= 0) {
-            this.shortcuts_.splice(index, 1);
-        } else {
-            console.warn('Shortcut not found', this.shortcuts_, shortcut);
-        }
+        const index = this.shortcuts.indexOf(shortcut);
+        if (index >= 0) this.shortcuts.splice(index, 1);
+        else console.warn('Shortcut not found', this.shortcuts, shortcut);
     }
 
-    set onPick(onPick: (object: Pickable) => void) {
-        this.onPick_ = onPick;
+    addPickCallback(onPick: (object: Pickable) => void) {
+        this.onPick = onPick;
     }
 
-    onMouseDown = (event: MouseEvent) => {
+    private onMouseDown = (event: MouseEvent) => {
         const localView = this.window.getViewAndPosition(event);
         if (!localView) return;
         const { view, x, y } = localView;
-        this.activeView_ = view;
-        this.lastX_ = x;
-        this.lastY_ = y;
-        this.mouseDown_ = true;
+        this.activeView = view;
+        this.lastX = x;
+        this.lastY = y;
+        this.mouseDown = true;
 
-        if (event.button === 1) {
-            this.middleMouse_ = true;
+        if (event.button === 1) this.middleMouse = true;
+        if (event.button === 2) this.rightMouse = true;
+        if (this.shiftKeyPressed) {
+            this.offsetOnDown = this.activeView.toNDC(event.offsetX, event.offsetY);
+            this.selectMode = true;
         }
 
-        if (event.button === 2) {
-            this.rightMouse_ = true;
-        }
-
-        this.downTime_ = Date.now();
+        this.downTime = Date.now();
     };
 
-    onMouseMove = (event: MouseEvent) => {
-        if (!this.activeView_) return;
+    private onMouseMove = (event: MouseEvent) => {
+        if (!this.activeView) return;
         const { offsetX, offsetY } = event;
-        const dx = (offsetX - this.lastX_) * this.dpr_;
-        const dy = (offsetY - this.lastY_) * this.dpr_;
-        this.lastX_ = offsetX;
-        this.lastY_ = offsetY;
+        const dx = (offsetX - this.lastX) * this.dpr;
+        const dy = (offsetY - this.lastY) * this.dpr;
+        this.lastX = offsetX;
+        this.lastY = offsetY;
 
-        if (this.activeShortcut_ && this.activeShortcut_.onMove) {
-            this.activeShortcut_.onMove(this.activeView_, dx, dy);
-        } else if (this.mouseDown_) {
-            if (this.altKey_ || this.middleMouse_ || this.rightMouse_) {
-                this.activeView_.cameraLock.restrictRotate(dx, dy);
-                const { coords } = this.activeView_.cameraLock;
-                this.activeView_.camera.rotate(coords[0], coords[1]);
+        if (this.activeShortcut && this.activeShortcut.onMove) {
+            this.activeShortcut.onMove(this.activeView, dx, dy);
+        } else if (this.mouseDown) {
+            if (this.selectMode) {
+                //update rectangle selection on screen
+            } else if (this.altKeyPressed || this.middleMouse || this.rightMouse) {
+                this.activeView.cameraLock.restrictRotate(dx, dy);
+                const { coords } = this.activeView.cameraLock;
+                this.activeView.camera.rotate(coords[0], coords[1]);
             } else {
-                this.activeView_.camera.pan(dx, dy);
+                this.activeView.camera.pan(dx, dy);
             }
         }
     };
 
-    onMouseUp = (event: MouseEvent) => {
-        if (this.activeShortcut_) {
-            this.activeShortcut_ = null;
-        } else {
-            if (Date.now() - this.downTime_ < 200) this.trace(event);
-        }
-
-        this.finish(event.button);
+    private onMouseUp = (event: MouseEvent) => {
+        if (this.activeShortcut) this.activeShortcut = null;
+        else if (this.selectMode) {
+            this.rectTrace(event);
+            this.selectMode = false;
+        } else if (this.clickDuration < 200) this.trace(event);
+        this.finish(event);
     };
 
-    private trace(event: MouseEvent) {
-        if (!this.activeView_) return;
-        const { offsetX, offsetY } = event;
-        const ndc = this.activeView_.toNDC(offsetX, offsetY);
-        const ray = this.activeView_.camera.primaryRay(ndc[0], ndc[1]);
-        const hit = this.activeView_.scene.picker.trace(ray);
-        if (hit && hit.object.onPick) {
-            hit.object.onPick(hit.object, hit.primitiveIndex, ray, hit.t, this.shiftKey_);
-            if (this.onPick_) this.onPick_(hit.object);
-        }
-    }
-
-    onMouseWheel = (event: WheelEvent) => {
+    private onMouseWheel = (event: WheelEvent) => {
         const local = this.window.getViewAndPosition(event);
         if (!local) return;
         const { view, lx, ly } = local;
-        const factor = event.deltaY > 0 ? 1.1 : 0.9;
-        view.camera.zoom(factor, lx, ly);
+        view.camera.zoom(event.deltaY, lx, ly);
+    };
+
+    private onKeyDown = (event: KeyboardEvent) => {
+        const { code } = event;
+        console.log('keydown', code);
+        this.keyMap[code] = true;
+        this.callShortcuts();
+    };
+
+    private onMouseOut = (event: MouseEvent) => {
+        this.finish(event);
+    };
+
+    private onKeyUp = (event: KeyboardEvent) => {
+        const { code } = event;
+        this.keyMap[code] = false;
+    };
+
+    private onContextMenu = (event: MouseEvent) => {
         event.preventDefault();
     };
 
-    onKeyDown = (event: KeyboardEvent) => {
-        const { code } = event;
-        console.log(`Pressed key ${code}`);
+    get shiftKeyPressed() {
+        return this.keyMap['ShiftLeft'];
+    }
 
-        if (code === 'MetaLeft' || code === 'AltLeft') {
-            this.altKey_ = true;
+    get altKeyPressed() {
+        return this.keyMap['AltLeft'] || this.keyMap['MetaLeft'];
+    }
+
+    get escapeKeyPressed() {
+        return this.keyMap['Escape'];
+    }
+
+    get clickDuration() {
+        return Date.now() - this.downTime;
+    }
+
+    private trace(event: MouseEvent) {
+        if (!this.activeView) return;
+        const { offsetX, offsetY } = event;
+        const ndc = this.activeView.toNDC(offsetX, offsetY);
+        const ray = this.activeView.camera.primaryRay(ndc[0], ndc[1]);
+        const hit = this.activeView.scene.picker.trace(ray);
+        if (hit && hit.object.onPick) {
+            hit.object.onPick(hit.object, hit.primitiveIndex, this.shiftKeyPressed);
+            if (this.onPick) this.onPick(hit.object);
         }
+    }
 
-        if (code === 'ShiftLeft') {
-            this.shiftKey_ = true;
+    private rectTrace(event: MouseEvent) {
+        if (!this.activeView) return;
+        const { offsetX, offsetY } = event;
+        const ndc = this.activeView.toNDC(offsetX, offsetY);
+        console.log('rect trace', this.offsetOnDown, ndc);
+        const rect = new RectSelector(this.activeView.camera, this.offsetOnDown, ndc);
+        const hits = this.activeView.scene.picker.traceRect(rect);
+        if (hits && hits.object.onPick) {
+            for (const index of hits.primitiveIndices) hits.object.onPick(hits.object, index, true);
+            if (this.onPick) this.onPick(hits.object);
         }
+    }
 
-        if (code === 'Escape') {
-            if (this.activeShortcut_ && this.activeShortcut_.onCancel) {
-                this.activeShortcut_.onCancel();
-                this.activeShortcut_ = null;
+    private finish(event: MouseEvent) {
+        event.preventDefault();
+        const button = event.button;
+        if (!this.mouseDown) return;
+        if (button === 1 || button === -1) this.middleMouse = false;
+        if (button === 2 || button === -1) this.rightMouse = false;
+        this.mouseDown = false;
+    }
+
+    private callShortcuts() {
+        if (this.escapeKeyPressed) {
+            if (this.activeShortcut && this.activeShortcut.onCancel) {
+                this.activeShortcut.onCancel();
+                this.activeShortcut = null;
             }
         }
 
-        this.callShortcuts(code);
-    };
-
-    onMouseOut = (event: MouseEvent) => {
-        const buttons = event.buttons;
-        this.finish(buttons);
-    };
-
-    private finish(button: number) {
-        if (!this.mouseDown_) return;
-
-        if (button === 1 || button === -1) {
-            this.middleMouse_ = false;
-        }
-
-        if (button === 2 || button === -1) {
-            this.rightMouse_ = false;
-        }
-
-        this.mouseDown_ = false;
-    }
-
-    onKeyUp = (event: KeyboardEvent) => {
-        const { code } = event;
-        if (code === 'MetaLeft' || code === 'AltLeft') {
-            this.altKey_ = false;
-        }
-
-        if (code === 'ShiftLeft') {
-            this.shiftKey_ = false;
-        }
-    };
-
-    onContextMenu = (event: MouseEvent) => {
-        event.preventDefault();
-    };
-
-    private callShortcuts(code: string) {
-        for (const shortcut of this.shortcuts_) {
-            if (shortcut.code === code) {
-                if (shortcut.onPress && this.activeView_) shortcut.onPress(this.activeView_);
-                if (shortcut.onMove && this.activeView_ && !this.activeShortcut_) {
-                    this.activeShortcut_ = shortcut;
-                    shortcut.onStart && shortcut.onStart(this.activeView_);
+        for (const shortcut of this.shortcuts) {
+            if (this.keyMap[shortcut.code] === true) {
+                if (shortcut.onPress && this.activeView) shortcut.onPress(this.activeView);
+                if (shortcut.onMove && this.activeView && !this.activeShortcut) {
+                    this.activeShortcut = shortcut;
+                    shortcut.onStart && shortcut.onStart(this.activeView);
                 }
             }
         }

@@ -6,8 +6,6 @@ import { TriangleBVH } from '@bananagl/picking/triangles/bvh.triangle';
 export type OnPickCallback = (
     object: Pickable,
     primitiveIndex: number,
-    ray: Ray,
-    t: number,
     addToSelection?: boolean
 ) => void;
 

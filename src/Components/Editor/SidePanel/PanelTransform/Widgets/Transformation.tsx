@@ -6,6 +6,7 @@ import { EditorModel } from '@utils/models/models/EditorModel';
 
 import * as GL from '@bananagl/bananagl';
 
+import { Input } from '@elements/Input';
 import { DetailWidget, WidgetDescription, WidgetLine, WidgetTitle } from '@elements/Widgets';
 
 function VectorComponentInput(props: {
@@ -17,7 +18,7 @@ function VectorComponentInput(props: {
 
     return (
         <td className="bg-white">
-            <input
+            <Input
                 type="number"
                 className="p-2 bg-transparent border-0 text-right focus:outline-none w-full"
                 value={isNaN(value) ? '' : value}

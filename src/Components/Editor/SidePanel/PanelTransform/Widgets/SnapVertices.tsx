@@ -6,6 +6,7 @@ import { snapVertices } from '@utils/transforms/vertexSnap';
 
 import * as GL from '@bananagl/bananagl';
 
+import { Input } from '@elements/Input';
 import {
     DetailWidget,
     WidgetApplyButton,
@@ -49,7 +50,7 @@ export function SnapVerticesWidget(props: SnapVerticesProps) {
             </WidgetLine>
             <WidgetLine>
                 <div className="py-2 px-4">Distance</div>
-                <input
+                <Input
                     type="number"
                     className="py-2 px-4 text-right w-full rounded-br-md"
                     step={0.1}

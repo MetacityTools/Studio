@@ -86,10 +86,10 @@ export function ContextComponent(props: { children: React.ReactNode }) {
     React.useEffect(() => {
         renderer.onInit = () => {
             const controls = renderer.window.controls;
-            controls.onPick = (m: GL.Pickable) => {
+            controls.addPickCallback((m: GL.Pickable) => {
                 const model = m as EditorModel;
                 selectModel(model);
-            };
+            });
         };
     }, [renderer]);
 

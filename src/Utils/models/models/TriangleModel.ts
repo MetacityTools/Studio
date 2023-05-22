@@ -65,7 +65,7 @@ export async function addTriangleModel(model: ModelData, ctx: EditorModelData) {
     glmodel.primitive = PrimitiveType.TRIANGLES;
     glmodel.mode = 4;
 
-    glmodel.onPick = (object, idx, ray, t, addToSelection) => {
+    glmodel.onPick = (object, idx, addToSelection) => {
         const submodel = object.attributes.getAttribute('submodel') as GL.Attribute;
         const submodelBuffer = submodel.buffer.getView(Uint32Array);
         if (!submodel) return;
