@@ -12,18 +12,17 @@ import { ModelTransformationWidget } from './Widgets/Transformation';
 
 export function ModelTransformPanel() {
     const ctx = React.useContext(EditorContext);
-    if (!ctx) return null;
-    const { scene, renderer, selectedModel, selection } = ctx;
+    const { selectedModel } = ctx;
 
     if (selectedModel === null) return <EmptyDetailPanel />;
 
     return (
         <div className="p-4 space-y-4">
-            <ModelTransformationWidget model={selectedModel} renderer={renderer} />
-            <SnapVerticesWidget model={selectedModel} />
-            <SplitModelWidget model={selectedModel} scene={scene} selection={selection} />
-            <JoinModelWidget model={selectedModel} scene={scene} selection={selection} />
-            <DeleteModelWidget model={selectedModel} scene={scene} />
+            <ModelTransformationWidget />
+            <SnapVerticesWidget />
+            <SplitModelWidget />
+            <JoinModelWidget />
+            <DeleteModelWidget />
         </div>
     );
 }

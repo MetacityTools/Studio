@@ -4,14 +4,16 @@ import { MdOutlineGrid3X3 } from 'react-icons/md';
 import * as GL from '@bananagl/bananagl';
 
 import { EditorContext } from '@components/Editor/Context';
+import { EditorViewerContext } from '@components/Editor/Context';
 
 import { Input } from '@elements/Input';
 import { DetailWidget, WidgetDescription, WidgetLine, WidgetTitle } from '@elements/Widgets';
 
 export function ShowGridWidget() {
     const ctx = React.useContext(EditorContext);
-    if (!ctx) return null;
-    const { scene, gridVisible, setGridVisible } = ctx;
+    const viewerCtx = React.useContext(EditorViewerContext);
+    const { scene } = ctx;
+    const { gridVisible, setGridVisible } = viewerCtx;
 
     const toggle = () => {
         setGridVisible(!gridVisible);

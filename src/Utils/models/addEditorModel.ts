@@ -4,6 +4,8 @@ import { ModelData, PrimitiveType } from '@utils/types';
 
 import * as GL from '@bananagl/bananagl';
 
+import { SelectionManager } from '@components/Editor/Context';
+
 import { addTriangleModel } from './models/TriangleModel';
 
 export enum CoordinateMode {
@@ -14,10 +16,10 @@ export enum CoordinateMode {
 
 export interface EditorModelData {
     modelData: ModelData[];
-    selection: GL.SelectionManager;
     scene: GL.Scene;
     coordMode: CoordinateMode;
     globalShift: vec3 | null;
+    selection: SelectionManager;
     position?: vec3;
     rotation?: vec3;
     scale?: vec3;

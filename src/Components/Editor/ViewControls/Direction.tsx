@@ -9,7 +9,6 @@ import { MenuButton, MenuGroup } from '@elements/MenuButton';
 
 export function DirectionControls() {
     const ctx = React.useContext(EditorContext);
-    if (!ctx) return null;
     const { renderer, activeView } = ctx;
 
     const [mode, setMode] = React.useState<GL.CameraView>(GL.CameraView.Free);

@@ -2,10 +2,14 @@ import { Model } from '@bananagl/models/model';
 import { BVH } from '@bananagl/picking/bvh';
 import { TriangleBVH } from '@bananagl/picking/triangles/bvh.triangle';
 
+/***
+    @param primitiveIndices are the indices of hit triangles
+    @param shiftFlag is true if the shift key was pressed during the pick event
+*/
 export type OnPickCallback = (
     object: Pickable,
-    primitiveIndex: number | number[],
-    addToSelection?: boolean
+    primitiveIndices: number | number[],
+    shiftFlag?: boolean
 ) => void;
 
 export abstract class Pickable extends Model {
@@ -34,7 +38,7 @@ export abstract class Pickable extends Model {
         return this.onPick_;
     }
 
-    set onPick(callback: OnPickCallback | undefined) {
+    addPickListener(callback: OnPickCallback | undefined) {
         this.onPick_ = callback;
     }
 }

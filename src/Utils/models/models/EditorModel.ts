@@ -13,6 +13,10 @@ export class EditorModel extends GL.Pickable implements GL.Selectable {
     private highlitColor_ = [255, 245, 229];
     private white_ = [255, 255, 255];
 
+    private geometryMode_ = GeometryMode.SOLID;
+    public solidShader?: GL.Shader;
+    public wireframeShader?: GL.Shader;
+
     constructor() {
         super();
     }
@@ -29,10 +33,6 @@ export class EditorModel extends GL.Pickable implements GL.Selectable {
         return this.data_;
     }
 
-    private geometryMode_ = GeometryMode.SOLID;
-    public solidShader?: GL.Shader;
-    public wireframeShader?: GL.Shader;
-
     get geometryMode() {
         return this.geometryMode_;
     }
@@ -46,10 +46,9 @@ export class EditorModel extends GL.Pickable implements GL.Selectable {
         }
     }
 
-    onSelect(selection: GL.Selection) {
-        const id = selection.identifier;
+    select(submodelIDs: number[]) {
         this.colorForId(
-            id,
+            submodelIDs,
             this.selectedColor_[0],
             this.selectedColor_[1],
             this.selectedColor_[2],
@@ -57,13 +56,14 @@ export class EditorModel extends GL.Pickable implements GL.Selectable {
         );
     }
 
-    onDeselect(selection: GL.Selection) {
-        const id = selection.identifier;
-        this.colorForId(id, this.baseColor_[0], this.baseColor_[1], this.baseColor_[2], 0);
+    deselect(submodelIDs: number[]) {
+        this.colorForId(submodelIDs, this.baseColor_[0], this.baseColor_[1], this.baseColor_[2], 0);
     }
 
-    private colorForId(id: number, r: number, g: number, b: number, s: number = 1) {
+    private colorForId(submodelIDs: number[], r: number, g: number, b: number, s: number = 1) {
         if (this.disposed) return;
+        if (submodelIDs.length === 0) return;
+        const set = new Set(submodelIDs);
 
         const color = this.attributes.getAttribute('color');
         const selected = this.attributes.getAttribute('selected');
@@ -77,7 +77,7 @@ export class EditorModel extends GL.Pickable implements GL.Selectable {
         let updateStart = 0,
             updateEnd = 0;
         for (let i = 0; i < submodelBuffer.length; i++) {
-            if (submodelBuffer[i] === id) {
+            if (set.has(submodelBuffer[i])) {
                 const scidx = i * 3;
                 color.buffer.data[scidx] = r;
                 color.buffer.data[scidx + 1] = g;
@@ -102,19 +102,21 @@ export class EditorModel extends GL.Pickable implements GL.Selectable {
         selected.buffer.toUpdate(updateStart / 3, updateEnd / 3);
     }
 
-    set selected(flag: boolean) {
+    set selected(isSelected: boolean) {
         if (this.disposed) return;
 
-        const color = flag ? this.highlitColor_ : this.white_;
+        const color = isSelected ? this.highlitColor_ : this.white_;
         const baseColor = this.attributes.getAttribute('color');
         if (!baseColor) return;
+
         for (let i = 0; i < baseColor.buffer.data.length; i += 3) {
             if (baseColor.buffer.data[i + 2] === this.selectedColor_[2]) continue;
             baseColor.buffer.data[i] = color[0];
             baseColor.buffer.data[i + 1] = color[1];
             baseColor.buffer.data[i + 2] = color[2];
         }
-        baseColor.buffer.toUpdate(0, baseColor.buffer.data.length);
+
+        baseColor.buffer.toUpdate();
         this.baseColor_ = color;
     }
 }

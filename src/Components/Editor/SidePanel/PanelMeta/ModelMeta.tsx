@@ -8,7 +8,6 @@ import { EmptyDetailPanel, EmptyMetaPanel } from '@elements/Empty';
 
 export function ModelMetaPanel() {
     const ctx = React.useContext(EditorContext);
-    if (!ctx) return null;
     const { selectedModel, selectedSubmodels } = ctx;
 
     if (selectedModel === null) return <EmptyDetailPanel />;
@@ -24,6 +23,4 @@ export function ModelMetaPanel() {
             ))}
         </div>
     );
-
-    return null;
 }

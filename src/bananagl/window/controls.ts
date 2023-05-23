@@ -9,6 +9,11 @@ import { Shortcut } from './shortcuts';
 
 //TODO
 //Refactor this wild west into something more comprehensible
+//HOW
+//remove the Event Listener binds from the WindowControls class
+//and leave it up to the progammer/framework to bind the events
+//this way, the programmer could also add custom events such as on touch etc.
+
 export class WindowControls {
     private activeView: View | null = null;
     private lastX: number = 0;

@@ -4,7 +4,7 @@ import { load } from '@utils/formats/loader';
 import { CoordinateMode, addEditorModels } from '@utils/models/addEditorModel';
 import { ModelData } from '@utils/types';
 
-import { EditorContext } from '@components/Editor/Context';
+import { EditorContext, EditorViewerContext } from '@components/Editor/Context';
 
 import { Input } from '@elements/Input';
 
@@ -13,17 +13,9 @@ import { Vitals } from './Vitals';
 
 export function ActionMenu() {
     const ctx = React.useContext(EditorContext);
-    if (!ctx) return null;
-    const {
-        renderer,
-        scene,
-        selection,
-        setProcessing,
-        globalShift,
-        setGlobalShift,
-        setLoadingStatus,
-    } = ctx;
-
+    const viewerCtx = React.useContext(EditorViewerContext);
+    const { renderer, scene, setProcessing, setLoadingStatus, selection } = ctx;
+    const { globalShift, setGlobalShift } = viewerCtx;
     const [importOpen, setImportOpen] = React.useState(false);
     const [importedModels, setImportedModels] = React.useState<ModelData[]>([]);
 
@@ -43,10 +35,10 @@ export function ActionMenu() {
         const shift = await addEditorModels(
             {
                 modelData: importedModels,
-                selection: selection,
                 scene: scene,
                 coordMode: mode,
                 globalShift: globalShift,
+                selection: selection,
             },
             setLoadingStatus
         );

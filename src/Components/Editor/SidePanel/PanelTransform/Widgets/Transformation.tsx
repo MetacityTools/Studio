@@ -6,6 +6,8 @@ import { EditorModel } from '@utils/models/models/EditorModel';
 
 import * as GL from '@bananagl/bananagl';
 
+import { EditorContext } from '@components/Editor/Context';
+
 import { Input } from '@elements/Input';
 import { DetailWidget, WidgetDescription, WidgetLine, WidgetTitle } from '@elements/Widgets';
 
@@ -48,13 +50,11 @@ function VectorControls(props: VectorControlsProps) {
     );
 }
 
-interface ModelControlsProps {
-    model: EditorModel;
-    renderer: GL.Renderer;
-}
-
-export function ModelTransformationWidget(props: ModelControlsProps) {
-    const { model, renderer } = props;
+export function ModelTransformationWidget() {
+    const ctx = React.useContext(EditorContext);
+    const { selectedModel, renderer } = ctx;
+    if (selectedModel === null) return null;
+    const model = selectedModel;
 
     const [position, setPosition] = React.useState(model.position);
     const [rotation, setRotation] = React.useState(model.rotation);

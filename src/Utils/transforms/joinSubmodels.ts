@@ -1,18 +1,11 @@
-import { CoordinateMode, addEditorModels } from '@utils/models/addEditorModel';
 import { EditorModel } from '@utils/models/models/EditorModel';
-import { ModelData } from '@utils/types';
 
-import * as GL from '@bananagl/bananagl';
-
-export async function joinModel(model: EditorModel, selection: GL.SelectionManager) {
-    const selected = selection.selected.filter((s) => s.object === model);
-    if (selected.length === 0) return;
-    const idsToJoin = new Set(selected.map((s) => s.identifier));
+export async function joinModel(model: EditorModel, selectedSubmodels: number[]) {
+    if (selectedSubmodels.length === 0) return;
+    const idsToJoin = new Set(selectedSubmodels);
 
     let minId = Infinity;
-    for (const id of idsToJoin) {
-        if (id < minId) minId = id;
-    }
+    for (const id of idsToJoin) if (id < minId) minId = id;
 
     const submodel = model.attributes.getAttribute('submodel');
     if (!submodel) throw new Error('submodel attribute not found');
@@ -33,7 +26,4 @@ export async function joinModel(model: EditorModel, selection: GL.SelectionManag
     }
 
     model.data[minId] = meta;
-
-    selection.clearSelection();
-    selection.select(minId, model);
 }

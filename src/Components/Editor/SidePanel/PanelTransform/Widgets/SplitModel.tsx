@@ -1,10 +1,7 @@
 import React from 'react';
 import { TbLayersIntersect } from 'react-icons/tb';
 
-import { EditorModel } from '@utils/models/models/EditorModel';
 import { splitModel } from '@utils/transforms/modelSplit';
-
-import * as GL from '@bananagl/bananagl';
 
 import { EditorContext } from '@components/Editor/Context';
 
@@ -16,21 +13,15 @@ import {
     WidgetTitle,
 } from '@elements/Widgets';
 
-interface SnapVerticesProps {
-    scene: GL.Scene;
-    model: EditorModel;
-    selection: GL.SelectionManager;
-}
-
-export function SplitModelWidget(props: SnapVerticesProps) {
-    const { scene, model, selection } = props;
+export function SplitModelWidget() {
     const ctx = React.useContext(EditorContext);
-    if (!ctx) return null;
-    const { setProcessing } = ctx;
+    const { setProcessing, scene, selectedModel, selectedSubmodels, selection } = ctx;
+
+    if (selectedModel === null) return null;
 
     const apply = async () => {
         setProcessing(true);
-        await splitModel(scene, model, selection);
+        await splitModel(scene, selectedModel, selectedSubmodels, selection);
         setProcessing(false);
     };
 

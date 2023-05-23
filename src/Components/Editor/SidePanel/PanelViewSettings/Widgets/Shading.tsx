@@ -3,15 +3,16 @@ import { MdHeight } from 'react-icons/md';
 
 import { EditorModel } from '@utils/models/models/EditorModel';
 
-import { EditorContext } from '@components/Editor/Context';
+import { EditorContext, EditorViewerContext } from '@components/Editor/Context';
 
 import { Range } from '@elements/Range';
 import { DetailWidget, WidgetDescription, WidgetLine, WidgetTitle } from '@elements/Widgets';
 
 export function ShadingWidget() {
     const ctx = React.useContext(EditorContext);
-    if (!ctx) return null;
-    const { scene, minShade, setMinShade, maxShade, setMaxShade } = ctx;
+    const viewerCtx = React.useContext(EditorViewerContext);
+    const { scene } = ctx;
+    const { minShade, maxShade, setMinShade, setMaxShade } = viewerCtx;
 
     const updateMinShade = (value: number) => {
         if (isNaN(value)) return;

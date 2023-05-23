@@ -11,7 +11,6 @@ import { MenuButton, MenuGroup } from '@elements/MenuButton';
 
 export function ShaderControls() {
     const ctx = React.useContext(EditorContext);
-    if (!ctx) return null;
     const { scene } = ctx;
 
     const [geometryMode, setGeometryMode] = React.useState<GeometryMode>(GeometryMode.SOLID);

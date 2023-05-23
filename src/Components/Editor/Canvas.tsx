@@ -11,7 +11,6 @@ export function Canvas() {
     const ctx = React.useContext(EditorContext);
 
     React.useEffect(() => {
-        if (!ctx) return;
         const { renderer, scene } = ctx;
 
         if (canvasRef.current && renderer) {
@@ -40,7 +39,7 @@ export function Canvas() {
                 scene.remove(grid);
             };
         }
-    }, [ctx?.renderer, ctx?.scene]);
+    }, [ctx.renderer, ctx.scene]);
 
     return (
         <canvas

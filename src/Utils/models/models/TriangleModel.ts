@@ -10,21 +10,14 @@ import { CoordinateMode, EditorModelData } from '../addEditorModel';
 import { solidShader, wireframeShader } from '../shaders/EditorModelShader';
 import { DEFAULT_UNIFORMS, EditorModel } from './EditorModel';
 
-export class TriangleModel extends EditorModel {
-    constructor() {
-        super();
-    }
-}
-
 export async function addTriangleModel(model: ModelData, ctx: EditorModelData) {
-    let { coordMode, globalShift, position, rotation, scale, selection, scene, uniforms } = ctx;
+    let { coordMode, globalShift, position, rotation, scale, scene, uniforms } = ctx;
 
-    console.log(model);
     position = position || vec3.create();
     rotation = rotation || vec3.create();
     scale = scale || vec3.fromValues(1, 1, 1);
 
-    const glmodel = new TriangleModel();
+    const glmodel = new EditorModel();
     const vertices = model.geometry.position;
     const submodel = model.geometry.submodel;
 
@@ -65,28 +58,26 @@ export async function addTriangleModel(model: ModelData, ctx: EditorModelData) {
     glmodel.primitive = PrimitiveType.TRIANGLES;
     glmodel.mode = 4;
 
-    glmodel.onPick = (object, idx, addToSelection) => {
+    glmodel.addPickListener((object, primitiveIndices, shiftFlag) => {
         const submodel = object.attributes.getAttribute('submodel') as GL.Attribute;
-        const submodelBuffer = submodel.buffer.getView(Uint32Array);
-        if (!submodel) return;
-        if (!Array.isArray(idx)) {
-            //case only a single triangle is selected
-            const id = submodelBuffer[idx * 3];
-            if (!addToSelection) selection.clearSelection();
-            selection.toggleSelection(id, object as EditorModel);
-        } else {
-            //case multiple triangles are selected
-            const ids = new Set<number>();
-            let id;
-            for (let i = 0; i < idx.length; i++) {
-                id = submodelBuffer[idx[i] * 3];
-                if (!ids.has(id)) {
-                    selection.addSelection(id, object as EditorModel);
-                    ids.add(id);
-                }
-            }
-        }
-    };
+        const submodelIds = submodel.buffer.getView(Uint32Array);
+
+        const multiselect = Array.isArray(primitiveIndices);
+        const arrIdxs = multiselect ? primitiveIndices : [primitiveIndices];
+        const submodelIDs = new Set<number>();
+        for (const idx of arrIdxs) submodelIDs.add(submodelIds[idx * 3]);
+        const submodelIDsArr = Array.from(submodelIDs);
+        let toggle = false;
+        let extend = false;
+
+        if (multiselect) {
+            if (shiftFlag) extend = true;
+            else toggle = true;
+        } else if (shiftFlag) toggle = true;
+
+        //TODO problem here is that the select is old/previous state
+        ctx.selection.updateSelection(glmodel, submodelIDsArr, toggle, extend);
+    });
 
     await glmodel.initTrianglePicking();
     scene.add(glmodel);

@@ -1,9 +1,7 @@
 import React from 'react';
 import { FiDelete } from 'react-icons/fi';
 
-import { EditorModel } from '@utils/models/models/EditorModel';
-
-import * as GL from '@bananagl/bananagl';
+import { EditorContext } from '@components/Editor/Context';
 
 import {
     DetailWidget,
@@ -13,16 +11,13 @@ import {
     WidgetTitle,
 } from '@elements/Widgets';
 
-interface DeleteModelProps {
-    scene: GL.Scene;
-    model: EditorModel;
-}
-
-export function DeleteModelWidget(props: DeleteModelProps) {
-    const { scene, model } = props;
+export function DeleteModelWidget() {
+    const ctx = React.useContext(EditorContext);
+    const { scene, selectedModel } = ctx;
+    if (selectedModel === null) return null;
 
     const apply = () => {
-        scene.remove(model);
+        scene.remove(selectedModel);
     };
 
     return (
