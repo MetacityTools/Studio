@@ -34,11 +34,11 @@ export abstract class Pickable extends Model {
         this.BVH = bvh;
     }
 
-    get onPick() {
+    /*get onPick() {
         return this.onPick_;
-    }
+    }*/
 
-    addPickListener(callback: OnPickCallback | undefined) {
+    /*addPickListener(callback: OnPickCallback | undefined) {
         this.onPick_ = callback;
-    }
+    }*/
 }

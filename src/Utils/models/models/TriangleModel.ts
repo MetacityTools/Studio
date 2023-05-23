@@ -58,7 +58,8 @@ export async function addTriangleModel(model: ModelData, ctx: EditorModelData) {
     glmodel.primitive = PrimitiveType.TRIANGLES;
     glmodel.mode = 4;
 
-    glmodel.addPickListener((object, primitiveIndices, shiftFlag) => {
+    //TODO refactor this completely
+    /*glmodel.addPickListener((object, primitiveIndices, shiftFlag) => {
         const submodel = object.attributes.getAttribute('submodel') as GL.Attribute;
         const submodelIds = submodel.buffer.getView(Uint32Array);
 
@@ -77,7 +78,7 @@ export async function addTriangleModel(model: ModelData, ctx: EditorModelData) {
 
         //TODO problem here is that the select is old/previous state
         ctx.selection.updateSelection(glmodel, submodelIDsArr, toggle, extend);
-    });
+    });*/
 
     await glmodel.initTrianglePicking();
     scene.add(glmodel);
