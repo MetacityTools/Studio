@@ -15,13 +15,13 @@ import {
 
 export function SplitModelWidget() {
     const ctx = React.useContext(EditorContext);
-    const { setProcessing, scene, selectedModel, selectedSubmodels, selection } = ctx;
+    const { setProcessing, scene, selectedModel, selectedSubmodels } = ctx;
 
     if (selectedModel === null) return null;
 
     const apply = async () => {
         setProcessing(true);
-        await splitModel(scene, selectedModel, selectedSubmodels, selection);
+        await splitModel(scene, selectedModel, selectedSubmodels);
         setProcessing(false);
     };
 

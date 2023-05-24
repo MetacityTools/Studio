@@ -60,18 +60,14 @@ export function ModelTransformationWidget() {
     const [rotation, setRotation] = React.useState(model.rotation);
     const [scale, setScale] = React.useState(model.scale);
 
-    const [tmpPosition, setTmpPosition] = React.useState(model.position);
-    const [tmpScale, setTmpScale] = React.useState(model.scale);
-
-    const [moveShortcut, setMoveShortcut] = React.useState(new GL.ShortcutOnMouseMove('KeyG'));
-    const [scaleShortcut, setScaleShortcut] = React.useState(new GL.ShortcutOnMouseMove('KeyS'));
+    const [moveShortcut] = React.useState(new GL.ShortcutOnMouseMove<vec3>('KeyG'));
+    const [scaleShortcut] = React.useState(new GL.ShortcutOnMouseMove<vec3>('KeyS'));
 
     React.useEffect(() => {
         renderer.onInit = () => {
             const controls = renderer.window.controls;
             controls.addShortcut(moveShortcut);
             controls.addShortcut(scaleShortcut);
-            //TODO cleanup shortcuts in strict mode
         };
 
         return () => {
@@ -88,11 +84,11 @@ export function ModelTransformationWidget() {
         };
 
         moveShortcut.onStartCall = () => {
-            setTmpPosition(position.slice() as vec3);
+            moveShortcut.storage = model.position.slice() as vec3;
         };
 
-        moveShortcut.onCancelCall = () => {
-            setPosition(tmpPosition.slice() as vec3);
+        moveShortcut.onCancelCall = (data) => {
+            if (data) setPosition(data.slice() as vec3);
         };
 
         scaleShortcut.onTrigger = (view, dx, dy) => {
@@ -102,11 +98,11 @@ export function ModelTransformationWidget() {
         };
 
         scaleShortcut.onStartCall = () => {
-            setTmpScale(scale.slice() as vec3);
+            scaleShortcut.storage = model.scale.slice() as vec3;
         };
 
-        scaleShortcut.onCancelCall = () => {
-            setScale(tmpScale.slice() as vec3);
+        scaleShortcut.onCancelCall = (data) => {
+            if (data) setScale(data.slice() as vec3);
         };
     }, [model, moveShortcut, scaleShortcut]);
 

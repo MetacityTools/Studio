@@ -17,7 +17,10 @@ class Plane {
     }
 
     sign(point: vec3) {
-        return vec3.dot(this.normal, vec3.sub(this.tmp, point, this.origin));
+        return vec3.dot(
+            this.normal,
+            vec3.normalize(this.tmp, vec3.sub(this.tmp, point, this.origin))
+        );
     }
 }
 
@@ -51,6 +54,8 @@ export class RectSelector {
         this.bottom = Plane.fromTwoRays(br, bl);
         this.far = new Plane(negatedDir, farPoint);
         this.near = new Plane(dir, nearPoint);
+
+        console.log(this.left, this.top, this.right, this.bottom, this.far, this.near);
     }
 
     intersectBox(min: vec3, max: vec3) {

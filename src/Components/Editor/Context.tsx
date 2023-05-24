@@ -6,32 +6,6 @@ import { changeSelection } from '@utils/seleciton/selection';
 
 import * as GL from '@bananagl/bananagl';
 
-export type SelectAction = (
-    model: EditorModel | null,
-    submodelIDs: number[],
-    toggle: boolean,
-    extend: boolean
-) => void;
-
-export class SelectionManager {
-    private onUpdate: SelectAction | null = null;
-    constructor() {}
-
-    addChangeListener(onUpdate: SelectAction) {
-        this.onUpdate = onUpdate;
-    }
-
-    updateSelection(
-        model: EditorModel | null,
-        submodelIDs: number[],
-        toggle: boolean,
-        extend: boolean
-    ) {
-        if (this.onUpdate === null) return;
-        this.onUpdate(model, submodelIDs, toggle, extend);
-    }
-}
-
 interface EditorContextProps {
     processing: boolean;
     setProcessing: React.Dispatch<React.SetStateAction<boolean>>;
@@ -40,13 +14,16 @@ interface EditorContextProps {
     activeView: number;
     models: EditorModel[];
     setModels: React.Dispatch<React.SetStateAction<EditorModel[]>>;
-    selectedModel: EditorModel | null;
-    setSelectedModel: (model: EditorModel | null) => void;
     loadingStatus: string;
     setLoadingStatus: React.Dispatch<React.SetStateAction<string>>;
+    selectedModel: EditorModel | null;
     selectedSubmodels: number[];
-    setSelectedSubmodels: React.Dispatch<React.SetStateAction<number[]>>;
-    selection: SelectionManager;
+    select: (
+        model: EditorModel | null,
+        submodelIDs?: number[],
+        toggle?: boolean,
+        extend?: boolean
+    ) => void;
 }
 
 export const EditorContext = React.createContext<EditorContextProps>({} as EditorContextProps);
@@ -55,9 +32,6 @@ export function ContextComponent(props: { children: React.ReactNode }) {
     const [renderer] = React.useState(new GL.Renderer());
     const [scene] = React.useState(new GL.Scene());
     const [models, setModels] = React.useState<EditorModel[]>([]);
-
-    //this is really not neat but it works (needed to make out-of-react updates)
-    const [selectionManager] = React.useState(new SelectionManager());
     const [selectedModel, setSelectedModel] = React.useState<EditorModel | null>(null);
     const [selectedSubmodels, setSelectedSubmodels] = React.useState<number[]>([]);
 
@@ -78,21 +52,25 @@ export function ContextComponent(props: { children: React.ReactNode }) {
         };
     }, [scene, selectedModel]);
 
-    React.useEffect(() => {
-        selectionManager.addChangeListener((model, submodelIDs, toggle, extend) => {
-            submodelIDs = changeSelection(
-                selectedModel,
-                model,
-                selectedSubmodels,
-                submodelIDs,
-                toggle,
-                extend
-            );
+    //selection callback, still a bit hacky but nicer than before
+    function select(
+        model: EditorModel | null,
+        submodelIDs: number[] = [],
+        toggle: boolean = false,
+        extend: boolean = false
+    ) {
+        submodelIDs = changeSelection(
+            selectedModel,
+            model,
+            selectedSubmodels,
+            submodelIDs,
+            toggle,
+            extend
+        );
 
-            setSelectedModel(model);
-            setSelectedSubmodels(submodelIDs);
-        });
-    }, [selectionManager, selectedModel, selectedSubmodels]);
+        setSelectedModel(model);
+        setSelectedSubmodels(submodelIDs);
+    }
 
     return (
         <EditorContext.Provider
@@ -104,13 +82,11 @@ export function ContextComponent(props: { children: React.ReactNode }) {
                 activeView: 0,
                 models,
                 setModels,
-                selectedModel,
-                setSelectedModel,
                 loadingStatus,
                 setLoadingStatus,
+                selectedModel,
                 selectedSubmodels,
-                setSelectedSubmodels,
-                selection: selectionManager,
+                select,
             }}
         >
             {props.children}

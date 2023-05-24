@@ -58,28 +58,6 @@ export async function addTriangleModel(model: ModelData, ctx: EditorModelData) {
     glmodel.primitive = PrimitiveType.TRIANGLES;
     glmodel.mode = 4;
 
-    //TODO refactor this completely
-    /*glmodel.addPickListener((object, primitiveIndices, shiftFlag) => {
-        const submodel = object.attributes.getAttribute('submodel') as GL.Attribute;
-        const submodelIds = submodel.buffer.getView(Uint32Array);
-
-        const multiselect = Array.isArray(primitiveIndices);
-        const arrIdxs = multiselect ? primitiveIndices : [primitiveIndices];
-        const submodelIDs = new Set<number>();
-        for (const idx of arrIdxs) submodelIDs.add(submodelIds[idx * 3]);
-        const submodelIDsArr = Array.from(submodelIDs);
-        let toggle = false;
-        let extend = false;
-
-        if (multiselect) {
-            if (shiftFlag) extend = true;
-            else toggle = true;
-        } else if (shiftFlag) toggle = true;
-
-        //TODO problem here is that the select is old/previous state
-        ctx.selection.updateSelection(glmodel, submodelIDsArr, toggle, extend);
-    });*/
-
     await glmodel.initTrianglePicking();
     scene.add(glmodel);
     return globalShift;

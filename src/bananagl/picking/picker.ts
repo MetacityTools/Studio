@@ -40,8 +40,7 @@ export class Picker {
         const object = objects[bestObjectIndex];
         return {
             object: object as Pickable,
-            primitiveIndex: bestPrimitiveIndex,
-            t: bestT,
+            primitiveIndices: bestPrimitiveIndex,
         };
     }
 

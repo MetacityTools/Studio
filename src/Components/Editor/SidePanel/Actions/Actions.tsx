@@ -14,7 +14,7 @@ import { Vitals } from './Vitals';
 export function ActionMenu() {
     const ctx = React.useContext(EditorContext);
     const viewerCtx = React.useContext(EditorViewerContext);
-    const { renderer, scene, setProcessing, setLoadingStatus, selection } = ctx;
+    const { renderer, scene, setProcessing, setLoadingStatus } = ctx;
     const { globalShift, setGlobalShift } = viewerCtx;
     const [importOpen, setImportOpen] = React.useState(false);
     const [importedModels, setImportedModels] = React.useState<ModelData[]>([]);
@@ -34,11 +34,10 @@ export function ActionMenu() {
         setImportOpen(false);
         const shift = await addEditorModels(
             {
-                modelData: importedModels,
+                models: importedModels,
                 scene: scene,
                 coordMode: mode,
                 globalShift: globalShift,
-                selection: selection,
             },
             setLoadingStatus
         );
