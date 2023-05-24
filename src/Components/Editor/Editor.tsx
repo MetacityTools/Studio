@@ -4,7 +4,7 @@ import React from 'react';
 
 import { SizeGuard } from '@elements/SizeGuard';
 
-import { Canvas } from './Canvas';
+import { CanvasWrapper } from './Canvas/CanvasWrapper';
 import { ContextComponent, ViewContextComponent } from './Context';
 import { SidePanel } from './SidePanel/SidePanel';
 import { ProcessingScreen } from './Utils/Processing';
@@ -19,7 +19,7 @@ export function ModelEditor() {
                     <Allotment separator={false}>
                         <Allotment.Pane minSize={200}>
                             <ViewControls />
-                            <Canvas />
+                            <CanvasWrapper />
                         </Allotment.Pane>
                         <Allotment.Pane
                             minSize={200}

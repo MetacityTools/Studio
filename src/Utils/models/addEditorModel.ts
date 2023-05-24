@@ -4,8 +4,6 @@ import { ModelData, PrimitiveType } from '@utils/types';
 
 import * as GL from '@bananagl/bananagl';
 
-import { SelectionManager } from '@components/Editor/Context';
-
 import { addTriangleModel } from './models/TriangleModel';
 
 export enum CoordinateMode {
