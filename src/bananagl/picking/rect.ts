@@ -22,6 +22,10 @@ class Plane {
             vec3.normalize(this.tmp, vec3.sub(this.tmp, point, this.origin))
         );
     }
+
+    signedDistance(point: vec3) {
+        return vec3.dot(this.normal, vec3.sub(this.tmp, point, this.origin));
+    }
 }
 
 export class RectSelector {
@@ -54,17 +58,17 @@ export class RectSelector {
         this.bottom = Plane.fromTwoRays(br, bl);
         this.far = new Plane(negatedDir, farPoint);
         this.near = new Plane(dir, nearPoint);
-
-        console.log(this.left, this.top, this.right, this.bottom, this.far, this.near);
     }
 
     intersectBox(min: vec3, max: vec3) {
-        if (this.left.sign(min) < 0 && this.left.sign(max) < 0) return false;
-        if (this.top.sign(min) < 0 && this.top.sign(max) < 0) return false;
-        if (this.right.sign(min) < 0 && this.right.sign(max) < 0) return false;
-        if (this.bottom.sign(min) < 0 && this.bottom.sign(max) < 0) return false;
-        if (this.far.sign(min) < 0 && this.far.sign(max) < 0) return false;
-        if (this.near.sign(min) < 0 && this.near.sign(max) < 0) return false;
+        const center = vec3.scaleAndAdd(vec3.create(), min, max, 0.5);
+        const diameter = vec3.sqrDist(max, min) * 0.5;
+        if (this.left.signedDistance(center) < -diameter) return false;
+        if (this.top.signedDistance(center) < -diameter) return false;
+        if (this.right.signedDistance(center) < -diameter) return false;
+        if (this.bottom.signedDistance(center) < -diameter) return false;
+        if (this.far.signedDistance(center) < -diameter) return false;
+        if (this.near.signedDistance(center) < -diameter) return false;
         return true;
     }
 

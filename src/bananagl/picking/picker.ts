@@ -56,6 +56,8 @@ export class Picker {
             const bvh = object.BVH;
             if (!bvh) return null;
 
+            //TODO to model space
+
             const hits = bvh.traceRect(rect);
             if (hits.length > 0)
                 return {

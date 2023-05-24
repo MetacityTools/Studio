@@ -110,7 +110,6 @@ export class EditorModel extends GL.Pickable implements GL.Selectable {
         if (!baseColor) return;
 
         for (let i = 0; i < baseColor.buffer.data.length; i += 3) {
-            if (baseColor.buffer.data[i + 2] === this.selectedColor_[2]) continue;
             baseColor.buffer.data[i] = color[0];
             baseColor.buffer.data[i + 1] = color[1];
             baseColor.buffer.data[i + 2] = color[2];
