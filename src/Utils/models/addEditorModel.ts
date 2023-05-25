@@ -13,8 +13,7 @@ export enum CoordinateMode {
 }
 
 export interface EditorModelData {
-    modelData: ModelData[];
-    selection: GL.SelectionManager;
+    models: ModelData[];
     scene: GL.Scene;
     coordMode: CoordinateMode;
     globalShift: vec3 | null;
@@ -29,10 +28,10 @@ export async function addEditorModels(
     updateStatus?: (status: string) => void
 ) {
     let i = 0;
-    let { modelData } = ctx;
+    let { models } = ctx;
 
-    for (const model of modelData) {
-        if (updateStatus) updateStatus(`Building BVH for ${i++}/${modelData.length}...`);
+    for (const model of models) {
+        if (updateStatus) updateStatus(`Building BVH for ${i++}/${models.length}...`);
         if (model.metadata.primitive === PrimitiveType.TRIANGLES)
             ctx.globalShift = await addTriangleModel(model, ctx);
     }

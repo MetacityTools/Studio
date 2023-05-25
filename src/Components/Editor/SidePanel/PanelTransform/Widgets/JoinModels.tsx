@@ -16,21 +16,16 @@ import {
     WidgetTitle,
 } from '@elements/Widgets';
 
-interface SnapVerticesProps {
-    scene: GL.Scene;
-    model: EditorModel;
-    selection: GL.SelectionManager;
-}
-
-export function JoinModelWidget(props: SnapVerticesProps) {
-    const { scene, model, selection } = props;
+export function JoinModelWidget() {
     const ctx = React.useContext(EditorContext);
-    if (!ctx) return null;
-    const { setProcessing } = ctx;
+    const { setProcessing, selectedModel, selectedSubmodels, select } = ctx;
+
+    if (selectedModel === null) return null;
 
     const apply = async () => {
         setProcessing(true);
-        await joinModel(model, selection);
+        const joinedSubmodelIDs = await joinModel(selectedModel, selectedSubmodels);
+        select(selectedModel, joinedSubmodelIDs);
         setProcessing(false);
     };
 

@@ -10,7 +10,6 @@ import { MenuButton, MenuGroup } from '@elements/MenuButton';
 
 export function ProjectionControls() {
     const ctx = React.useContext(EditorContext);
-    if (!ctx) return null;
     const { renderer, activeView } = ctx;
 
     const [projection, setProjection] = React.useState<GL.ProjectionType>(

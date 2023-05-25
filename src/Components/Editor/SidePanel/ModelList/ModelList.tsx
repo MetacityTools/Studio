@@ -7,8 +7,7 @@ import { ModelPanel } from './ModelPanel';
 
 export function ModelList() {
     const ctx = React.useContext(EditorContext);
-    if (!ctx) return null;
-    const { selectedModel, selectModel, models } = ctx;
+    const { selectedModel, select, models } = ctx;
 
     return (
         <div className="overflow-x-auto w-full h-full">
@@ -21,7 +20,7 @@ export function ModelList() {
                             key={model.name + index}
                             selected={selectedModel === model}
                             onSelect={() =>
-                                selectedModel === model ? selectModel(null) : selectModel(model)
+                                selectedModel === model ? select(null) : select(model)
                             }
                         />
                     ))}

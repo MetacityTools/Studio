@@ -4,14 +4,9 @@ import { ModelData } from '@utils/types';
 
 import * as GL from '@bananagl/bananagl';
 
-export async function splitModel(
-    scene: GL.Scene,
-    model: EditorModel,
-    selection: GL.SelectionManager
-) {
-    const selected = selection.selected.filter((s) => s.object === model);
-    if (selected.length === 0) return;
-    const idsToRemove = new Set(selected.map((s) => s.identifier));
+export async function splitModel(scene: GL.Scene, model: EditorModel, selectedSubmodels: number[]) {
+    if (selectedSubmodels.length === 0) return;
+    const idsToRemove = new Set(selectedSubmodels);
 
     let originalModelVertexCount = 0;
     let newModelVertexCount = 0;
@@ -91,7 +86,7 @@ export async function splitModel(
     }
 
     await addEditorModels({
-        modelData: [originalModelData, newModelData],
+        models: [originalModelData, newModelData],
         coordMode: CoordinateMode.None,
         scene: scene,
         globalShift: null,
@@ -99,7 +94,6 @@ export async function splitModel(
         scale: model.scale,
         position: model.position,
         uniforms: model.uniforms,
-        selection: selection,
     });
 
     scene.remove(model);

@@ -3,15 +3,16 @@ import { TbCircuitGround } from 'react-icons/tb';
 
 import * as GL from '@bananagl/bananagl';
 
-import { EditorContext } from '@components/Editor/Context';
+import { EditorContext, EditorViewerContext } from '@components/Editor/Context';
 
 import { Range } from '@elements/Range';
 import { DetailWidget, WidgetDescription, WidgetLine, WidgetTitle } from '@elements/Widgets';
 
 export function CameraGroundWidget() {
     const ctx = React.useContext(EditorContext);
-    if (!ctx) return null;
-    const { renderer, activeView, camTargetZ, setCamTargetZ } = ctx;
+    const viewerCtx = React.useContext(EditorViewerContext);
+    const { renderer, activeView } = ctx;
+    const { camTargetZ, setCamTargetZ } = viewerCtx;
 
     const updateCamTargetZ = (value: number) => {
         if (isNaN(value)) return;

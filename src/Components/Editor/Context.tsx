@@ -2,20 +2,99 @@ import { vec3 } from 'gl-matrix';
 import React from 'react';
 
 import { EditorModel } from '@utils/models/models/EditorModel';
+import { changeSelection } from '@utils/seleciton/selection';
 
 import * as GL from '@bananagl/bananagl';
 
-export const EditorContext = React.createContext<{
+interface EditorContextProps {
     processing: boolean;
     setProcessing: React.Dispatch<React.SetStateAction<boolean>>;
     scene: GL.Scene;
     renderer: GL.Renderer;
-    selection: GL.SelectionManager;
     activeView: number;
     models: EditorModel[];
     setModels: React.Dispatch<React.SetStateAction<EditorModel[]>>;
+    loadingStatus: string;
+    setLoadingStatus: React.Dispatch<React.SetStateAction<string>>;
     selectedModel: EditorModel | null;
-    selectModel: (model: EditorModel | null) => void;
+    selectedSubmodels: number[];
+    select: (
+        model: EditorModel | null,
+        submodelIDs?: number[],
+        toggle?: boolean,
+        extend?: boolean
+    ) => void;
+}
+
+export const EditorContext = React.createContext<EditorContextProps>({} as EditorContextProps);
+
+export function ContextComponent(props: { children: React.ReactNode }) {
+    const [renderer] = React.useState(new GL.Renderer());
+    const [scene] = React.useState(new GL.Scene());
+    const [models, setModels] = React.useState<EditorModel[]>([]);
+    const [selectedModel, setSelectedModel] = React.useState<EditorModel | null>(null);
+    const [selectedSubmodels, setSelectedSubmodels] = React.useState<number[]>([]);
+
+    const [loadingStatus, setLoadingStatus] = React.useState<string>('');
+    const [processing, setProcessing] = React.useState(false);
+
+    React.useEffect(() => {
+        const onChange = () => {
+            const copy = scene.objects.filter((obj) => obj instanceof EditorModel) as EditorModel[];
+            setModels(copy);
+            if (selectedModel !== null && !copy.includes(selectedModel)) setSelectedModel(null);
+        };
+
+        scene.addChangeListener(onChange);
+
+        return () => {
+            scene.removeChangeListener(onChange);
+        };
+    }, [scene, selectedModel]);
+
+    //selection callback, still a bit hacky but nicer than before
+    function select(
+        model: EditorModel | null,
+        submodelIDs: number[] = [],
+        toggle: boolean = false,
+        extend: boolean = false
+    ) {
+        submodelIDs = changeSelection(
+            selectedModel,
+            model,
+            selectedSubmodels,
+            submodelIDs,
+            toggle,
+            extend
+        );
+
+        setSelectedModel(model);
+        setSelectedSubmodels(submodelIDs);
+    }
+
+    return (
+        <EditorContext.Provider
+            value={{
+                processing,
+                setProcessing,
+                scene,
+                renderer,
+                activeView: 0,
+                models,
+                setModels,
+                loadingStatus,
+                setLoadingStatus,
+                selectedModel,
+                selectedSubmodels,
+                select,
+            }}
+        >
+            {props.children}
+        </EditorContext.Provider>
+    );
+}
+
+interface EditorViewerContextProps {
     camTargetZ: number;
     setCamTargetZ: React.Dispatch<React.SetStateAction<number>>;
     minShade: number;
@@ -26,86 +105,22 @@ export const EditorContext = React.createContext<{
     setGridVisible: React.Dispatch<React.SetStateAction<boolean>>;
     globalShift: vec3 | null;
     setGlobalShift: React.Dispatch<React.SetStateAction<vec3 | null>>;
-    loadingStatus: string;
-    setLoadingStatus: React.Dispatch<React.SetStateAction<string>>;
-    selectedSubmodels: number[];
-    setSelectedSubmodels: React.Dispatch<React.SetStateAction<number[]>>;
-} | null>(null);
+}
 
-export function ContextComponent(props: { children: React.ReactNode }) {
-    const [renderer, setRenderer] = React.useState(new GL.Renderer());
-    const [scene, setScene] = React.useState(new GL.Scene());
-    const [processing, setProcessing] = React.useState(false);
-    const [selection, setSelection] = React.useState(new GL.SelectionManager());
-    const [models, setModels] = React.useState<EditorModel[]>([]);
-    const [selectedModel, setSelectedModel] = React.useState<EditorModel | null>(null);
-    const [selectedSubmodels, setSelectedSubmodels] = React.useState<number[]>([]);
+export const EditorViewerContext = React.createContext<EditorViewerContextProps>(
+    {} as EditorViewerContextProps
+);
 
+export function ViewContextComponent(props: { children: React.ReactNode }) {
     const [camTargetZ, setCamTargetZ] = React.useState<number>(0);
     const [minShade, setMinShade] = React.useState<number>(0);
     const [maxShade, setMaxShade] = React.useState<number>(10);
     const [gridVisible, setGridVisible] = React.useState<boolean>(true);
     const [globalShift, setGlobalShift] = React.useState<vec3 | null>(null);
-    const [loadingStatus, setLoadingStatus] = React.useState<string>('');
-
-    const selectModel = (model: EditorModel | null) => {
-        setSelectedModel((prev) => {
-            if (prev !== null && prev !== model) prev.selected = false;
-            if (model !== null && prev !== model) model.selected = true;
-            if (model === null || prev !== model) selection.clearSelection();
-            return model;
-        });
-    };
-
-    React.useEffect(() => {
-        const onChange = () => {
-            setSelectedSubmodels(selection.selected.map((obj) => obj.identifier));
-        };
-
-        selection.onSelect = onChange;
-
-        return () => {
-            selection.removeOnSelect(onChange);
-        };
-    }, [selection, setSelectedSubmodels]);
-
-    React.useEffect(() => {
-        const onChange = () => {
-            const copy = scene.objects.filter((obj) => obj instanceof EditorModel) as EditorModel[];
-            setModels(copy);
-            if (selectedModel !== null && !copy.includes(selectedModel)) setSelectedModel(null);
-        };
-
-        scene.onChange = onChange;
-
-        return () => {
-            scene.removeChange = onChange;
-        };
-    }, [scene, selectedModel]);
-
-    React.useEffect(() => {
-        renderer.onInit = () => {
-            const controls = renderer.window.controls;
-            controls.onPick = (m: GL.Pickable) => {
-                const model = m as EditorModel;
-                selectModel(model);
-            };
-        };
-    }, [renderer]);
 
     return (
-        <EditorContext.Provider
+        <EditorViewerContext.Provider
             value={{
-                processing,
-                setProcessing,
-                scene,
-                renderer,
-                selection,
-                activeView: 0,
-                models,
-                setModels,
-                selectedModel,
-                selectModel,
                 camTargetZ,
                 setCamTargetZ,
                 minShade,
@@ -116,13 +131,9 @@ export function ContextComponent(props: { children: React.ReactNode }) {
                 setGridVisible,
                 globalShift,
                 setGlobalShift,
-                loadingStatus,
-                setLoadingStatus,
-                selectedSubmodels,
-                setSelectedSubmodels,
             }}
         >
             {props.children}
-        </EditorContext.Provider>
+        </EditorViewerContext.Provider>
     );
 }
