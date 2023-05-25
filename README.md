@@ -18,19 +18,46 @@ Only time will tell if this is a good idea.
 
 Currently:
 
--   SHP (Polygons and MultiPatch only)
+-   SHP (Polygons and MultiPatch only for now)
 -   IFC
 -   GLTF (triangles only)
 
 ## Roadmap
 
--   [x] Grid in the background
--   [x] Translucent models to see wirefame in the background
--   [x] Snap vertices
--   [x] Translation - scale - rotate
--   [x] Split models
--   [x] Hide models
--   [x] Delete model
+The project is in active development. The roadmap is as follows:
+
+## v0.1.2
+
+-   [ ] Project export
+-   [ ] Project import
+
+## v0.1.1
+
+-   [ ] Baking/Transforming models to Table-like format
+-   [ ] Allow labeling geometry
+
+## v0.1.0
+
+-   [x] Rectangular select
+-   [x] Merge submodels
+-   [ ] Delete selected submodel
+
+## v0.0.4 - ✅ Released
+
+-   [x] Removed IFC metadata loading to optimize memory usage
+
+## v0.0.3 - ✅ Released
+
+-   [x] Selecting alignment for loaded models
+-   [x] Worker pool for loading
+-   [x] Status - counter, update global loading status
+-   [x] Reading metadata from IFC files - inspeciton of metadata?
+-   [x] CI na githubu autodeploy
+-   [x] Uniforms copy on model add
+-   [x] Rotate Splash screen bug
+
+## v0.0.2 - ✅ Released
+
 -   [x] Loading SHP - _needs our own library to load, noone supports multipatch_
 -   [x] BVH build into worker
 -   [x] Loading screen + Add chicken
@@ -39,26 +66,21 @@ Currently:
 -   [x] Redesign
 -   [x] Sidepanel view settings
 -   [x] Intro screen
--   [x] Selecting alignment for loaded models
--   [x] Worker pool for loading
--   [x] Status - counter, update global loading status
--   [x] Reading metadata from IFC files - inspeciton of metadata?
--   [x] CI na githubu autodeploy
--   [x] Uniforms copy on model add
--   [x] Rotate Splash screen bug
--   [ ] Loading points and lines from SHP
--   [ ] Loading GeoJSON
--   [ ] Project export
--   [ ] Project import
--   [ ] Allow labeling geometry
--   [ ] delete selected submodel
--   [ ] merge submodels
+
+## v0.0.1 - ✅ Released
+
+-   [x] Grid in the background
+-   [x] Translucent models to see wirefame in the background
+-   [x] Snap vertices
+-   [x] Translation - scale - rotate
+-   [x] Split models
+-   [x] Hide models
+-   [x] Delete model
 
 ### Backlog
 
--   [ ] IFC metadata loading (memory-efficiency???)
--   [ ] BVH
--   [ ] remesh models - intersection of triangles
--   [ ] delete submodel - _for now as (split + delete)_
--   [ ] frustum culling
--   [ ] rectangular select
+-   [ ] Loading points and lines from SHP
+-   [ ] Loading GeoJSON
+-   [ ] Loading IFC metadata loading (memory-efficiency???)
+-   [ ] Remesh models - intersection of triangles
+-   [ ] Frustum culling
