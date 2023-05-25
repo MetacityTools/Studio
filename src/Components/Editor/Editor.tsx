@@ -9,6 +9,7 @@ import { ContextComponent, ViewContextComponent } from './Context';
 import { SidePanel } from './SidePanel/SidePanel';
 import { ProcessingScreen } from './Utils/Processing';
 import { SpashScreen } from './Utils/Splash';
+import { HelpPanel } from './ViewControls/Help';
 import { ViewControls } from './ViewControls/ViewControls';
 
 export function ModelEditor() {
@@ -20,6 +21,7 @@ export function ModelEditor() {
                         <Allotment.Pane minSize={200} className="bg-neutral-100">
                             <ViewControls />
                             <CanvasWrapper />
+                            <HelpPanel />
                         </Allotment.Pane>
                         <Allotment.Pane
                             minSize={200}
