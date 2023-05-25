@@ -17,7 +17,7 @@ export function ModelEditor() {
             <ViewContextComponent>
                 <SizeGuard minWidth={600} minHeight={400}>
                     <Allotment separator={false}>
-                        <Allotment.Pane minSize={200}>
+                        <Allotment.Pane minSize={200} className="bg-neutral-100">
                             <ViewControls />
                             <CanvasWrapper />
                         </Allotment.Pane>

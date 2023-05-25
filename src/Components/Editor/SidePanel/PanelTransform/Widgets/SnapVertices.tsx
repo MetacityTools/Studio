@@ -31,13 +31,12 @@ export function SnapVerticesWidget() {
     };
 
     return (
-        <DetailWidget>
+        <DetailWidget onClick={applySnap}>
             <WidgetLine>
                 <WidgetTitle>
                     <TbRulerMeasure className="mr-2" />
                     Collapse Vertices
                 </WidgetTitle>
-                <WidgetApplyButton onApply={applySnap} />
             </WidgetLine>
             <WidgetLine>
                 <WidgetDescription>

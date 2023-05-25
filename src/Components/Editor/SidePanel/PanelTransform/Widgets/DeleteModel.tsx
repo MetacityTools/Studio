@@ -21,13 +21,12 @@ export function DeleteModelWidget() {
     };
 
     return (
-        <DetailWidget>
+        <DetailWidget onClick={apply}>
             <WidgetLine>
                 <WidgetTitle>
                     <FiDelete className="mr-2" />
                     Delete Model
                 </WidgetTitle>
-                <WidgetApplyButton onApply={apply} text="Delete" />
             </WidgetLine>
             <WidgetLine>
                 <WidgetDescription>Delete the model from the scene.</WidgetDescription>
