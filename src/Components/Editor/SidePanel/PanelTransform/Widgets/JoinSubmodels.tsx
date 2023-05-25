@@ -1,5 +1,5 @@
 import React from 'react';
-import { TbLayersDifference } from 'react-icons/tb';
+import { TbLayersUnion } from 'react-icons/tb';
 
 import { EditorModel } from '@utils/models/models/EditorModel';
 import { joinModel } from '@utils/transforms/joinSubmodels';
@@ -16,7 +16,7 @@ import {
     WidgetTitle,
 } from '@elements/Widgets';
 
-export function JoinModelWidget() {
+export function JoinSubmodelWidget() {
     const ctx = React.useContext(EditorContext);
     const { setProcessing, selectedModel, selectedSubmodels, select } = ctx;
 
@@ -30,13 +30,12 @@ export function JoinModelWidget() {
     };
 
     return (
-        <DetailWidget>
+        <DetailWidget onClick={apply}>
             <WidgetLine>
                 <WidgetTitle>
-                    <TbLayersDifference className="mr-2" />
-                    Join Model
+                    <TbLayersUnion className="mr-2" />
+                    Join Submodels
                 </WidgetTitle>
-                <WidgetApplyButton onApply={apply} />
             </WidgetLine>
             <WidgetLine>
                 <WidgetDescription>

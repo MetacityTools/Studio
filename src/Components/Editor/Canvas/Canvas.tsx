@@ -41,11 +41,7 @@ export function Canvas(props: { canvasRef: React.RefObject<HTMLCanvasElement> })
             ref={props.canvasRef}
             key="canvas"
             tabIndex={1000}
-            style={{
-                width: '100%',
-                height: '100%',
-                outline: 'none',
-            }}
+            className="w-full h-full outline-none"
             onPointerDown={(e) => {
                 ctx.renderer.windowNullable?.controls?.pointerDown(e.nativeEvent);
             }}

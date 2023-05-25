@@ -5,10 +5,11 @@ import { EditorContext } from '@components/Editor/Context';
 import { EmptyDetailPanel } from '@elements/Empty';
 
 import { DeleteModelWidget } from './Widgets/DeleteModel';
-import { JoinModelWidget } from './Widgets/JoinModels';
+import { JoinSubmodelWidget } from './Widgets/JoinSubmodels';
 import { SnapVerticesWidget } from './Widgets/SnapVertices';
 import { SplitModelWidget } from './Widgets/SplitModel';
 import { ModelTransformationWidget } from './Widgets/Transformation';
+import { DeleteSubmodelsWidget } from './Widgets/DeleteSubmodels';
 
 export function ModelTransformPanel() {
     const ctx = React.useContext(EditorContext);
@@ -21,7 +22,8 @@ export function ModelTransformPanel() {
             <ModelTransformationWidget />
             <SnapVerticesWidget />
             <SplitModelWidget />
-            <JoinModelWidget />
+            <JoinSubmodelWidget />
+            <DeleteSubmodelsWidget />
             <DeleteModelWidget />
         </div>
     );
