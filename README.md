@@ -41,7 +41,7 @@ The project is in active development. The roadmap is as follows:
 -   [x] Rectangular select
 -   [x] Merge submodels
 -   [x] Delete selected submodel
--   [ ] Context Help
+-   [x] Context Help
 
 ### v0.0.4 - ✅ Released
 
