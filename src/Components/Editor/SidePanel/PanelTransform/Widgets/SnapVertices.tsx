@@ -1,11 +1,11 @@
 import React from 'react';
 import { TbRulerMeasure } from 'react-icons/tb';
 
-import { EditorModel } from '@utils/models/models/EditorModel';
 import { snapVertices } from '@utils/transforms/vertexSnap';
 
-import * as GL from '@bananagl/bananagl';
+import { EditorContext } from '@components/Editor/Context';
 
+import { Input } from '@elements/Input';
 import {
     DetailWidget,
     WidgetApplyButton,
@@ -14,14 +14,11 @@ import {
     WidgetTitle,
 } from '@elements/Widgets';
 
-interface SnapVerticesProps {
-    model: EditorModel;
-}
-
-export function SnapVerticesWidget(props: SnapVerticesProps) {
-    const { model } = props;
-
+export function SnapVerticesWidget() {
     const [snapDistance, setSnapDistance] = React.useState(0.1);
+    const ctx = React.useContext(EditorContext);
+    const { selectedModel } = ctx;
+    if (selectedModel === null) return null;
 
     const updateSnapValue = (e: React.ChangeEvent<HTMLInputElement>) => {
         const i = parseFloat(e.target.value);
@@ -30,17 +27,16 @@ export function SnapVerticesWidget(props: SnapVerticesProps) {
     };
 
     const applySnap = () => {
-        snapVertices(model, snapDistance);
+        snapVertices(selectedModel, snapDistance);
     };
 
     return (
-        <DetailWidget>
+        <DetailWidget onClick={applySnap}>
             <WidgetLine>
                 <WidgetTitle>
                     <TbRulerMeasure className="mr-2" />
                     Collapse Vertices
                 </WidgetTitle>
-                <WidgetApplyButton onApply={applySnap} />
             </WidgetLine>
             <WidgetLine>
                 <WidgetDescription>
@@ -49,7 +45,7 @@ export function SnapVerticesWidget(props: SnapVerticesProps) {
             </WidgetLine>
             <WidgetLine>
                 <div className="py-2 px-4">Distance</div>
-                <input
+                <Input
                     type="number"
                     className="py-2 px-4 text-right w-full rounded-br-md"
                     step={0.1}

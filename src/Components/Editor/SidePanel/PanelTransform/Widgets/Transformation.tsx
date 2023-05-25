@@ -6,6 +6,9 @@ import { EditorModel } from '@utils/models/models/EditorModel';
 
 import * as GL from '@bananagl/bananagl';
 
+import { EditorContext } from '@components/Editor/Context';
+
+import { Input } from '@elements/Input';
 import { DetailWidget, WidgetDescription, WidgetLine, WidgetTitle } from '@elements/Widgets';
 
 function VectorComponentInput(props: {
@@ -17,7 +20,7 @@ function VectorComponentInput(props: {
 
     return (
         <td className="bg-white">
-            <input
+            <Input
                 type="number"
                 className="p-2 bg-transparent border-0 text-right focus:outline-none w-full"
                 value={isNaN(value) ? '' : value}
@@ -47,30 +50,24 @@ function VectorControls(props: VectorControlsProps) {
     );
 }
 
-interface ModelControlsProps {
-    model: EditorModel;
-    renderer: GL.Renderer;
-}
-
-export function ModelTransformationWidget(props: ModelControlsProps) {
-    const { model, renderer } = props;
+export function ModelTransformationWidget() {
+    const ctx = React.useContext(EditorContext);
+    const { selectedModel, renderer } = ctx;
+    if (selectedModel === null) return null;
+    const model = selectedModel;
 
     const [position, setPosition] = React.useState(model.position);
     const [rotation, setRotation] = React.useState(model.rotation);
     const [scale, setScale] = React.useState(model.scale);
 
-    const [tmpPosition, setTmpPosition] = React.useState(model.position);
-    const [tmpScale, setTmpScale] = React.useState(model.scale);
-
-    const [moveShortcut, setMoveShortcut] = React.useState(new GL.ShortcutOnMouseMove('KeyG'));
-    const [scaleShortcut, setScaleShortcut] = React.useState(new GL.ShortcutOnMouseMove('KeyS'));
+    const [moveShortcut] = React.useState(new GL.ShortcutOnMouseMove<vec3>('KeyG'));
+    const [scaleShortcut] = React.useState(new GL.ShortcutOnMouseMove<vec3>('KeyS'));
 
     React.useEffect(() => {
         renderer.onInit = () => {
             const controls = renderer.window.controls;
             controls.addShortcut(moveShortcut);
             controls.addShortcut(scaleShortcut);
-            //TODO cleanup shortcuts in strict mode
         };
 
         return () => {
@@ -87,11 +84,11 @@ export function ModelTransformationWidget(props: ModelControlsProps) {
         };
 
         moveShortcut.onStartCall = () => {
-            setTmpPosition(position.slice() as vec3);
+            moveShortcut.storage = model.position.slice() as vec3;
         };
 
-        moveShortcut.onCancelCall = () => {
-            setPosition(tmpPosition.slice() as vec3);
+        moveShortcut.onCancelCall = (data) => {
+            if (data) setPosition(data.slice() as vec3);
         };
 
         scaleShortcut.onTrigger = (view, dx, dy) => {
@@ -101,11 +98,11 @@ export function ModelTransformationWidget(props: ModelControlsProps) {
         };
 
         scaleShortcut.onStartCall = () => {
-            setTmpScale(scale.slice() as vec3);
+            scaleShortcut.storage = model.scale.slice() as vec3;
         };
 
-        scaleShortcut.onCancelCall = () => {
-            setScale(tmpScale.slice() as vec3);
+        scaleShortcut.onCancelCall = (data) => {
+            if (data) setScale(data.slice() as vec3);
         };
     }, [model, moveShortcut, scaleShortcut]);
 

@@ -21,7 +21,7 @@ export async function parse(model: UserInputModel) {
         throw new Error(`Missing required files: ${model.name}`);
     const collection = await FeatureReader.fromArrayBuffers(data.shp, data.shx, data.dbf, data.cpg);
     const features = collection.readFeatureCollection();
-    const { buffers, submodelIdx, coordType, metadata } = getBuffersAndMeta(features);
+    const { buffers, submodelIdx, coordType, metadata, type } = getBuffersAndMeta(features);
     const { position, submodel } = unifyBuffers(buffers, submodelIdx, coordType);
 
     return {
@@ -32,7 +32,7 @@ export async function parse(model: UserInputModel) {
         metadata: {
             name: model.name,
             data: metadata,
-            primitive: PrimitiveType.TRIANGLES,
+            primitive: type,
         },
     };
 }
@@ -67,7 +67,7 @@ function getBuffersAndMeta(features: FeatureCollection) {
         idx++;
     }
 
-    return { buffers, submodelIdx, coordType, metadata };
+    return { buffers, submodelIdx, coordType, metadata, type };
 }
 
 function processMultiPoint(

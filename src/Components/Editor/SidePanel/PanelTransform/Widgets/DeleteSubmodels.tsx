@@ -1,7 +1,7 @@
 import React from 'react';
-import { TbLayersIntersect } from 'react-icons/tb';
+import { TbLayersSubtract } from 'react-icons/tb';
 
-import { splitModel } from '@utils/transforms/modelSplit';
+import { deleteSubmodels } from '@utils/transforms/deleteSubmodels';
 
 import { EditorContext } from '@components/Editor/Context';
 
@@ -13,7 +13,7 @@ import {
     WidgetTitle,
 } from '@elements/Widgets';
 
-export function SplitModelWidget() {
+export function DeleteSubmodelsWidget() {
     const ctx = React.useContext(EditorContext);
     const { setProcessing, scene, selectedModel, selectedSubmodels } = ctx;
 
@@ -21,7 +21,7 @@ export function SplitModelWidget() {
 
     const apply = async () => {
         setProcessing(true);
-        await splitModel(scene, selectedModel, selectedSubmodels);
+        await deleteSubmodels(scene, selectedModel, selectedSubmodels);
         setProcessing(false);
     };
 
@@ -29,14 +29,13 @@ export function SplitModelWidget() {
         <DetailWidget onClick={apply}>
             <WidgetLine>
                 <WidgetTitle>
-                    <TbLayersIntersect className="mr-2" />
-                    Split Model
+                    <TbLayersSubtract className="mr-2" />
+                    Delete Submodels
                 </WidgetTitle>
             </WidgetLine>
             <WidgetLine>
                 <WidgetDescription>
-                    Split the model based on the current selection, the selected parts will be
-                    removed from the original model and placed into a new model.
+                    Remove the selected submodels from the  model.
                 </WidgetDescription>
             </WidgetLine>
         </DetailWidget>

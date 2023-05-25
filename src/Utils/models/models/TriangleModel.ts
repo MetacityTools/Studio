@@ -10,20 +10,14 @@ import { CoordinateMode, EditorModelData } from '../addEditorModel';
 import { solidShader, wireframeShader } from '../shaders/EditorModelShader';
 import { DEFAULT_UNIFORMS, EditorModel } from './EditorModel';
 
-export class TriangleModel extends EditorModel {
-    constructor() {
-        super();
-    }
-}
-
 export async function addTriangleModel(model: ModelData, ctx: EditorModelData) {
-    let { coordMode, globalShift, position, rotation, scale, selection, scene, uniforms } = ctx;
+    let { coordMode, globalShift, position, rotation, scale, scene, uniforms } = ctx;
 
     position = position || vec3.create();
     rotation = rotation || vec3.create();
     scale = scale || vec3.fromValues(1, 1, 1);
 
-    const glmodel = new TriangleModel();
+    const glmodel = new EditorModel();
     const vertices = model.geometry.position;
     const submodel = model.geometry.submodel;
 
@@ -63,16 +57,6 @@ export async function addTriangleModel(model: ModelData, ctx: EditorModelData) {
     glmodel.scale = scale.slice() as vec3;
     glmodel.primitive = PrimitiveType.TRIANGLES;
     glmodel.mode = 4;
-
-    glmodel.onPick = (object, idx, ray, t, addToSelection) => {
-        const submodel = object.attributes.getAttribute('submodel') as GL.Attribute;
-        const submodelBuffer = submodel.buffer.getView(Uint32Array);
-        if (!submodel) return;
-        const id = submodelBuffer[idx * 3];
-
-        if (!addToSelection) selection.clearSelection();
-        selection.toggleSelection(id, object as EditorModel);
-    };
 
     await glmodel.initTrianglePicking();
     scene.add(glmodel);

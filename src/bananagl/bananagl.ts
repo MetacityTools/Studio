@@ -1,4 +1,4 @@
-import { ProjectionType } from './camera/camera';
+import { ProjectionType } from './camera/cameraInterface';
 import { CameraView } from './camera/cameraLock';
 import { Attribute, ElementAttribute, InstancedAttribute } from './models/attribute';
 import { Attributes } from './models/attributes';
@@ -11,7 +11,6 @@ import { Ray } from './picking/ray';
 import { Renderer } from './renderer/renderer';
 import { mountRenderer, unmountRenderer } from './renderer/setup';
 import { Scene } from './scene/scene';
-import { Selection, SelectionManager } from './scene/selection';
 import { cloneUniforms } from './shaders/clone';
 import { Shader } from './shaders/shader';
 import { Profiler } from './utils/profiler';
@@ -36,8 +35,6 @@ export {
     View,
     CameraView,
     Profiler,
-    SelectionManager,
-    Selection,
     ShortcutOnPress,
     ShortcutOnMouseMove,
     mountRenderer,

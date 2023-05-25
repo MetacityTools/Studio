@@ -114,3 +114,81 @@ export function TriangleFull(props: IconProps) {
         </svg>
     );
 }
+
+export function MouseLeft(props: IconProps) {
+    return (
+        <svg
+            {...props}
+            stroke="currentColor"
+            fill="currentColor"
+            strokeWidth="0"
+            viewBox="0 0 16 16"
+            height="1em"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+        >
+            <path
+                d="M 13 6.487 L 3 6.487 L 3 10.8 C 3 13.645 5.22 15.987 8 15.987 C 10.78 15.987 13 13.645 13 10.799 L 13 6.487 Z"
+                style={{ fillOpacity: 0.3 }}
+            ></path>
+            <path
+                d="M 8.5 0.013 L 8.5 5.487 L 13 5.487 L 13 5.175 C 13 2.502 11.042 0.273 8.5 0.013 Z"
+                style={{ fillOpacity: 0.3 }}
+            ></path>
+            <path d="M 7.5 0.013 C 4.958 0.273 3 2.502 3 5.175 L 3 5.487 L 7.5 5.487 L 7.5 0.013 Z"></path>
+        </svg>
+    );
+}
+
+export function MouseRight(props: IconProps) {
+    return (
+        <svg
+            {...props}
+            stroke="currentColor"
+            fill="currentColor"
+            strokeWidth="0"
+            viewBox="0 0 16 16"
+            height="1em"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+        >
+            <path
+                d="M 13 6.487 L 3 6.487 L 3 10.8 C 3 13.645 5.22 15.987 8 15.987 C 10.78 15.987 13 13.645 13 10.799 L 13 6.487 Z"
+                style={{ fillOpacity: 0.3 }}
+            ></path>
+            <path d="M 8.5 0.013 L 8.5 5.487 L 13 5.487 L 13 5.175 C 13 2.502 11.042 0.273 8.5 0.013 Z"></path>
+            <path
+                d="M 7.5 0.013 C 4.958 0.273 3 2.502 3 5.175 L 3 5.487 L 7.5 5.487 L 7.5 0.013 Z"
+                style={{ fillOpacity: 0.3 }}
+            ></path>
+        </svg>
+    );
+}
+
+export function MouseWheel(props: IconProps) {
+    return (
+        <svg
+            {...props}
+            stroke="currentColor"
+            fill="currentColor"
+            strokeWidth="0"
+            viewBox="0 0 16 16"
+            height="1em"
+            width="1em"
+            xmlns="http://www.w3.org/2000/svg"
+        >
+            <path
+                d="M 13 6.487 L 3 6.487 L 3 10.8 C 3 13.645 5.22 15.987 8 15.987 C 10.78 15.987 13 13.645 13 10.799 L 13 6.487 Z"
+                style={{ fillOpacity: 0.3 }}
+            ></path>
+            <path
+                d="M 8.5 0.013 L 8.5 5.487 L 13 5.487 L 13 5.175 C 13 2.502 11.042 0.273 8.5 0.013 Z"
+                style={{ fillOpacity: 0.3 }}
+            ></path>
+            <path
+                d="M 7.5 0.013 C 4.958 0.273 3 2.502 3 5.175 L 3 5.487 L 7.5 5.487 L 7.5 0.013 Z"
+                style={{ fillOpacity: 0.3 }}
+            ></path>
+        </svg>
+    );
+}

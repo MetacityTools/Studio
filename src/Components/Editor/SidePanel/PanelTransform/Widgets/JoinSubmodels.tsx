@@ -1,7 +1,10 @@
 import React from 'react';
-import { TbLayersIntersect } from 'react-icons/tb';
+import { TbLayersUnion } from 'react-icons/tb';
 
-import { splitModel } from '@utils/transforms/modelSplit';
+import { EditorModel } from '@utils/models/models/EditorModel';
+import { joinModel } from '@utils/transforms/joinSubmodels';
+
+import * as GL from '@bananagl/bananagl';
 
 import { EditorContext } from '@components/Editor/Context';
 
@@ -13,15 +16,16 @@ import {
     WidgetTitle,
 } from '@elements/Widgets';
 
-export function SplitModelWidget() {
+export function JoinSubmodelWidget() {
     const ctx = React.useContext(EditorContext);
-    const { setProcessing, scene, selectedModel, selectedSubmodels } = ctx;
+    const { setProcessing, selectedModel, selectedSubmodels, select } = ctx;
 
     if (selectedModel === null) return null;
 
     const apply = async () => {
         setProcessing(true);
-        await splitModel(scene, selectedModel, selectedSubmodels);
+        const joinedSubmodelIDs = await joinModel(selectedModel, selectedSubmodels);
+        select(selectedModel, joinedSubmodelIDs);
         setProcessing(false);
     };
 
@@ -29,14 +33,13 @@ export function SplitModelWidget() {
         <DetailWidget onClick={apply}>
             <WidgetLine>
                 <WidgetTitle>
-                    <TbLayersIntersect className="mr-2" />
-                    Split Model
+                    <TbLayersUnion className="mr-2" />
+                    Join Submodels
                 </WidgetTitle>
             </WidgetLine>
             <WidgetLine>
                 <WidgetDescription>
-                    Split the model based on the current selection, the selected parts will be
-                    removed from the original model and placed into a new model.
+                    Join selected submodels into a single submodel.
                 </WidgetDescription>
             </WidgetLine>
         </DetailWidget>
