@@ -18,13 +18,14 @@ import {
 
 export function JoinModelWidget() {
     const ctx = React.useContext(EditorContext);
-    const { setProcessing, selectedModel, selectedSubmodels } = ctx;
+    const { setProcessing, selectedModel, selectedSubmodels, select } = ctx;
 
     if (selectedModel === null) return null;
 
     const apply = async () => {
         setProcessing(true);
-        await joinModel(selectedModel, selectedSubmodels);
+        const joinedSubmodelIDs = await joinModel(selectedModel, selectedSubmodels);
+        select(selectedModel, joinedSubmodelIDs);
         setProcessing(false);
     };
 

@@ -1,16 +1,20 @@
-import { vec2, vec3 } from 'gl-matrix';
+import { mat4, vec2, vec3 } from 'gl-matrix';
 
 import { Camera } from '@bananagl/camera/camera';
 import { TypedArray } from '@bananagl/shaders/shader';
 
-import { Ray } from './ray';
+import { Ray, transformMat4ZeroW } from './ray';
 
 class Plane {
     private tmp: vec3 = vec3.create();
+
+    private origin_ = vec3.create();
+    private normal_ = vec3.create();
+
     constructor(private normal: vec3, private origin: vec3) {}
     static fromTwoRays(ray1: Ray, ray2: Ray) {
-        const dist = vec3.distance(ray1.origin, ray2.origin);
-        const crossDir = vec3.scaleAndAdd(vec3.create(), ray1.origin, ray1.direction, dist);
+        console.log(ray1, ray2);
+        const crossDir = vec3.add(vec3.create(), ray1.origin, ray1.direction);
         vec3.normalize(crossDir, vec3.sub(crossDir, crossDir, ray2.origin));
         const normal = vec3.cross(vec3.create(), crossDir, ray2.direction);
         return new Plane(normal, ray1.origin);
@@ -25,6 +29,19 @@ class Plane {
 
     signedDistance(point: vec3) {
         return vec3.dot(this.normal, vec3.sub(this.tmp, point, this.origin));
+    }
+
+    transform(m: mat4) {
+        vec3.copy(this.origin_, this.origin);
+        vec3.copy(this.normal_, this.normal);
+        vec3.transformMat4(this.origin, this.origin, m);
+        transformMat4ZeroW(this.normal, this.normal, m);
+        vec3.normalize(this.normal, this.normal);
+    }
+
+    untransform() {
+        vec3.copy(this.origin, this.origin_);
+        vec3.copy(this.normal, this.normal_);
     }
 }
 
@@ -46,6 +63,7 @@ export class RectSelector {
         const tl = camera.primaryRay(xmin, ymax);
         const br = camera.primaryRay(xmax, ymin);
         const tr = camera.primaryRay(xmax, ymax);
+
         const dir = vec3.create();
         vec3.normalize(dir, vec3.sub(dir, camera.target, camera.position));
         const negatedDir = vec3.negate(vec3.create(), dir);
@@ -58,21 +76,50 @@ export class RectSelector {
         this.bottom = Plane.fromTwoRays(br, bl);
         this.far = new Plane(negatedDir, farPoint);
         this.near = new Plane(dir, nearPoint);
+        console.log(this);
     }
 
-    intersectBox(min: vec3, max: vec3) {
-        const center = vec3.scaleAndAdd(vec3.create(), min, max, 0.5);
-        const diameter = vec3.sqrDist(max, min) * 0.5;
-        if (this.left.signedDistance(center) < -diameter) return false;
-        if (this.top.signedDistance(center) < -diameter) return false;
-        if (this.right.signedDistance(center) < -diameter) return false;
-        if (this.bottom.signedDistance(center) < -diameter) return false;
-        if (this.far.signedDistance(center) < -diameter) return false;
-        if (this.near.signedDistance(center) < -diameter) return false;
+    transform(matrix: mat4) {
+        this.left.transform(matrix);
+        this.top.transform(matrix);
+        this.right.transform(matrix);
+        this.bottom.transform(matrix);
+        this.far.transform(matrix);
+        this.near.transform(matrix);
+    }
+
+    untransform() {
+        this.left.untransform();
+        this.top.untransform();
+        this.right.untransform();
+        this.bottom.untransform();
+        this.far.untransform();
+        this.near.untransform();
+    }
+
+    boxInsideFrustum(min: vec3, max: vec3) {
+        const points = [
+            vec3.fromValues(min[0], min[1], min[2]),
+            vec3.fromValues(min[0], min[1], max[2]),
+            vec3.fromValues(min[0], max[1], min[2]),
+            vec3.fromValues(min[0], max[1], max[2]),
+            vec3.fromValues(max[0], min[1], min[2]),
+            vec3.fromValues(max[0], min[1], max[2]),
+            vec3.fromValues(max[0], max[1], min[2]),
+            vec3.fromValues(max[0], max[1], max[2]),
+        ];
+
+        if (points.map((p) => this.left.sign(p)).every((s) => s < 0)) return false;
+        if (points.map((p) => this.top.sign(p)).every((s) => s < 0)) return false;
+        if (points.map((p) => this.right.sign(p)).every((s) => s < 0)) return false;
+        if (points.map((p) => this.bottom.sign(p)).every((s) => s < 0)) return false;
+        if (points.map((p) => this.far.sign(p)).every((s) => s < 0)) return false;
+        if (points.map((p) => this.near.sign(p)).every((s) => s < 0)) return false;
+
         return true;
     }
 
-    triangleInside(data: TypedArray, triIndex: number) {
+    triangleInsideFrustum(data: TypedArray, triIndex: number) {
         const index = triIndex * 9;
         const a = vec3.fromValues(data[index], data[index + 1], data[index + 2]);
         const b = vec3.fromValues(data[index + 3], data[index + 4], data[index + 5]);

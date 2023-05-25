@@ -56,7 +56,7 @@ export class Picker {
             const bvh = object.BVH;
             if (!bvh) return null;
 
-            //TODO to model space
+            rect.transform(mat4.invert(inverseTransform, object.transform));
 
             const hits = bvh.traceRect(rect);
             if (hits.length > 0)
@@ -64,6 +64,8 @@ export class Picker {
                     object: object as Pickable,
                     primitiveIndices: hits,
                 };
+
+            rect.untransform();
         }
         return null;
     }

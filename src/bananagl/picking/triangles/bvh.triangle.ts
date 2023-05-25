@@ -146,7 +146,7 @@ export class TriangleBVH implements BVH {
             const node = stack.pop();
             if (!node) continue;
             if (node.bbox) {
-                if (!rect.intersectBox(node.bbox.min, node.bbox.max)) continue;
+                if (!rect.boxInsideFrustum(node.bbox.min, node.bbox.max)) continue;
 
                 if (node.left) stack.push(node.left);
                 if (node.right) stack.push(node.right);
@@ -163,7 +163,7 @@ export class TriangleBVH implements BVH {
     private traverseLeafRect(node: BVHNode, rect: RectSelector, indices: number[]) {
         let hit;
         for (let i = node.from!; i < node.to!; i++) {
-            hit = rect.triangleInside(this.position.buffer.data, i);
+            hit = rect.triangleInsideFrustum(this.position.buffer.data, i);
             if (hit) indices.push(i);
         }
     }

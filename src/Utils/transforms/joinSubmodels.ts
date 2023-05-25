@@ -1,7 +1,7 @@
 import { EditorModel } from '@utils/models/models/EditorModel';
 
 export async function joinModel(model: EditorModel, selectedSubmodels: number[]) {
-    if (selectedSubmodels.length === 0) return;
+    if (selectedSubmodels.length === 0) return [];
     const idsToJoin = new Set(selectedSubmodels);
 
     let minId = Infinity;
@@ -26,4 +26,5 @@ export async function joinModel(model: EditorModel, selectedSubmodels: number[])
     }
 
     model.data[minId] = meta;
+    return [minId];
 }
