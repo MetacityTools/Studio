@@ -1,4 +1,4 @@
-import { ProjectionType } from './camera/camera';
+import { ProjectionType } from './camera/cameraInterface';
 import { CameraView } from './camera/cameraLock';
 import { Attribute, ElementAttribute, InstancedAttribute } from './models/attribute';
 import { Attributes } from './models/attributes';

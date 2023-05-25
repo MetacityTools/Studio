@@ -36,6 +36,19 @@ export function Canvas(props: { canvasRef: React.RefObject<HTMLCanvasElement> })
         ctx.select(object as EditorModel, submodelIDs, toggle, extend);
     }
 
+    const handleWheel = (event: WheelEvent) => {
+        event.preventDefault();
+    };
+
+    React.useEffect(() => {
+        const canvas = props.canvasRef.current;
+        if (!canvas) return;
+        canvas.addEventListener('wheel', handleWheel);
+        return () => {
+            canvas.removeEventListener('wheel', handleWheel);
+        };
+    }, [props.canvasRef]);
+
     return (
         <canvas
             ref={props.canvasRef}
