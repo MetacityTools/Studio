@@ -4,29 +4,7 @@ import React from 'react';
 
 import { CoordinateMode } from '@utils/models/addEditorModel';
 
-import { OverlayDialog } from '@elements/Dialog';
-
-function DialogOption(props: {
-    title: string;
-    body: string;
-    onClick: () => void;
-    className?: string;
-}) {
-    return (
-        <button
-            type="button"
-            className={clsx(
-                'w-full text-left rounded-md border border-transparent bg-blue-100 px-4 py-2 text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 transition-colors',
-                props.className
-            )}
-            onClick={props.onClick}
-        >
-            {/* span because it is incorrect to use a div inside a button */}
-            <span className="text-lg font-medium block">{props.title}</span>
-            <span className="text-sm block">{props.body}</span>
-        </button>
-    );
-}
+import { DialogOption, OverlayDialog } from '@elements/Dialog';
 
 export function ImportDialog(props: { isOpen: boolean; onClose: (mode: CoordinateMode) => void }) {
     const { isOpen, onClose } = props;

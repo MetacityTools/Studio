@@ -58,6 +58,7 @@ export async function convert(scene: Scene, models: EditorModel[]) {
         offset += submodels[i].length;
     }
 
+    //create model data
     const modelData: ModelData = {
         geometry: {
             position,

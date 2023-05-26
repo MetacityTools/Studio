@@ -36,6 +36,7 @@ The project is in active development. The roadmap is as follows:
 
 ### v0.1.1 - 👨‍💻 In progress
 
+-   [x] Infrastructure for the built-in viewer (vite setup, etc.)
 -   [ ] Baking/Transforming models to a table-like format - ✨WIP
 -   [ ] Allow labeling geometry, adding metadata, etc.
 -   [ ] Building hierarchies of objects

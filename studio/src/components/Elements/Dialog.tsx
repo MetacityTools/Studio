@@ -1,5 +1,48 @@
 import { Dialog, Transition } from '@headlessui/react';
+import clsx from 'clsx';
 import React from 'react';
+
+export function DialogOption(props: {
+    title: string;
+    body: string;
+    onClick?: () => void;
+    href?: string;
+    className?: string;
+}) {
+    if (props.onClick) {
+        return (
+            <button
+                type="button"
+                className={clsx(
+                    'w-full text-left rounded-md border border-transparent bg-blue-100 px-4 py-2 text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 transition-colors',
+                    props.className
+                )}
+                onClick={props.onClick}
+            >
+                {/* span because it is incorrect to use a div inside a button */}
+                <span className="text-lg font-medium block">{props.title}</span>
+                <span className="text-sm block">{props.body}</span>
+            </button>
+        );
+    }
+
+    if (props.href) {
+        return (
+            <a
+                href={props.href}
+                className={clsx(
+                    'w-full text-left rounded-md border border-transparent bg-blue-100 px-4 py-2 text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 transition-colors block',
+                    props.className
+                )}
+            >
+                <span className="text-lg font-medium block">{props.title}</span>
+                <span className="text-sm block">{props.body}</span>
+            </a>
+        );
+    }
+
+    return null;
+}
 
 export function OverlayDialog(props: {
     isOpen: boolean;
