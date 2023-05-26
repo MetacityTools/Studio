@@ -5,7 +5,7 @@ import { CoordinateMode, addEditorModels } from '@utils/models/addEditorModel';
 import { convert } from '@utils/transforms/convert';
 import { ModelData } from '@utils/types';
 
-import { EditorContext, EditorViewerContext } from '@editor/Context';
+import { EditingStage, EditorContext, EditorViewerContext } from '@editor/Context';
 
 import { Input } from '@elements/Input';
 
@@ -16,7 +16,7 @@ import { Vitals } from './Vitals';
 export function ActionMenu() {
     const ctx = React.useContext(EditorContext);
     const viewerCtx = React.useContext(EditorViewerContext);
-    const { renderer, scene, models, setProcessing, setLoadingStatus } = ctx;
+    const { renderer, scene, models, setProcessing, setLoadingStatus, setEditingStage } = ctx;
     const { globalShift, setGlobalShift } = viewerCtx;
     const [importOpen, setImportOpen] = React.useState(false);
     const [convertOpen, setConvertOpen] = React.useState(false);
@@ -53,12 +53,13 @@ export function ActionMenu() {
         setConvertOpen(true);
     };
 
-    const handleConvertRun = (run: boolean) => {
+    const handleConvertRun = async (run: boolean) => {
         setConvertOpen(false);
 
         if (run) {
+            setEditingStage(EditingStage.Annotate);
             setProcessing(true);
-            convert(models);
+            await convert(scene, models);
             setProcessing(false);
         }
     };

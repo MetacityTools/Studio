@@ -11,6 +11,7 @@ const build = {
             view: path.resolve(__dirname, 'studio/view/index.html'),
         },
     },
+    outDir: '../dist',
 };
 
 // https://vitejs.dev/config/

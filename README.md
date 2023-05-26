@@ -36,8 +36,9 @@ The project is in active development. The roadmap is as follows:
 
 ### v0.1.1 - 👨‍💻 In progress
 
--   [ ] Baking/Transforming models to a table-like format
--   [ ] Allow labeling geometry
+-   [ ] Baking/Transforming models to a table-like format - ✨WIP
+-   [ ] Allow labeling geometry, adding metadata, etc.
+-   [ ] Building hierarchies of objects
 
 ### v0.1.0 - ✅ Released
 

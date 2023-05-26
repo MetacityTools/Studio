@@ -6,6 +6,8 @@ import { BiMessageSquareDetail } from 'react-icons/bi';
 import { GoSettings } from 'react-icons/go';
 import { TiArrowMove } from 'react-icons/ti';
 
+import { EditingStage, EditorContext } from '@editor/Context';
+
 import { TabButton, TabPanel } from '@elements/Tabs';
 
 import { ActionMenu } from './Actions/Actions';
@@ -14,9 +16,9 @@ import { ModelMetaPanel } from './PanelMeta/ModelMeta';
 import { ModelTransformPanel } from './PanelTransform/ModelTransform';
 import { ViewSettings } from './PanelViewSettings/ViewSettings';
 
-export function SidePanel() {
+function TransformSidePanel() {
     return (
-        <div className="w-[calc(100%-16px)] h-[calc(100%-16px)] flex flex-col items-start shadow-even rounded-lg m-[8px] bg-white">
+        <>
             <ActionMenu />
             <Allotment separator={false} vertical>
                 <Allotment.Pane minSize={200} preferredSize={300}>
@@ -49,6 +51,16 @@ export function SidePanel() {
                     </Tab.Group>
                 </Allotment.Pane>
             </Allotment>
+        </>
+    );
+}
+
+export function SidePanel() {
+    const { editingStage } = React.useContext(EditorContext);
+
+    return (
+        <div className="w-[calc(100%-16px)] h-[calc(100%-16px)] flex flex-col items-start shadow-even rounded-lg m-[8px] bg-white">
+            {editingStage === EditingStage.Transform && <TransformSidePanel />}
         </div>
     );
 }

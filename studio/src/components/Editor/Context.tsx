@@ -6,6 +6,11 @@ import { changeSelection } from '@utils/seleciton/selection';
 
 import * as GL from '@bananagl/bananagl';
 
+export enum EditingStage {
+    Transform,
+    Annotate,
+}
+
 interface EditorContextProps {
     processing: boolean;
     setProcessing: React.Dispatch<React.SetStateAction<boolean>>;
@@ -24,6 +29,8 @@ interface EditorContextProps {
         toggle?: boolean,
         extend?: boolean
     ) => void;
+    editingStage: EditingStage;
+    setEditingStage: React.Dispatch<React.SetStateAction<EditingStage>>;
 }
 
 export const EditorContext = React.createContext<EditorContextProps>({} as EditorContextProps);
@@ -34,6 +41,7 @@ export function ContextComponent(props: { children: React.ReactNode }) {
     const [models, setModels] = React.useState<EditorModel[]>([]);
     const [selectedModel, setSelectedModel] = React.useState<EditorModel | null>(null);
     const [selectedSubmodels, setSelectedSubmodels] = React.useState<number[]>([]);
+    const [editingStage, setEditingStage] = React.useState<EditingStage>(EditingStage.Transform);
 
     const [loadingStatus, setLoadingStatus] = React.useState<string>('');
     const [processing, setProcessing] = React.useState(false);
@@ -87,6 +95,8 @@ export function ContextComponent(props: { children: React.ReactNode }) {
                 selectedModel,
                 selectedSubmodels,
                 select,
+                editingStage,
+                setEditingStage,
             }}
         >
             {props.children}
