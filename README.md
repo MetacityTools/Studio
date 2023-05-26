@@ -1,6 +1,6 @@
 # 🏡 [Metacity Studio](https://studio.metacity.cc)
 
-![Screenshot](src/assets/splash/screen.png)
+![Screenshot](./studio.png)
 
 Metacity Studio is an online tool for integrating and visualizing spatial and tabular data.
 
@@ -31,12 +31,12 @@ The project is in active development. The roadmap is as follows:
 -   [ ] Project export
 -   [ ] Project import
 
-### v0.1.1
+### v0.1.1 - 👨‍💻 In progress
 
 -   [ ] Baking/Transforming models to Table-like format
 -   [ ] Allow labeling geometry
 
-### v0.1.0 - 👨‍💻 In progress
+### v0.1.0 - ✅ Released
 
 -   [x] Rectangular select
 -   [x] Merge submodels
