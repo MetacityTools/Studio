@@ -25,15 +25,18 @@ Currently:
 
 The project is in active development. The roadmap is as follows:
 
+### v0.2.0
+
+-   [ ] Viewer - Details TBA
+
 ### v0.1.2
 
 -   [ ] Connect tabular data
 -   [ ] Project export
--   [ ] Project import
 
 ### v0.1.1 - 👨‍💻 In progress
 
--   [ ] Baking/Transforming models to Table-like format
+-   [ ] Baking/Transforming models to a table-like format
 -   [ ] Allow labeling geometry
 
 ### v0.1.0 - ✅ Released
