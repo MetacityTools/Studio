@@ -5,7 +5,12 @@ import { CoordinateMode, addEditorModels } from '@utils/models/addEditorModel';
 import { convert } from '@utils/transforms/convert';
 import { ModelData } from '@utils/types';
 
-import { EditingStage, EditorContext, EditorViewerContext } from '@editor/Context';
+import {
+    EditingStage,
+    EditorContext,
+    EditorViewerContext,
+    HierarchyContext,
+} from '@editor/Context';
 
 import { Input } from '@elements/Input';
 
@@ -16,8 +21,10 @@ import { Vitals } from './Vitals';
 export function ActionMenu() {
     const ctx = React.useContext(EditorContext);
     const viewerCtx = React.useContext(EditorViewerContext);
+    const hierarchyCtx = React.useContext(HierarchyContext);
     const { renderer, scene, models, setProcessing, setLoadingStatus, setEditingStage } = ctx;
     const { globalShift, setGlobalShift } = viewerCtx;
+    const { setGraph } = hierarchyCtx;
     const [importOpen, setImportOpen] = React.useState(false);
     const [convertOpen, setConvertOpen] = React.useState(false);
     const [importedModels, setImportedModels] = React.useState<ModelData[]>([]);
@@ -59,7 +66,8 @@ export function ActionMenu() {
         if (run) {
             setEditingStage(EditingStage.Annotate);
             setProcessing(true);
-            await convert(scene, models);
+            const { hierarchy } = await convert(scene, models);
+            setGraph(hierarchy);
             setProcessing(false);
         }
     };

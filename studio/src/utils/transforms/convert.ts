@@ -1,5 +1,6 @@
 import { vec3 } from 'gl-matrix';
 
+import { ModelGraph } from '@utils/hierarchy/modelGraph';
 import { CoordinateMode, addEditorModels } from '@utils/models/addEditorModel';
 import { EditorModel } from '@utils/models/models/EditorModel';
 import { ModelData } from '@utils/types';
@@ -78,4 +79,8 @@ export async function convert(scene: Scene, models: EditorModel[]) {
         coordMode: CoordinateMode.None,
         globalShift: [0, 0, 0],
     });
+
+    const hierarchy = new ModelGraph();
+    for (let i = 0; i < submodelCount; i++) hierarchy.addModelToRoot(i);
+    return { hierarchy, meta };
 }

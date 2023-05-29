@@ -1,6 +1,7 @@
 import react from '@vitejs/plugin-react';
 import path from 'path';
 import { defineConfig } from 'vite';
+import mkcert from 'vite-plugin-mkcert';
 
 import trailing from './plugins/trailing';
 
@@ -25,9 +26,12 @@ export default defineConfig({
             '@assets': path.resolve(__dirname, 'studio/src/assets'),
         },
     },
+    //server: {
+    //    https: true,
+    //},
     root: 'studio',
     build,
-    plugins: [react(), trailing(Object.keys(build.rollupOptions.input))],
+    plugins: [react(), trailing(Object.keys(build.rollupOptions.input))], //, mkcert()],
     define: {
         APP_VERSION: JSON.stringify(process.env.npm_package_version),
     },

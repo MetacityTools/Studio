@@ -1,6 +1,7 @@
 import { vec3 } from 'gl-matrix';
 import React from 'react';
 
+import { ModelGraph } from '@utils/hierarchy/modelGraph';
 import { EditorModel } from '@utils/models/models/EditorModel';
 import { changeSelection } from '@utils/seleciton/selection';
 
@@ -145,5 +146,37 @@ export function ViewContextComponent(props: { children: React.ReactNode }) {
         >
             {props.children}
         </EditorViewerContext.Provider>
+    );
+}
+
+interface HierarchyContextProps {
+    graph: ModelGraph;
+    setGraph: React.Dispatch<React.SetStateAction<ModelGraph>>;
+}
+
+export const HierarchyContext = React.createContext<HierarchyContextProps>(
+    {} as HierarchyContextProps
+);
+
+export function HierarchyContextComponent(props: { children: React.ReactNode }) {
+    const [graph, setGraph] = React.useState<ModelGraph>(new ModelGraph());
+
+    React.useEffect(() => {
+        graph.addChangeListener(() => {
+            const updated = new ModelGraph();
+            updated.copy(graph);
+            setGraph(updated);
+        });
+    }, [graph]);
+
+    return (
+        <HierarchyContext.Provider
+            value={{
+                graph,
+                setGraph,
+            }}
+        >
+            {props.children}
+        </HierarchyContext.Provider>
     );
 }

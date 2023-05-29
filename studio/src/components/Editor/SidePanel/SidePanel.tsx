@@ -11,6 +11,7 @@ import { EditingStage, EditorContext } from '@editor/Context';
 import { TabButton, TabPanel } from '@elements/Tabs';
 
 import { ActionMenu } from './Actions/Actions';
+import { HierarchyPanel } from './Hierarchy/HierarchyPanel';
 import { ModelList } from './ModelList/ModelList';
 import { ModelMetaPanel } from './PanelMeta/ModelMeta';
 import { ModelTransformPanel } from './PanelTransform/ModelTransform';
@@ -55,12 +56,21 @@ function TransformSidePanel() {
     );
 }
 
+function AnnotateSidePanel() {
+    return (
+        <>
+            <HierarchyPanel />
+        </>
+    );
+}
+
 export function SidePanel() {
     const { editingStage } = React.useContext(EditorContext);
 
     return (
         <div className="w-[calc(100%-16px)] h-[calc(100%-16px)] flex flex-col items-start shadow-even rounded-lg m-[8px] bg-white">
             {editingStage === EditingStage.Transform && <TransformSidePanel />}
+            {editingStage === EditingStage.Annotate && <AnnotateSidePanel />}
         </div>
     );
 }

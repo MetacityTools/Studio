@@ -31,15 +31,19 @@ The project is in active development. The roadmap is as follows:
 
 ### v0.1.2
 
--   [ ] Connect tabular data
 -   [ ] Project export
+-   [ ] Resize guard update graphics (The "Oops" message is pretty lame)
 
 ### v0.1.1 - 👨‍💻 In progress
 
 -   [x] Infrastructure for the built-in viewer (vite setup, etc.)
--   [ ] Baking/Transforming models to a table-like format - ✨WIP
--   [ ] Allow labeling geometry, adding metadata, etc.
--   [ ] Building hierarchies of objects
+-   [ ] Building a hierarchy of models (floors, buildings, blocks, etc.) - ✨WIP
+    -   [x] Group models
+    -   [ ] Group groups
+    -   [ ] Named groups - allow changing and inserting group names
+    -   [ ] Deselect all - button and shortcut
+    -   [ ] Hierarchy UI - ✨WIP
+-   [ ] Loading tabular data (CSV) and linking it to the hierarchy.
 
 ### v0.1.0 - ✅ Released
 
