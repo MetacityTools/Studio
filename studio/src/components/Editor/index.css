@@ -42,19 +42,19 @@ body,
     }
 
     input[type='range']::-webkit-slider-runnable-track {
-        @apply bg-neutral-200 rounded-full;
+        @apply bg-neutral-300 rounded-full;
     }
 
     input[type='range']::-webkit-slider-thumb {
-        @apply appearance-none bg-neutral-400 rounded-full w-4 h-4;
+        @apply appearance-none bg-neutral-500 rounded-full w-4 h-4;
     }
 
     input[type='range']::-moz-range-track {
-        @apply bg-neutral-200 rounded-full;
+        @apply bg-neutral-300 rounded-full;
     }
 
     input[type='range']::-ms-track {
-        @apply bg-neutral-200 rounded-full;
+        @apply bg-neutral-300 rounded-full;
     }
 
     .shadow-even {

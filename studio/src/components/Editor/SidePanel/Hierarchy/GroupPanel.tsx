@@ -1,6 +1,5 @@
 import clsx from 'clsx';
 import React from 'react';
-import { BiRename } from 'react-icons/bi';
 import { FiChevronRight } from 'react-icons/fi';
 import { MdOutlineDriveFileMove } from 'react-icons/md';
 
@@ -68,9 +67,6 @@ function GroupParentPanel(props: GroupParentPanelProps) {
                 onClick={select}
             >
                 Group Name
-            </button>
-            <button className={clsx(bg, 'px-4 py-2')}>
-                <BiRename />
             </button>
             <button className={clsx(bg, 'px-4 py-2 rounded-r')}>
                 <MdOutlineDriveFileMove />
