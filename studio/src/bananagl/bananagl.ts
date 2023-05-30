@@ -12,7 +12,7 @@ import { Renderer } from './renderer/renderer';
 import { mountRenderer, unmountRenderer } from './renderer/setup';
 import { Scene } from './scene/scene';
 import { cloneUniforms } from './shaders/clone';
-import { Shader } from './shaders/shader';
+import { Shader, TypedArray } from './shaders/shader';
 import { Profiler } from './utils/profiler';
 import { Shortcut, ShortcutOnMouseMove, ShortcutOnPress } from './window/shortcuts';
 import { View } from './window/view';
@@ -42,4 +42,4 @@ export {
     cloneUniforms,
 };
 
-export type { Selectable, Shortcut };
+export type { Selectable, Shortcut, TypedArray };

@@ -15,7 +15,7 @@ export function MenuButton(props: MenuButtonProps) {
     return (
         <button
             className={clsx(
-                'text-xs last:rounded-r-md first:rounded-l-md transition-colors',
+                'text-xs last:rounded-r-md first:rounded-l-md transition-colors outline-none focus:outline-none',
                 props.active
                     ? 'text-green-600 bg-green-100 hover:bg-green-200'
                     : 'text-neutral-600 bg-white hover:bg-neutral-300'

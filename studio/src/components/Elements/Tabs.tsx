@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import React from 'react';
 
 export function TabButton(props: { children: React.ReactNode }) {
-    const base = 'outline-none p-2 m-2 text-center transition-colors flex-1 rounded';
+    const base = 'outline-none p-2 text-center transition-colors flex-1 rounded';
     return (
         <Tab
             className={({ selected }) =>

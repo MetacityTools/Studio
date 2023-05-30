@@ -2,6 +2,7 @@ import React from 'react';
 
 import { DirectionControls } from './Direction';
 import { ProjectionControls } from './Projection';
+import { SelectionControls } from './Select';
 import { ShaderControls } from './Shader';
 
 export function ViewControls() {
@@ -10,6 +11,7 @@ export function ViewControls() {
             <ProjectionControls />
             <DirectionControls />
             <ShaderControls />
+            <SelectionControls />
         </div>
     );
 }

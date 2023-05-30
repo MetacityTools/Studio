@@ -38,10 +38,10 @@ export function ProcessingScreen() {
         <Transition
             show={context?.processing}
             className="absolute top-0 left-0 w-full h-full bg-white z-50 flex items-center justify-center"
-            enter="transition-opacity duration-500"
+            enter="transition-opacity duration-200"
             enterFrom="opacity-0"
             enterTo="opacity-100"
-            leave="transition-opacity duration-500"
+            leave="transition-opacity duration-200"
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
         >

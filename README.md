@@ -38,11 +38,11 @@ The project is in active development. The roadmap is as follows:
 
 -   [x] Infrastructure for the built-in viewer (vite setup, etc.)
 -   [ ] Building a hierarchy of models (floors, buildings, blocks, etc.) - ✨WIP
+    -   [ ] Hierarchy UI - ✨WIP
     -   [x] Group models
     -   [ ] Group groups
     -   [ ] Named groups - allow changing and inserting group names
     -   [ ] Deselect all - button and shortcut
-    -   [ ] Hierarchy UI - ✨WIP
 -   [ ] Loading tabular data (CSV) and linking it to the hierarchy.
 
 ### v0.1.0 - ✅ Released

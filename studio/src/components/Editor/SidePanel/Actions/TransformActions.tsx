@@ -12,13 +12,14 @@ import {
     HierarchyContext,
 } from '@editor/Context';
 
+import { Button } from '@elements/Button';
 import { Input } from '@elements/Input';
 
 import { ConvertDialog } from './Convert';
 import { ImportDialog } from './ImportDialog';
 import { Vitals } from './Vitals';
 
-export function ActionMenu() {
+export function TransformActionMenu() {
     const ctx = React.useContext(EditorContext);
     const viewerCtx = React.useContext(EditorViewerContext);
     const hierarchyCtx = React.useContext(HierarchyContext);
@@ -73,7 +74,7 @@ export function ActionMenu() {
     };
 
     return (
-        <div className="flex flex-row p-4 w-full space-x-2 text-xs">
+        <div className="flex flex-row p-4 w-full space-x-2 text-xs border-b">
             <label
                 htmlFor="modelInputFiles"
                 className="py-2 px-4 hover:bg-neutral-300 rounded-md transition-colors cursor-pointer border"
@@ -87,12 +88,7 @@ export function ActionMenu() {
                 id="modelInputFiles"
                 multiple
             />
-            <button
-                className="py-2 px-4 hover:bg-neutral-300 rounded-md transition-colors border"
-                onClick={handleConvert}
-            >
-                Convert
-            </button>
+            <Button onClick={handleConvert}>Convert</Button>
             <Vitals scenes={[scene]} renderer={renderer} />
             <ImportDialog isOpen={importOpen} onClose={handleModelsAdded} />
             <ConvertDialog isOpen={convertOpen} onClose={handleConvertRun} />

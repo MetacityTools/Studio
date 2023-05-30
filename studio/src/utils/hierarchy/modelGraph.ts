@@ -23,14 +23,20 @@ export class ModelGraph {
     copy(graph: ModelGraph) {
         this.root = graph.root;
     }
+
+    getSelectedGroups(selectedModels: Set<number>) {
+        return this.root.getSelectedDescendantGroups(selectedModels);
+    }
 }
 
-export class Node {
+export abstract class Node {
     parent?: ModelGroupNode;
 
     addParent(parent: ModelGroupNode) {
         this.parent = parent;
     }
+
+    abstract selected(selectedModels: Set<number>): boolean;
 }
 
 export class ModelGroupNode extends Node {
@@ -65,18 +71,42 @@ export class ModelGroupNode extends Node {
         }
     }
 
-    allModelsSelected(set: Set<number>): boolean {
-        return this.children
-            .map((child) => {
-                if (child instanceof ModelNode) return set.has(child.submodelId);
-                if (child instanceof ModelGroupNode) return child.allModelsSelected(set);
-            })
-            .every((b) => b);
+    selected(selectedModels: Set<number>) {
+        return this.children.every((child) => {
+            return child.selected(selectedModels);
+        });
+    }
+
+    getSelectedDescendantGroups(selectedModels: Set<number>, groups: ModelGroupNode[] = []) {
+        if (this.selected(selectedModels)) {
+            groups.push(this);
+        } else {
+            for (const child of this.children) {
+                if (child instanceof ModelGroupNode)
+                    child.getSelectedDescendantGroups(selectedModels, groups);
+            }
+        }
+        return groups;
+    }
+
+    filterComplementDescendantModels(selectedModels: Set<number>) {
+        if (!this.children) return;
+        for (const child of this.children) {
+            if (child instanceof ModelNode && selectedModels.has(child.submodelId)) {
+                selectedModels.delete(child.submodelId);
+            } else if (child instanceof ModelGroupNode) {
+                child.filterComplementDescendantModels(selectedModels);
+            }
+        }
     }
 }
 
 export class ModelNode extends Node {
     constructor(public submodelId: number) {
         super();
+    }
+
+    selected(selectedModels: Set<number>) {
+        return selectedModels.has(this.submodelId);
     }
 }

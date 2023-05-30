@@ -5,6 +5,8 @@ import { EditorModel } from '@utils/models/models/EditorModel';
 
 import { EditorContext, HierarchyContext } from '@editor/Context';
 
+import { Button } from '@elements/Button';
+
 import { GroupNodePanel } from './GroupPanel';
 
 export function HierarchyPanel() {
@@ -44,8 +46,6 @@ export function HierarchyPanel() {
 
     return (
         <div className="flex flex-col w-full h-full">
-            <div onClick={createGroup}>group selected</div>
-            <div>deselect all</div>
             <div className="flex flex-col flex-grow overflow-y-auto p-4">
                 <GroupNodePanel model={mainModel} submodels={submodels} node={graph.root} />
             </div>
