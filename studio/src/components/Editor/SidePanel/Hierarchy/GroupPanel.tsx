@@ -52,7 +52,6 @@ function GroupParentPanel(props: GroupParentPanelProps) {
     const { opened, submodels, node, open, select } = props;
 
     const bg = colorNodeBackground(node.selected(submodels));
-    console.log(node.selected(submodels));
 
     return (
         <div className="flex flex-row justify-between items-center">
@@ -83,7 +82,6 @@ function GroupParentPanel(props: GroupParentPanelProps) {
 function GroupChildrenPanel(props: GroupNodePanelProps) {
     const { model, submodels, node } = props;
 
-    console.log(node);
     return (
         <div className="mt-1 pl-8 space-y-1">
             {node.children?.map(

@@ -36,7 +36,7 @@ export function ModelNodePanel(props: ModelNodePanelProps) {
             <button className={clsx('flex-1 text-left px-4 rounded-l', bg)} onClick={selectModel}>
                 {node.submodelId}
             </button>
-            <button className={clsx('px-4 py-2 rounded-r text-neutral-400', bg)}>
+            <button className={clsx('px-4 py-2 rounded-r', bg)}>
                 <MdOutlineDriveFileMove />
             </button>
         </div>

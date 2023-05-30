@@ -8,15 +8,6 @@ export function changeSelection(
     toggleSelection: boolean,
     extendSelection: boolean
 ) {
-    console.log(
-        oldModel,
-        newModel,
-        oldSubmodelIDs,
-        newSubmodelIDs,
-        toggleSelection,
-        extendSelection
-    );
-
     if (oldModel !== null) {
         if (oldModel !== newModel) {
             return caseDifferentModelsUpdate(oldModel, newModel, newSubmodelIDs);

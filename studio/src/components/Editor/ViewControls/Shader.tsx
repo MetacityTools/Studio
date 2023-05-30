@@ -22,7 +22,6 @@ export function ShaderControls() {
             if (obj instanceof EditorModel) {
                 obj.geometryMode = GeometryMode.WIREFRAME;
                 obj.attributes.needsRebind = true;
-                console.log(obj);
             }
         });
 
