@@ -37,7 +37,7 @@ The project is in active development. The roadmap is as follows:
 ### v0.1.1 - 👨‍💻 In progress
 
 -   [x] Infrastructure for the built-in viewer (vite setup, etc.)
--   [ ] Building a hierarchy of models (floors, buildings, blocks, etc.) - ✨WIP
+-   [x] Building a hierarchy of models (floors, buildings, blocks, etc.) - ✨WIP
     -   [x] Deselect all - button and shortcut
     -   [x] Group models
     -   [x] Group groups
