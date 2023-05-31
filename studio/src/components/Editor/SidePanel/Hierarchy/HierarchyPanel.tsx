@@ -30,8 +30,8 @@ export function HierarchyPanel() {
     return (
         <div className="flex flex-col w-full h-full">
             <div className="text-xs px-4 py-4 border-b space-x-2">
-                <Button onClick={group}>group selected</Button>
-                {nodeToMove && <Button onClick={unmove}>unmove</Button>}
+                <Button onClick={group}>Group Selected</Button>
+                {nodeToMove && <Button onClick={unmove}>Unmove</Button>}
             </div>
             <div className="flex flex-col flex-grow overflow-y-auto p-4">
                 <GroupNodePanel model={mainModel} submodels={submodels} node={graph.root} />
