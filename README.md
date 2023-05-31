@@ -33,6 +33,7 @@ The project is in active development. The roadmap is as follows:
 
 -   [ ] Project export
 -   [ ] Resize guard update graphics (The "Oops" message is pretty lame)
+-   [ ] Transforming original metadata to a table
 
 ### v0.1.1 - 👨‍💻 In progress
 

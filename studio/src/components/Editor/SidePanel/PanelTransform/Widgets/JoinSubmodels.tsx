@@ -1,20 +1,11 @@
 import React from 'react';
 import { TbLayersUnion } from 'react-icons/tb';
 
-import { EditorModel } from '@utils/models/models/EditorModel';
 import { joinModel } from '@utils/transforms/joinSubmodels';
-
-import * as GL from '@bananagl/bananagl';
 
 import { EditorContext } from '@editor/Context';
 
-import {
-    DetailWidget,
-    WidgetApplyButton,
-    WidgetDescription,
-    WidgetLine,
-    WidgetTitle,
-} from '@elements/Widgets';
+import { DetailWidget, WidgetDescription, WidgetLine, WidgetTitle } from '@elements/Widgets';
 
 export function JoinSubmodelWidget() {
     const ctx = React.useContext(EditorContext);
