@@ -1,4 +1,4 @@
-import { ModelGraph, ModelGroupNode, ModelNode } from './modelGraph';
+import { ModelGraph, ModelGroupNode, ModelNode } from './graph';
 
 export function createGroup(selectedSubmodels: number[], graph: ModelGraph) {
     const selected = new Set(selectedSubmodels);

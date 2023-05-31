@@ -1,17 +1,24 @@
-import clsx from 'clsx';
 import React from 'react';
-import { FiChevronRight, FiDelete } from 'react-icons/fi';
+import { FiDelete } from 'react-icons/fi';
 import { MdDriveFileMoveRtl, MdOutlineDriveFileMove } from 'react-icons/md';
 
 import { deleteGroup } from '@utils/hierarchy/deleteGroup';
-import { ModelGroupNode, ModelNode, Node } from '@utils/hierarchy/modelGraph';
+import { ModelGroupNode } from '@utils/hierarchy/graph';
 import { EditorModel } from '@utils/models/models/EditorModel';
 
 import { EditorContext, HierarchyContext } from '@editor/Context';
 
-import { ModelNodePanel, colorNodeBackground } from './ModelPanel';
+import {
+    HierarchyButton,
+    HierarchyChevronButton,
+    HierarchyMainButton,
+    HierarchyNodeRow,
+    colorNodeBackground,
+} from '@elements/Hierarchy';
 
-interface GroupNodePanelProps {
+import { GroupChildrenPanel } from './GroupChildrenPanel';
+
+export interface GroupNodePanelProps {
     model: EditorModel;
     submodels: Set<number>;
     node: ModelGroupNode;
@@ -20,12 +27,14 @@ interface GroupNodePanelProps {
 export function GroupNodePanel(props: GroupNodePanelProps) {
     const { model, node, submodels } = props;
     const [open, setOpen] = React.useState(false);
-    const ctx = React.useContext(EditorContext);
-    const { select } = ctx;
-    const hierarchyCtx = React.useContext(HierarchyContext);
-    const { graph, nodeToMove, setNodeToMove } = hierarchyCtx;
+    const { select } = React.useContext(EditorContext);
+    const { graph, nodeToMove, setNodeToMove } = React.useContext(HierarchyContext);
 
     const isSelected = React.useMemo(() => node.selected(submodels), [node, submodels]);
+    const isDescendantOfSelected = React.useMemo(
+        () => nodeToMove && node.isDescendantOf(nodeToMove),
+        [node, nodeToMove]
+    );
 
     const handleSelect = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         const children = node.getAllLeaveIds();
@@ -64,101 +73,25 @@ export function GroupNodePanel(props: GroupNodePanelProps) {
         e.stopPropagation();
     };
 
+    const bg = colorNodeBackground(node.selected(submodels), nodeToMove === node);
+
     return (
         <div className="flex flex-col rounded-md">
-            <GroupParentPanel
-                {...props}
-                open={handleOpen}
-                select={handleSelect}
-                remove={handleRemove}
-                move={handleToMove}
-                nodeToMove={nodeToMove}
-                opened={open}
-            />
-            {open && <GroupChildrenPanel {...props} />}
-        </div>
-    );
-}
-
-interface GroupParentPanelProps extends GroupNodePanelProps {
-    open: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
-    select: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
-    remove: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
-    move: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
-    opened: boolean;
-    nodeToMove?: Node;
-}
-
-function GroupParentPanel(props: GroupParentPanelProps) {
-    const { opened, submodels, node, open, select, remove, move, nodeToMove } = props;
-
-    const bg = colorNodeBackground(node.selected(submodels));
-    const isDescendantOfSelected = React.useMemo(
-        () => nodeToMove && node.isDescendantOf(nodeToMove),
-        [node, nodeToMove]
-    );
-
-    return (
-        <div className="flex flex-row justify-between items-center">
-            <button className={clsx('px-2 py-2 rounded-l', bg)} onClick={open}>
-                <FiChevronRight
-                    className={clsx('w-4 h-4 transition-all', opened && 'transform rotate-90')}
-                />
-            </button>
-            <button
-                className={clsx(
-                    bg,
-                    'px-2 flex-1 text-left text-ellipsis overflow-hidden whitespace-nowrap'
+            <HierarchyNodeRow>
+                <HierarchyChevronButton open={open} onClick={handleOpen} bg={bg} />
+                <HierarchyMainButton onClick={handleSelect} bg={bg}>
+                    {node.children.length} Parts
+                </HierarchyMainButton>
+                <HierarchyButton bg={bg} onClick={handleRemove}>
+                    <FiDelete />
+                </HierarchyButton>
+                {!isDescendantOfSelected && (
+                    <HierarchyButton bg={bg} onClick={handleToMove}>
+                        {nodeToMove ? <MdDriveFileMoveRtl /> : <MdOutlineDriveFileMove />}
+                    </HierarchyButton>
                 )}
-                onClick={select}
-            >
-                {node.children.length} Nodes
-            </button>
-            <button className={clsx(bg, 'px-4 py-2 last:rounded-r')} onClick={remove}>
-                <FiDelete />
-            </button>
-            {nodeToMove ? (
-                !isDescendantOfSelected && (
-                    <button className={clsx(bg, 'px-4 py-2 rounded-r')} onClick={move}>
-                        <MdDriveFileMoveRtl />
-                    </button>
-                )
-            ) : (
-                <button className={clsx(bg, 'px-4 py-2 rounded-r')} onClick={move}>
-                    <MdOutlineDriveFileMove />
-                </button>
-            )}
-        </div>
-    );
-}
-
-function GroupChildrenPanel(props: GroupNodePanelProps) {
-    const { model, submodels, node } = props;
-
-    return (
-        <div className="mt-1 pl-8 space-y-1">
-            {node.children?.map(
-                (child, index) =>
-                    child instanceof ModelGroupNode && (
-                        <GroupNodePanel
-                            key={`group-${index}`}
-                            model={model}
-                            submodels={submodels}
-                            node={child}
-                        />
-                    )
-            )}
-            {node.children?.map(
-                (child, index) =>
-                    child instanceof ModelNode && (
-                        <ModelNodePanel
-                            key={`node-${index}`}
-                            model={model}
-                            submodels={submodels}
-                            node={child}
-                        />
-                    )
-            )}
+            </HierarchyNodeRow>
+            {open && <GroupChildrenPanel {...props} />}
         </div>
     );
 }

@@ -1,23 +1,23 @@
-import clsx from 'clsx';
 import React from 'react';
 import { MdOutlineDriveFileMove } from 'react-icons/md';
 
-import { ModelNode } from '@utils/hierarchy/modelGraph';
+import { ModelNode } from '@utils/hierarchy/graph';
 import { EditorModel } from '@utils/models/models/EditorModel';
 
 import { EditorContext, HierarchyContext } from '@editor/Context';
+
+import {
+    HierarchyButton,
+    HierarchyMainButton,
+    HierarchyNodeRow,
+    colorNodeBackground,
+} from '@elements/Hierarchy';
 
 type ModelNodePanelProps = {
     model: EditorModel;
     submodels: Set<number>;
     node: ModelNode;
 };
-
-export function colorNodeBackground(selected: boolean) {
-    return selected
-        ? 'text-amber-800 bg-amber-300 hover:bg-amber-200 outline-none'
-        : 'text-neutral-800 bg-neutral-100 hover:bg-neutral-200 outline-none';
-}
 
 export function ModelNodePanel(props: ModelNodePanelProps) {
     const { model, submodels, node } = props;
@@ -35,21 +35,21 @@ export function ModelNodePanel(props: ModelNodePanelProps) {
         setNodeToMove(node);
     };
 
-    const bg = colorNodeBackground(submodels.has(node.submodelId));
+    const active = submodels.has(node.submodelId) || nodeToMove === node;
+    const bg = colorNodeBackground(submodels.has(node.submodelId), nodeToMove === node);
 
-    return (
-        <div className="flex flex-row justify-between items-center">
-            <button
-                className={clsx('flex-1 text-left px-4 rounded-l last:rounded-r', bg)}
-                onClick={selectModel}
-            >
-                {node.submodelId}
-            </button>
-            {!nodeToMove && (
-                <button className={clsx('px-4 py-2 rounded-r', bg)} onClick={handleToMove}>
-                    <MdOutlineDriveFileMove />
-                </button>
-            )}
-        </div>
-    );
+    if (active)
+        return (
+            <HierarchyNodeRow>
+                <HierarchyMainButton onClick={selectModel} bg={bg} padded>
+                    Model {node.submodelId}
+                </HierarchyMainButton>
+                {!nodeToMove && (
+                    <HierarchyButton onClick={handleToMove} bg={bg}>
+                        <MdOutlineDriveFileMove />
+                    </HierarchyButton>
+                )}
+            </HierarchyNodeRow>
+        );
+    return null;
 }

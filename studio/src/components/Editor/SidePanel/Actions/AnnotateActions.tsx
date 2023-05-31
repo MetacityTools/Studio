@@ -13,7 +13,6 @@ export function AnnotateActionMenu() {
     return (
         <div className="flex flex-row p-4 w-full space-x-2 text-xs border-b">
             <Button>import table</Button>
-            <Button>export</Button>
             <Vitals scenes={[scene]} renderer={renderer} />
         </div>
     );

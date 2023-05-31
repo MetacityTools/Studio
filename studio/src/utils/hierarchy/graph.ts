@@ -1,3 +1,5 @@
+import { v4 as uuidv4 } from 'uuid';
+
 export class ModelGraph {
     root: ModelGroupNode = new ModelGroupNode();
     private onUpdateCallbacks: ((graph: ModelGraph) => void)[] = [];
@@ -31,6 +33,7 @@ export class ModelGraph {
 
 export abstract class Node {
     parent?: ModelGroupNode;
+    uuid = uuidv4();
 
     addParent(parent: ModelGroupNode) {
         this.parent = parent;

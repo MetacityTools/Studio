@@ -1,6 +1,6 @@
 import { vec3 } from 'gl-matrix';
 
-import { ModelGraph } from '@utils/hierarchy/modelGraph';
+import { ModelGraph } from '@utils/hierarchy/graph';
 import { CoordinateMode, addEditorModels } from '@utils/models/addEditorModel';
 import { EditorModel } from '@utils/models/models/EditorModel';
 import { ModelData } from '@utils/types';

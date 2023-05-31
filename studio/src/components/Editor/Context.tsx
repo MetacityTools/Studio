@@ -1,7 +1,7 @@
 import { vec3 } from 'gl-matrix';
 import React from 'react';
 
-import { ModelGraph, Node } from '@utils/hierarchy/modelGraph';
+import { ModelGraph, Node } from '@utils/hierarchy/graph';
 import { EditorModel } from '@utils/models/models/EditorModel';
 import { changeSelection } from '@utils/seleciton/selection';
 
