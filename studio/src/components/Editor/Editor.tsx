@@ -5,18 +5,13 @@ import React from 'react';
 import { SizeGuard } from '@elements/SizeGuard';
 
 import { CanvasWrapper } from './Canvas/CanvasWrapper';
-import {
-    ContextComponent,
-    EditingStage,
-    EditorContext,
-    HierarchyContextComponent,
-    ViewContextComponent,
-} from './Context';
+import { EditingStage, EditorContext } from './Context';
 import { SidePanel } from './SidePanel/SidePanel';
 import { ProcessingScreen } from './Utils/Processing';
 import { SpashScreen } from './Utils/Splash';
 import { HelpPanel } from './ViewControls/Help';
 import { ViewControls } from './ViewControls/ViewControls';
+import { ViewSettings } from './ViewSettings/ViewSettings';
 
 export function ModelEditor() {
     const ctx = React.useContext(EditorContext);
@@ -27,6 +22,7 @@ export function ModelEditor() {
             <Allotment separator={false}>
                 <Allotment.Pane minSize={200} className="bg-neutral-100">
                     <ViewControls />
+                    <ViewSettings />
                     <CanvasWrapper />
                     <HelpPanel />
                 </Allotment.Pane>

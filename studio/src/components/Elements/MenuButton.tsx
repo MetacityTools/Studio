@@ -15,7 +15,7 @@ export function MenuButton(props: MenuButtonProps) {
     return (
         <button
             className={clsx(
-                'text-xs last:rounded-r-md first:rounded-l-md transition-colors outline-none focus:outline-none',
+                'text-xs last:rounded-r-md first:rounded-l-md transition-colors outline-none focus:outline-none border-y first:burder-l last:border-r',
                 props.active
                     ? 'text-green-600 bg-green-100 hover:bg-green-200'
                     : 'text-neutral-600 bg-white hover:bg-neutral-300'
@@ -37,7 +37,7 @@ export function MenuGroup(props: { children: React.ReactNode; row?: boolean; col
     return (
         <div
             className={clsx(
-                'flex rounded-md shadow-even border',
+                'flex rounded-md shadow-even',
                 (!props.column && 'flex-row') || (!props.row && 'flex-col space-y-2')
             )}
         >

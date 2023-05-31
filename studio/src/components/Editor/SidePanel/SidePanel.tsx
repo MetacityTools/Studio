@@ -3,9 +3,6 @@ import { Allotment } from 'allotment';
 import 'allotment/dist/style.css';
 import React from 'react';
 import { BiMessageSquareDetail } from 'react-icons/bi';
-import { BsTable } from 'react-icons/bs';
-import { GoSettings } from 'react-icons/go';
-import { TbHierarchy3 } from 'react-icons/tb';
 import { TiArrowMove } from 'react-icons/ti';
 
 import { EditingStage, EditorContext } from '@editor/Context';
@@ -18,7 +15,6 @@ import { HierarchyPanel } from './Hierarchy/HierarchyPanel';
 import { ModelList } from './ModelList/ModelList';
 import { ModelMetaPanel } from './PanelMeta/ModelMeta';
 import { ModelTransformPanel } from './PanelTransform/ModelTransform';
-import { ViewSettings } from './PanelViewSettings/ViewSettings';
 
 function TransformSidePanel() {
     return (
@@ -37,9 +33,6 @@ function TransformSidePanel() {
                             <TabButton>
                                 <TiArrowMove className="text-xl w-full" />
                             </TabButton>
-                            <TabButton>
-                                <GoSettings className="text-xl w-full" />
-                            </TabButton>
                         </Tab.List>
                         <Tab.Panels className="w-full h-full">
                             <TabPanel>
@@ -47,9 +40,6 @@ function TransformSidePanel() {
                             </TabPanel>
                             <TabPanel>
                                 <ModelTransformPanel />
-                            </TabPanel>
-                            <TabPanel>
-                                <ViewSettings />
                             </TabPanel>
                         </Tab.Panels>
                     </Tab.Group>

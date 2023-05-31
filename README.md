@@ -41,10 +41,10 @@ The project is in active development. The roadmap is as follows:
     -   [x] Deselect all - button and shortcut
     -   [x] Group models
     -   [x] Group groups
-    -   [ ] Delete groups
-    -   [ ] Move groups (and models)
+    -   [x] Delete groups
+    -   [x] Move groups (and models)
+-   [x] View settings in the annotate settings - move it to the canvas
 -   [ ] Loading tabular data (CSV) and linking it to the hierarchy.
--   [ ] View settings in the annotate settings - move it to the canvas
 
 ### v0.1.0 - ✅ Released
 

@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { DirectionControls } from './Direction';
 import { ProjectionControls } from './Projection';
 import { SelectionControls } from './Select';

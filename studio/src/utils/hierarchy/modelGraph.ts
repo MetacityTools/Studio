@@ -99,6 +99,18 @@ export class ModelGroupNode extends Node {
             }
         }
     }
+
+    isAncestorOf(node: Node): boolean {
+        return this.children.some((child) => {
+            if (child === node) return true;
+            if (child instanceof ModelGroupNode) return child.isAncestorOf(node);
+            return false;
+        });
+    }
+
+    isDescendantOf(node: Node): boolean {
+        return this.parent === node || ((this.parent && this.parent.isDescendantOf(node)) ?? false);
+    }
 }
 
 export class ModelNode extends Node {

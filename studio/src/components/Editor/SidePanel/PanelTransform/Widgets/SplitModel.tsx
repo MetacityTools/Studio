@@ -5,13 +5,7 @@ import { splitModel } from '@utils/transforms/modelSplit';
 
 import { EditorContext } from '@editor/Context';
 
-import {
-    DetailWidget,
-    WidgetApplyButton,
-    WidgetDescription,
-    WidgetLine,
-    WidgetTitle,
-} from '@elements/Widgets';
+import { DetailWidget, WidgetDescription, WidgetLine, WidgetTitle } from '@elements/Widgets';
 
 export function SplitModelWidget() {
     const ctx = React.useContext(EditorContext);

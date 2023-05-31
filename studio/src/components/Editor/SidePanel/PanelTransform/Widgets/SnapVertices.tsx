@@ -6,13 +6,7 @@ import { snapVertices } from '@utils/transforms/vertexSnap';
 import { EditorContext } from '@editor/Context';
 
 import { Input } from '@elements/Input';
-import {
-    DetailWidget,
-    WidgetApplyButton,
-    WidgetDescription,
-    WidgetLine,
-    WidgetTitle,
-} from '@elements/Widgets';
+import { DetailWidget, WidgetDescription, WidgetLine, WidgetTitle } from '@elements/Widgets';
 
 export function SnapVerticesWidget() {
     const [snapDistance, setSnapDistance] = React.useState(0.1);

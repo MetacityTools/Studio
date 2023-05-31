@@ -13,6 +13,11 @@ export async function convert(scene: Scene, models: EditorModel[]) {
     const meta: any[] = [];
     let submodelCount = 0;
 
+    const uniforms = {
+        uZMin: 0,
+        uZMax: 0,
+    };
+
     for (const model of models) {
         //get required attributes
         const p = model.attributes.getAttribute('position');
@@ -38,6 +43,9 @@ export async function convert(scene: Scene, models: EditorModel[]) {
         for (let i = 0; i < ids.length; i++) map.set(ids[i], i), meta.push(model.data[ids[i]]);
         for (let i = 0; i < si.length; i++) si[i] = map.get(si[i])! + submodelCount;
         submodels.push(si);
+
+        uniforms.uZMin = model.uniforms.uZMin as number;
+        uniforms.uZMax = model.uniforms.uZMax as number;
 
         //epilogue
         submodelCount += ids.length;
@@ -77,6 +85,7 @@ export async function convert(scene: Scene, models: EditorModel[]) {
         models: [modelData],
         scene,
         coordMode: CoordinateMode.None,
+        uniforms,
         globalShift: [0, 0, 0],
     });
 

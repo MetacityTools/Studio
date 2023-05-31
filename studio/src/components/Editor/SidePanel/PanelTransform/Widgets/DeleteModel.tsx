@@ -3,13 +3,7 @@ import { FiDelete } from 'react-icons/fi';
 
 import { EditorContext } from '@editor/Context';
 
-import {
-    DetailWidget,
-    WidgetApplyButton,
-    WidgetDescription,
-    WidgetLine,
-    WidgetTitle,
-} from '@elements/Widgets';
+import { DetailWidget, WidgetDescription, WidgetLine, WidgetTitle } from '@elements/Widgets';
 
 export function DeleteModelWidget() {
     const ctx = React.useContext(EditorContext);

@@ -5,7 +5,7 @@ import { MdOutlineDriveFileMove } from 'react-icons/md';
 import { ModelNode } from '@utils/hierarchy/modelGraph';
 import { EditorModel } from '@utils/models/models/EditorModel';
 
-import { EditorContext } from '@editor/Context';
+import { EditorContext, HierarchyContext } from '@editor/Context';
 
 type ModelNodePanelProps = {
     model: EditorModel;
@@ -23,22 +23,33 @@ export function ModelNodePanel(props: ModelNodePanelProps) {
     const { model, submodels, node } = props;
     const ctx = React.useContext(EditorContext);
     const { select } = ctx;
+    const hierarchyCtx = React.useContext(HierarchyContext);
+    const { nodeToMove, setNodeToMove } = hierarchyCtx;
 
     const selectModel = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         select(model, [node.submodelId!], true, true);
         e.stopPropagation();
     };
 
+    const handleToMove = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        setNodeToMove(node);
+    };
+
     const bg = colorNodeBackground(submodels.has(node.submodelId));
 
     return (
         <div className="flex flex-row justify-between items-center">
-            <button className={clsx('flex-1 text-left px-4 rounded-l', bg)} onClick={selectModel}>
+            <button
+                className={clsx('flex-1 text-left px-4 rounded-l last:rounded-r', bg)}
+                onClick={selectModel}
+            >
                 {node.submodelId}
             </button>
-            <button className={clsx('px-4 py-2 rounded-r', bg)}>
-                <MdOutlineDriveFileMove />
-            </button>
+            {!nodeToMove && (
+                <button className={clsx('px-4 py-2 rounded-r', bg)} onClick={handleToMove}>
+                    <MdOutlineDriveFileMove />
+                </button>
+            )}
         </div>
     );
 }

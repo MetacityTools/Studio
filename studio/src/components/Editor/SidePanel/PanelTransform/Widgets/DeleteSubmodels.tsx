@@ -5,13 +5,7 @@ import { deleteSubmodels } from '@utils/transforms/deleteSubmodels';
 
 import { EditorContext } from '@editor/Context';
 
-import {
-    DetailWidget,
-    WidgetApplyButton,
-    WidgetDescription,
-    WidgetLine,
-    WidgetTitle,
-} from '@elements/Widgets';
+import { DetailWidget, WidgetDescription, WidgetLine, WidgetTitle } from '@elements/Widgets';
 
 export function DeleteSubmodelsWidget() {
     const ctx = React.useContext(EditorContext);

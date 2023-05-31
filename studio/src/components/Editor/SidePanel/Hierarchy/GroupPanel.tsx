@@ -1,12 +1,13 @@
 import clsx from 'clsx';
 import React from 'react';
-import { FiChevronRight } from 'react-icons/fi';
-import { MdOutlineDriveFileMove } from 'react-icons/md';
+import { FiChevronRight, FiDelete } from 'react-icons/fi';
+import { MdDriveFileMoveRtl, MdOutlineDriveFileMove } from 'react-icons/md';
 
-import { ModelGroupNode, ModelNode } from '@utils/hierarchy/modelGraph';
+import { deleteGroup } from '@utils/hierarchy/deleteGroup';
+import { ModelGroupNode, ModelNode, Node } from '@utils/hierarchy/modelGraph';
 import { EditorModel } from '@utils/models/models/EditorModel';
 
-import { EditorContext } from '@editor/Context';
+import { EditorContext, HierarchyContext } from '@editor/Context';
 
 import { ModelNodePanel, colorNodeBackground } from './ModelPanel';
 
@@ -17,26 +18,64 @@ interface GroupNodePanelProps {
 }
 
 export function GroupNodePanel(props: GroupNodePanelProps) {
-    const { model, submodels, node } = props;
+    const { model, node, submodels } = props;
     const [open, setOpen] = React.useState(false);
     const ctx = React.useContext(EditorContext);
     const { select } = ctx;
+    const hierarchyCtx = React.useContext(HierarchyContext);
+    const { graph, nodeToMove, setNodeToMove } = hierarchyCtx;
 
-    const selectRecursive = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    const isSelected = React.useMemo(() => node.selected(submodels), [node, submodels]);
+
+    const handleSelect = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         const children = node.getAllLeaveIds();
-        select(model, children, false, true);
+        if (!isSelected) select(model, children, false, true);
+        else select(model, children, true, true);
         e.stopPropagation();
     };
 
-    const toggleOpen = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    const handleOpen = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         setOpen(!open);
+        e.stopPropagation();
+    };
+
+    const handleRemove = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        deleteGroup(node, graph);
+        e.stopPropagation();
+    };
+
+    const handleToMove = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        setNodeToMove((prev) => {
+            if (prev === node) return undefined;
+            if (prev === undefined) return node;
+            else {
+                if (node.isDescendantOf(prev)) return undefined;
+
+                const prevParent = prev.parent;
+                if (prevParent) prevParent.removeChild(prev);
+                node.addChild(prev);
+                prev.addParent(node);
+                graph.needsUpdate = true;
+
+                if (prevParent?.children.length === 0) prevParent.parent?.removeChild(prevParent);
+                return undefined;
+            }
+        });
         e.stopPropagation();
     };
 
     return (
         <div className="flex flex-col rounded-md">
-            <GroupParentPanel {...props} open={toggleOpen} select={selectRecursive} opened={open} />
-            {open && <GroupChildrenPanel model={model} submodels={submodels} node={node} />}
+            <GroupParentPanel
+                {...props}
+                open={handleOpen}
+                select={handleSelect}
+                remove={handleRemove}
+                move={handleToMove}
+                nodeToMove={nodeToMove}
+                opened={open}
+            />
+            {open && <GroupChildrenPanel {...props} />}
         </div>
     );
 }
@@ -44,13 +83,20 @@ export function GroupNodePanel(props: GroupNodePanelProps) {
 interface GroupParentPanelProps extends GroupNodePanelProps {
     open: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
     select: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+    remove: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+    move: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
     opened: boolean;
+    nodeToMove?: Node;
 }
 
 function GroupParentPanel(props: GroupParentPanelProps) {
-    const { opened, submodels, node, open, select } = props;
+    const { opened, submodels, node, open, select, remove, move, nodeToMove } = props;
 
     const bg = colorNodeBackground(node.selected(submodels));
+    const isDescendantOfSelected = React.useMemo(
+        () => nodeToMove && node.isDescendantOf(nodeToMove),
+        [node, nodeToMove]
+    );
 
     return (
         <div className="flex flex-row justify-between items-center">
@@ -66,11 +112,22 @@ function GroupParentPanel(props: GroupParentPanelProps) {
                 )}
                 onClick={select}
             >
-                Group Name
+                {node.children.length} Nodes
             </button>
-            <button className={clsx(bg, 'px-4 py-2 rounded-r')}>
-                <MdOutlineDriveFileMove />
+            <button className={clsx(bg, 'px-4 py-2 last:rounded-r')} onClick={remove}>
+                <FiDelete />
             </button>
+            {nodeToMove ? (
+                !isDescendantOfSelected && (
+                    <button className={clsx(bg, 'px-4 py-2 rounded-r')} onClick={move}>
+                        <MdDriveFileMoveRtl />
+                    </button>
+                )
+            ) : (
+                <button className={clsx(bg, 'px-4 py-2 rounded-r')} onClick={move}>
+                    <MdOutlineDriveFileMove />
+                </button>
+            )}
         </div>
     );
 }
