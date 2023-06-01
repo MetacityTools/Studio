@@ -16,12 +16,13 @@ export function Table(props: {
     updateValue: (row: number, col: number, value: string) => void;
 }) {
     const { table, updateValue } = props;
-    const headCls = 'border-r border-b p-1 w-16 text-xs font-normal text-neutral-500';
+    const headCls =
+        'border-r border-b p-1 w-16 text-xs font-normal text-neutral-500 bg-neutral-100';
 
     return (
         <table className="table-fixed border-separate border-spacing-0">
             <thead>
-                <tr className="sticky top-0 bg-white">
+                <tr className="sticky top-0">
                     <th className={headCls}>#</th>
                     {table[0].map((cell, index) => (
                         <th key={index} className={headCls}>
@@ -32,8 +33,13 @@ export function Table(props: {
             </thead>
             <tbody>
                 {table.map((row, indexRow) => (
-                    <tr key={indexRow} className="">
-                        <td className={clsx(cellCls, 'text-xs sticky left-0 bg-white')}>
+                    <tr key={indexRow} className="odd:bg-neutral-50">
+                        <td
+                            className={clsx(
+                                cellCls,
+                                'text-xs sticky left-0 text-neutral-500 bg-neutral-100'
+                            )}
+                        >
                             {indexRow + 1}
                         </td>
                         {row.map((cell, index) => (
