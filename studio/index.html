@@ -8,5 +8,13 @@
   <body>
     <div id="root"></div>
     <script type="module" src="src/components/Editor/main.tsx"></script>
+    <script>
+      if (window.safari) {
+  history.pushState(null, null, location.href);
+  window.onpopstate = function(event) {
+      history.go(1);
+  };
+}
+    </script>
   </body>
 </html>

@@ -6,6 +6,7 @@ html,
 body,
 #root {
     @apply w-full h-full;
+    overscroll-behavior-x: none;
 }
 
 :root {
