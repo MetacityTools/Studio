@@ -5,26 +5,19 @@ import React from 'react';
 import { SizeGuard } from '@elements/SizeGuard';
 
 import { CanvasWrapper } from './Canvas/CanvasWrapper';
-import { EditingStage, EditorContext } from './Context';
+import { EditingStage, EditorContext } from './Context/EditorContext';
 import { SidePanel } from './SidePanel/SidePanel';
 import { ProcessingScreen } from './Utils/Processing';
 import { SpashScreen } from './Utils/Splash';
-import { HelpPanel } from './ViewControls/Help';
-import { ViewControls } from './ViewControls/ViewControls';
-import { ViewSettings } from './ViewSettings/ViewSettings';
 
 export function ModelEditor() {
-    const ctx = React.useContext(EditorContext);
-    const { editingStage } = ctx;
-    const minSize = editingStage === EditingStage.Annotate ? 800 : 400;
+    const { editingStage } = React.useContext(EditorContext);
+    const minSize = editingStage === EditingStage.Table ? 800 : 450;
     return (
         <SizeGuard minWidth={600} minHeight={400}>
             <Allotment separator={false}>
                 <Allotment.Pane minSize={200} className="bg-neutral-100">
-                    <ViewControls />
-                    <ViewSettings />
                     <CanvasWrapper />
-                    <HelpPanel />
                 </Allotment.Pane>
                 <Allotment.Pane
                     minSize={minSize}

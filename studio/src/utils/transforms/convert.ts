@@ -8,6 +8,8 @@ import { ModelData } from '@utils/types';
 import { Scene } from '@bananagl/bananagl';
 
 export async function convert(scene: Scene, models: EditorModel[]) {
+    if (models.length === 0) throw new Error('No models to convert.');
+
     const positions: Float32Array[] = [];
     const submodels: Uint32Array[] = [];
     const meta: any[] = [];

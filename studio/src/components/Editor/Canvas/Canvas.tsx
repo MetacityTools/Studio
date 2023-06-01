@@ -4,7 +4,7 @@ import { EditorModel } from '@utils/models/models/EditorModel';
 
 import * as GL from '@bananagl/bananagl';
 
-import { EditorContext } from '../Context';
+import { EditorContext } from '../Context/EditorContext';
 
 function primitiveIndicesToSubmodelIndices(object: EditorModel, indices: number[]) {
     const submodel = object.attributes.getAttribute('submodel') as GL.Attribute;
@@ -26,14 +26,14 @@ function selectionFlags(multiselect: boolean, shiftKey: boolean) {
 }
 
 export function Canvas(props: { canvasRef: React.RefObject<HTMLCanvasElement> }) {
-    const ctx = React.useContext(EditorContext);
+    const { renderer, select } = React.useContext(EditorContext);
 
     function handlePick(object: EditorModel, indices: number | number[], shiftKey: boolean) {
         const multiselect = Array.isArray(indices);
         const arrIdxs = multiselect ? indices : [indices];
         const submodelIDs = primitiveIndicesToSubmodelIndices(object, arrIdxs);
         let { toggle, extend } = selectionFlags(multiselect, shiftKey);
-        ctx.select(object as EditorModel, submodelIDs, toggle, extend);
+        select(object as EditorModel, submodelIDs, toggle, extend);
     }
 
     const handleWheel = (event: WheelEvent) => {
@@ -56,25 +56,25 @@ export function Canvas(props: { canvasRef: React.RefObject<HTMLCanvasElement> })
             tabIndex={1000}
             className="w-full h-full outline-none"
             onPointerDown={(e) => {
-                ctx.renderer.windowNullable?.controls?.pointerDown(e.nativeEvent);
+                renderer.controls?.pointerDown(e.nativeEvent);
             }}
             onPointerMove={(e) => {
-                ctx.renderer.windowNullable?.controls?.pointerMove(e.nativeEvent);
+                renderer.controls?.pointerMove(e.nativeEvent);
             }}
             onPointerUp={(e) => {
-                const selection = ctx.renderer.windowNullable?.controls?.pointerUp(e.nativeEvent);
-                const shift = ctx.renderer.windowNullable?.controls?.keyboard.keyMap.shift ?? false;
+                const selection = renderer.controls?.pointerUp(e.nativeEvent);
+                const shift = renderer.controls?.keyboard.keyMap.shift ?? false;
                 if (selection)
                     handlePick(selection.object as EditorModel, selection.primitiveIndices, shift);
             }}
             onWheel={(e) => {
-                ctx.renderer.windowNullable?.controls?.wheel(e.nativeEvent);
+                renderer.controls?.wheel(e.nativeEvent);
             }}
             onPointerOut={(e) => {
-                ctx.renderer.windowNullable?.controls?.pointerOut(e.nativeEvent);
+                renderer.controls?.pointerOut(e.nativeEvent);
             }}
             onContextMenu={(e) => {
-                ctx.renderer.windowNullable?.controls?.contextMenu(e.nativeEvent);
+                renderer.controls?.contextMenu(e.nativeEvent);
             }}
         />
     );

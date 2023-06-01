@@ -4,8 +4,11 @@ import { GridModel } from '@utils/models/models/GridModel';
 
 import * as GL from '@bananagl/bananagl';
 
-import { EditorContext } from '../Context';
+import { EditorContext } from '../Context/EditorContext';
 import { Canvas } from './Canvas';
+import { ViewControls } from './Controls';
+import { HelpPanel } from './Controls/Help';
+import { ViewSettings } from './Controls/Settings';
 
 export function CanvasWrapper() {
     const canvasRef = React.useRef<HTMLCanvasElement>(null);
@@ -55,5 +58,12 @@ export function CanvasWrapper() {
         }
     }, [ctx.renderer, ctx.scene]);
 
-    return <Canvas canvasRef={canvasRef} />;
+    return (
+        <>
+            <Canvas canvasRef={canvasRef} />
+            <HelpPanel />
+            <ViewControls />
+            <ViewSettings />
+        </>
+    );
 }

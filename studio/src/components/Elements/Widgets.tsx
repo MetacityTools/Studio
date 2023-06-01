@@ -1,11 +1,11 @@
 import clsx from 'clsx';
 import React from 'react';
 
-export function DetailWidget(props: { children?: React.ReactNode; onClick?: () => void }) {
+export function Widget(props: { children?: React.ReactNode; onClick?: () => void }) {
     return (
         <div
             className={clsx(
-                'flex flex-col bg-neutral-100 rounded-md text-neutral-500',
+                'flex flex-col bg-neutral-100 rounded-md text-neutral-800',
                 props.onClick &&
                     'cursor-pointer hover:bg-amber-300 hover:text-amber-900 transition-colors'
             )}
