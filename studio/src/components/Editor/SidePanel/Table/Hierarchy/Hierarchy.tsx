@@ -5,9 +5,9 @@ import { EditorModel } from '@utils/models/models/EditorModel';
 import { EditorContext } from '@editor/Context/EditorContext';
 import { TablesContext } from '@editor/Context/TableContext';
 
-import { GroupNodePanel } from './GroupPanel';
+import { GroupNode } from './NodeGroup';
 
-export function HierarchyPanel() {
+export function Hierarchy() {
     const { models, selectedSubmodels } = React.useContext(EditorContext);
     const { graph } = React.useContext(TablesContext);
 
@@ -17,7 +17,7 @@ export function HierarchyPanel() {
     return (
         <div className="flex flex-col w-full h-full">
             <div className="flex flex-col flex-grow overflow-y-auto p-4">
-                <GroupNodePanel model={mainModel} submodels={submodels} node={graph.root} />
+                <GroupNode model={mainModel} submodels={submodels} node={graph.root} />
             </div>
         </div>
     );

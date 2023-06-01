@@ -12,8 +12,8 @@ import { Vitals } from '@editor/Utils/Vitals';
 
 import { Button, ButtonFileInput } from '@elements/Button';
 
-import { ConvertDialog } from './ConvertDialog';
-import { ImportDialog } from './ImportDialog';
+import { ConvertDialog } from './DialogConvert';
+import { ImportDialog } from './DialogImport';
 
 export function TransformMenu() {
     const { renderer, scene, models, setProcessing, setLoadingStatus, setEditingStage, select } =

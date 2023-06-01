@@ -11,7 +11,7 @@ import { Button, ButtonFileInput } from '@elements/Button';
 
 export function TableMenu() {
     const { renderer, scene, selectedSubmodels } = React.useContext(EditorContext);
-    const { graph, nodeToMove, setNodeToMove } = React.useContext(TablesContext);
+    const { graph, nodeToMove, setNodeToMove, setTables } = React.useContext(TablesContext);
 
     const handleTableSelected = async (event: React.ChangeEvent<HTMLInputElement>) => {
         const files = event.target.files;
@@ -19,7 +19,14 @@ export function TableMenu() {
         const file = files[0];
         const text = await file.text();
         const parsed = parse(text);
-        console.log(parsed);
+
+        setTables((tables) => {
+            console.log(tables);
+            return [...tables, parsed];
+        });
+
+        event.target.value = '';
+        event.preventDefault();
     };
 
     const group = () => {
@@ -33,7 +40,7 @@ export function TableMenu() {
     return (
         <div className="flex flex-row p-4 w-full space-x-2 text-xs border-b">
             <ButtonFileInput id="table" onChange={handleTableSelected}>
-                Import Table
+                Import CSV Table
             </ButtonFileInput>
             <Button onClick={group}>Group Selected</Button>
             {nodeToMove && <Button onClick={unmove}>Unmove</Button>}

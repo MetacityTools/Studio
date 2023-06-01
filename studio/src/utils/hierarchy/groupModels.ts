@@ -1,8 +1,8 @@
-import { ModelGraph, ModelGroupNode, ModelNode } from './graph';
+import { GroupNode, ModelGraph, ModelNode } from './graph';
 
 export function createGroup(selectedSubmodels: number[], graph: ModelGraph) {
     const selected = new Set(selectedSubmodels);
-    const newGroup = new ModelGroupNode();
+    const newGroup = new GroupNode();
     let lastParent = null;
 
     const groupNodes = graph.getSelectedGroups(selected);

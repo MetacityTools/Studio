@@ -12,7 +12,7 @@ function HelpItem(props: { children: React.ReactNode; last?: boolean }) {
     );
 }
 
-export function HelpPanel() {
+export function Help() {
     const [show, setShow] = React.useState(false);
 
     if (!show)

@@ -8,6 +8,7 @@ export function Input(props: React.InputHTMLAttributes<HTMLInputElement>) {
             {...props}
             className={clsx(className, 'bg-white bg-opacity-50 focus:bg-amber-100 outline-none')}
             onKeyDown={(e) => e.stopPropagation()}
+            onKeyUp={(e) => e.stopPropagation()}
             onClick={(e) => e.stopPropagation()}
         />
     );

@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 
 export class ModelGraph {
-    root: ModelGroupNode = new ModelGroupNode();
+    root: GroupNode = new GroupNode();
     private onUpdateCallbacks: ((graph: ModelGraph) => void)[] = [];
 
     addModelToRoot(modelId: number) {
@@ -32,17 +32,17 @@ export class ModelGraph {
 }
 
 export abstract class Node {
-    parent?: ModelGroupNode;
+    parent?: GroupNode;
     uuid = uuidv4();
 
-    addParent(parent: ModelGroupNode) {
+    addParent(parent: GroupNode) {
         this.parent = parent;
     }
 
     abstract selected(selectedModels: Set<number>): boolean;
 }
 
-export class ModelGroupNode extends Node {
+export class GroupNode extends Node {
     children: Node[] = [];
 
     addChild(child: Node) {
@@ -59,7 +59,7 @@ export class ModelGroupNode extends Node {
     getAllLeaveIds(arr: number[] = []): number[] {
         for (const child of this.children) {
             if (child instanceof ModelNode) arr.push(child.submodelId);
-            if (child instanceof ModelGroupNode) child.getAllLeaveIds(arr);
+            if (child instanceof GroupNode) child.getAllLeaveIds(arr);
         }
         return arr;
     }
@@ -67,7 +67,7 @@ export class ModelGroupNode extends Node {
     getModelNode(modelId: number): ModelNode | undefined {
         for (const child of this.children) {
             if (child instanceof ModelNode && child.submodelId === modelId) return child;
-            if (child instanceof ModelGroupNode) {
+            if (child instanceof GroupNode) {
                 const node = child.getModelNode(modelId);
                 if (node) return node;
             }
@@ -80,12 +80,12 @@ export class ModelGroupNode extends Node {
         });
     }
 
-    getSelectedDescendantGroups(selectedModels: Set<number>, groups: ModelGroupNode[] = []) {
+    getSelectedDescendantGroups(selectedModels: Set<number>, groups: GroupNode[] = []) {
         if (this.selected(selectedModels)) {
             groups.push(this);
         } else {
             for (const child of this.children) {
-                if (child instanceof ModelGroupNode)
+                if (child instanceof GroupNode)
                     child.getSelectedDescendantGroups(selectedModels, groups);
             }
         }
@@ -97,7 +97,7 @@ export class ModelGroupNode extends Node {
         for (const child of this.children) {
             if (child instanceof ModelNode && selectedModels.has(child.submodelId)) {
                 selectedModels.delete(child.submodelId);
-            } else if (child instanceof ModelGroupNode) {
+            } else if (child instanceof GroupNode) {
                 child.filterComplementDescendantModels(selectedModels);
             }
         }
@@ -106,7 +106,7 @@ export class ModelGroupNode extends Node {
     isAncestorOf(node: Node): boolean {
         return this.children.some((child) => {
             if (child === node) return true;
-            if (child instanceof ModelGroupNode) return child.isAncestorOf(node);
+            if (child instanceof GroupNode) return child.isAncestorOf(node);
             return false;
         });
     }

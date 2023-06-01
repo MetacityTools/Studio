@@ -1,9 +1,9 @@
-import { DirectionControls } from './Controls/Direction';
-import { ProjectionControls } from './Controls/Projection';
-import { SelectionControls } from './Controls/Select';
-import { ShaderControls } from './Controls/Shader';
+import { DirectionControls } from './ControlsDirection';
+import { ProjectionControls } from './ControlsProjection';
+import { SelectionControls } from './ControlsSelect';
+import { ShaderControls } from './ControlsShader';
 
-export function ViewControls() {
+export function Controls() {
     return (
         <div className="absolute m-4 space-x-2 left-0 top-0 z-40 flex flex-row">
             <ProjectionControls />

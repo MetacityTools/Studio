@@ -40,7 +40,7 @@ export function ContextComponent(props: { children: React.ReactNode }) {
     const [models, setModels] = React.useState<EditorModel[]>([]);
     const [selectedModel, setSelectedModel] = React.useState<EditorModel | null>(null);
     const [selectedSubmodels, setSelectedSubmodels] = React.useState<number[]>([]);
-    const [editingStage, setEditingStage] = React.useState<EditingStage>(EditingStage.Transform);
+    const [editingStage, setEditingStage] = React.useState<EditingStage>(EditingStage.Table);
 
     const [loadingStatus, setLoadingStatus] = React.useState<string>('');
     const [processing, setProcessing] = React.useState(false);

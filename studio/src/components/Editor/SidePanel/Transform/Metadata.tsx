@@ -4,13 +4,13 @@ import 'react18-json-view/src/style.css';
 
 import { EditorContext } from '@editor/Context/EditorContext';
 
-import { EmptyDetailPanel, EmptyMetaPanel } from '@elements/Empty';
+import { EmptyDetail, EmptyMetadata } from '@elements/Empty';
 
-export function ModelMetaPanel() {
+export function Metadata() {
     const { selectedModel, selectedSubmodels } = React.useContext(EditorContext);
 
-    if (selectedModel === null) return <EmptyDetailPanel />;
-    if (selectedSubmodels.length === 0) return <EmptyMetaPanel />;
+    if (selectedModel === null) return <EmptyDetail />;
+    if (selectedSubmodels.length === 0) return <EmptyMetadata />;
 
     return (
         <div className="p-4 space-y-4">

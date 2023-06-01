@@ -1,6 +1,6 @@
-import { ModelGraph, ModelGroupNode } from './graph';
+import { GroupNode, ModelGraph } from './graph';
 
-export function deleteGroup(group: ModelGroupNode, graph: ModelGraph) {
+export function deleteGroup(group: GroupNode, graph: ModelGraph) {
     if (!group.parent) return; //cannot delete root
     const parent = group.parent;
 

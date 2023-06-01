@@ -7,6 +7,8 @@ interface TablesContextProps {
     setGraph: React.Dispatch<React.SetStateAction<ModelGraph>>;
     nodeToMove: Node | undefined;
     setNodeToMove: React.Dispatch<React.SetStateAction<Node | undefined>>;
+    tables: string[][][];
+    setTables: React.Dispatch<React.SetStateAction<string[][][]>>;
 }
 
 export const TablesContext = React.createContext<TablesContextProps>({} as TablesContextProps);
@@ -14,6 +16,7 @@ export const TablesContext = React.createContext<TablesContextProps>({} as Table
 export function TablesContextComponent(props: { children: React.ReactNode }) {
     const [graph, setGraph] = React.useState<ModelGraph>(new ModelGraph());
     const [nodeToMove, setNodeToMove] = React.useState<Node | undefined>();
+    const [tables, setTables] = React.useState<string[][][]>([]);
 
     React.useEffect(() => {
         graph.addChangeListener(() => {
@@ -30,6 +33,8 @@ export function TablesContextComponent(props: { children: React.ReactNode }) {
                 setGraph,
                 nodeToMove,
                 setNodeToMove,
+                tables,
+                setTables,
             }}
         >
             {props.children}

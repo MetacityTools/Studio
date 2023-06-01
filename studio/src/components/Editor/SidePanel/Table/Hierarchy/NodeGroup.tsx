@@ -3,7 +3,7 @@ import { FiDelete } from 'react-icons/fi';
 import { MdDriveFileMoveRtl, MdOutlineDriveFileMove } from 'react-icons/md';
 
 import { deleteGroup } from '@utils/hierarchy/deleteGroup';
-import { ModelGroupNode } from '@utils/hierarchy/graph';
+import { GroupNode as GroupNodeClass } from '@utils/hierarchy/graph';
 import { EditorModel } from '@utils/models/models/EditorModel';
 
 import { EditorContext } from '@editor/Context/EditorContext';
@@ -17,15 +17,15 @@ import {
     colorNodeBackground,
 } from '@elements/Hierarchy';
 
-import { GroupChildrenPanel } from './GroupChildrenPanel';
+import { GroupNodeChildren } from './NodeGroupChildren';
 
-export interface GroupNodePanelProps {
+export interface GroupNodeProps {
     model: EditorModel;
     submodels: Set<number>;
-    node: ModelGroupNode;
+    node: GroupNodeClass;
 }
 
-export function GroupNodePanel(props: GroupNodePanelProps) {
+export function GroupNode(props: GroupNodeProps) {
     const { model, node, submodels } = props;
     const [open, setOpen] = React.useState(false);
     const { select } = React.useContext(EditorContext);
@@ -92,7 +92,7 @@ export function GroupNodePanel(props: GroupNodePanelProps) {
                     </HierarchyButton>
                 )}
             </HierarchyNodeRow>
-            {open && <GroupChildrenPanel {...props} />}
+            {open && <GroupNodeChildren {...props} />}
         </div>
     );
 }

@@ -6,9 +6,9 @@ import * as GL from '@bananagl/bananagl';
 
 import { EditorContext } from '../Context/EditorContext';
 import { Canvas } from './Canvas';
-import { ViewControls } from './Controls';
-import { HelpPanel } from './Controls/Help';
-import { ViewSettings } from './Controls/Settings';
+import { Controls } from './Controls';
+import { Help } from './Help';
+import { Settings } from './Settings';
 
 export function CanvasWrapper() {
     const canvasRef = React.useRef<HTMLCanvasElement>(null);
@@ -61,9 +61,9 @@ export function CanvasWrapper() {
     return (
         <>
             <Canvas canvasRef={canvasRef} />
-            <HelpPanel />
-            <ViewControls />
-            <ViewSettings />
+            <Help />
+            <Controls />
+            <Settings />
         </>
     );
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import { MdOutlineDriveFileMove } from 'react-icons/md';
 
-import { ModelNode } from '@utils/hierarchy/graph';
+import { ModelNode as ModelNodeClass } from '@utils/hierarchy/graph';
 import { EditorModel } from '@utils/models/models/EditorModel';
 
 import { EditorContext } from '@editor/Context/EditorContext';
@@ -14,13 +14,13 @@ import {
     colorNodeBackground,
 } from '@elements/Hierarchy';
 
-type ModelNodePanelProps = {
+type ModelNodeProps = {
     model: EditorModel;
     submodels: Set<number>;
-    node: ModelNode;
+    node: ModelNodeClass;
 };
 
-export function ModelNodePanel(props: ModelNodePanelProps) {
+export function ModelNode(props: ModelNodeProps) {
     const { model, submodels, node } = props;
     const { select } = React.useContext(EditorContext);
     const { nodeToMove, setNodeToMove } = React.useContext(TablesContext);

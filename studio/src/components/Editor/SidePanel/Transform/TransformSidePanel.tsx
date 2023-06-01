@@ -7,9 +7,9 @@ import { TiArrowMove } from 'react-icons/ti';
 import { TabButton, TabList, TabPanel } from '@elements/Tabs';
 
 import { TransformMenu } from './Menu/TransformMenu';
-import { ModelMetaPanel } from './Metadata/ModelMeta';
+import { Metadata } from './Metadata';
 import { ModelList } from './ModelList/ModelList';
-import { ModelTransformPanel } from './Transform/ModelTransform';
+import { Modifiers } from './Modifiers/Modifiers';
 
 export function TransformSidePanel() {
     return (
@@ -31,10 +31,10 @@ export function TransformSidePanel() {
                         </TabList>
                         <Tab.Panels className="w-full h-full">
                             <TabPanel>
-                                <ModelMetaPanel />
+                                <Metadata />
                             </TabPanel>
                             <TabPanel>
-                                <ModelTransformPanel />
+                                <Modifiers />
                             </TabPanel>
                         </Tab.Panels>
                     </Tab.Group>

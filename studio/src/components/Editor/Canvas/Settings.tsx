@@ -4,11 +4,11 @@ import { MdOutlineClose } from 'react-icons/md';
 
 import { MenuButton, MenuGroup } from '@elements/MenuButton';
 
-import { CameraGroundWidget } from './SettingsWidgets/CameraGround';
-import { ShadingWidget } from './SettingsWidgets/Shading';
-import { ShowGridWidget } from './SettingsWidgets/ShowGrid';
+import { CameraGroundWidget } from './WidgetCameraGround';
+import { ShadingWidget } from './WidgetShading';
+import { ShowGridWidget } from './WidgetShowGrid';
 
-export function ViewSettings() {
+export function Settings() {
     const [open, setOpen] = React.useState(false);
 
     if (!open)

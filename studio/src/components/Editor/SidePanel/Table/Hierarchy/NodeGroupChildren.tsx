@@ -1,19 +1,19 @@
-import { ModelGroupNode, ModelNode } from '@utils/hierarchy/graph';
+import { GroupNode as GroupNodeClass, ModelNode as ModelNodeClass } from '@utils/hierarchy/graph';
 
 import { HierarchyNodeRow } from '@elements/Hierarchy';
 
-import { GroupNodePanel, GroupNodePanelProps } from './GroupPanel';
-import { ModelNodePanel } from './ModelPanel';
+import { GroupNode, GroupNodeProps } from './NodeGroup';
+import { ModelNode } from './NodeModel';
 
-export function GroupChildrenPanel(props: GroupNodePanelProps) {
+export function GroupNodeChildren(props: GroupNodeProps) {
     const { model, submodels, node } = props;
 
     return (
         <div className="mt-1 pl-8 space-y-1">
             {node.children?.map(
                 (child) =>
-                    child instanceof ModelGroupNode && (
-                        <GroupNodePanel
+                    child instanceof GroupNodeClass && (
+                        <GroupNode
                             key={child.uuid}
                             model={model}
                             submodels={submodels}
@@ -23,8 +23,8 @@ export function GroupChildrenPanel(props: GroupNodePanelProps) {
             )}
             {node.children?.map(
                 (child) =>
-                    child instanceof ModelNode && (
-                        <ModelNodePanel
+                    child instanceof ModelNodeClass && (
+                        <ModelNode
                             key={child.uuid}
                             model={model}
                             submodels={submodels}
