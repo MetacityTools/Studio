@@ -46,6 +46,10 @@ The project is in active development. The roadmap is as follows:
     -   [x] Move groups (and models)
 -   [x] View settings in the annotate settings - move it to the canvas
 -   [ ] Loading tabular data (CSV) and linking it to the hierarchy.
+    -   [x] Loading CSV
+    -   [x] CSV editor
+    -   [ ] Multiple CSVs
+    -   [ ] Linking CSV to the hierarchy
 
 ### v0.1.0 - ✅ Released
 
