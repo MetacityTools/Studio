@@ -27,20 +27,17 @@ The project is in active development. The roadmap is as follows:
 
 ### v0.3.0
 
+-   [ ] Viewer - Details TBA
 -   [ ] Optional interactivity - build BVH only if user opts-in to make the loaded models clickable
 
-### v0.2.0
-
--   [ ] Viewer - Details TBA
-
-### v0.1.2
+### v0.2.1
 
 -   [ ] Project export
 -   [ ] Resize guard update graphics (The "Oops" message is pretty lame)
 -   [ ] Transforming original metadata to a table
 -   [ ] Extract Utils to separate SDK form metacity editors
 
-### v0.1.1 - 👨‍💻 In progress
+### v0.2.0 - 👨‍💻 In progress
 
 -   [x] Infrastructure for the built-in viewer (vite setup, etc.)
 -   [x] Building a hierarchy of models (floors, buildings, blocks, etc.) - ✨WIP
@@ -53,8 +50,9 @@ The project is in active development. The roadmap is as follows:
 -   [ ] Loading tabular data (CSV) and linking it to the hierarchy.
     -   [x] Loading CSV
     -   [x] CSV editor
-    -   [ ] Multiple CSVs
-    -   [ ] Linking CSV to the hierarchy
+    -   [x] Multiple CSVs
+    -   [ ] Linking CSV rows to the hierarchy
+    -   [ ] Unlinking CSV rows from the hierarchy
 
 ### v0.1.0 - ✅ Released
 

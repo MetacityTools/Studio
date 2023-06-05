@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
-import { ViewContextComponent } from '@utils/components/Context';
+import { ViewContextComponent } from '@utils/utils';
 
 import { EditorContextComponent } from './Context/EditorContext';
 import { TablesContextComponent } from './Context/TableContext';

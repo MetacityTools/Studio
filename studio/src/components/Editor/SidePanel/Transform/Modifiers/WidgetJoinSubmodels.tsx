@@ -1,7 +1,7 @@
 import React from 'react';
 import { TbLayersUnion } from 'react-icons/tb';
 
-import { joinModel } from '@utils/modifiers/joinSubmodels';
+import { joinSubmodels } from '@utils/utils';
 
 import { EditorContext } from '@editor/Context/EditorContext';
 
@@ -15,7 +15,7 @@ export function JoinSubmodelWidget() {
 
     const apply = async () => {
         setProcessing(true);
-        const joinedSubmodelIDs = await joinModel(selectedModel, selectedSubmodels);
+        const joinedSubmodelIDs = await joinSubmodels(selectedModel, selectedSubmodels);
         select(selectedModel, joinedSubmodelIDs);
         setProcessing(false);
     };

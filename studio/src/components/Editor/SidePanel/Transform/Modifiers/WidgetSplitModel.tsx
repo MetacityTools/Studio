@@ -1,7 +1,7 @@
 import React from 'react';
 import { TbLayersIntersect } from 'react-icons/tb';
 
-import { splitModel } from '@utils/modifiers/splitModels';
+import { splitModel } from '@utils/utils';
 
 import { EditorContext } from '@editor/Context/EditorContext';
 

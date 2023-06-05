@@ -1,8 +1,7 @@
 import React from 'react';
 import { TbVectorTriangle } from 'react-icons/tb';
 
-import { EditorModel } from '@utils/models/EditorModel';
-import { GeometryMode } from '@utils/types';
+import { EditorModel, GeometryMode } from '@utils/utils';
 
 import { EditorContext } from '@editor/Context/EditorContext';
 

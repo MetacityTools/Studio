@@ -1,8 +1,8 @@
 import React from 'react';
+import { BiLink } from 'react-icons/bi';
 import { MdOutlineDriveFileMove } from 'react-icons/md';
 
-import { ModelNode as ModelNodeClass } from '@utils/hierarchy/graph';
-import { EditorModel } from '@utils/models/EditorModel';
+import { EditorModel, ModelNode as ModelNodeClass } from '@utils/utils';
 
 import { EditorContext } from '@editor/Context/EditorContext';
 import { TablesContext } from '@editor/Context/TableContext';
@@ -23,7 +23,7 @@ type ModelNodeProps = {
 export function ModelNode(props: ModelNodeProps) {
     const { model, submodels, node } = props;
     const { select } = React.useContext(EditorContext);
-    const { nodeToMove, setNodeToMove } = React.useContext(TablesContext);
+    const { nodeToMove, setNodeToMove, activeRows } = React.useContext(TablesContext);
 
     const selectModel = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         select(model, [node.submodelId!], true, true);
@@ -34,8 +34,14 @@ export function ModelNode(props: ModelNodeProps) {
         setNodeToMove(node);
     };
 
+    const handleLink = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        //todo
+        e.stopPropagation();
+    };
+
     const active = submodels.has(node.submodelId) || nodeToMove === node;
     const bg = colorNodeBackground(submodels.has(node.submodelId), nodeToMove === node);
+    const recordAvailable = activeRows.size > 0;
 
     if (active)
         return (
@@ -48,6 +54,14 @@ export function ModelNode(props: ModelNodeProps) {
                         <MdOutlineDriveFileMove />
                     </HierarchyButton>
                 )}
+                <HierarchyButton
+                    bg={bg}
+                    onClick={handleLink}
+                    title="Link to selected rows in table"
+                    disabled={!recordAvailable}
+                >
+                    <BiLink />
+                </HierarchyButton>
             </HierarchyNodeRow>
         );
     return null;

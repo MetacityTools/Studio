@@ -1,7 +1,4 @@
 import { Dialog } from '@headlessui/react';
-import React from 'react';
-
-import { CoordinateMode } from '@utils/models/addEditorModel';
 
 import { OverlayDialog } from '@elements/Dialog';
 

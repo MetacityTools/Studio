@@ -1,6 +1,6 @@
 import { EditorModel } from '@utils/models/EditorModel';
 
-export async function joinModel(model: EditorModel, selectedSubmodels: number[]) {
+export async function joinSubmodels(model: EditorModel, selectedSubmodels: number[]) {
     if (selectedSubmodels.length === 0) return [];
     const idsToJoin = new Set(selectedSubmodels);
 

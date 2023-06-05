@@ -1,7 +1,6 @@
 import React from 'react';
 
-import { Canvas } from '@utils/components/Canvas';
-import { addGridModel } from '@utils/models/addGridModel';
+import { Canvas, addGridModel } from '@utils/utils';
 
 import * as GL from '@bananagl/bananagl';
 

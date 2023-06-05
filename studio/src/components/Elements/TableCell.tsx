@@ -2,9 +2,11 @@ import React from 'react';
 import ContentEditable, { ContentEditableEvent } from 'react-contenteditable';
 import sanitizeHtml from 'sanitize-html';
 
-export const cellCls = 'border-r border-b whitespace-pre px-2 h-full';
-
-export function Cell(props: { value: string; onChange: (value: string) => void }) {
+export function TableCell(props: {
+    value: string;
+    onChange: (value: string) => void;
+    className?: string;
+}) {
     const handleChange = (e: React.FocusEvent<HTMLDivElement> | ContentEditableEvent) => {
         if (props.onChange) props.onChange(sanitizeHtml(e.currentTarget.innerHTML || ''));
     };
@@ -15,7 +17,7 @@ export function Cell(props: { value: string; onChange: (value: string) => void }
 
     return (
         <ContentEditable
-            className={cellCls}
+            className={props.className}
             onBlur={handleChange}
             onKeyDown={handleKey}
             onKeyUp={handleKey}

@@ -1,7 +1,7 @@
 import React from 'react';
 import { TbRulerMeasure } from 'react-icons/tb';
 
-import { snapVertices } from '@utils/modifiers/vertexSnap';
+import { snapVertices } from '@utils/utils';
 
 import { EditorContext } from '@editor/Context/EditorContext';
 

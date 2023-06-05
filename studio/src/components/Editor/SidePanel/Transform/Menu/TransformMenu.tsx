@@ -1,11 +1,14 @@
 import * as React from 'react';
 import { TbSquareRoundedNumber1Filled, TbSquareRoundedNumber2Filled } from 'react-icons/tb';
 
-import { load } from '@utils/formats/loader';
-import { CoordinateMode, addEditorModels } from '@utils/models/addEditorModel';
-import { createHierarchy } from '@utils/modifiers/createHierarchy';
-import { joinModels } from '@utils/modifiers/joinModels';
-import { ModelData } from '@utils/types';
+import {
+    CoordinateMode,
+    ModelData,
+    addEditorModels,
+    createHierarchy,
+    joinModels,
+    load,
+} from '@utils/utils';
 
 import { EditingStage, EditorContext } from '@editor/Context/EditorContext';
 import { TablesContext } from '@editor/Context/TableContext';

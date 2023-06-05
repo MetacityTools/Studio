@@ -1,8 +1,4 @@
-import {
-    GroupNode as GroupNodeClass,
-    ModelNode as ModelNodeClass,
-    Node,
-} from '@utils/hierarchy/graph';
+import { GroupNode as GroupNodeClass, ModelNode as ModelNodeClass, Node } from '@utils/utils';
 
 import { HierarchyNodeRow } from '@elements/Hierarchy';
 
@@ -24,6 +20,9 @@ export function GroupNodeChildren(props: GroupNodeChildrenProps) {
             (submodels.has(child.submodelId) || child === nodeToMove)
     ) as ModelNodeClass[];
 
+    if (groups.length === 0 && activeChildren.length === 0)
+        return <div className="text-neutral-400 pl-10">No selected models</div>;
+
     return (
         <div className="mt-1 pl-8 space-y-1">
             {groups.map((child) => (
@@ -40,12 +39,6 @@ export function GroupNodeChildren(props: GroupNodeChildrenProps) {
                         />
                     )
             )}
-            <HierarchyNodeRow>
-                <div className="px-4 rounded-md bg-neutral-100 flex-1 text-neutral-500 text-left overflow-hidden whitespace-nowrap overflow-ellipsis">
-                    other {(node.children?.length ?? 0) - groups.length - activeChildren.length}{' '}
-                    models
-                </div>
-            </HierarchyNodeRow>
         </div>
     );
 }

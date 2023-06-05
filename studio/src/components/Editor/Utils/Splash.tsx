@@ -1,7 +1,6 @@
 import { Dialog } from '@headlessui/react';
 import React from 'react';
 import {
-    TbSquareRoundedNumber0Filled,
     TbSquareRoundedNumber1Filled,
     TbSquareRoundedNumber2Filled,
     TbSquareRoundedNumber3Filled,

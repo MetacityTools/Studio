@@ -8,7 +8,6 @@ import { Tables } from './Tables/Table';
 export function TableSidePanel() {
     return (
         <>
-            <TableMenu />
             <div className="h-full w-full">
                 <Allotment separator={false}>
                     <Allotment.Pane minSize={200} preferredSize={300}>

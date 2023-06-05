@@ -1,6 +1,6 @@
-import clsx from 'clsx';
+import React from 'react';
 
-import { Cell, cellCls } from './Cell';
+import { TableRow } from './TableRow';
 
 function encodeTableColumnName(col: number): string {
     let name = '';
@@ -13,9 +13,12 @@ function encodeTableColumnName(col: number): string {
 
 export function Table(props: {
     table: string[][];
-    updateValue: (row: number, col: number, value: string) => void;
+    selectedRows: Set<number>;
+    onUpdateValue: (row: number, col: number, value: string) => void;
+    onSelectRow: (row: number) => void;
 }) {
-    const { table, updateValue } = props;
+    const { table, onUpdateValue, selectedRows, onSelectRow } = props;
+
     const headCls =
         'border-r border-b p-1 w-16 text-xs font-normal text-neutral-500 bg-neutral-100';
 
@@ -33,26 +36,14 @@ export function Table(props: {
             </thead>
             <tbody>
                 {table.map((row, indexRow) => (
-                    <tr key={indexRow} className="odd:bg-neutral-50">
-                        <td
-                            className={clsx(
-                                cellCls,
-                                'text-xs sticky left-0 text-neutral-500 bg-neutral-100'
-                            )}
-                        >
-                            {indexRow + 1}
-                        </td>
-                        {row.map((cell, index) => (
-                            <Cell
-                                key={index}
-                                value={cell}
-                                onChange={(value) => {
-                                    updateValue(indexRow, index, value);
-                                    console.log('updateValue', indexRow, index, value);
-                                }}
-                            />
-                        ))}
-                    </tr>
+                    <TableRow
+                        key={indexRow}
+                        indexRow={indexRow}
+                        row={row}
+                        onUpdateValue={onUpdateValue}
+                        selected={selectedRows.has(indexRow)}
+                        onSelect={() => onSelectRow(indexRow)}
+                    />
                 ))}
             </tbody>
         </table>

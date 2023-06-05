@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { ViewContext, ViewContextProps } from '@utils/components/Context';
+import { ViewContext, ViewContextProps } from '@utils/utils';
 
 export enum EditingStage {
     Transform,

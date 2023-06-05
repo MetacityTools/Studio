@@ -1,10 +1,9 @@
 import React from 'react';
+import { BiLink } from 'react-icons/bi';
 import { FiDelete } from 'react-icons/fi';
 import { MdDriveFileMoveRtl, MdOutlineDriveFileMove } from 'react-icons/md';
 
-import { GroupNode as GroupNodeClass } from '@utils/hierarchy/graph';
-import { EditorModel } from '@utils/models/EditorModel';
-import { deleteGroup } from '@utils/modifiers/deleteGroup';
+import { EditorModel, GroupNode as GroupNodeClass, deleteGroup } from '@utils/utils';
 
 import { EditorContext } from '@editor/Context/EditorContext';
 import { TablesContext } from '@editor/Context/TableContext';
@@ -29,7 +28,7 @@ export function GroupNode(props: GroupNodeProps) {
     const { model, node, submodels } = props;
     const [open, setOpen] = React.useState(false);
     const { select } = React.useContext(EditorContext);
-    const { graph, nodeToMove, setNodeToMove } = React.useContext(TablesContext);
+    const { graph, nodeToMove, setNodeToMove, activeRows } = React.useContext(TablesContext);
 
     const isSelected = React.useMemo(() => node.selected(submodels), [node, submodels]);
     const isDescendantOfSelected = React.useMemo(
@@ -74,7 +73,13 @@ export function GroupNode(props: GroupNodeProps) {
         e.stopPropagation();
     };
 
+    const handleLink = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        //todo
+        e.stopPropagation();
+    };
+
     const bg = colorNodeBackground(node.selected(submodels), nodeToMove === node);
+    const recordAvailable = activeRows.size > 0;
 
     return (
         <div className="flex flex-col rounded-md">
@@ -95,6 +100,14 @@ export function GroupNode(props: GroupNodeProps) {
                         {nodeToMove ? <MdDriveFileMoveRtl /> : <MdOutlineDriveFileMove />}
                     </HierarchyButton>
                 )}
+                <HierarchyButton
+                    bg={bg}
+                    onClick={handleLink}
+                    title="Link to selected rows in table"
+                    disabled={!recordAvailable}
+                >
+                    <BiLink />
+                </HierarchyButton>
             </HierarchyNodeRow>
             {open && <GroupNodeChildren {...props} nodeToMove={nodeToMove} />}
         </div>

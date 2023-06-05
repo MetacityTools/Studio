@@ -1,4 +1,6 @@
-import { GroupNode, ModelGraph, ModelNode } from './graph';
+import { ModelGraph } from '@utils/hierarchy/graph';
+import { GroupNode } from '@utils/hierarchy/nodeGroup';
+import { ModelNode } from '@utils/hierarchy/nodeModel';
 
 export function createGroup(selectedSubmodels: number[], graph: ModelGraph) {
     const selected = new Set(selectedSubmodels);

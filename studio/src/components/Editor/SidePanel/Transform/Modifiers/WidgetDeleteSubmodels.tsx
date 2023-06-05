@@ -1,7 +1,7 @@
 import React from 'react';
 import { TbLayersSubtract } from 'react-icons/tb';
 
-import { deleteSubmodels } from '@utils/modifiers/deleteSubmodels';
+import { deleteSubmodels } from '@utils/utils';
 
 import { EditorContext } from '@editor/Context/EditorContext';
 

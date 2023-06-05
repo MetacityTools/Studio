@@ -1,7 +1,7 @@
 import React from 'react';
 import { MdHeight } from 'react-icons/md';
 
-import { EditorModel } from '@utils/models/EditorModel';
+import { EditorModel } from '@utils/utils';
 
 import { EditorContext } from '@editor/Context/EditorContext';
 
