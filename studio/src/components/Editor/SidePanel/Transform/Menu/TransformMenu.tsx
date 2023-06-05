@@ -1,13 +1,14 @@
 import * as React from 'react';
+import { TbSquareRoundedNumber1Filled, TbSquareRoundedNumber2Filled } from 'react-icons/tb';
 
 import { load } from '@utils/formats/loader';
 import { CoordinateMode, addEditorModels } from '@utils/models/addEditorModel';
-import { convert } from '@utils/transforms/convert';
+import { createHierarchy } from '@utils/modifiers/createHierarchy';
+import { joinModels } from '@utils/modifiers/joinModels';
 import { ModelData } from '@utils/types';
 
 import { EditingStage, EditorContext } from '@editor/Context/EditorContext';
 import { TablesContext } from '@editor/Context/TableContext';
-import { TransformContext } from '@editor/Context/TransformContext';
 import { Vitals } from '@editor/Utils/Vitals';
 
 import { Button, ButtonFileInput } from '@elements/Button';
@@ -16,9 +17,17 @@ import { ConvertDialog } from './DialogConvert';
 import { ImportDialog } from './DialogImport';
 
 export function TransformMenu() {
-    const { renderer, scene, models, setProcessing, setLoadingStatus, setEditingStage, select } =
-        React.useContext(EditorContext);
-    const { globalShift, setGlobalShift } = React.useContext(TransformContext);
+    const {
+        renderer,
+        scene,
+        models,
+        setProcessing,
+        setLoadingStatus,
+        setEditingStage,
+        select,
+        globalShift,
+        setGlobalShift,
+    } = React.useContext(EditorContext);
     const { setGraph } = React.useContext(TablesContext);
 
     const [importOpen, setImportOpen] = React.useState(false);
@@ -63,7 +72,8 @@ export function TransformMenu() {
             setProcessing(true);
 
             await new Promise((resolve) => setTimeout(resolve, 1000));
-            const { hierarchy } = await convert(scene, models);
+            const submodelCount = await joinModels(scene, models);
+            const hierarchy = createHierarchy(submodelCount);
 
             setEditingStage(EditingStage.Table);
             setGraph(hierarchy);
@@ -74,10 +84,12 @@ export function TransformMenu() {
 
     return (
         <div className="flex flex-row p-4 w-full space-x-2 border-b">
-            <ButtonFileInput id="models" onChange={onModelsSelected}>
-                Import
+            <ButtonFileInput id="models" onChange={onModelsSelected} multiple>
+                <TbSquareRoundedNumber1Filled className="mr-2 text-xl text-blue-500" /> Import
             </ButtonFileInput>
-            <Button onClick={handleConvert}>Convert to Tables</Button>
+            <Button onClick={handleConvert} disabled={models.length == 0}>
+                <TbSquareRoundedNumber2Filled className="mr-2 text-xl text-blue-500" /> Convert
+            </Button>
             <Vitals scenes={[scene]} renderer={renderer} />
             <ImportDialog isOpen={importOpen} onClose={handleModelsAdded} />
             <ConvertDialog isOpen={convertOpen} onClose={handleConvertRun} />

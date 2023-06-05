@@ -1,4 +1,4 @@
-import { EditorModel } from '@utils/models/models/EditorModel';
+import { EditorModel } from '@utils/models/EditorModel';
 
 export function changeSelection(
     oldModel: EditorModel | null,

@@ -1,17 +1,15 @@
 import React from 'react';
 import { MdHeight } from 'react-icons/md';
 
-import { EditorModel } from '@utils/models/models/EditorModel';
+import { EditorModel } from '@utils/models/EditorModel';
 
 import { EditorContext } from '@editor/Context/EditorContext';
-import { TransformContext } from '@editor/Context/TransformContext';
 
 import { Range } from '@elements/Range';
 import { Widget, WidgetDescription, WidgetLine, WidgetTitle } from '@elements/Widgets';
 
 export function ShadingWidget() {
-    const { scene } = React.useContext(EditorContext);
-    const { minShade, maxShade, setMinShade, setMaxShade } = React.useContext(TransformContext);
+    const { scene, minShade, maxShade, setMinShade, setMaxShade } = React.useContext(EditorContext);
 
     const updateMinShade = (value: number) => {
         if (isNaN(value)) return;

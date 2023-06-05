@@ -32,7 +32,6 @@ export function ProjectionControls() {
             <MenuButton
                 onClick={setOrtho}
                 tipTitle="Orthographic Camera"
-                tipPosition="top"
                 active={projection === GL.ProjectionType.ORTHOGRAPHIC}
             >
                 <BiRectangle className="text-2xl" />
@@ -40,7 +39,6 @@ export function ProjectionControls() {
             <MenuButton
                 onClick={setPerspective}
                 tipTitle="Perspective Camera"
-                tipPosition="top"
                 active={projection === GL.ProjectionType.PERSPECTIVE}
             >
                 <TbPerspective className="text-2xl" />

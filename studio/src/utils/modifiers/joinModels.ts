@@ -1,13 +1,13 @@
 import { vec3 } from 'gl-matrix';
 
 import { ModelGraph } from '@utils/hierarchy/graph';
+import { EditorModel } from '@utils/models/EditorModel';
 import { CoordinateMode, addEditorModels } from '@utils/models/addEditorModel';
-import { EditorModel } from '@utils/models/models/EditorModel';
 import { ModelData } from '@utils/types';
 
 import { Scene } from '@bananagl/bananagl';
 
-export async function convert(scene: Scene, models: EditorModel[]) {
+export async function joinModels(scene: Scene, models: EditorModel[]) {
     if (models.length === 0) throw new Error('No models to convert.');
 
     const positions: Float32Array[] = [];
@@ -91,7 +91,5 @@ export async function convert(scene: Scene, models: EditorModel[]) {
         globalShift: [0, 0, 0],
     });
 
-    const hierarchy = new ModelGraph();
-    for (let i = 0; i < submodelCount; i++) hierarchy.addModelToRoot(i);
-    return { hierarchy, meta };
+    return submodelCount;
 }

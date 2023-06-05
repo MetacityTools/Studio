@@ -15,7 +15,7 @@ export function Settings() {
         return (
             <div className="absolute bottom-4 right-4">
                 <MenuGroup>
-                    <MenuButton onClick={() => setOpen(true)}>
+                    <MenuButton onClick={() => setOpen(true)} tipTitle="Viewer Settings">
                         <GoSettings className="text-2xl" />
                     </MenuButton>
                 </MenuGroup>
@@ -28,6 +28,7 @@ export function Settings() {
                 <button
                     className="px-2 py-2 rounded-md hover:bg-neutral-200"
                     onClick={() => setOpen(false)}
+                    title="Close Viewer Settings"
                 >
                     <MdOutlineClose />
                 </button>

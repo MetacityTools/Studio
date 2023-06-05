@@ -11,13 +11,18 @@ export type ButtonHandler = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>)
 
 interface HierarchyButtonProps {
     onClick?: ButtonHandler;
+    title?: string;
     children: React.ReactNode;
     bg: string;
 }
 
 export function HierarchyButton(props: HierarchyButtonProps) {
     return (
-        <button className={clsx(props.bg, 'px-4 py-2 last:rounded-r')} onClick={props.onClick}>
+        <button
+            className={clsx(props.bg, 'px-4 py-2 last:rounded-r')}
+            onClick={props.onClick}
+            title={props.title}
+        >
             {props.children}
         </button>
     );
@@ -58,7 +63,11 @@ interface HierarchyChevronButtonProps {
 
 export function HierarchyChevronButton(props: HierarchyChevronButtonProps) {
     return (
-        <button className={clsx('px-2 py-2 rounded-l', props.bg)} onClick={props.onClick}>
+        <button
+            className={clsx('px-2 py-2 rounded-l', props.bg)}
+            onClick={props.onClick}
+            title="Show children parts"
+        >
             <FiChevronRight
                 className={clsx('w-4 h-4 transition-all', props.open && 'transform rotate-90')}
             />

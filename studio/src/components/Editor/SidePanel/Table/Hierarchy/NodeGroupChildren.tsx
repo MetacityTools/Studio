@@ -1,27 +1,35 @@
-import { GroupNode as GroupNodeClass, ModelNode as ModelNodeClass } from '@utils/hierarchy/graph';
+import {
+    GroupNode as GroupNodeClass,
+    ModelNode as ModelNodeClass,
+    Node,
+} from '@utils/hierarchy/graph';
 
 import { HierarchyNodeRow } from '@elements/Hierarchy';
 
 import { GroupNode, GroupNodeProps } from './NodeGroup';
 import { ModelNode } from './NodeModel';
 
-export function GroupNodeChildren(props: GroupNodeProps) {
-    const { model, submodels, node } = props;
+interface GroupNodeChildrenProps extends GroupNodeProps {
+    nodeToMove?: Node;
+}
+
+export function GroupNodeChildren(props: GroupNodeChildrenProps) {
+    const { model, submodels, node, nodeToMove } = props;
+    const groups = node.children?.filter(
+        (child) => child instanceof GroupNodeClass
+    ) as GroupNodeClass[];
+    const activeChildren = node.children?.filter(
+        (child) =>
+            child instanceof ModelNodeClass &&
+            (submodels.has(child.submodelId) || child === nodeToMove)
+    ) as ModelNodeClass[];
 
     return (
         <div className="mt-1 pl-8 space-y-1">
-            {node.children?.map(
-                (child) =>
-                    child instanceof GroupNodeClass && (
-                        <GroupNode
-                            key={child.uuid}
-                            model={model}
-                            submodels={submodels}
-                            node={child}
-                        />
-                    )
-            )}
-            {node.children?.map(
+            {groups.map((child) => (
+                <GroupNode key={child.uuid} model={model} submodels={submodels} node={child} />
+            ))}
+            {activeChildren.map(
                 (child) =>
                     child instanceof ModelNodeClass && (
                         <ModelNode
@@ -33,8 +41,9 @@ export function GroupNodeChildren(props: GroupNodeProps) {
                     )
             )}
             <HierarchyNodeRow>
-                <div className="px-4 rounded-md bg-neutral-100 flex-1 text-neutral-500 text-right overflow-hidden whitespace-nowrap overflow-ellipsis">
-                    contains {node.children?.length} children parts
+                <div className="px-4 rounded-md bg-neutral-100 flex-1 text-neutral-500 text-left overflow-hidden whitespace-nowrap overflow-ellipsis">
+                    other {(node.children?.length ?? 0) - groups.length - activeChildren.length}{' '}
+                    models
                 </div>
             </HierarchyNodeRow>
         </div>

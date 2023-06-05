@@ -1,4 +1,4 @@
-import { EditorModel } from '@utils/models/models/EditorModel';
+import { EditorModel } from '@utils/models/EditorModel';
 
 export async function joinModel(model: EditorModel, selectedSubmodels: number[]) {
     if (selectedSubmodels.length === 0) return [];

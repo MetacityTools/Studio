@@ -51,7 +51,6 @@ export function DirectionControls() {
         <MenuGroup>
             <MenuButton
                 tipTitle="Free View"
-                tipPosition="top"
                 onClick={setView.bind(null, GL.CameraView.Free)}
                 active={mode === GL.CameraView.Free}
             >
@@ -59,7 +58,6 @@ export function DirectionControls() {
             </MenuButton>
             <MenuButton
                 tipTitle="Top View"
-                tipPosition="top"
                 onClick={setView.bind(null, GL.CameraView.Top)}
                 active={mode === GL.CameraView.Top}
             >
@@ -67,7 +65,6 @@ export function DirectionControls() {
             </MenuButton>
             <MenuButton
                 tipTitle="Front View"
-                tipPosition="top"
                 onClick={setView.bind(null, GL.CameraView.Front)}
                 active={mode === GL.CameraView.Front}
             >
@@ -75,7 +72,6 @@ export function DirectionControls() {
             </MenuButton>
             <MenuButton
                 tipTitle="Right View"
-                tipPosition="top"
                 onClick={setView.bind(null, GL.CameraView.Right)}
                 active={mode === GL.CameraView.Right}
             >
@@ -83,7 +79,6 @@ export function DirectionControls() {
             </MenuButton>
             <MenuButton
                 tipTitle="Left View"
-                tipPosition="top"
                 onClick={setView.bind(null, GL.CameraView.Left)}
                 active={mode === GL.CameraView.Left}
             >
@@ -91,7 +86,6 @@ export function DirectionControls() {
             </MenuButton>
             <MenuButton
                 tipTitle="Back View"
-                tipPosition="top"
                 onClick={setView.bind(null, GL.CameraView.Back)}
                 active={mode === GL.CameraView.Back}
             >

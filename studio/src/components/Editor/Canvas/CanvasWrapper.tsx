@@ -1,11 +1,11 @@
 import React from 'react';
 
-import { GridModel } from '@utils/models/models/GridModel';
+import { Canvas } from '@utils/components/Canvas';
+import { addGridModel } from '@utils/models/addGridModel';
 
 import * as GL from '@bananagl/bananagl';
 
 import { EditorContext } from '../Context/EditorContext';
-import { Canvas } from './Canvas';
 import { Controls } from './Controls';
 import { Help } from './Help';
 import { Settings } from './Settings';
@@ -34,8 +34,7 @@ export function CanvasWrapper() {
                 },
             ]);
 
-            const grid = GridModel();
-            scene.add(grid);
+            addGridModel(scene);
             renderer.clearColor = [1, 1, 1, 1];
 
             const down = (e: KeyboardEvent) => {
@@ -53,7 +52,6 @@ export function CanvasWrapper() {
                 document.removeEventListener('keydown', down);
                 document.removeEventListener('keyup', up);
                 GL.unmountRenderer(renderer);
-                scene.remove(grid);
             };
         }
     }, [ctx.renderer, ctx.scene]);

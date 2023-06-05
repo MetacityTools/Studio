@@ -25,6 +25,10 @@ Currently:
 
 The project is in active development. The roadmap is as follows:
 
+### v0.3.0
+
+-   [ ] Optional interactivity - build BVH only if user opts-in to make the loaded models clickable
+
 ### v0.2.0
 
 -   [ ] Viewer - Details TBA
@@ -34,6 +38,7 @@ The project is in active development. The roadmap is as follows:
 -   [ ] Project export
 -   [ ] Resize guard update graphics (The "Oops" message is pretty lame)
 -   [ ] Transforming original metadata to a table
+-   [ ] Extract Utils to separate SDK form metacity editors
 
 ### v0.1.1 - 👨‍💻 In progress
 

@@ -1,4 +1,4 @@
-import { GroupNode, ModelGraph } from './graph';
+import { GroupNode, ModelGraph } from '../hierarchy/graph';
 
 export function deleteGroup(group: GroupNode, graph: ModelGraph) {
     if (!group.parent) return; //cannot delete root

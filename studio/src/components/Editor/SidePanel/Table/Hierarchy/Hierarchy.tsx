@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { EditorModel } from '@utils/models/models/EditorModel';
+import { EditorModel } from '@utils/models/EditorModel';
 
 import { EditorContext } from '@editor/Context/EditorContext';
 import { TablesContext } from '@editor/Context/TableContext';

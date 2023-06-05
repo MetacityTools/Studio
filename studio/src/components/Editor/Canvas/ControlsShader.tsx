@@ -1,7 +1,7 @@
 import React from 'react';
 import { TbVectorTriangle } from 'react-icons/tb';
 
-import { EditorModel } from '@utils/models/models/EditorModel';
+import { EditorModel } from '@utils/models/EditorModel';
 import { GeometryMode } from '@utils/types';
 
 import { EditorContext } from '@editor/Context/EditorContext';
@@ -45,7 +45,6 @@ export function ShaderControls() {
             <MenuButton
                 onClick={setSolid}
                 tipTitle="Solid Mode"
-                tipPosition="top"
                 active={geometryMode === GeometryMode.SOLID}
             >
                 <TriangleFull className="text-2xl" />
@@ -53,7 +52,6 @@ export function ShaderControls() {
             <MenuButton
                 onClick={setWireframe}
                 tipTitle="Wireframe Mode"
-                tipPosition="top"
                 active={geometryMode === GeometryMode.WIREFRAME}
             >
                 <TbVectorTriangle className="text-2xl" />

@@ -1,7 +1,7 @@
 import React from 'react';
 import { TbLayersUnion } from 'react-icons/tb';
 
-import { joinModel } from '@utils/transforms/joinSubmodels';
+import { joinModel } from '@utils/modifiers/joinSubmodels';
 
 import { EditorContext } from '@editor/Context/EditorContext';
 

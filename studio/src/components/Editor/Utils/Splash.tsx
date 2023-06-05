@@ -1,9 +1,15 @@
 import { Dialog } from '@headlessui/react';
 import React from 'react';
+import {
+    TbSquareRoundedNumber0Filled,
+    TbSquareRoundedNumber1Filled,
+    TbSquareRoundedNumber2Filled,
+    TbSquareRoundedNumber3Filled,
+} from 'react-icons/tb';
 
 import { DialogOption, OverlayDialog } from '@elements/Dialog';
 
-import splash from '@assets/office.png';
+import splash from '@assets/bubny.png';
 
 export function SpashScreen() {
     let [isOpen, setIsOpen] = React.useState(true);
@@ -26,19 +32,30 @@ export function SpashScreen() {
             >
                 Metacity Studio
             </Dialog.Title>
-            <div className="mx-6">
+            <div className="mx-6 mb-4">
                 <p className="text-neutral-500">v{APP_VERSION} - ⚠️ alpha release</p>
             </div>
-            <div className="mt-4 mx-6 mb-8">
-                <p className="text-sm">
-                    Prepare and view interactive urban visualizations in your browser. Editor
-                    currently supports:
-                </p>
-                <ul className="list-disc list-inside text-sm mt-2">
-                    <li>SHP (only Polygons and MultiPatch)</li>
-                    <li>IFC</li>
-                    <li>GLTF/GLB (only triangular mesh)</li>
-                </ul>
+            <div className="mx-6 mb-8">
+                <div className="flex flex-row items-center">
+                    <TbSquareRoundedNumber1Filled className="mr-2 text-xl text-blue-500" />
+                    import, transform, and align models
+                </div>
+                <div className="border-l ml-2 pl-5 border-blue-500 border-dashed">
+                    <ul className="list-disc list-inside text-sm py-2">
+                        <li>SHP (only Polygons and MultiPatch)</li>
+                        <li>IFC</li>
+                        <li>GLTF/GLB (only triangular mesh)</li>
+                    </ul>
+                </div>
+                <div className="flex flex-row items-center">
+                    <TbSquareRoundedNumber2Filled className="mr-2 text-xl text-blue-500" />
+                    connect tabular data
+                </div>
+                <div className="border-l h-4 ml-2 border-blue-500 border-dashed"></div>
+                <div className="flex flex-row items-center">
+                    <TbSquareRoundedNumber3Filled className="mr-2 text-xl text-blue-500" />
+                    export
+                </div>
             </div>
             <div className="mx-6 mt-6">
                 <DialogOption

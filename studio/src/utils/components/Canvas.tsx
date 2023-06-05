@@ -1,10 +1,10 @@
 import React from 'react';
 
-import { EditorModel } from '@utils/models/models/EditorModel';
+import { EditorModel } from '@utils/models/EditorModel';
 
 import * as GL from '@bananagl/bananagl';
 
-import { EditorContext } from '../Context/EditorContext';
+import { EditorContext } from '../../components/Editor/Context/EditorContext';
 
 function primitiveIndicesToSubmodelIndices(object: EditorModel, indices: number[]) {
     const submodel = object.attributes.getAttribute('submodel') as GL.Attribute;

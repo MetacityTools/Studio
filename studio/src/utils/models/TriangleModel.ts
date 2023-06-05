@@ -1,14 +1,14 @@
 import { vec3 } from 'gl-matrix';
 
-import { alignToCenter, shiftModel } from '@utils/geometry/align';
-import { computeNormals } from '@utils/geometry/normals';
+import { alignToCenter, shiftModel } from '@utils/modifiers/alignVertices';
+import { computeNormals } from '@utils/modifiers/computeNormals';
 import { ModelData, PrimitiveType } from '@utils/types';
 
 import * as GL from '@bananagl/bananagl';
 
-import { CoordinateMode, EditorModelData } from '../addEditorModel';
-import { solidShader, wireframeShader } from '../shaders/EditorModelShader';
 import { DEFAULT_UNIFORMS, EditorModel } from './EditorModel';
+import { solidShader, wireframeShader } from './EditorModelShader';
+import { CoordinateMode, EditorModelData } from './addEditorModel';
 
 export async function addTriangleModel(model: ModelData, ctx: EditorModelData) {
     let { coordMode, globalShift, position, rotation, scale, scene, uniforms } = ctx;

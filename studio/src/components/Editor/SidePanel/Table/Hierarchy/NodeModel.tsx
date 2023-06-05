@@ -2,7 +2,7 @@ import React from 'react';
 import { MdOutlineDriveFileMove } from 'react-icons/md';
 
 import { ModelNode as ModelNodeClass } from '@utils/hierarchy/graph';
-import { EditorModel } from '@utils/models/models/EditorModel';
+import { EditorModel } from '@utils/models/EditorModel';
 
 import { EditorContext } from '@editor/Context/EditorContext';
 import { TablesContext } from '@editor/Context/TableContext';
@@ -44,7 +44,7 @@ export function ModelNode(props: ModelNodeProps) {
                     Model {node.submodelId}
                 </HierarchyMainButton>
                 {!nodeToMove && (
-                    <HierarchyButton onClick={handleToMove} bg={bg}>
+                    <HierarchyButton onClick={handleToMove} bg={bg} title="Move in hierarchy">
                         <MdOutlineDriveFileMove />
                     </HierarchyButton>
                 )}

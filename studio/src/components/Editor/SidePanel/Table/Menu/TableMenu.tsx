@@ -1,5 +1,6 @@
 import { parse } from '@vojtatom/csvts';
 import * as React from 'react';
+import { TbSquareRoundedNumber2Filled } from 'react-icons/tb';
 
 import { createGroup } from '@utils/hierarchy/groupModels';
 
@@ -39,11 +40,12 @@ export function TableMenu() {
 
     return (
         <div className="flex flex-row p-4 w-full space-x-2 text-xs border-b">
-            <ButtonFileInput id="table" onChange={handleTableSelected}>
-                Import CSV Table
-            </ButtonFileInput>
             <Button onClick={group}>Group Selected</Button>
             {nodeToMove && <Button onClick={unmove}>Unmove</Button>}
+            <ButtonFileInput id="table" onChange={handleTableSelected}>
+                <TbSquareRoundedNumber2Filled className="mr-2 text-xl text-blue-500" /> Import CSV
+                Table
+            </ButtonFileInput>
             <Vitals scenes={[scene]} renderer={renderer} />
         </div>
     );

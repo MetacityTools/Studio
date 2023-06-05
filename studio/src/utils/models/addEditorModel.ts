@@ -4,7 +4,7 @@ import { ModelData, PrimitiveType } from '@utils/types';
 
 import * as GL from '@bananagl/bananagl';
 
-import { addTriangleModel } from './models/TriangleModel';
+import { addTriangleModel } from './TriangleModel';
 
 export enum CoordinateMode {
     Keep,

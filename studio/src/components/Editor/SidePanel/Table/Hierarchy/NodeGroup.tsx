@@ -2,9 +2,9 @@ import React from 'react';
 import { FiDelete } from 'react-icons/fi';
 import { MdDriveFileMoveRtl, MdOutlineDriveFileMove } from 'react-icons/md';
 
-import { deleteGroup } from '@utils/hierarchy/deleteGroup';
 import { GroupNode as GroupNodeClass } from '@utils/hierarchy/graph';
-import { EditorModel } from '@utils/models/models/EditorModel';
+import { EditorModel } from '@utils/models/EditorModel';
+import { deleteGroup } from '@utils/modifiers/deleteGroup';
 
 import { EditorContext } from '@editor/Context/EditorContext';
 import { TablesContext } from '@editor/Context/TableContext';
@@ -81,18 +81,22 @@ export function GroupNode(props: GroupNodeProps) {
             <HierarchyNodeRow>
                 <HierarchyChevronButton open={open} onClick={handleOpen} bg={bg} />
                 <HierarchyMainButton onClick={handleSelect} bg={bg}>
-                    {node.children.length} Parts
+                    Group of {node.children.length} parts
                 </HierarchyMainButton>
-                <HierarchyButton bg={bg} onClick={handleRemove}>
+                <HierarchyButton bg={bg} onClick={handleRemove} title="Delete group">
                     <FiDelete />
                 </HierarchyButton>
                 {!isDescendantOfSelected && (
-                    <HierarchyButton bg={bg} onClick={handleToMove}>
+                    <HierarchyButton
+                        bg={bg}
+                        onClick={handleToMove}
+                        title={nodeToMove ? 'Move here in hierarchy' : 'Move in hierarchy'}
+                    >
                         {nodeToMove ? <MdDriveFileMoveRtl /> : <MdOutlineDriveFileMove />}
                     </HierarchyButton>
                 )}
             </HierarchyNodeRow>
-            {open && <GroupNodeChildren {...props} />}
+            {open && <GroupNodeChildren {...props} nodeToMove={nodeToMove} />}
         </div>
     );
 }
