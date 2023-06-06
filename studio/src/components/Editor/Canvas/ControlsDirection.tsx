@@ -1,16 +1,16 @@
 import React from 'react';
 
-import * as GL from '@bananagl/bananagl';
+import { useActiveView, useRenderer } from '@utils/utils';
 
-import { EditorContext } from '@editor/Context/EditorContext';
+import * as GL from '@bananagl/bananagl';
 
 import { CubeEmpty, CubeLeft, CubeRight, CubeTop } from '@elements/Icons';
 import { MenuButton, MenuGroup } from '@elements/MenuButton';
 
 export function DirectionControls() {
-    const { renderer, activeView } = React.useContext(EditorContext);
-
     const [mode, setMode] = React.useState<GL.CameraView>(GL.CameraView.Free);
+    const renderer = useRenderer();
+    const activeView = useActiveView();
 
     const setView = (viewMode: GL.CameraView) => {
         const view = renderer.views[activeView].view;

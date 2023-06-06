@@ -1,12 +1,12 @@
 import React from 'react';
 import { MdDeselect } from 'react-icons/md';
 
-import { EditorContext } from '@editor/Context/EditorContext';
+import { useSelection } from '@utils/utils';
 
 import { MenuButton, MenuGroup } from '@elements/MenuButton';
 
 export function SelectionControls() {
-    const { select } = React.useContext(EditorContext);
+    const [select] = useSelection();
 
     const deselect = () => {
         select(null);
@@ -14,7 +14,7 @@ export function SelectionControls() {
 
     return (
         <MenuGroup>
-            <MenuButton onClick={deselect} tipTitle="Deselect all" tipPosition="top">
+            <MenuButton onClick={deselect} tipTitle="Deselect all">
                 <MdDeselect className="text-2xl" />
             </MenuButton>
         </MenuGroup>

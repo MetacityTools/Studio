@@ -2,12 +2,12 @@ import React from 'react';
 import JsonView from 'react18-json-view';
 import 'react18-json-view/src/style.css';
 
-import { EditorContext } from '@editor/Context/EditorContext';
+import { useSelection } from '@utils/utils';
 
 import { EmptyDetail, EmptyMetadata } from '@elements/Empty';
 
 export function Metadata() {
-    const { selectedModel, selectedSubmodels } = React.useContext(EditorContext);
+    const [, selectedModel, selectedSubmodels] = useSelection();
 
     if (selectedModel === null) return <EmptyDetail />;
     if (selectedSubmodels.length === 0) return <EmptyMetadata />;

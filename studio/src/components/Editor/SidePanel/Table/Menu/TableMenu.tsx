@@ -1,14 +1,17 @@
 import * as React from 'react';
 
-import { EditorContext } from '@editor/Context/EditorContext';
-import { TablesContext } from '@editor/Context/TableContext';
+import { useRenderer, useScene } from '@utils/utils';
+
+import { useLinkingNode, useUpdateTables } from '@editor/Context/TableContext';
 import { Vitals } from '@editor/Utils/Vitals';
 
-import { ButtonFileInput } from '@elements/Button';
+import { Button, ButtonFileInput } from '@elements/Button';
 
 export function TableMenu() {
-    const { renderer, scene } = React.useContext(EditorContext);
-    const { addSheet } = React.useContext(TablesContext);
+    const renderer = useRenderer();
+    const scene = useScene();
+    const [addSheet] = useUpdateTables();
+    const [linkingNode, updateLinkingNode] = useLinkingNode();
 
     const handleTableSelected = async (event: React.ChangeEvent<HTMLInputElement>) => {
         const files = event.target.files;
@@ -19,11 +22,18 @@ export function TableMenu() {
         event.preventDefault();
     };
 
+    const handleEndLinking = () => {
+        updateLinkingNode(undefined);
+    };
+
     return (
         <div className="flex flex-row p-4 w-full space-x-2 border-b items-center">
             <ButtonFileInput id="table" onChange={handleTableSelected}>
                 Import CSV Table
             </ButtonFileInput>
+            <Button onClick={handleEndLinking} disabled={!linkingNode}>
+                End Linking
+            </Button>
             <Vitals scenes={[scene]} renderer={renderer} />
         </div>
     );

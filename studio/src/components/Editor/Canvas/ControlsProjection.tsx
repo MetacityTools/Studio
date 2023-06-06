@@ -2,14 +2,15 @@ import React from 'react';
 import { BiRectangle } from 'react-icons/bi';
 import { TbPerspective } from 'react-icons/tb';
 
-import * as GL from '@bananagl/bananagl';
+import { useActiveView, useRenderer } from '@utils/utils';
 
-import { EditorContext } from '@editor/Context/EditorContext';
+import * as GL from '@bananagl/bananagl';
 
 import { MenuButton, MenuGroup } from '@elements/MenuButton';
 
 export function ProjectionControls() {
-    const { renderer, activeView } = React.useContext(EditorContext);
+    const renderer = useRenderer();
+    const activeView = useActiveView();
 
     const [projection, setProjection] = React.useState<GL.ProjectionType>(
         GL.ProjectionType.ORTHOGRAPHIC

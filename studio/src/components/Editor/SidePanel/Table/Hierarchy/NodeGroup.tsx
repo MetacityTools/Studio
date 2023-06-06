@@ -1,12 +1,13 @@
 import React from 'react';
-import { BiLink } from 'react-icons/bi';
+import { BsFillStopFill } from 'react-icons/bs';
 import { FiDelete } from 'react-icons/fi';
 import { MdDriveFileMoveRtl, MdOutlineDriveFileMove } from 'react-icons/md';
+import { VscSymbolInterface } from 'react-icons/vsc';
 
 import { EditorModel, GroupNode as GroupNodeClass, deleteGroup } from '@utils/utils';
+import { useSelection } from '@utils/utils';
 
-import { EditorContext } from '@editor/Context/EditorContext';
-import { TablesContext } from '@editor/Context/TableContext';
+import { useGraph, useLinkingNode, useMovingNode } from '@editor/Context/TableContext';
 
 import {
     HierarchyButton,
@@ -15,6 +16,7 @@ import {
     HierarchyNodeRow,
     colorNodeBackground,
 } from '@elements/Hierarchy';
+import { If } from '@elements/If';
 
 import { GroupNodeChildren } from './NodeGroupChildren';
 
@@ -26,12 +28,16 @@ export interface GroupNodeProps {
 
 export function GroupNode(props: GroupNodeProps) {
     const { model, node, submodels } = props;
+    const [select] = useSelection();
+    const [graph] = useGraph();
+    const [nodeToMove, updateNodeToMove] = useMovingNode();
+    const [nodeToLink, updateNodeToLink] = useLinkingNode();
     const [open, setOpen] = React.useState(false);
-    const { select } = React.useContext(EditorContext);
-    const { graph, nodeToMove, setNodeToMove, activeRows } = React.useContext(TablesContext);
 
     const isSelected = React.useMemo(() => node.selected(submodels), [node, submodels]);
-    const isDescendantOfSelected = React.useMemo(
+    const isLinking = React.useMemo(() => node === nodeToLink, [node, nodeToLink]);
+    const isMoving = React.useMemo(() => node === nodeToMove, [node, nodeToMove]);
+    const isDescendant = React.useMemo(
         () => nodeToMove && node.isDescendantOf(nodeToMove),
         [node, nodeToMove]
     );
@@ -50,36 +56,24 @@ export function GroupNode(props: GroupNodeProps) {
 
     const handleRemove = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         deleteGroup(node, graph);
+        if (node === nodeToMove) updateNodeToMove(undefined);
+        if (node === nodeToLink) updateNodeToLink(undefined);
         e.stopPropagation();
     };
 
     const handleToMove = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-        setNodeToMove((prev) => {
-            if (prev === node) return undefined;
-            if (prev === undefined) return node;
-            else {
-                if (node.isDescendantOf(prev)) return undefined;
-
-                const prevParent = prev.parent;
-                if (prevParent) prevParent.removeChild(prev);
-                node.addChild(prev);
-                prev.addParent(node);
-                graph.needsUpdate = true;
-
-                if (prevParent?.children.length === 0) prevParent.parent?.removeChild(prevParent);
-                return undefined;
-            }
-        });
+        updateNodeToMove(node);
         e.stopPropagation();
     };
 
     const handleLink = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-        //todo
+        updateNodeToLink(node);
         e.stopPropagation();
     };
 
-    const bg = colorNodeBackground(node.selected(submodels), nodeToMove === node);
-    const recordAvailable = activeRows.size > 0;
+    const bg = colorNodeBackground(isSelected, isMoving || isLinking);
+    const bgMoving = colorNodeBackground(isMoving, isSelected || isLinking);
+    const bgLinking = colorNodeBackground(isLinking, isSelected || isMoving);
 
     return (
         <div className="flex flex-col rounded-md">
@@ -88,28 +82,49 @@ export function GroupNode(props: GroupNodeProps) {
                 <HierarchyMainButton onClick={handleSelect} bg={bg}>
                     Group of {node.children.length} parts
                 </HierarchyMainButton>
-                <HierarchyButton bg={bg} onClick={handleRemove} title="Delete group">
-                    <FiDelete />
-                </HierarchyButton>
-                {!isDescendantOfSelected && (
-                    <HierarchyButton
-                        bg={bg}
-                        onClick={handleToMove}
-                        title={nodeToMove ? 'Move here in hierarchy' : 'Move in hierarchy'}
-                    >
-                        {nodeToMove ? <MdDriveFileMoveRtl /> : <MdOutlineDriveFileMove />}
+                <If cond={!nodeToMove}>
+                    <HierarchyButton bg={bg} onClick={handleRemove} title="Delete group">
+                        <FiDelete />
                     </HierarchyButton>
-                )}
-                <HierarchyButton
-                    bg={bg}
-                    onClick={handleLink}
-                    title="Link to selected rows in table"
-                    disabled={!recordAvailable}
-                >
-                    <BiLink />
-                </HierarchyButton>
+                </If>
+                <If cond={!isDescendant}>
+                    <If cond={!nodeToMove}>
+                        <HierarchyButton
+                            onClick={handleToMove}
+                            bg={bgMoving}
+                            title="Move in hierarchy"
+                        >
+                            <MdOutlineDriveFileMove />
+                        </HierarchyButton>
+                    </If>
+                    <If cond={nodeToMove && !isMoving}>
+                        <HierarchyButton
+                            onClick={handleToMove}
+                            bg={bgMoving}
+                            title="Move here in hierarchy"
+                        >
+                            <MdDriveFileMoveRtl />
+                        </HierarchyButton>
+                    </If>
+                    <If cond={isMoving}>
+                        <HierarchyButton onClick={handleToMove} bg={bgMoving} title="Drop moving">
+                            <BsFillStopFill />
+                        </HierarchyButton>
+                    </If>
+                </If>
+                <If cond={!nodeToMove}>
+                    <HierarchyButton
+                        bg={bgLinking}
+                        onClick={handleLink}
+                        title="Link to selected rows in table"
+                    >
+                        <VscSymbolInterface />
+                    </HierarchyButton>
+                </If>
             </HierarchyNodeRow>
-            {open && <GroupNodeChildren {...props} nodeToMove={nodeToMove} />}
+            {open && (
+                <GroupNodeChildren {...props} nodeToMove={nodeToMove} nodeToLink={nodeToLink} />
+            )}
         </div>
     );
 }

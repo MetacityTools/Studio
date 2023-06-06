@@ -1,12 +1,14 @@
 import React from 'react';
 
+import { useModels, useSelection } from '@utils/utils';
+
 import { EmptyList } from '@elements/Empty';
 
-import { EditorContext } from '../../../Context/EditorContext';
 import { Model } from './Model';
 
 export function ModelList() {
-    const { selectedModel, select, models } = React.useContext(EditorContext);
+    const models = useModels();
+    const [select, selectedModel] = useSelection();
 
     return (
         <div className="overflow-x-auto w-full h-full">

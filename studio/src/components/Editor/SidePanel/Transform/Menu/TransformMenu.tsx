@@ -8,10 +8,20 @@ import {
     createHierarchy,
     joinModels,
     load,
+    useGlobalShift,
+    useModels,
+    useRenderer,
+    useScene,
+    useSelection,
 } from '@utils/utils';
 
-import { EditingStage, EditorContext } from '@editor/Context/EditorContext';
-import { TablesContext } from '@editor/Context/TableContext';
+import {
+    EditingStage,
+    useEditingStage,
+    useLoadingStatus,
+    useProcessing,
+} from '@editor/Context/EditorContext';
+import { useGraph } from '@editor/Context/TableContext';
 import { Vitals } from '@editor/Utils/Vitals';
 
 import { Button, ButtonFileInput } from '@elements/Button';
@@ -20,22 +30,19 @@ import { ConvertDialog } from './DialogConvert';
 import { ImportDialog } from './DialogImport';
 
 export function TransformMenu() {
-    const {
-        renderer,
-        scene,
-        models,
-        setProcessing,
-        setLoadingStatus,
-        setEditingStage,
-        select,
-        globalShift,
-        setGlobalShift,
-    } = React.useContext(EditorContext);
-    const { setGraph } = React.useContext(TablesContext);
+    const renderer = useRenderer();
+    const scene = useScene();
+    const models = useModels();
+    const [, setProcessing] = useProcessing();
+    const [, setLoadingStatus] = useLoadingStatus();
+    const [, setEditingStage] = useEditingStage();
+    const [select] = useSelection();
+    const [globalShift, setGlobalShift] = useGlobalShift();
 
     const [importOpen, setImportOpen] = React.useState(false);
     const [convertOpen, setConvertOpen] = React.useState(false);
     const [importedModels, setImportedModels] = React.useState<ModelData[]>([]);
+    const [graph, setGraph] = useGraph();
 
     const onModelsSelected = async (event: React.ChangeEvent<HTMLInputElement>) => {
         setProcessing(true);

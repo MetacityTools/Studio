@@ -1,3 +1,4 @@
+import { Node } from './node';
 import { GroupNode } from './nodeGroup';
 import { ModelNode } from './nodeModel';
 
@@ -29,5 +30,14 @@ export class ModelGraph {
 
     getSelectedGroups(selectedModels: Set<number>) {
         return this.root.getSelectedDescendantGroups(selectedModels);
+    }
+
+    moveNode(node: Node, newParent: GroupNode) {
+        const prevParent = node.parent;
+        if (prevParent) prevParent.removeChild(node);
+        newParent.addChild(node);
+        node.addParent(newParent);
+        this.needsUpdate = true;
+        if (prevParent?.children.length === 0) prevParent.parent?.removeChild(prevParent);
     }
 }

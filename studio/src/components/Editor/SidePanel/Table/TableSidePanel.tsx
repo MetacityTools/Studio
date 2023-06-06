@@ -3,7 +3,7 @@ import 'allotment/dist/style.css';
 
 import { Hierarchy } from './Hierarchy/Hierarchy';
 import { TableMenu } from './Menu/TableMenu';
-import { Tables } from './Tables/Table';
+import { Tables } from './Tables/Tables';
 
 export function TableSidePanel() {
     return (

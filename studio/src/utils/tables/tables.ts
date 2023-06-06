@@ -4,13 +4,13 @@ export class Tables {
     constructor(public contents: string[][][]) {}
 
     changeCell(sheet: number, row: number, col: number, value: string) {
-        const tableCopy = [...this.contents];
-        const rowCopy = [...tableCopy[sheet]];
-        const colCopy = [...rowCopy[row]];
-        colCopy[col] = value;
-        rowCopy[row] = colCopy;
-        tableCopy[sheet] = rowCopy;
-        return new Tables(tableCopy);
+        const sheetsCopy = [...this.contents];
+        const sheetCopy = [...sheetsCopy[sheet]];
+        const rowCopy = [...sheetCopy[row]];
+        rowCopy[col] = value;
+        sheetCopy[row] = rowCopy;
+        sheetsCopy[sheet] = sheetCopy;
+        return new Tables(sheetsCopy);
     }
 
     addSheet(contents: string) {

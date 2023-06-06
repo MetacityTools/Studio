@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { EditorContext } from '@editor/Context/EditorContext';
+import { useSelection } from '@utils/utils';
 
 import { EmptyDetail } from '@elements/Empty';
 
@@ -12,7 +12,7 @@ import { SplitModelWidget } from './WidgetSplitModel';
 import { ModelTransformationWidget } from './WidgetTransformation';
 
 export function Modifiers() {
-    const { selectedModel } = React.useContext(EditorContext);
+    const [, selectedModel] = useSelection();
 
     if (selectedModel === null) return <EmptyDetail />;
 

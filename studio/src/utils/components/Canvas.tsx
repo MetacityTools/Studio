@@ -1,10 +1,9 @@
 import React from 'react';
 
 import { EditorModel } from '@utils/models/EditorModel';
+import { useRenderer, useSelection } from '@utils/utils';
 
 import * as GL from '@bananagl/bananagl';
-
-import { EditorContext } from '../../components/Editor/Context/EditorContext';
 
 function primitiveIndicesToSubmodelIndices(object: EditorModel, indices: number[]) {
     const submodel = object.attributes.getAttribute('submodel') as GL.Attribute;
@@ -26,7 +25,8 @@ function selectionFlags(multiselect: boolean, shiftKey: boolean) {
 }
 
 export function Canvas(props: { canvasRef: React.RefObject<HTMLCanvasElement> }) {
-    const { renderer, select } = React.useContext(EditorContext);
+    const renderer = useRenderer();
+    const [select] = useSelection();
 
     function handlePick(object: EditorModel, indices: number | number[], shiftKey: boolean) {
         const multiselect = Array.isArray(indices);

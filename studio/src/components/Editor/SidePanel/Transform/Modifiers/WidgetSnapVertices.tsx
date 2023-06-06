@@ -2,15 +2,14 @@ import React from 'react';
 import { TbRulerMeasure } from 'react-icons/tb';
 
 import { snapVertices } from '@utils/utils';
-
-import { EditorContext } from '@editor/Context/EditorContext';
+import { useSelection } from '@utils/utils';
 
 import { Input } from '@elements/Input';
 import { Widget, WidgetDescription, WidgetLine, WidgetTitle } from '@elements/Widgets';
 
 export function SnapVerticesWidget() {
     const [snapDistance, setSnapDistance] = React.useState(0.1);
-    const { selectedModel } = React.useContext(EditorContext);
+    const [, selectedModel] = useSelection();
 
     if (selectedModel === null) return null;
 

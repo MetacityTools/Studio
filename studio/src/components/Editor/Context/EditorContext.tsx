@@ -1,13 +1,11 @@
 import React from 'react';
 
-import { ViewContext, ViewContextProps } from '@utils/utils';
-
 export enum EditingStage {
     Transform,
     Table,
 }
 
-interface EditorContextProps extends ViewContextProps {
+interface EditorContextProps {
     processing: boolean;
     setProcessing: React.Dispatch<React.SetStateAction<boolean>>;
     loadingStatus: string;
@@ -16,17 +14,15 @@ interface EditorContextProps extends ViewContextProps {
     setEditingStage: React.Dispatch<React.SetStateAction<EditingStage>>;
 }
 
-export const EditorContext = React.createContext<EditorContextProps>({} as EditorContextProps);
+const context = React.createContext<EditorContextProps>({} as EditorContextProps);
 
-export function EditorContextComponent(props: { children: React.ReactNode }) {
-    const ctx = React.useContext(ViewContext);
-
-    const [editingStage, setEditingStage] = React.useState<EditingStage>(EditingStage.Transform);
+export function EditorContext(props: { children: React.ReactNode }) {
+    const [editingStage, setEditingStage] = React.useState<EditingStage>(EditingStage.Table);
     const [loadingStatus, setLoadingStatus] = React.useState<string>('');
     const [processing, setProcessing] = React.useState(false);
 
     return (
-        <EditorContext.Provider
+        <context.Provider
             value={{
                 processing,
                 setProcessing,
@@ -34,10 +30,31 @@ export function EditorContextComponent(props: { children: React.ReactNode }) {
                 setLoadingStatus,
                 editingStage,
                 setEditingStage,
-                ...ctx,
             }}
         >
             {props.children}
-        </EditorContext.Provider>
+        </context.Provider>
     );
+}
+
+export function useEditorContext(): EditorContextProps {
+    return React.useContext(context);
+}
+
+export function useProcessing(): [boolean, React.Dispatch<React.SetStateAction<boolean>>] {
+    const { processing, setProcessing } = useEditorContext();
+    return [processing, setProcessing];
+}
+
+export function useLoadingStatus(): [string, React.Dispatch<React.SetStateAction<string>>] {
+    const { loadingStatus, setLoadingStatus } = useEditorContext();
+    return [loadingStatus, setLoadingStatus];
+}
+
+export function useEditingStage(): [
+    EditingStage,
+    React.Dispatch<React.SetStateAction<EditingStage>>
+] {
+    const { editingStage, setEditingStage } = useEditorContext();
+    return [editingStage, setEditingStage];
 }

@@ -47,12 +47,13 @@ The project is in active development. The roadmap is as follows:
     -   [x] Delete groups
     -   [x] Move groups (and models)
 -   [x] View settings in the annotate settings - move it to the canvas
--   [ ] Loading tabular data (CSV) and linking it to the hierarchy.
+-   [x] Loading tabular data (CSV) and linking it to the hierarchy.
     -   [x] Loading CSV
     -   [x] CSV editor
     -   [x] Multiple CSVs
-    -   [ ] Linking CSV rows to the hierarchy
-    -   [ ] Unlinking CSV rows from the hierarchy
+    -   [x] Linking CSV rows to the hierarchy
+    -   [x] Unlinking CSV rows from the hierarchy
+-   [ ] Resolve table editing issues - maybe leave out table editing all togheter?
 
 ### v0.1.0 - ✅ Released
 

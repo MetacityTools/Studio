@@ -7,17 +7,18 @@ import { ModelNode } from './NodeModel';
 
 interface GroupNodeChildrenProps extends GroupNodeProps {
     nodeToMove?: Node;
+    nodeToLink?: Node;
 }
 
 export function GroupNodeChildren(props: GroupNodeChildrenProps) {
-    const { model, submodels, node, nodeToMove } = props;
+    const { model, submodels, node, nodeToMove, nodeToLink } = props;
     const groups = node.children?.filter(
         (child) => child instanceof GroupNodeClass
     ) as GroupNodeClass[];
     const activeChildren = node.children?.filter(
         (child) =>
             child instanceof ModelNodeClass &&
-            (submodels.has(child.submodelId) || child === nodeToMove)
+            (submodels.has(child.submodelId) || child === nodeToMove || child === nodeToLink)
     ) as ModelNodeClass[];
 
     if (groups.length === 0 && activeChildren.length === 0)

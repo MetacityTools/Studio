@@ -2,14 +2,16 @@ import React from 'react';
 import { TbLayersIntersect } from 'react-icons/tb';
 
 import { splitModel } from '@utils/utils';
+import { useScene, useSelection } from '@utils/utils';
 
-import { EditorContext } from '@editor/Context/EditorContext';
+import { useProcessing } from '@editor/Context/EditorContext';
 
 import { Widget, WidgetDescription, WidgetLine, WidgetTitle } from '@elements/Widgets';
 
 export function SplitModelWidget() {
-    const { setProcessing, scene, selectedModel, selectedSubmodels } =
-        React.useContext(EditorContext);
+    const scene = useScene();
+    const [, selectedModel, selectedSubmodels] = useSelection();
+    const [, setProcessing] = useProcessing();
 
     if (selectedModel === null) return null;
 

@@ -1,5 +1,18 @@
 import { Canvas } from './components/Canvas';
-import { ViewContext, ViewContextComponent, ViewContextProps } from './components/Context';
+import {
+    ViewContext,
+    useActiveView,
+    useCameraZ,
+    useGlobalShift,
+    useGridVisible,
+    useModels,
+    useRenderer,
+    useScene,
+    useSelectedSubmodels,
+    useSelection,
+    useShadeRange,
+    useViewContext,
+} from './components/Context';
 import { load } from './formats/loader';
 import { ModelGraph } from './hierarchy/graph';
 import { Node } from './hierarchy/node';
@@ -22,8 +35,6 @@ import { Tables } from './tables/tables';
 
 export {
     Canvas,
-    ViewContext,
-    ViewContextComponent,
     load,
     Tables,
     Node,
@@ -46,7 +57,19 @@ export {
     joinSubmodels,
     snapVertices,
     splitModel,
+    ViewContext,
+    useViewContext,
+    useActiveView,
+    useScene,
+    useRenderer,
+    useModels,
+    useSelection,
+    useSelectedSubmodels,
+    useCameraZ,
+    useShadeRange,
+    useGridVisible,
+    useGlobalShift,
 };
 
 export * from './types';
-export type { ViewContextProps, EditorModelData };
+export type { EditorModelData };

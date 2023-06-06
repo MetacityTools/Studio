@@ -1,12 +1,13 @@
 import React from 'react';
 import { FiDelete } from 'react-icons/fi';
 
-import { EditorContext } from '@editor/Context/EditorContext';
+import { useScene, useSelection } from '@utils/utils';
 
 import { Widget, WidgetDescription, WidgetLine, WidgetTitle } from '@elements/Widgets';
 
 export function DeleteModelWidget() {
-    const { scene, selectedModel } = React.useContext(EditorContext);
+    const scene = useScene();
+    const [, selectedModel] = useSelection();
 
     if (selectedModel === null) return null;
 

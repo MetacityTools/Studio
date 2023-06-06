@@ -1,21 +1,20 @@
 import React from 'react';
 
 import { Canvas, addGridModel } from '@utils/utils';
+import { useRenderer, useScene } from '@utils/utils';
 
 import * as GL from '@bananagl/bananagl';
 
-import { EditorContext } from '../Context/EditorContext';
 import { Controls } from './Controls';
 import { Help } from './Help';
 import { Settings } from './Settings';
 
-export function CanvasWrapper() {
+export function CanvasView() {
     const canvasRef = React.useRef<HTMLCanvasElement>(null);
-    const ctx = React.useContext(EditorContext);
+    const scene = useScene();
+    const renderer = useRenderer();
 
     React.useEffect(() => {
-        const { renderer, scene } = ctx;
-
         if (canvasRef.current && renderer) {
             GL.mountRenderer(canvasRef.current, renderer, {}, [
                 {
@@ -53,7 +52,7 @@ export function CanvasWrapper() {
                 GL.unmountRenderer(renderer);
             };
         }
-    }, [ctx.renderer, ctx.scene]);
+    }, [renderer, scene]);
 
     return (
         <>

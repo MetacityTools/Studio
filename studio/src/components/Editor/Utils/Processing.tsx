@@ -1,7 +1,7 @@
 import { Transition } from '@headlessui/react';
 import React from 'react';
 
-import { EditorContext } from '@editor/Context/EditorContext';
+import { useLoadingStatus, useProcessing } from '@editor/Context/EditorContext';
 
 import chicken1 from '@assets/Chicken_Run.gif';
 import chicken3 from '@assets/Chicken_Strut.gif';
@@ -16,13 +16,13 @@ const messages = [
 const chickens = [chicken1, chicken3];
 
 export function ProcessingScreen() {
-    const context = React.useContext(EditorContext);
     const [message, setMessage] = React.useState(messages[0]);
     const [chicken, setChicken] = React.useState(chickens[0]);
-    const { loadingStatus } = context || { loadingStatus: '' };
+    const [loadingStatus] = useLoadingStatus();
+    const [processing] = useProcessing();
 
     React.useEffect(() => {
-        if (context?.processing) {
+        if (processing) {
             let i = 0;
             const interval = setInterval(() => {
                 i++;
@@ -32,11 +32,11 @@ export function ProcessingScreen() {
 
             return () => clearInterval(interval);
         }
-    }, [context?.processing]);
+    }, [processing]);
 
     return (
         <Transition
-            show={context?.processing}
+            show={processing}
             className="absolute top-0 left-0 w-full h-full bg-white z-50 flex items-center justify-center"
             enter="transition-opacity duration-200"
             enterFrom="opacity-0"

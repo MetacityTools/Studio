@@ -1,12 +1,12 @@
 import clsx from 'clsx';
 import { FiChevronRight } from 'react-icons/fi';
 
-export function colorNodeBackground(selected: boolean, moving: boolean) {
-    if (selected)
-        return 'text-amber-800 bg-amber-300 enabled:hover:bg-amber-400 outline-none disabled:text-amber-300 disabled:bg-amber-100 transition-colors';
-    if (moving)
-        return 'text-blue-800 bg-blue-300 enabled:hover:bg-blue-400 outline-none disabled:text-blue-300 disabled:bg-blue-100 transition-colors';
-    return 'text-neutral-800 bg-neutral-200 enabled:hover:bg-neutral-300 outline-none disabled:text-neutral-200 disabled:bg-neutral-50 transition-colors';
+export function colorNodeBackground(active: boolean, light?: boolean) {
+    if (active)
+        return 'text-amber-800 bg-amber-300 enabled:hover:bg-amber-400 outline-none transition-colors';
+    if (light)
+        return 'text-amber-800 bg-amber-200 enabled:hover:bg-amber-400 outline-none transition-colors';
+    return 'text-neutral-800 bg-neutral-200 enabled:hover:bg-neutral-300 outline-none transition-colors';
 }
 
 export type ButtonHandler = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;

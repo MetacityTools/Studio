@@ -2,16 +2,14 @@ import React from 'react';
 import { TbVectorTriangle } from 'react-icons/tb';
 
 import { EditorModel, GeometryMode } from '@utils/utils';
-
-import { EditorContext } from '@editor/Context/EditorContext';
+import { useScene } from '@utils/utils';
 
 import { TriangleFull } from '@elements/Icons';
 import { MenuButton, MenuGroup } from '@elements/MenuButton';
 
 export function ShaderControls() {
-    const { scene } = React.useContext(EditorContext);
-
     const [geometryMode, setGeometryMode] = React.useState<GeometryMode>(GeometryMode.SOLID);
+    const scene = useScene();
 
     const setWireframe = () => {
         setGeometryMode(GeometryMode.WIREFRAME);

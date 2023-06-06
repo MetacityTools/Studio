@@ -2,14 +2,16 @@ import React from 'react';
 import { TbLayersUnion } from 'react-icons/tb';
 
 import { joinSubmodels } from '@utils/utils';
+import { useScene, useSelection } from '@utils/utils';
 
-import { EditorContext } from '@editor/Context/EditorContext';
+import { useProcessing } from '@editor/Context/EditorContext';
 
 import { Widget, WidgetDescription, WidgetLine, WidgetTitle } from '@elements/Widgets';
 
 export function JoinSubmodelWidget() {
-    const { setProcessing, selectedModel, selectedSubmodels, select } =
-        React.useContext(EditorContext);
+    const scene = useScene();
+    const [select, selectedModel, selectedSubmodels] = useSelection();
+    const [, setProcessing] = useProcessing();
 
     if (selectedModel === null) return null;
 

@@ -1,26 +1,28 @@
 import React from 'react';
 
-import { ModelGraph, Node, Tables } from '@utils/utils';
+import { GroupNode, ModelGraph, Node, Tables } from '@utils/utils';
 
 interface TablesContextProps {
     graph: ModelGraph;
     setGraph: React.Dispatch<React.SetStateAction<ModelGraph>>;
     nodeToMove: Node | undefined;
     setNodeToMove: React.Dispatch<React.SetStateAction<Node | undefined>>;
+    nodeToLink: Node | undefined;
+    setNodeToLink: React.Dispatch<React.SetStateAction<Node | undefined>>;
     tables: Tables;
+    setTables: React.Dispatch<React.SetStateAction<Tables>>;
     activeSheet: number;
-    activeRows: Set<number>;
-    addSheet: (content: string) => void;
     setActiveSheet: React.Dispatch<React.SetStateAction<number>>;
-    toggleRowSelection: (row: number) => void;
-    updateCell: (table: number, row: number, col: number, value: string) => void;
+    activeRows: Set<number>;
+    setActiveRows: React.Dispatch<React.SetStateAction<Set<number>>>;
 }
 
-export const TablesContext = React.createContext<TablesContextProps>({} as TablesContextProps);
+const context = React.createContext<TablesContextProps>({} as TablesContextProps);
 
-export function TablesContextComponent(props: { children: React.ReactNode }) {
+export function TablesContext(props: { children: React.ReactNode }) {
     const [graph, setGraph] = React.useState<ModelGraph>(new ModelGraph());
     const [nodeToMove, setNodeToMove] = React.useState<Node | undefined>();
+    const [nodeToLink, setNodeToLink] = React.useState<Node | undefined>();
     const [tables, setTables] = React.useState<Tables>(new Tables([]));
     const [activeSheet, setActiveSheet] = React.useState<number>(0);
     const [activeRows, setActiveRows] = React.useState<Set<number>>(new Set<number>());
@@ -33,45 +35,125 @@ export function TablesContextComponent(props: { children: React.ReactNode }) {
         });
     }, [graph]);
 
-    const updateCell = (table: number, row: number, col: number, value: string) => {
-        setTables(tables.changeCell(table, row, col, value));
-    };
-
-    const addSheet = (content: string) => {
-        setTables(tables.addSheet(content));
-    };
-
-    const toggleRowSelection = (row: number) => {
-        const updated = new Set(activeRows);
-        if (updated.has(row)) {
-            updated.delete(row);
-        } else {
-            updated.add(row);
-        }
-        setActiveRows(updated);
-    };
-
-    React.useEffect(() => {
-        setActiveRows(new Set<number>());
-    }, [activeSheet]);
-
     return (
-        <TablesContext.Provider
+        <context.Provider
             value={{
                 graph,
                 setGraph,
                 nodeToMove,
                 setNodeToMove,
+                nodeToLink,
+                setNodeToLink,
                 tables,
+                setTables,
                 activeSheet,
-                activeRows,
-                updateCell,
-                addSheet,
                 setActiveSheet,
-                toggleRowSelection,
+                activeRows,
+                setActiveRows,
             }}
         >
             {props.children}
-        </TablesContext.Provider>
+        </context.Provider>
     );
+}
+
+export function useTablesContext(): TablesContextProps {
+    return React.useContext(context);
+}
+
+export function useGraph(): [ModelGraph, React.Dispatch<React.SetStateAction<ModelGraph>>] {
+    const ctx = React.useContext(context);
+    return [ctx.graph, ctx.setGraph];
+}
+
+export function useMovingNode(): [Node | undefined, (node: Node | undefined) => void] {
+    const ctx = React.useContext(context);
+
+    const updateNodeToMove = (node: Node | undefined) => {
+        ctx.setNodeToMove((prev) => {
+            if (prev === node) return undefined;
+            if (prev === undefined) return node;
+            if (node === undefined) return undefined;
+            else {
+                if (node instanceof GroupNode) {
+                    if (node.isDescendantOf(prev)) return undefined;
+                    ctx.graph.moveNode(prev, node);
+                    return undefined;
+                } else {
+                    //fallback
+                    return node;
+                }
+            }
+        });
+    };
+
+    return [ctx.nodeToMove, updateNodeToMove];
+}
+
+export function useLinkingNode(): [Node | undefined, (node: Node | undefined) => void] {
+    const ctx = React.useContext(context);
+
+    const updateNodeToLink = (node: Node | undefined) => {
+        ctx.setNodeToLink((prev) => {
+            if (prev === node || node === undefined) {
+                ctx.setActiveRows(new Set());
+                return undefined;
+            } else {
+                const rows = node.getLinkedTableRecords(ctx.activeSheet);
+                ctx.setActiveRows(new Set(rows));
+                return node;
+            }
+        });
+    };
+
+    return [ctx.nodeToLink, updateNodeToLink];
+}
+
+export function useTables(): [Tables, number, Set<number>] {
+    const ctx = React.useContext(context);
+    return [ctx.tables, ctx.activeSheet, ctx.activeRows];
+}
+
+export function useUpdateTables(): [
+    (content: string) => void,
+    (row: number) => void,
+    (sheet: number) => void,
+    (table: number, row: number, col: number, value: string) => void
+] {
+    const ctx = React.useContext(context);
+
+    const addSheet = (content: string) => {
+        ctx.setTables(ctx.tables.addSheet(content));
+    };
+
+    const updateCell = (sheet: number, row: number, col: number, value: string) => {
+        console.log('update cell', sheet, row, col, value);
+        const newTables = ctx.tables.changeCell(sheet, row, col, value);
+        console.log('new tables', newTables);
+        ctx.setTables(newTables);
+    };
+
+    const updateActiveRows = (row: number) => {
+        const updated = new Set(ctx.activeRows);
+        if (updated.has(row)) updated.delete(row);
+        else updated.add(row);
+        ctx.setActiveRows(updated);
+        if (ctx.nodeToLink) ctx.nodeToLink.linkTableRecords(ctx.activeSheet, row);
+    };
+
+    const updateActiveSheet = (sheet: number) => {
+        ctx.setActiveSheet((prev) => {
+            if (prev === sheet) return prev;
+
+            if (ctx.nodeToLink) {
+                const rows = ctx.nodeToLink.getLinkedTableRecords(sheet);
+                ctx.setActiveRows(new Set(rows));
+            } else if (ctx.activeRows.size > 0) {
+                ctx.setActiveRows(new Set());
+            }
+            return sheet;
+        });
+    };
+
+    return [addSheet, updateActiveRows, updateActiveSheet, updateCell];
 }

@@ -2,9 +2,9 @@ import { vec3 } from 'gl-matrix';
 import React from 'react';
 import { TiArrowMove } from 'react-icons/ti';
 
-import * as GL from '@bananagl/bananagl';
+import { useRenderer, useSelection } from '@utils/utils';
 
-import { EditorContext } from '@editor/Context/EditorContext';
+import * as GL from '@bananagl/bananagl';
 
 import { Input } from '@elements/Input';
 import { Widget, WidgetDescription, WidgetLine, WidgetTitle } from '@elements/Widgets';
@@ -49,7 +49,8 @@ function VectorControls(props: VectorControlsProps) {
 }
 
 export function ModelTransformationWidget() {
-    const { selectedModel, renderer } = React.useContext(EditorContext);
+    const renderer = useRenderer();
+    const [, selectedModel] = useSelection();
 
     if (selectedModel === null) return null;
     const model = selectedModel;
