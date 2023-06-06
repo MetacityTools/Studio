@@ -4,8 +4,6 @@ import { VscSymbolInterface } from 'react-icons/vsc';
 
 import { useLinkingNode, useTables, useUpdateTables } from '@editor/Context/TableContext';
 
-import { TableCell } from './Cell';
-
 interface TableRowProps {
     index: number;
     row: string[];
@@ -46,13 +44,9 @@ export function TableRow(props: TableRowProps) {
                 </div>
             </td>
             {row.map((cell, cindex) => (
-                <TableCell
-                    key={activeSheet + '_' + index + '_' + cindex}
-                    col={cindex}
-                    contents={cell}
-                    row={index}
-                    className={cellCls}
-                />
+                <td className={cellCls} key={activeSheet + '_' + index + '_' + cindex}>
+                    {cell}
+                </td>
             ))}
         </tr>
     );

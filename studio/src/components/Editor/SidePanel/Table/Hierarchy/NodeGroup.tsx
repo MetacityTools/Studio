@@ -107,7 +107,7 @@ export function GroupNode(props: GroupNodeProps) {
                         </HierarchyButton>
                     </If>
                     <If cond={isMoving}>
-                        <HierarchyButton onClick={handleToMove} bg={bgMoving} title="Drop moving">
+                        <HierarchyButton onClick={handleToMove} bg={bgMoving} title="End Move">
                             <BsFillStopFill />
                         </HierarchyButton>
                     </If>

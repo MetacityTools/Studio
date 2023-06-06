@@ -24,7 +24,7 @@ export function HierarchyMenu() {
         <div className="flex flex-row p-4 w-full space-x-2 border-b items-center">
             <Button onClick={group}>Group Selected Models</Button>
             <Button onClick={unmove} disabled={!nodeToMove}>
-                Drop Moving
+                End Move
             </Button>
         </div>
     );

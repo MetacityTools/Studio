@@ -17,7 +17,7 @@ interface EditorContextProps {
 const context = React.createContext<EditorContextProps>({} as EditorContextProps);
 
 export function EditorContext(props: { children: React.ReactNode }) {
-    const [editingStage, setEditingStage] = React.useState<EditingStage>(EditingStage.Table);
+    const [editingStage, setEditingStage] = React.useState<EditingStage>(EditingStage.Transform);
     const [loadingStatus, setLoadingStatus] = React.useState<string>('');
     const [processing, setProcessing] = React.useState(false);
 
