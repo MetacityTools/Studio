@@ -31,14 +31,14 @@ The project is in active development. The roadmap is as follows:
 -   [ ] Optional interactivity - build BVH only if user opts-in to make the loaded models clickable
 -   [ ] Integrate Google Sheets imports
 
-### v0.2.1
+### v0.2.1 - 👨‍💻 In progress
 
 -   [ ] Project export
 -   [ ] Resize guard update graphics (The "Oops" message is pretty lame)
 -   [ ] Transforming original metadata to a table
 -   [ ] Extract Utils to separate SDK form metacity editors
 
-### v0.2.0 - 👨‍💻 In progress
+### v0.2.0 - ✅ Released
 
 -   [x] Infrastructure for the built-in viewer (vite setup, etc.)
 -   [x] Building a hierarchy of models (floors, buildings, blocks, etc.) - ✨WIP
