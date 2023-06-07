@@ -1,6 +1,6 @@
 # 🏡 [Metacity Studio](https://studio.metacity.cc)
 
-![Screenshot](src/assets/splash/screen.png)
+![Screenshot](./studio.png)
 
 Metacity Studio is an online tool for integrating and visualizing spatial and tabular data.
 
@@ -25,18 +25,40 @@ Currently:
 
 The project is in active development. The roadmap is as follows:
 
-### v0.1.2
+### v0.3.0
 
--   [ ] Connect tabular data
+-   [ ] Viewer - Details TBA
+-   [ ] Optional interactivity - build BVH only if user opts-in to make the loaded models clickable
+-   [ ] Integrate Google Sheets imports
+
+### v0.2.1
+
 -   [ ] Project export
--   [ ] Project import
+-   [ ] Resize guard update graphics (The "Oops" message is pretty lame)
+-   [ ] Transforming original metadata to a table
+-   [ ] Extract Utils to separate SDK form metacity editors
 
-### v0.1.1
+### v0.2.0 - 👨‍💻 In progress
 
--   [ ] Baking/Transforming models to Table-like format
--   [ ] Allow labeling geometry
+-   [x] Infrastructure for the built-in viewer (vite setup, etc.)
+-   [x] Building a hierarchy of models (floors, buildings, blocks, etc.) - ✨WIP
+    -   [x] Deselect all - button and shortcut
+    -   [x] Group models
+    -   [x] Group groups
+    -   [x] Delete groups
+    -   [x] Move groups (and models)
+-   [x] View settings in the annotate settings - move it to the canvas
+-   [x] Loading tabular data (CSV) and linking it to the hierarchy.
+    -   [x] Loading CSV
+    -   [x] CSV editor
+    -   [x] Multiple CSVs
+    -   [x] Linking CSV rows to the hierarchy
+    -   [x] Unlinking CSV rows from the hierarchy
+-   [x] Resolve table editing issues - maybe leave out table editing all togheter?
+-   [x] Privacy Policy docs
+-   [x] Add text to the Convert dialog
 
-### v0.1.0 - 👨‍💻 In progress
+### v0.1.0 - ✅ Released
 
 -   [x] Rectangular select
 -   [x] Merge submodels

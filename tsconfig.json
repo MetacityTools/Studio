@@ -15,15 +15,15 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "baseUrl": "./src",
+    "baseUrl": "./studio/src",
     "paths": {
-      "@utils/*": ["./Utils/*"],
-      "@components/*": ["./Components/*"],
-      "@elements/*": ["./Elements/*"],
+      "@editor/*": ["./components/Editor/*"],
+      "@elements/*": ["./components/Elements/*"],
+      "@utils/*": ["./utils/*"],
       "@bananagl/*": ["./bananagl/*"],
       "@assets/*": ["./assets/*"],
     }
   },
-  "include": ["src"],
+  "include": ["studio", "plugins"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
