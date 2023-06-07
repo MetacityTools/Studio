@@ -37,7 +37,6 @@ The project is in active development. The roadmap is as follows:
 -   [ ] Resize guard update graphics (The "Oops" message is pretty lame)
 -   [ ] Transforming original metadata to a table
 -   [ ] Extract Utils to separate SDK form metacity editors
--   [ ] Add text to the Conver dialog
 
 ### v0.2.0 - 👨‍💻 In progress
 
@@ -56,7 +55,8 @@ The project is in active development. The roadmap is as follows:
     -   [x] Linking CSV rows to the hierarchy
     -   [x] Unlinking CSV rows from the hierarchy
 -   [x] Resolve table editing issues - maybe leave out table editing all togheter?
--   [ ] Privacy Policy docs
+-   [x] Privacy Policy docs
+-   [x] Add text to the Convert dialog
 
 ### v0.1.0 - ✅ Released
 
