@@ -5,6 +5,7 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import { ViewContext } from '@utils/utils';
 
 import { EditorContext } from './Context/EditorContext';
+import { GoogleAuthContext } from './Context/GoogleAuthContext';
 import { TablesContext } from './Context/TableContext';
 import { ModelEditor } from './Editor';
 import { ErrorPage } from './Utils/Error';
@@ -20,12 +21,14 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     <React.StrictMode>
-        <ViewContext>
-            <EditorContext>
-                <TablesContext>
-                    <RouterProvider router={router} />
-                </TablesContext>
-            </EditorContext>
-        </ViewContext>
+        <GoogleAuthContext>
+            <ViewContext>
+                <EditorContext>
+                    <TablesContext>
+                        <RouterProvider router={router} />
+                    </TablesContext>
+                </EditorContext>
+            </ViewContext>
+        </GoogleAuthContext>
     </React.StrictMode>
 );

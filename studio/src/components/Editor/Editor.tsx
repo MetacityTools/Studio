@@ -6,13 +6,19 @@ import { SizeGuard } from '@elements/SizeGuard';
 
 import { CanvasView } from './Canvas/CanvasView';
 import { EditingStage, useEditingStage } from './Context/EditorContext';
+import { useUserSignIn } from './Context/GoogleAuthContext';
 import { SidePanel } from './SidePanel/SidePanel';
+import { GoogleSignInScreen } from './Utils/GoogleSignIn';
 import { ProcessingScreen } from './Utils/Processing';
 import { SpashScreen } from './Utils/Splash';
 
 export function ModelEditor() {
     const [editingStage] = useEditingStage();
     const minSize = editingStage === EditingStage.Table ? 800 : 450;
+    const [signedIn, setSignedIn] = useUserSignIn();
+
+    if (!signedIn) return <GoogleSignInScreen />;
+
     return (
         <SizeGuard minWidth={600} minHeight={400}>
             <Allotment separator={false}>
