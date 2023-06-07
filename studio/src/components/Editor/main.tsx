@@ -4,11 +4,12 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
 import { ViewContext } from '@utils/utils';
 
+import '@assets/index.css';
+
 import { EditorContext } from './Context/EditorContext';
 import { TablesContext } from './Context/TableContext';
 import { ModelEditor } from './Editor';
 import { ErrorPage } from './Utils/Error';
-import './index.css';
 
 const router = createBrowserRouter([
     {

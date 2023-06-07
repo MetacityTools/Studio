@@ -33,13 +33,19 @@ export function SpashScreen() {
             </Dialog.Title>
             <div className="mx-6 mb-4">
                 <p className="text-neutral-500">v{APP_VERSION} - ⚠️ alpha release</p>
+                <a
+                    href="/privacy"
+                    className="underline text-neutral-500 block text-xs outline-none"
+                >
+                    Privacy Policy
+                </a>
             </div>
             <div className="mx-6 mb-8">
                 <div className="flex flex-row items-center">
                     <TbSquareRoundedNumber1Filled className="mr-2 text-xl text-blue-500" />
                     import, transform, and align models
                 </div>
-                <div className="border-l ml-2 pl-5 border-blue-500 border-dashed">
+                <div className="border-l ml-2 pl-5 border-neutral-500 border-dashed">
                     <ul className="list-disc list-inside text-sm py-2">
                         <li>SHP (only Polygons and MultiPatch)</li>
                         <li>IFC</li>
@@ -47,12 +53,12 @@ export function SpashScreen() {
                     </ul>
                 </div>
                 <div className="flex flex-row items-center">
-                    <TbSquareRoundedNumber2Filled className="mr-2 text-xl text-blue-500" />
+                    <TbSquareRoundedNumber2Filled className="mr-2 text-xl text-neutral-500" />
                     connect tabular data
                 </div>
-                <div className="border-l h-4 ml-2 border-blue-500 border-dashed"></div>
+                <div className="border-l h-4 ml-2 border-neutral-500 border-dashed"></div>
                 <div className="flex flex-row items-center">
-                    <TbSquareRoundedNumber3Filled className="mr-2 text-xl text-blue-500" />
+                    <TbSquareRoundedNumber3Filled className="mr-2 text-xl text-neutral-500" />
                     export
                 </div>
             </div>

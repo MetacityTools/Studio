@@ -1,7 +1,6 @@
 import react from '@vitejs/plugin-react';
 import path from 'path';
 import { defineConfig } from 'vite';
-import mkcert from 'vite-plugin-mkcert';
 
 import trailing from './plugins/trailing';
 
@@ -10,6 +9,7 @@ const build = {
         input: {
             main: path.resolve(__dirname, 'studio/index.html'),
             view: path.resolve(__dirname, 'studio/view/index.html'),
+            privacy: path.resolve(__dirname, 'studio/privacy/index.html'),
         },
     },
     outDir: '../dist',

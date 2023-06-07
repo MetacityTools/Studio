@@ -117,20 +117,12 @@ export function useTables(): [Tables, number, Set<number>] {
 export function useUpdateTables(): [
     (content: string) => void,
     (row: number) => void,
-    (sheet: number) => void,
-    (table: number, row: number, col: number, value: string) => void
+    (sheet: number) => void
 ] {
     const ctx = React.useContext(context);
 
     const addSheet = (content: string) => {
         ctx.setTables(ctx.tables.addSheet(content));
-    };
-
-    const updateCell = (sheet: number, row: number, col: number, value: string) => {
-        console.log('update cell', sheet, row, col, value);
-        const newTables = ctx.tables.changeCell(sheet, row, col, value);
-        console.log('new tables', newTables);
-        ctx.setTables(newTables);
     };
 
     const updateActiveRows = (row: number) => {
@@ -155,5 +147,5 @@ export function useUpdateTables(): [
         });
     };
 
-    return [addSheet, updateActiveRows, updateActiveSheet, updateCell];
+    return [addSheet, updateActiveRows, updateActiveSheet];
 }

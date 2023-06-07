@@ -29,6 +29,7 @@ The project is in active development. The roadmap is as follows:
 
 -   [ ] Viewer - Details TBA
 -   [ ] Optional interactivity - build BVH only if user opts-in to make the loaded models clickable
+-   [ ] Integrate Google Sheets imports
 
 ### v0.2.1
 
@@ -54,7 +55,8 @@ The project is in active development. The roadmap is as follows:
     -   [x] Multiple CSVs
     -   [x] Linking CSV rows to the hierarchy
     -   [x] Unlinking CSV rows from the hierarchy
--   [ ] Resolve table editing issues - maybe leave out table editing all togheter?
+-   [x] Resolve table editing issues - maybe leave out table editing all togheter?
+-   [ ] Privacy Policy docs
 
 ### v0.1.0 - ✅ Released
 

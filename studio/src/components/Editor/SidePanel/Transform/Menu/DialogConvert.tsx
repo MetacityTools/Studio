@@ -1,4 +1,9 @@
 import { Dialog } from '@headlessui/react';
+import {
+    TbSquareRoundedNumber1Filled,
+    TbSquareRoundedNumber2Filled,
+    TbSquareRoundedNumber3Filled,
+} from 'react-icons/tb';
 
 import { OverlayDialog } from '@elements/Dialog';
 
@@ -11,9 +16,38 @@ export function ConvertDialog(props: { isOpen: boolean; onClose: (run: boolean) 
                 as="h1"
                 className="text-2xl font-medium leading-6 text-gray-900 mx-6 mt-6"
             >
-                Convert to Tables
+                Convert Models
             </Dialog.Title>
-            <div className="mx-6 mt-6 text-sm">TODO text describing what this does</div>
+            <div className="py-2 px-6 leading-normal text-sm mt-2">
+                Convert imported models and proceed to connecting tabular data.{' '}
+                <span className="text-blue-500">
+                    You won't be able to modify the imported geometry after conversion.
+                </span>
+            </div>
+            <div className="mx-6 my-2">
+                <div className="flex flex-row items-center">
+                    <TbSquareRoundedNumber1Filled className="mr-2 text-xl text-blue-500" />
+                    import, transform, and align models
+                </div>
+                <div className="border-l ml-2 pl-5 border-blue-500 border-dashed"></div>
+                <div className="border-l h-4 ml-2 border-blue-500 border-dashed"></div>
+                <div className="flex flex-row items-center">
+                    <TbSquareRoundedNumber2Filled className="mr-2 text-xl text-blue-500" />
+                    connect tabular data
+                </div>
+                <div className="border-l ml-2 pl-5 border-neutral-500 border-dashed">
+                    <ul className="list-disc list-inside text-sm py-2">
+                        <li>import CSV tables</li>
+                        <li>group models and groups of models</li>
+                        <li>connect geometry and metadata</li>
+                    </ul>
+                </div>
+                <div className="flex flex-row items-center">
+                    <TbSquareRoundedNumber3Filled className="mr-2 text-xl text-neutral-500" />
+                    export
+                </div>
+            </div>
+
             <div className="m-6 mt-8">
                 <button
                     type="button"
