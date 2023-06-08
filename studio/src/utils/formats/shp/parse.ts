@@ -149,9 +149,7 @@ function unifyBuffers(buffers: Float32Array[], submodelIdx: number[], coordType:
     const coordCount = coordType === CoordType.XY ? 2 : 3;
     const icount = buffers.reduce((acc, b) => acc + b.length, 0) / coordCount;
 
-    console.log('coord type', coordType);
     const needsPadding = coordType === CoordType.XY;
-    console.log('needs padding', needsPadding);
     const position = new Float32Array(icount * 3);
     const submodel = new Uint32Array(icount);
 
@@ -177,8 +175,6 @@ function unifyBuffers(buffers: Float32Array[], submodelIdx: number[], coordType:
 
         suboffset += b.length / coordCount;
     }
-
-    console.log('position', position);
 
     return { position, submodel };
 }

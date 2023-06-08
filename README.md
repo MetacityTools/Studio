@@ -29,9 +29,12 @@ The project is in active development. The roadmap is as follows:
 
 -   [ ] Optional interactivity - build BVH only if user opts-in to make the loaded models clickable
 -   [ ] Integrate Google Sheets imports
+-   [ ] Hide and show models
 
 ### v0.3.0 - 👨‍💻 In progress
 
+-   [x] Auto setup shading based on height
+-   [ ] Projecting models onto models (2D onto 3D) - ✨WIP https://github.com/vojtatom/geometry
 -   [ ] Loading points and lines from SHP
 -   [ ] Project export
 -   [ ] Resize guard update graphics (The "Oops" message is pretty lame)

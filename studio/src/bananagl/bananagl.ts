@@ -5,8 +5,9 @@ import { Attributes } from './models/attributes';
 import { Buffer, ElementBuffer } from './models/buffer';
 import { Model } from './models/model';
 import { Pickable } from './models/pickable';
-import { Renderable } from './models/renderable';
+import { PRIMITIVE_MODE, PrimitiveMode, Renderable } from './models/renderable';
 import { Selectable } from './models/selectable';
+import { BBox } from './picking/bbox';
 import { Ray } from './picking/ray';
 import { Renderer } from './renderer/renderer';
 import { mountRenderer, unmountRenderer } from './renderer/setup';
@@ -37,9 +38,11 @@ export {
     Profiler,
     ShortcutOnPress,
     ShortcutOnMouseMove,
+    BBox,
     mountRenderer,
     unmountRenderer,
     cloneUniforms,
+    PrimitiveMode,
 };
 
-export type { Selectable, Shortcut, TypedArray };
+export type { Selectable, Shortcut, TypedArray, PRIMITIVE_MODE };

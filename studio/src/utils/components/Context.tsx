@@ -60,7 +60,20 @@ function ViewContext(props: { children: React.ReactNode }) {
     React.useEffect(() => {
         const onChange = () => {
             const copy = scene.objects.filter((obj) => obj instanceof EditorModel) as EditorModel[];
+
+            let minZ = Infinity;
+            let maxZ = -Infinity;
+
+            for (const model of copy) {
+                const bbox = model.boundingBox;
+                minZ = Math.min(minZ, bbox.min[2]);
+                maxZ = Math.max(maxZ, bbox.max[2]);
+            }
+
             setModels(copy);
+            setMinShade(minZ);
+            setMaxShade(maxZ);
+
             if (selectedModel !== null && !copy.includes(selectedModel)) setSelectedModel(null);
         };
 
@@ -70,6 +83,26 @@ function ViewContext(props: { children: React.ReactNode }) {
             scene.removeChangeListener(onChange);
         };
     }, [scene, selectedModel]);
+
+    React.useEffect(() => {
+        models.forEach((object) => {
+            if (object instanceof EditorModel) {
+                object.uniforms = {
+                    uZMin: minShade,
+                };
+            }
+        });
+    }, [minShade, models]);
+
+    React.useEffect(() => {
+        models.forEach((object) => {
+            if (object instanceof EditorModel) {
+                object.uniforms = {
+                    uZMax: maxShade,
+                };
+            }
+        });
+    }, [maxShade, models]);
 
     return (
         <context.Provider
