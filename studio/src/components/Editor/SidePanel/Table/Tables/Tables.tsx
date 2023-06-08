@@ -7,7 +7,7 @@ import { Sheet } from '@editor/SidePanel/Table/Tables/Sheet';
 import { EmptyTable } from '@elements/Empty';
 import { If } from '@elements/If';
 
-import { TableMenu } from '../Menu/TableMenu';
+import { MetaMenu } from '../Menu/MetaMenu';
 
 export function Tables() {
     const [tables, activeSheet] = useTables();
@@ -15,7 +15,7 @@ export function Tables() {
 
     return (
         <div className="flex flex-col w-full h-full">
-            <TableMenu />
+            <MetaMenu />
             <If cond={tables.empty}>
                 <EmptyTable />
             </If>

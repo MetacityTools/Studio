@@ -19,7 +19,7 @@ export function ConvertDialog(props: { isOpen: boolean; onClose: (run: boolean) 
                 Convert Models
             </Dialog.Title>
             <div className="py-2 px-6 leading-normal text-sm mt-2">
-                Convert imported models and proceed to connecting tabular data.{' '}
+                Convert imported models and proceed to connecting metadata.{' '}
                 <span className="text-blue-500">
                     You won't be able to modify the imported geometry after conversion.
                 </span>
@@ -33,11 +33,10 @@ export function ConvertDialog(props: { isOpen: boolean; onClose: (run: boolean) 
                 <div className="border-l h-4 ml-2 border-blue-500 border-dashed"></div>
                 <div className="flex flex-row items-center">
                     <TbSquareRoundedNumber2Filled className="mr-2 text-xl text-blue-500" />
-                    connect tabular data
+                    connect metadata data
                 </div>
                 <div className="border-l ml-2 pl-5 border-neutral-500 border-dashed">
                     <ul className="list-disc list-inside text-sm py-2">
-                        <li>import CSV tables</li>
                         <li>group models and groups of models</li>
                         <li>connect geometry and metadata</li>
                     </ul>

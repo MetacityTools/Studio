@@ -12,6 +12,7 @@
         "@headlessui/react": "^1.7.14",
         "@loaders.gl/core": "^3.3.3",
         "@loaders.gl/gltf": "^3.3.3",
+        "@monaco-editor/react": "^4.5.1",
         "@vojtatom/csvts": "^0.1.0",
         "allotment": "^1.18.1",
         "clsx": "^1.2.1",

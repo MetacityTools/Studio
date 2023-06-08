@@ -9,12 +9,6 @@ interface TablesContextProps {
     setNodeToMove: React.Dispatch<React.SetStateAction<Node | undefined>>;
     nodeToLink: Node | undefined;
     setNodeToLink: React.Dispatch<React.SetStateAction<Node | undefined>>;
-    tables: Tables;
-    setTables: React.Dispatch<React.SetStateAction<Tables>>;
-    activeSheet: number;
-    setActiveSheet: React.Dispatch<React.SetStateAction<number>>;
-    activeRows: Set<number>;
-    setActiveRows: React.Dispatch<React.SetStateAction<Set<number>>>;
 }
 
 const context = React.createContext<TablesContextProps>({} as TablesContextProps);
@@ -44,12 +38,6 @@ export function TablesContext(props: { children: React.ReactNode }) {
                 setNodeToMove,
                 nodeToLink,
                 setNodeToLink,
-                tables,
-                setTables,
-                activeSheet,
-                setActiveSheet,
-                activeRows,
-                setActiveRows,
             }}
         >
             {props.children}
@@ -96,56 +84,12 @@ export function useLinkingNode(): [Node | undefined, (node: Node | undefined) =>
     const updateNodeToLink = (node: Node | undefined) => {
         ctx.setNodeToLink((prev) => {
             if (prev === node || node === undefined) {
-                ctx.setActiveRows(new Set());
                 return undefined;
             } else {
-                const rows = node.getLinkedTableRecords(ctx.activeSheet);
-                ctx.setActiveRows(new Set(rows));
                 return node;
             }
         });
     };
 
     return [ctx.nodeToLink, updateNodeToLink];
-}
-
-export function useTables(): [Tables, number, Set<number>] {
-    const ctx = React.useContext(context);
-    return [ctx.tables, ctx.activeSheet, ctx.activeRows];
-}
-
-export function useUpdateTables(): [
-    (content: string) => void,
-    (row: number) => void,
-    (sheet: number) => void
-] {
-    const ctx = React.useContext(context);
-
-    const addSheet = (content: string) => {
-        ctx.setTables(ctx.tables.addSheet(content));
-    };
-
-    const updateActiveRows = (row: number) => {
-        const updated = new Set(ctx.activeRows);
-        if (updated.has(row)) updated.delete(row);
-        else updated.add(row);
-        ctx.setActiveRows(updated);
-        if (ctx.nodeToLink) ctx.nodeToLink.linkTableRecords(ctx.activeSheet, row);
-    };
-
-    const updateActiveSheet = (sheet: number) => {
-        ctx.setActiveSheet((prev) => {
-            if (prev === sheet) return prev;
-
-            if (ctx.nodeToLink) {
-                const rows = ctx.nodeToLink.getLinkedTableRecords(sheet);
-                ctx.setActiveRows(new Set(rows));
-            } else if (ctx.activeRows.size > 0) {
-                ctx.setActiveRows(new Set());
-            }
-            return sheet;
-        });
-    };
-
-    return [addSheet, updateActiveRows, updateActiveSheet];
 }

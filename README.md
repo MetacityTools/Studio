@@ -2,7 +2,7 @@
 
 ![Screenshot](./studio.png)
 
-Metacity Studio is an online tool for integrating and visualizing spatial and tabular data.
+Metacity Studio is an online tool for integrating and visualization of spatial data.
 
 Running at [studio.metacity.cc](https://studio.metacity.cc)
 
@@ -11,7 +11,7 @@ Running at [studio.metacity.cc](https://studio.metacity.cc)
 Prepare urban visualizations online. Load your data, align it, and export it for viewing online.
 
 -   works best with small to medium-sized datasets
--   allows yout to connect 3D models and tabular data
+-   allows yout to connect 3D models and metadata
 
 ## What formats can you load in?
 
@@ -28,19 +28,23 @@ The project is in active development. The roadmap is as follows:
 ### v0.4.0
 
 -   [ ] Optional interactivity - build BVH only if user opts-in to make the loaded models clickable
--   [ ] Integrate Google Sheets imports
 -   [ ] Hide and show models
+-   [ ] Viewer - Details TBA
+
+### v0.3.1
+
+-   [ ] Loading points and lines from SHP
+-   [ ] Extract Utils to separate SDK form metacity editors
 
 ### v0.3.0 - 👨‍💻 In progress
 
 -   [x] Auto setup shading based on height
--   [ ] Projecting models onto models (2D onto 3D) - ✨WIP https://github.com/vojtatom/geometry
--   [ ] Loading points and lines from SHP
--   [ ] Project export
 -   [ ] Resize guard update graphics (The "Oops" message is pretty lame)
--   [ ] Transforming original metadata to a table
--   [ ] Extract Utils to separate SDK form metacity editors
--   [ ] Viewer - Details TBA
+-   [ ] Projecting models onto models (2D onto 3D) - ✨WIP https://github.com/vojtatom/geometry
+-   [ ] JSON metadata for nodes in hierarchy
+    -   [ ] Assign metadata to model nodes
+-   [ ] Project export
+-   [ ] Styling???
 
 ### v0.2.0 - ✅ Released
 
