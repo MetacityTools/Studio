@@ -25,18 +25,19 @@ Currently:
 
 The project is in active development. The roadmap is as follows:
 
-### v0.3.0
+### v0.4.0
 
--   [ ] Viewer - Details TBA
 -   [ ] Optional interactivity - build BVH only if user opts-in to make the loaded models clickable
 -   [ ] Integrate Google Sheets imports
 
-### v0.2.1 - 👨‍💻 In progress
+### v0.3.0 - 👨‍💻 In progress
 
+-   [ ] Loading points and lines from SHP
 -   [ ] Project export
 -   [ ] Resize guard update graphics (The "Oops" message is pretty lame)
 -   [ ] Transforming original metadata to a table
 -   [ ] Extract Utils to separate SDK form metacity editors
+-   [ ] Viewer - Details TBA
 
 ### v0.2.0 - ✅ Released
 
@@ -103,7 +104,6 @@ The project is in active development. The roadmap is as follows:
 ## Backlog
 
 -   [ ] Merge whole models
--   [ ] Loading points and lines from SHP
 -   [ ] Loading GeoJSON
 -   [ ] Loading IFC metadata loading (memory-efficiency???)
 -   [ ] Remesh models - intersection of triangles
