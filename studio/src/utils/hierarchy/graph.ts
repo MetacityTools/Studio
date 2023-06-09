@@ -6,8 +6,9 @@ export class ModelGraph {
     root: GroupNode = new GroupNode();
     private onUpdateCallbacks: ((graph: ModelGraph) => void)[] = [];
 
-    addModelToRoot(modelId: number) {
+    addModelToRoot(modelId: number, data: { [key: string]: any } = {}) {
         const node = new ModelNode(modelId);
+        node.data = data;
         this.root.addChild(node);
         node.addParent(this.root);
     }

@@ -9,6 +9,10 @@ interface TablesContextProps {
     setNodeToMove: React.Dispatch<React.SetStateAction<Node | undefined>>;
     nodeToLink: Node | undefined;
     setNodeToLink: React.Dispatch<React.SetStateAction<Node | undefined>>;
+    tables: Tables;
+    setTables: React.Dispatch<React.SetStateAction<Tables>>;
+    activeSheet: number;
+    setActiveSheet: React.Dispatch<React.SetStateAction<number>>;
 }
 
 const context = React.createContext<TablesContextProps>({} as TablesContextProps);
@@ -19,7 +23,6 @@ export function TablesContext(props: { children: React.ReactNode }) {
     const [nodeToLink, setNodeToLink] = React.useState<Node | undefined>();
     const [tables, setTables] = React.useState<Tables>(new Tables([]));
     const [activeSheet, setActiveSheet] = React.useState<number>(0);
-    const [activeRows, setActiveRows] = React.useState<Set<number>>(new Set<number>());
 
     React.useEffect(() => {
         graph.addChangeListener(() => {
@@ -38,6 +41,10 @@ export function TablesContext(props: { children: React.ReactNode }) {
                 setNodeToMove,
                 nodeToLink,
                 setNodeToLink,
+                tables,
+                setTables,
+                activeSheet,
+                setActiveSheet,
             }}
         >
             {props.children}
@@ -92,4 +99,34 @@ export function useLinkingNode(): [Node | undefined, (node: Node | undefined) =>
     };
 
     return [ctx.nodeToLink, updateNodeToLink];
+}
+
+export function useTables(): [Tables, React.Dispatch<React.SetStateAction<Tables>>] {
+    const ctx = React.useContext(context);
+    return [ctx.tables, ctx.setTables];
+}
+
+export function useSheets(): [(content: string) => void, (index: number) => void] {
+    const ctx = React.useContext(context);
+    const addSheet = (content: string) => {
+        ctx.setTables(ctx.tables.addSheet(content));
+    };
+
+    const removeSheet = (index: number) => {
+        ctx.setTables(ctx.tables.removeSheet(index));
+    };
+
+    return [addSheet, removeSheet];
+}
+
+export function useActiveSheet(): [number, React.Dispatch<React.SetStateAction<number>>] {
+    const ctx = React.useContext(context);
+    return [ctx.activeSheet, ctx.setActiveSheet];
+}
+
+export function useRowTypes(): (sheet: number, row: number, rowType: string) => void {
+    const ctx = React.useContext(context);
+    return (sheet: number, row: number, rowType: string) => {
+        ctx.setTables(ctx.tables.setSheetRowType(sheet, row, rowType as any));
+    };
 }

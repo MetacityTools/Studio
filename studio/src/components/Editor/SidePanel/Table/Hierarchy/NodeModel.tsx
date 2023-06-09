@@ -1,7 +1,7 @@
 import React from 'react';
 import { BsFillStopFill } from 'react-icons/bs';
 import { MdOutlineDriveFileMove } from 'react-icons/md';
-import { VscSymbolInterface } from 'react-icons/vsc';
+import { VscJson, VscSymbolInterface } from 'react-icons/vsc';
 
 import { EditorModel, ModelNode as ModelNodeClass } from '@utils/utils';
 import { useSelection } from '@utils/utils';
@@ -73,7 +73,7 @@ export function ModelNode(props: ModelNodeProps) {
                         onClick={handleLink}
                         title="Link to selected rows in table"
                     >
-                        <VscSymbolInterface />
+                        <VscJson />
                     </HierarchyButton>
                 </If>
             </HierarchyNodeRow>

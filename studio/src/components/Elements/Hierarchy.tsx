@@ -5,7 +5,7 @@ export function colorNodeBackground(active: boolean, light?: boolean) {
     if (active)
         return 'text-amber-800 bg-amber-300 enabled:hover:bg-amber-400 outline-none transition-colors';
     if (light)
-        return 'text-amber-800 bg-amber-200 enabled:hover:bg-amber-400 outline-none transition-colors';
+        return 'text-amber-800 bg-amber-100 enabled:hover:bg-amber-400 outline-none transition-colors';
     return 'text-neutral-800 bg-neutral-200 enabled:hover:bg-neutral-300 outline-none transition-colors';
 }
 

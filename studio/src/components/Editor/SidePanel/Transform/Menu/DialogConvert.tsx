@@ -33,7 +33,7 @@ export function ConvertDialog(props: { isOpen: boolean; onClose: (run: boolean) 
                 <div className="border-l h-4 ml-2 border-blue-500 border-dashed"></div>
                 <div className="flex flex-row items-center">
                     <TbSquareRoundedNumber2Filled className="mr-2 text-xl text-blue-500" />
-                    connect metadata data
+                    connect metadata
                 </div>
                 <div className="border-l ml-2 pl-5 border-neutral-500 border-dashed">
                     <ul className="list-disc list-inside text-sm py-2">

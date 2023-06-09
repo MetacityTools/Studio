@@ -1,47 +1,59 @@
-import { Transition } from '@headlessui/react';
 import clsx from 'clsx';
-import { VscSymbolInterface } from 'react-icons/vsc';
+import { BiCopy } from 'react-icons/bi';
 
-import { useLinkingNode, useTables, useUpdateTables } from '@editor/Context/TableContext';
+import { useActiveSheet, useRowTypes, useTables } from '@editor/Context/TableContext';
 
 interface TableRowProps {
     index: number;
     row: string[];
+    rowType: string;
 }
 
 const cellCls = 'border-r border-b whitespace-pre px-2 h-full';
 
 export function TableRow(props: TableRowProps) {
-    const { index, row } = props;
-    const [, activeSheet, activeRows] = useTables();
-    const [nodeToLink] = useLinkingNode();
-    const [, updateActiveRows] = useUpdateTables();
-    const selected = activeRows.has(index);
+    const { index, row, rowType } = props;
+    const [activeSheet] = useActiveSheet();
+    const [tables] = useTables();
+
+    const updateRowType = useRowTypes();
+
+    const handleRowTypeUpdate = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        const { value } = event.target;
+        updateRowType(activeSheet, index, value);
+    };
+
+    const handleCopyClipboard = () => {
+        console.log('copy to clipboard');
+        const json = tables.getJSON(activeSheet, index);
+        console.log(json);
+        navigator.clipboard.writeText(JSON.stringify(json, null, 4));
+    };
 
     return (
-        <tr className={clsx(selected ? 'bg-amber-100' : 'odd:bg-neutral-50', 'transition-colors')}>
+        <tr className="odd:bg-neutral-50">
             <td
-                className={clsx(
-                    cellCls,
-                    'text-xs sticky left-0 cursor-pointer transition-all hover:text-amber-900 hover:bg-amber-300',
-                    selected ? 'text-amber-800 bg-amber-300' : 'text-neutral-500 bg-neutral-100'
-                )}
-                onClick={() => updateActiveRows(index)}
+                className="text-neutral-500 px-2 bg-neutral-100 border-r border-b sticky left-0 cursor-pointer hover:bg-amber-200 hover:text-amber-800"
+                onClick={handleCopyClipboard}
+                title="Copy row to clipboard"
             >
                 <div className="flex flex-row items-center">
-                    <Transition
-                        show={!!(selected && nodeToLink)}
-                        enter="transition-all duration-150"
-                        enterFrom="opacity-0 w-0"
-                        enterTo="opacity-100 w-6"
-                        leave="transition-all duration-150"
-                        leaveFrom="opacity-100 w-6"
-                        leaveTo="opacity-0 w-0"
-                    >
-                        <VscSymbolInterface className="rotate-180 mr-2" />
-                    </Transition>
-                    <div>{String(index + 1).padStart(4, '0')}</div>
+                    {String(index + 1).padStart(4, '0')}
+                    <BiCopy className="inline-block ml-1" />
                 </div>
+            </td>
+            <td className={clsx(cellCls, 'text-neutral-500 bg-neutral-100')}>
+                <select
+                    name="rowType"
+                    id="rowType"
+                    defaultValue={rowType}
+                    onChange={handleRowTypeUpdate}
+                    className="text-neutral-500 bg-transparent outline-none cursor-pointer"
+                >
+                    <option value="key">key</option>
+                    <option value="value">value</option>
+                    <option value="value">units</option>
+                </select>
             </td>
             {row.map((cell, cindex) => (
                 <td className={cellCls} key={activeSheet + '_' + index + '_' + cindex}>

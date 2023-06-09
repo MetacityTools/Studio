@@ -2,7 +2,7 @@ import React from 'react';
 import { BsFillStopFill } from 'react-icons/bs';
 import { FiDelete } from 'react-icons/fi';
 import { MdDriveFileMoveRtl, MdOutlineDriveFileMove } from 'react-icons/md';
-import { VscSymbolInterface } from 'react-icons/vsc';
+import { VscJson } from 'react-icons/vsc';
 
 import { EditorModel, GroupNode as GroupNodeClass, deleteGroup } from '@utils/utils';
 import { useSelection } from '@utils/utils';
@@ -32,7 +32,7 @@ export function GroupNode(props: GroupNodeProps) {
     const [graph] = useGraph();
     const [nodeToMove, updateNodeToMove] = useMovingNode();
     const [nodeToLink, updateNodeToLink] = useLinkingNode();
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = React.useState(true);
 
     const isSelected = React.useMemo(() => node.selected(submodels), [node, submodels]);
     const isLinking = React.useMemo(() => node === nodeToLink, [node, nodeToLink]);
@@ -118,7 +118,7 @@ export function GroupNode(props: GroupNodeProps) {
                         onClick={handleLink}
                         title="Link to selected rows in table"
                     >
-                        <VscSymbolInterface />
+                        <VscJson />
                     </HierarchyButton>
                 </If>
             </HierarchyNodeRow>

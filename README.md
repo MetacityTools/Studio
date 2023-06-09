@@ -36,15 +36,18 @@ The project is in active development. The roadmap is as follows:
 -   [ ] Loading points and lines from SHP
 -   [ ] Extract Utils to separate SDK form metacity editors
 
-### v0.3.0 - 👨‍💻 In progress
+### v0.3.2 - 👨‍💻 In progress
 
--   [x] Auto setup shading based on height
--   [ ] Resize guard update graphics (The "Oops" message is pretty lame)
 -   [ ] Projecting models onto models (2D onto 3D) - ✨WIP https://github.com/vojtatom/geometry
--   [ ] JSON metadata for nodes in hierarchy
-    -   [ ] Assign metadata to model nodes
 -   [ ] Project export
 -   [ ] Styling???
+
+### v0.2.1 - ✅ Released
+
+-   [x] Auto setup shading based on height
+-   [x] JSON metadata for nodes in hierarchy
+    -   [x] Assign metadata to model nodes
+-   [x] Resize guard update graphics (The "Oops" message is pretty lame)
 
 ### v0.2.0 - ✅ Released
 

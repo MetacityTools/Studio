@@ -90,5 +90,5 @@ export async function joinModels(scene: Scene, models: EditorModel[]) {
         globalShift: [0, 0, 0],
     });
 
-    return submodelCount;
+    return { submodelCount, meta };
 }

@@ -1,17 +1,80 @@
 import { parse } from '@vojtatom/csvts';
 
+type rowType = 'key' | 'value' | 'units';
+
 export class Tables {
-    constructor(public contents: string[][][]) {}
+    public rowTypes: rowType[][] = [];
+
+    constructor(public contents: string[][][], rowTypes?: rowType[][]) {
+        if (!rowTypes) {
+            for (const sheet of contents) {
+                console.log(sheet);
+                this.rowTypes.push(sheet.map(() => 'value'));
+            }
+        } else {
+            this.rowTypes = rowTypes;
+        }
+    }
 
     addSheet(contents: string) {
         const parsed = parse(contents);
         const tableCopy = [...this.contents];
         tableCopy.push(parsed);
-        return new Tables(tableCopy);
+        const rowTypesCopy = [...this.rowTypes];
+        rowTypesCopy.push(parsed.map(() => 'value'));
+        return new Tables(tableCopy, rowTypesCopy);
+    }
+
+    removeSheet(index: number) {
+        const tableCopy = [...this.contents];
+        tableCopy.splice(index, 1);
+        const rowTypesCopy = [...this.rowTypes];
+        rowTypesCopy.splice(index, 1);
+        return new Tables(tableCopy, rowTypesCopy);
     }
 
     getSheet(table: number) {
         return this.contents[table];
+    }
+
+    setSheetRowType(sheet: number, row: number, rowType: rowType) {
+        const tableCopy = [...this.rowTypes];
+        const sheetCopy = [...tableCopy[sheet]];
+        sheetCopy[row] = rowType;
+        tableCopy[sheet] = sheetCopy;
+        return new Tables(this.contents, tableCopy);
+    }
+
+    getSheetRowTypes(sheet: number) {
+        return this.rowTypes[sheet];
+    }
+
+    getJSON(sheet: number, row: number): { [key: string]: any } {
+        const table = this.contents[sheet];
+        const rowData = table[row];
+
+        const result: any = {};
+        for (let i = 0; i < rowData.length; i++) {
+            const value = rowData[i];
+            if (value === '') continue;
+            const keys = this.getKeysForColumn(sheet, i);
+            if (keys.length === 0) return {};
+            recursiveInsert(keys, value, result);
+        }
+        return result;
+    }
+
+    private getKeysForColumn(sheet: number, column: number) {
+        const keys: string[] = [];
+        const table = this.contents[sheet];
+
+        for (let i = 0; i < table.length; i++) {
+            if (this.rowTypes[sheet][i] === 'key') {
+                keys.push(table[i][column]);
+            }
+        }
+
+        return keys;
     }
 
     get empty() {
@@ -21,4 +84,20 @@ export class Tables {
     get sheets() {
         return this.contents;
     }
+}
+
+function recursiveInsert(keys: string[], value: any, obj: any) {
+    if (keys.length === 0) {
+        const num = parseFloat(value);
+
+        if (isNaN(num)) {
+            return value;
+        } else {
+            return num;
+        }
+    }
+
+    const key = keys.shift()!;
+    obj[key] = recursiveInsert(keys, value, obj[key] ?? {});
+    return obj;
 }

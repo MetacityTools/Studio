@@ -1,12 +1,15 @@
 import React from 'react';
 
+import cat from '@assets/cat.gif';
+
 function UnsuitableSize() {
     return (
         <div className="absolute inset-0 flex flex-col place-content-center place-items-center z-50 bg-white">
-            <div className="text-4xl mb-4 text-gray-500">Oops :(</div>
-            <div className="text-xs text-gray-500">
-                The window is too small to display the content
-            </div>
+            <img src={cat} alt="cat" className="w-32 h-32 disable-blur" />
+            <p className="max-w-xs text-center leading-normal">
+                Sorry, Metacity Studio <span className="font-bold">requires larger screen</span> to
+                display the content.
+            </p>
         </div>
     );
 }

@@ -56,6 +56,7 @@ function ViewContext(props: { children: React.ReactNode }) {
     const [maxShade, setMaxShade] = React.useState<number>(10);
     const [gridVisible, setGridVisible] = React.useState<boolean>(true);
     const [globalShift, setGlobalShift] = React.useState<vec3 | null>(null);
+    const activeView = 0;
 
     React.useEffect(() => {
         const onChange = () => {
@@ -73,6 +74,7 @@ function ViewContext(props: { children: React.ReactNode }) {
             setModels(copy);
             setMinShade(minZ);
             setMaxShade(maxZ);
+            if (isFinite(minZ)) setCamTargetZ(minZ);
 
             if (selectedModel !== null && !copy.includes(selectedModel)) setSelectedModel(null);
         };
@@ -104,12 +106,17 @@ function ViewContext(props: { children: React.ReactNode }) {
         });
     }, [maxShade, models]);
 
+    React.useEffect(() => {
+        const view = renderer.views[activeView].view;
+        view.camera.z = camTargetZ;
+    }, [activeView, renderer, camTargetZ]);
+
     return (
         <context.Provider
             value={{
                 scene,
                 renderer,
-                activeView: 0,
+                activeView: activeView,
                 models,
                 selectedModel,
                 setSelectedModel,
