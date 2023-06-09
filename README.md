@@ -38,6 +38,10 @@ The project is in active development. The roadmap is as follows:
 
 ### v0.3.2 - 👨‍💻 In progress
 
+-   [ ] Remove the conversion process and support switching between transform and table mode
+    -    [ ] add model identifiers
+    -    [ ] add create/remove modifiers for hierarchy 
+    -    [ ] move hierarchy to Editor Context 
 -   [ ] Projecting models onto models (2D onto 3D) - ✨WIP https://github.com/vojtatom/geometry
 -   [ ] Project export
 -   [ ] Styling???
