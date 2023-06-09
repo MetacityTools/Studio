@@ -13,8 +13,6 @@ interface TablesContextProps {
     setTables: React.Dispatch<React.SetStateAction<Tables>>;
     activeSheet: number;
     setActiveSheet: React.Dispatch<React.SetStateAction<number>>;
-    activeRows: Set<number>;
-    setActiveRows: React.Dispatch<React.SetStateAction<Set<number>>>;
 }
 
 const context = React.createContext<TablesContextProps>({} as TablesContextProps);
@@ -25,7 +23,6 @@ export function TablesContext(props: { children: React.ReactNode }) {
     const [nodeToLink, setNodeToLink] = React.useState<Node | undefined>();
     const [tables, setTables] = React.useState<Tables>(new Tables([]));
     const [activeSheet, setActiveSheet] = React.useState<number>(0);
-    const [activeRows, setActiveRows] = React.useState<Set<number>>(new Set<number>());
 
     React.useEffect(() => {
         graph.addChangeListener(() => {
@@ -48,8 +45,6 @@ export function TablesContext(props: { children: React.ReactNode }) {
                 setTables,
                 activeSheet,
                 setActiveSheet,
-                activeRows,
-                setActiveRows,
             }}
         >
             {props.children}
@@ -96,11 +91,8 @@ export function useLinkingNode(): [Node | undefined, (node: Node | undefined) =>
     const updateNodeToLink = (node: Node | undefined) => {
         ctx.setNodeToLink((prev) => {
             if (prev === node || node === undefined) {
-                ctx.setActiveRows(new Set());
                 return undefined;
             } else {
-                const rows = node.getLinkedTableRecords(ctx.activeSheet);
-                ctx.setActiveRows(new Set(rows));
                 return node;
             }
         });
@@ -109,43 +101,32 @@ export function useLinkingNode(): [Node | undefined, (node: Node | undefined) =>
     return [ctx.nodeToLink, updateNodeToLink];
 }
 
-export function useTables(): [Tables, number, Set<number>] {
+export function useTables(): [Tables, React.Dispatch<React.SetStateAction<Tables>>] {
     const ctx = React.useContext(context);
-    return [ctx.tables, ctx.activeSheet, ctx.activeRows];
+    return [ctx.tables, ctx.setTables];
 }
 
-export function useUpdateTables(): [
-    (content: string) => void,
-    (row: number) => void,
-    (sheet: number) => void
-] {
+export function useSheets(): [(content: string) => void, (index: number) => void] {
     const ctx = React.useContext(context);
-
     const addSheet = (content: string) => {
         ctx.setTables(ctx.tables.addSheet(content));
     };
 
-    const updateActiveRows = (row: number) => {
-        const updated = new Set(ctx.activeRows);
-        if (updated.has(row)) updated.delete(row);
-        else updated.add(row);
-        ctx.setActiveRows(updated);
-        if (ctx.nodeToLink) ctx.nodeToLink.linkTableRecords(ctx.activeSheet, row);
+    const removeSheet = (index: number) => {
+        ctx.setTables(ctx.tables.removeSheet(index));
     };
 
-    const updateActiveSheet = (sheet: number) => {
-        ctx.setActiveSheet((prev) => {
-            if (prev === sheet) return prev;
+    return [addSheet, removeSheet];
+}
 
-            if (ctx.nodeToLink) {
-                const rows = ctx.nodeToLink.getLinkedTableRecords(sheet);
-                ctx.setActiveRows(new Set(rows));
-            } else if (ctx.activeRows.size > 0) {
-                ctx.setActiveRows(new Set());
-            }
-            return sheet;
-        });
+export function useActiveSheet(): [number, React.Dispatch<React.SetStateAction<number>>] {
+    const ctx = React.useContext(context);
+    return [ctx.activeSheet, ctx.setActiveSheet];
+}
+
+export function useRowTypes(): (sheet: number, row: number, rowType: string) => void {
+    const ctx = React.useContext(context);
+    return (sheet: number, row: number, rowType: string) => {
+        ctx.setTables(ctx.tables.setSheetRowType(sheet, row, rowType as any));
     };
-
-    return [addSheet, updateActiveRows, updateActiveSheet];
 }

@@ -38,6 +38,15 @@ body,
 }
 
 @layer components {
+    .disable-blur {
+        -webkit-image-rendering: pixelated;
+        -moz-image-rendering: pixelated;
+        -o-image-rendering: pixelated;
+        image-rendering: pixelated;
+    }
+}
+
+@layer components {
     input[type='range'] {
         @apply appearance-none bg-transparent cursor-pointer outline-none;
     }

@@ -2,7 +2,7 @@
 
 ![Screenshot](./studio.png)
 
-Metacity Studio is an online tool for integrating and visualizing spatial and tabular data.
+Metacity Studio is an online tool for integrating and visualization of spatial data.
 
 Running at [studio.metacity.cc](https://studio.metacity.cc)
 
@@ -11,7 +11,7 @@ Running at [studio.metacity.cc](https://studio.metacity.cc)
 Prepare urban visualizations online. Load your data, align it, and export it for viewing online.
 
 -   works best with small to medium-sized datasets
--   allows yout to connect 3D models and tabular data
+-   allows yout to connect 3D models and metadata
 
 ## What formats can you load in?
 
@@ -25,20 +25,31 @@ Currently:
 
 The project is in active development. The roadmap is as follows:
 
-### v0.3.0
+### v0.4.0
 
--   [ ] Viewer - Details TBA
 -   [ ] Optional interactivity - build BVH only if user opts-in to make the loaded models clickable
--   [ ] Integrate Google Sheets imports
+-   [ ] Hide and show models
+-   [ ] Viewer - Details TBA
 
-### v0.2.1
+### v0.3.1
 
--   [ ] Project export
--   [ ] Resize guard update graphics (The "Oops" message is pretty lame)
--   [ ] Transforming original metadata to a table
+-   [ ] Loading points and lines from SHP
 -   [ ] Extract Utils to separate SDK form metacity editors
 
-### v0.2.0 - 👨‍💻 In progress
+### v0.3.2 - 👨‍💻 In progress
+
+-   [ ] Projecting models onto models (2D onto 3D) - ✨WIP https://github.com/vojtatom/geometry
+-   [ ] Project export
+-   [ ] Styling???
+
+### v0.2.1 - ✅ Released
+
+-   [x] Auto setup shading based on height
+-   [x] JSON metadata for nodes in hierarchy
+    -   [x] Assign metadata to model nodes
+-   [x] Resize guard update graphics (The "Oops" message is pretty lame)
+
+### v0.2.0 - ✅ Released
 
 -   [x] Infrastructure for the built-in viewer (vite setup, etc.)
 -   [x] Building a hierarchy of models (floors, buildings, blocks, etc.) - ✨WIP
@@ -103,7 +114,6 @@ The project is in active development. The roadmap is as follows:
 ## Backlog
 
 -   [ ] Merge whole models
--   [ ] Loading points and lines from SHP
 -   [ ] Loading GeoJSON
 -   [ ] Loading IFC metadata loading (memory-efficiency???)
 -   [ ] Remesh models - intersection of triangles

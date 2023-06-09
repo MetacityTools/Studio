@@ -82,8 +82,8 @@ export function TransformMenu() {
             setProcessing(true);
 
             await new Promise((resolve) => setTimeout(resolve, 1000));
-            const submodelCount = await joinModels(scene, models);
-            const hierarchy = createHierarchy(submodelCount);
+            const { submodelCount, meta } = await joinModels(scene, models);
+            const hierarchy = createHierarchy(submodelCount, meta);
 
             setEditingStage(EditingStage.Table);
             setGraph(hierarchy);

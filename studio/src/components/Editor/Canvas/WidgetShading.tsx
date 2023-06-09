@@ -13,27 +13,11 @@ export function ShadingWidget() {
 
     const updateMinShade = (value: number) => {
         if (isNaN(value)) return;
-        scene.objects.forEach((object) => {
-            if (object instanceof EditorModel) {
-                object.uniforms = {
-                    uZMin: value,
-                };
-            }
-        });
-
         setMinShade(value);
     };
 
     const updateMaxShade = (value: number) => {
         if (isNaN(value)) return;
-        scene.objects.forEach((object) => {
-            if (object instanceof EditorModel) {
-                object.uniforms = {
-                    uZMax: value,
-                };
-            }
-        });
-
         setMaxShade(value);
     };
 
@@ -48,11 +32,11 @@ export function ShadingWidget() {
             <WidgetLine>
                 <WidgetDescription>Set Z-levels for shading</WidgetDescription>
             </WidgetLine>
-            <WidgetLine className="py-2 px-4">Low Z is {minShade}</WidgetLine>
+            <WidgetLine className="py-2 px-4">Low Z is {minShade.toFixed(2)}</WidgetLine>
             <WidgetLine className="px-4 mb-4">
                 <Range min={-10} max={500} value={minShade} onChange={updateMinShade} />
             </WidgetLine>
-            <WidgetLine className="py-2 px-4">High Z is {maxShade}</WidgetLine>
+            <WidgetLine className="py-2 px-4">High Z is {maxShade.toFixed(2)}</WidgetLine>
             <WidgetLine className="px-4 mb-4">
                 <Range min={-10} max={500} value={maxShade} onChange={updateMaxShade} />
             </WidgetLine>

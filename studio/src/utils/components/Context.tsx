@@ -56,11 +56,26 @@ function ViewContext(props: { children: React.ReactNode }) {
     const [maxShade, setMaxShade] = React.useState<number>(10);
     const [gridVisible, setGridVisible] = React.useState<boolean>(true);
     const [globalShift, setGlobalShift] = React.useState<vec3 | null>(null);
+    const activeView = 0;
 
     React.useEffect(() => {
         const onChange = () => {
             const copy = scene.objects.filter((obj) => obj instanceof EditorModel) as EditorModel[];
+
+            let minZ = Infinity;
+            let maxZ = -Infinity;
+
+            for (const model of copy) {
+                const bbox = model.boundingBox;
+                minZ = Math.min(minZ, bbox.min[2]);
+                maxZ = Math.max(maxZ, bbox.max[2]);
+            }
+
             setModels(copy);
+            setMinShade(minZ);
+            setMaxShade(maxZ);
+            if (isFinite(minZ)) setCamTargetZ(minZ);
+
             if (selectedModel !== null && !copy.includes(selectedModel)) setSelectedModel(null);
         };
 
@@ -71,12 +86,37 @@ function ViewContext(props: { children: React.ReactNode }) {
         };
     }, [scene, selectedModel]);
 
+    React.useEffect(() => {
+        models.forEach((object) => {
+            if (object instanceof EditorModel) {
+                object.uniforms = {
+                    uZMin: minShade,
+                };
+            }
+        });
+    }, [minShade, models]);
+
+    React.useEffect(() => {
+        models.forEach((object) => {
+            if (object instanceof EditorModel) {
+                object.uniforms = {
+                    uZMax: maxShade,
+                };
+            }
+        });
+    }, [maxShade, models]);
+
+    React.useEffect(() => {
+        const view = renderer.views[activeView].view;
+        view.camera.z = camTargetZ;
+    }, [activeView, renderer, camTargetZ]);
+
     return (
         <context.Provider
             value={{
                 scene,
                 renderer,
-                activeView: 0,
+                activeView: activeView,
                 models,
                 selectedModel,
                 setSelectedModel,

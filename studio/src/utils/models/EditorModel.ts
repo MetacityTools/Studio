@@ -13,6 +13,8 @@ export class EditorModel extends GL.Pickable implements GL.Selectable {
     private highlitColor_ = [255, 245, 229];
     private white_ = [255, 255, 255];
 
+    private bbox?: GL.BBox;
+
     private geometryMode_ = GeometryMode.SOLID;
     public solidShader?: GL.Shader;
     public wireframeShader?: GL.Shader;
@@ -58,6 +60,15 @@ export class EditorModel extends GL.Pickable implements GL.Selectable {
 
     deselect(submodelIDs: number[]) {
         this.colorForId(submodelIDs, this.baseColor_[0], this.baseColor_[1], this.baseColor_[2], 0);
+    }
+
+    get boundingBox() {
+        if (!this.bbox) {
+            const pos = this.attributes.getAttribute('position');
+            this.bbox = new GL.BBox();
+            if (pos) this.bbox.extendArr(pos.buffer.data, 0, pos.buffer.data.length);
+        }
+        return this.bbox;
     }
 
     private colorForId(submodelIDs: number[], r: number, g: number, b: number, s: number = 1) {

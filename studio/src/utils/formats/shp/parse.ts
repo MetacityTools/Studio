@@ -160,10 +160,10 @@ function unifyBuffers(buffers: Float32Array[], submodelIdx: number[], coordType:
         const b = buffers[i];
         const s = submodelIdx[i];
         if (needsPadding) {
-            for (let i = 0; i < b.length; i += 2) {
-                position[posoffset + i] = b[i];
-                position[posoffset + i + 1] = b[i + 1];
-                position[posoffset + i + 2] = 0;
+            for (let j = 0, k = 0; j < b.length; j += 2, k += 3) {
+                position[posoffset + k] = b[j];
+                position[posoffset + k + 1] = b[j + 1];
+                position[posoffset + k + 2] = 0;
             }
             posoffset += (b.length / 2) * 3;
         } else {
