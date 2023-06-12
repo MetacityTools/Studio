@@ -17,6 +17,14 @@ export class Model extends Renderable {
         return this._shader;
     }
 
+    get data() {
+        return this.data_;
+    }
+
+    set data(data: { [name: string]: any }) {
+        this.data_ = data;
+    }
+
     set shader(shader: Shader) {
         this._shader = shader;
     }
