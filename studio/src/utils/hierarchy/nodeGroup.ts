@@ -20,10 +20,10 @@ export class GroupNode extends Node {
 
     removeModel(model: EditorModel) {
         if (!this.children) return;
-        for (const child of this.children) {
+        for (let i = this.children.length - 1; i >= 0; i--) {
+            const child = this.children[i];
             if (child instanceof ModelNode && child.model === model) {
                 this.removeChild(child);
-                break;
             }
             if (child instanceof GroupNode) {
                 child.removeModel(model);
@@ -46,10 +46,10 @@ export class GroupNode extends Node {
 
     removeSubmodels(model: EditorModel, ids: Set<number>) {
         if (!this.children) return;
-        for (const child of this.children) {
+        for (let i = this.children.length - 1; i >= 0; i--) {
+            const child = this.children[i];
             if (child instanceof ModelNode && child.model === model && ids.has(child.submodelId)) {
                 this.removeChild(child);
-                break;
             }
             if (child instanceof GroupNode) {
                 child.removeSubmodels(model, ids);
@@ -80,6 +80,21 @@ export class GroupNode extends Node {
                 if (node) return node;
             }
         }
+    }
+
+    getMetadata(model: EditorModel, submodelID: Set<number>, data: any[] = []) {
+        for (const child of this.children) {
+            if (
+                child instanceof ModelNode &&
+                child.model === model &&
+                submodelID.has(child.submodelId)
+            )
+                data.push(child.data);
+            if (child instanceof GroupNode) {
+                child.getMetadata(model, submodelID, data);
+            }
+        }
+        return data;
     }
 
     selected(selectedModels: SelectionType) {

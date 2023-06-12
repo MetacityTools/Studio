@@ -21,8 +21,9 @@ export function ModelList() {
                             key={model.name + index}
                             selected={selection.has(model)}
                             onSelect={() =>
-                                //TODO how to handle this??
-                                selection.has(model)
+                                selection.size > 1
+                                    ? select(new Map([[model, new Set()]]))
+                                    : selection.has(model)
                                     ? select(new Map())
                                     : select(new Map([[model, new Set()]]))
                             }

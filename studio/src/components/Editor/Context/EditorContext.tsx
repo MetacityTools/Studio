@@ -1,6 +1,6 @@
 import React from 'react';
 
-export enum EditingStage {
+export enum EditingMode {
     Transform,
     Table,
 }
@@ -10,14 +10,14 @@ interface EditorContextProps {
     setProcessing: React.Dispatch<React.SetStateAction<boolean>>;
     loadingStatus: string;
     setLoadingStatus: React.Dispatch<React.SetStateAction<string>>;
-    editingStage: EditingStage;
-    setEditingStage: React.Dispatch<React.SetStateAction<EditingStage>>;
+    editingMode: EditingMode;
+    setEditingMode: React.Dispatch<React.SetStateAction<EditingMode>>;
 }
 
 const context = React.createContext<EditorContextProps>({} as EditorContextProps);
 
 export function EditorContext(props: { children: React.ReactNode }) {
-    const [editingStage, setEditingStage] = React.useState<EditingStage>(EditingStage.Transform);
+    const [editingMode, setEditingMode] = React.useState<EditingMode>(EditingMode.Transform);
     const [loadingStatus, setLoadingStatus] = React.useState<string>('');
     const [processing, setProcessing] = React.useState(false);
 
@@ -28,8 +28,8 @@ export function EditorContext(props: { children: React.ReactNode }) {
                 setProcessing,
                 loadingStatus,
                 setLoadingStatus,
-                editingStage,
-                setEditingStage,
+                editingMode,
+                setEditingMode,
             }}
         >
             {props.children}
@@ -51,10 +51,7 @@ export function useLoadingStatus(): [string, React.Dispatch<React.SetStateAction
     return [loadingStatus, setLoadingStatus];
 }
 
-export function useEditingStage(): [
-    EditingStage,
-    React.Dispatch<React.SetStateAction<EditingStage>>
-] {
-    const { editingStage, setEditingStage } = useEditorContext();
-    return [editingStage, setEditingStage];
+export function useEditingMode(): [EditingMode, React.Dispatch<React.SetStateAction<EditingMode>>] {
+    const { editingMode, setEditingMode } = useEditorContext();
+    return [editingMode, setEditingMode];
 }

@@ -120,11 +120,13 @@ export function useCreateModels() {
 
 export function useRemoveModels() {
     const ctx = React.useContext(context);
+    const [select] = useSelection();
 
     const remove = (models: EditorModel) => {
         ctx.scene.remove(models);
         ctx.graph.removeModel(models);
         ctx.graph.needsUpdate = true;
+        select(new Map());
     };
 
     return remove;
@@ -132,6 +134,7 @@ export function useRemoveModels() {
 
 export function useRemoveSubmodels() {
     const ctx = React.useContext(context);
+    const [select] = useSelection();
 
     const remove = async (model: EditorModel, submodels: Set<number>) => {
         const data = removeSubmodels(model, submodels);
@@ -146,6 +149,7 @@ export function useRemoveSubmodels() {
 
         ctx.scene.remove(model);
         ctx.graph.needsUpdate = true;
+        select(new Map());
     };
 
     return remove;
@@ -153,6 +157,7 @@ export function useRemoveSubmodels() {
 
 export function useSplitModel() {
     const ctx = React.useContext(context);
+    const [select] = useSelection();
 
     const split = async (oldModel: EditorModel, submodels: Set<number>) => {
         const data = splitModel(oldModel, submodels);
@@ -175,6 +180,7 @@ export function useSplitModel() {
 
         ctx.scene.remove(oldModel);
         ctx.graph.needsUpdate = true;
+        select(new Map());
     };
 
     return split;
@@ -182,14 +188,19 @@ export function useSplitModel() {
 
 export function useJoinSubmodels() {
     const ctx = React.useContext(context);
+    const [select] = useSelection();
 
     const join = async (model: EditorModel, submodels: Set<number>) => {
         const newSubmodelId = await joinSubmodels(model, submodels);
         if (!newSubmodelId) return;
+        const data = ctx.graph.getMetadata(model, submodels);
         submodels.delete(newSubmodelId);
-        //TODO merge metadata
+        const node = ctx.graph.getModel(model, newSubmodelId);
+        if (!node) return;
+        node.data = data;
         ctx.graph.removeSubmodels(model, submodels);
         ctx.graph.needsUpdate = true;
+        select(new Map([[model, new Set([newSubmodelId])]]));
     };
 
     return join;

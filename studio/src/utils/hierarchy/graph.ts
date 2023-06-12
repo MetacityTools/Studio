@@ -36,6 +36,10 @@ export class ModelGraph {
         this.root.updateModel(oldModel, newModel, submodelIDs);
     }
 
+    getMetadata(model: EditorModel, submodelID: Set<number>) {
+        return this.root.getMetadata(model, submodelID);
+    }
+
     set needsUpdate(value: boolean) {
         if (value) this.onUpdateCallbacks.forEach((cb) => cb(this));
     }
