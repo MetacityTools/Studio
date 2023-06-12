@@ -1,8 +1,6 @@
-import { Dialog, Transition } from '@headlessui/react';
-import clsx from 'clsx';
-import React from 'react';
+import { Dialog } from '@headlessui/react';
 
-import { CoordinateMode } from '@utils/models/addEditorModel';
+import { CoordinateMode } from '@utils/utils';
 
 import { DialogOption, OverlayDialog } from '@elements/Dialog';
 

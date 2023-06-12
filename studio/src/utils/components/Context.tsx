@@ -1,11 +1,10 @@
 import { vec3 } from 'gl-matrix';
 import React from 'react';
 
+import { ModelGraph } from '@utils/hierarchy/graph';
 import { EditorModel } from '@utils/models/EditorModel';
 
 import * as GL from '@bananagl/bananagl';
-
-import { changeSelection } from './selection';
 
 /**
  * A function that updates the selection of models and submodels.
@@ -15,22 +14,19 @@ import { changeSelection } from './selection';
  * @param extend A boolean indicating whether to extend the selection or not.
  * @returns void
  */
-type SelectFunction = (
-    model: EditorModel | null,
-    submodelIDs?: number[],
-    toggle?: boolean,
-    extend?: boolean
-) => void;
+export type SelectFunction = (selection: SelectionType, toggle?: boolean, extend?: boolean) => void;
+
+export type SelectionType = Map<EditorModel, Set<number>>;
 
 interface ViewContextProps {
     scene: GL.Scene;
     renderer: GL.Renderer;
     activeView: number;
     models: EditorModel[];
-    selectedModel: EditorModel | null;
-    setSelectedModel: React.Dispatch<React.SetStateAction<EditorModel | null>>;
-    selectedSubmodels: number[];
-    setSelectedSubmodels: React.Dispatch<React.SetStateAction<number[]>>;
+    selection: SelectionType;
+    setSelection: React.Dispatch<React.SetStateAction<SelectionType>>;
+    graph: ModelGraph;
+    setGraph: React.Dispatch<React.SetStateAction<ModelGraph>>;
     camTargetZ: number;
     setCamTargetZ: React.Dispatch<React.SetStateAction<number>>;
     minShade: number;
@@ -43,14 +39,14 @@ interface ViewContextProps {
     setGlobalShift: React.Dispatch<React.SetStateAction<vec3 | null>>;
 }
 
-const context = React.createContext<ViewContextProps>({} as ViewContextProps);
+export const context = React.createContext<ViewContextProps>({} as ViewContextProps);
 
-function ViewContext(props: { children: React.ReactNode }) {
+export function ViewContext(props: { children: React.ReactNode }) {
     const [renderer] = React.useState(new GL.Renderer());
     const [scene] = React.useState(new GL.Scene());
     const [models, setModels] = React.useState<EditorModel[]>([]);
-    const [selectedModel, setSelectedModel] = React.useState<EditorModel | null>(null);
-    const [selectedSubmodels, setSelectedSubmodels] = React.useState<number[]>([]);
+    const [selection, setSelection] = React.useState<SelectionType>(new Map());
+    const [graph, setGraph] = React.useState<ModelGraph>(new ModelGraph());
     const [camTargetZ, setCamTargetZ] = React.useState<number>(0);
     const [minShade, setMinShade] = React.useState<number>(0);
     const [maxShade, setMaxShade] = React.useState<number>(10);
@@ -76,7 +72,15 @@ function ViewContext(props: { children: React.ReactNode }) {
             setMaxShade(maxZ);
             if (isFinite(minZ)) setCamTargetZ(minZ);
 
-            if (selectedModel !== null && !copy.includes(selectedModel)) setSelectedModel(null);
+            let selectionCopy = new Map(selection);
+            let changed = false;
+            for (const model of copy) {
+                if (selectionCopy.has(model)) continue;
+                selectionCopy.delete(model);
+                changed = true;
+            }
+
+            if (changed) setSelection(selectionCopy);
         };
 
         scene.addChangeListener(onChange);
@@ -84,7 +88,15 @@ function ViewContext(props: { children: React.ReactNode }) {
         return () => {
             scene.removeChangeListener(onChange);
         };
-    }, [scene, selectedModel]);
+    }, [scene, selection]);
+
+    React.useEffect(() => {
+        graph.addChangeListener(() => {
+            const updated = new ModelGraph();
+            updated.copy(graph);
+            setGraph(updated);
+        });
+    }, [graph]);
 
     React.useEffect(() => {
         models.forEach((object) => {
@@ -118,10 +130,10 @@ function ViewContext(props: { children: React.ReactNode }) {
                 renderer,
                 activeView: activeView,
                 models,
-                selectedModel,
-                setSelectedModel,
-                selectedSubmodels,
-                setSelectedSubmodels,
+                selection,
+                setSelection,
+                graph,
+                setGraph,
                 camTargetZ,
                 setCamTargetZ,
                 minShade,
@@ -138,105 +150,3 @@ function ViewContext(props: { children: React.ReactNode }) {
         </context.Provider>
     );
 }
-
-function useViewContext(): ViewContextProps {
-    return React.useContext(context);
-}
-
-function useActiveView(): number {
-    const ctx = React.useContext(context);
-    return ctx.activeView;
-}
-
-function useScene(): GL.Scene {
-    const ctx = React.useContext(context);
-    return ctx.scene;
-}
-
-function useRenderer(): GL.Renderer {
-    const ctx = React.useContext(context);
-    return ctx.renderer;
-}
-
-/**
- * A hook that returns an array containing the current models, the selected model, and the selected submodels.
- * @returns An array containing the current models, the selected model, and the selected submodels.
- */
-function useModels(): EditorModel[] {
-    const ctx = React.useContext(context);
-    return ctx.models;
-}
-
-/**
- * A hook that returns an array containing the currently selected model, an array of selected submodel IDs, and a function to update the selection.
- * @returns An array containing the currently selected model, an array of selected submodel IDs, and a function to update the selection.
- */
-function useSelection(): [SelectFunction, EditorModel | null, number[]] {
-    const ctx = React.useContext(context);
-
-    const select = (
-        model: EditorModel | null,
-        submodelIDs: number[] = [],
-        toggle: boolean = false,
-        extend: boolean = false
-    ) => {
-        submodelIDs = changeSelection(
-            ctx.selectedModel,
-            model,
-            ctx.selectedSubmodels,
-            submodelIDs,
-            toggle,
-            extend
-        );
-
-        ctx.setSelectedModel(model);
-        ctx.setSelectedSubmodels(submodelIDs);
-    };
-
-    return [select, ctx.selectedModel, ctx.selectedSubmodels];
-}
-
-function useSelectedSubmodels(): [number[], React.Dispatch<React.SetStateAction<number[]>>] {
-    const ctx = React.useContext(context);
-    return [ctx.selectedSubmodels, ctx.setSelectedSubmodels];
-}
-
-function useCameraZ(): [number, React.Dispatch<React.SetStateAction<number>>] {
-    const ctx = React.useContext(context);
-    return [ctx.camTargetZ, ctx.setCamTargetZ];
-}
-
-function useShadeRange(): [
-    number,
-    number,
-    React.Dispatch<React.SetStateAction<number>>,
-    React.Dispatch<React.SetStateAction<number>>
-] {
-    const ctx = React.useContext(context);
-    return [ctx.minShade, ctx.maxShade, ctx.setMinShade, ctx.setMaxShade];
-}
-
-function useGridVisible(): [boolean, React.Dispatch<React.SetStateAction<boolean>>] {
-    const ctx = React.useContext(context);
-    return [ctx.gridVisible, ctx.setGridVisible];
-}
-
-function useGlobalShift(): [vec3 | null, React.Dispatch<React.SetStateAction<vec3 | null>>] {
-    const ctx = React.useContext(context);
-    return [ctx.globalShift, ctx.setGlobalShift];
-}
-
-export {
-    ViewContext,
-    useViewContext,
-    useActiveView,
-    useScene,
-    useRenderer,
-    useModels,
-    useSelection,
-    useSelectedSubmodels,
-    useCameraZ,
-    useShadeRange,
-    useGridVisible,
-    useGlobalShift,
-};

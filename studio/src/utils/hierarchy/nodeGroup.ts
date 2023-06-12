@@ -1,3 +1,6 @@
+import { SelectionType } from '@utils/components/Context';
+import { EditorModel } from '@utils/utils';
+
 import { Node } from './node';
 import { ModelNode } from './nodeModel';
 
@@ -15,31 +18,77 @@ export class GroupNode extends Node {
         if (index > -1) this.children.splice(index, 1);
     }
 
-    getAllLeaveIds(arr: number[] = []): number[] {
+    removeModel(model: EditorModel) {
+        if (!this.children) return;
         for (const child of this.children) {
-            if (child instanceof ModelNode) arr.push(child.submodelId);
-            if (child instanceof GroupNode) child.getAllLeaveIds(arr);
+            if (child instanceof ModelNode && child.model === model) {
+                this.removeChild(child);
+                break;
+            }
+            if (child instanceof GroupNode) {
+                child.removeModel(model);
+                if (child.children.length === 0) this.removeChild(child);
+            }
         }
-        return arr;
     }
 
-    getModelNode(modelId: number): ModelNode | undefined {
+    updateModel(oldModel: EditorModel, newModel: EditorModel, submodelIDs?: Set<number>) {
+        if (!this.children) return;
         for (const child of this.children) {
-            if (child instanceof ModelNode && child.submodelId === modelId) return child;
+            if (child instanceof ModelNode && child.model === oldModel) {
+                if (!submodelIDs || submodelIDs.has(child.submodelId)) child.model = newModel;
+            }
             if (child instanceof GroupNode) {
-                const node = child.getModelNode(modelId);
+                child.updateModel(oldModel, newModel, submodelIDs);
+            }
+        }
+    }
+
+    removeSubmodels(model: EditorModel, ids: Set<number>) {
+        if (!this.children) return;
+        for (const child of this.children) {
+            if (child instanceof ModelNode && child.model === model && ids.has(child.submodelId)) {
+                this.removeChild(child);
+                break;
+            }
+            if (child instanceof GroupNode) {
+                child.removeSubmodels(model, ids);
+                if (child.children.length === 0) this.removeChild(child);
+            }
+        }
+    }
+
+    getTreeSelection(selection: SelectionType = new Map()): SelectionType {
+        for (const child of this.children) {
+            if (child instanceof ModelNode) {
+                const m = selection.get(child.model);
+                if (!m) selection.set(child.model, new Set([child.submodelId]));
+                else m.add(child.submodelId);
+            }
+
+            if (child instanceof GroupNode) child.getTreeSelection(selection);
+        }
+        return selection;
+    }
+
+    getModelNode(model: EditorModel, modelId: number): ModelNode | undefined {
+        for (const child of this.children) {
+            if (child instanceof ModelNode && child.model === model && child.submodelId === modelId)
+                return child;
+            if (child instanceof GroupNode) {
+                const node = child.getModelNode(model, modelId);
                 if (node) return node;
             }
         }
     }
 
-    selected(selectedModels: Set<number>) {
+    selected(selectedModels: SelectionType) {
         return this.children.every((child) => {
             return child.selected(selectedModels);
         });
     }
 
-    getSelectedDescendantGroups(selectedModels: Set<number>, groups: GroupNode[] = []) {
+    getSelectedDescendantGroups(selectedModels: SelectionType, groups: GroupNode[] = []) {
         if (this.selected(selectedModels)) {
             groups.push(this);
         } else {
@@ -51,13 +100,15 @@ export class GroupNode extends Node {
         return groups;
     }
 
-    filterComplementDescendantModels(selectedModels: Set<number>) {
+    filterComplementDescendantModels(selection: SelectionType) {
         if (!this.children) return;
         for (const child of this.children) {
-            if (child instanceof ModelNode && selectedModels.has(child.submodelId)) {
-                selectedModels.delete(child.submodelId);
+            if (child instanceof ModelNode) {
+                const m = selection.get(child.model);
+                if (!m) continue;
+                if (m.has(child.submodelId)) m.delete(child.submodelId);
             } else if (child instanceof GroupNode) {
-                child.filterComplementDescendantModels(selectedModels);
+                child.filterComplementDescendantModels(selection);
             }
         }
     }

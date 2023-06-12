@@ -1,3 +1,6 @@
+import { SelectionType } from '@utils/components/Context';
+import { EditorModel } from '@utils/utils';
+
 import { Node } from './node';
 import { GroupNode } from './nodeGroup';
 import { ModelNode } from './nodeModel';
@@ -6,15 +9,31 @@ export class ModelGraph {
     root: GroupNode = new GroupNode();
     private onUpdateCallbacks: ((graph: ModelGraph) => void)[] = [];
 
-    addModelToRoot(modelId: number, data: { [key: string]: any } = {}) {
-        const node = new ModelNode(modelId);
-        node.data = data;
-        this.root.addChild(node);
-        node.addParent(this.root);
+    addModel(model: EditorModel, data: { [key: number]: any } = {}) {
+        const submodelIDs = model.submodelIDs;
+        console.log('addModel', submodelIDs, data);
+        for (const submodelID of submodelIDs) {
+            const node = new ModelNode(model, submodelID);
+            node.data = data[submodelID] ?? {};
+            this.root.addChild(node);
+            node.addParent(this.root);
+        }
     }
 
-    getModelNode(modelId: number): ModelNode | undefined {
-        return this.root.getModelNode(modelId);
+    getModel(model: EditorModel, modelId: number): ModelNode | undefined {
+        return this.root.getModelNode(model, modelId);
+    }
+
+    removeModel(model: EditorModel) {
+        this.root.removeModel(model);
+    }
+
+    removeSubmodels(model: EditorModel, ids: Set<number>) {
+        this.root.removeSubmodels(model, ids);
+    }
+
+    updateModel(oldModel: EditorModel, newModel: EditorModel, submodelIDs?: Set<number>) {
+        this.root.updateModel(oldModel, newModel, submodelIDs);
     }
 
     set needsUpdate(value: boolean) {
@@ -29,7 +48,7 @@ export class ModelGraph {
         this.root = graph.root;
     }
 
-    getSelectedGroups(selectedModels: Set<number>) {
+    getSelectedGroups(selectedModels: SelectionType) {
         return this.root.getSelectedDescendantGroups(selectedModels);
     }
 

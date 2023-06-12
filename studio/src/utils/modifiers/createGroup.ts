@@ -1,19 +1,22 @@
 import { ModelGraph } from '@utils/hierarchy/graph';
 import { GroupNode } from '@utils/hierarchy/nodeGroup';
 import { ModelNode } from '@utils/hierarchy/nodeModel';
+import { SelectionType } from '@utils/utils';
 
-export function createGroup(selectedSubmodels: number[], graph: ModelGraph) {
-    const selected = new Set(selectedSubmodels);
+export function createGroup(selection: SelectionType, graph: ModelGraph) {
     const newGroup = new GroupNode();
     let lastParent = null;
 
-    const groupNodes = graph.getSelectedGroups(selected);
+    const groupNodes = graph.getSelectedGroups(selection);
     groupNodes.forEach((group) => {
-        group.filterComplementDescendantModels(selected);
+        group.filterComplementDescendantModels(selection);
     });
 
-    const modelNodes = Array.from(selected)
-        .map((id) => graph.getModelNode(id))
+    const modelNodes = Array.from(selection)
+        .map(([model, submodelIDs]) =>
+            Array.from(submodelIDs).map((id) => graph.getModel(model, id))
+        )
+        .flat()
         .filter((node) => node !== undefined) as ModelNode[];
 
     for (const node of modelNodes) {

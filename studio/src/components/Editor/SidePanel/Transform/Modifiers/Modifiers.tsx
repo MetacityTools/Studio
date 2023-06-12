@@ -1,29 +1,29 @@
 import React from 'react';
 
-import { useSelection } from '@utils/utils';
+import { useSelectedModels } from '@utils/utils';
 
-import { EmptyDetail } from '@elements/Empty';
+import { EmptyDetail, TooManySelected } from '@elements/Empty';
 
 import { DeleteModelWidget } from './WidgetDeleteModel';
 import { DeleteSubmodelsWidget } from './WidgetDeleteSubmodels';
 import { JoinSubmodelWidget } from './WidgetJoinSubmodels';
-import { SnapVerticesWidget } from './WidgetSnapVertices';
 import { SplitModelWidget } from './WidgetSplitModel';
 import { ModelTransformationWidget } from './WidgetTransformation';
 
 export function Modifiers() {
-    const [, selectedModel] = useSelection();
+    const selection = useSelectedModels();
 
-    if (selectedModel === null) return <EmptyDetail />;
+    if (selection.size === 0) return <EmptyDetail />;
+    if (selection.size > 1) return <TooManySelected />;
+    const model = Array.from(selection)[0][0];
 
     return (
         <div className="p-4 space-y-4">
-            <ModelTransformationWidget />
-            <SnapVerticesWidget />
-            <SplitModelWidget />
-            <JoinSubmodelWidget />
-            <DeleteSubmodelsWidget />
-            <DeleteModelWidget />
+            <ModelTransformationWidget model={model} />
+            <SplitModelWidget model={model} />
+            <JoinSubmodelWidget model={model} />
+            <DeleteSubmodelsWidget model={model} />
+            <DeleteModelWidget model={model} />
         </div>
     );
 }

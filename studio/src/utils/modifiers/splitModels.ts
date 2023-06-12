@@ -1,12 +1,9 @@
 import { EditorModel } from '@utils/models/EditorModel';
-import { CoordinateMode, addEditorModels } from '@utils/models/addEditorModel';
-import { ModelData } from '@utils/types';
+import { EditorModelData } from '@utils/utils';
 
-import * as GL from '@bananagl/bananagl';
-
-export async function splitModel(scene: GL.Scene, model: EditorModel, selectedSubmodels: number[]) {
-    if (selectedSubmodels.length === 0) return;
-    const idsToRemove = new Set(selectedSubmodels);
+export function splitModel(model: EditorModel, submodelIDs: Set<number>) {
+    if (submodelIDs.size === 0) return;
+    const otherSubmodelIDs = new Set<number>();
 
     let originalModelVertexCount = 0;
     let newModelVertexCount = 0;
@@ -16,14 +13,15 @@ export async function splitModel(scene: GL.Scene, model: EditorModel, selectedSu
 
     const submodelBuffer = submodel.buffer.getView(Uint32Array);
     for (let i = 0; i < submodelBuffer.length; i++) {
-        if (!idsToRemove.has(submodelBuffer[i])) {
+        if (!submodelIDs.has(submodelBuffer[i])) {
             originalModelVertexCount++;
+            otherSubmodelIDs.add(submodelBuffer[i]);
         } else {
             newModelVertexCount++;
         }
     }
 
-    const originalModelData: ModelData = {
+    const originalModelData: EditorModelData = {
         geometry: {
             position: new Float32Array(originalModelVertexCount * 3),
             submodel: new Uint32Array(originalModelVertexCount),
@@ -33,9 +31,13 @@ export async function splitModel(scene: GL.Scene, model: EditorModel, selectedSu
             data: {},
             primitive: model.primitive,
         },
+        rotation: model.rotation,
+        scale: model.scale,
+        position: model.position,
+        uniforms: model.uniforms,
     };
 
-    const newModelData: ModelData = {
+    const newModelData: EditorModelData = {
         geometry: {
             position: new Float32Array(newModelVertexCount * 3),
             submodel: new Uint32Array(newModelVertexCount),
@@ -45,6 +47,10 @@ export async function splitModel(scene: GL.Scene, model: EditorModel, selectedSu
             data: {},
             primitive: model.primitive,
         },
+        rotation: model.rotation,
+        scale: model.scale,
+        position: model.position,
+        uniforms: model.uniforms,
     };
 
     const position = model.attributes.getAttribute('position');
@@ -59,7 +65,7 @@ export async function splitModel(scene: GL.Scene, model: EditorModel, selectedSu
     let originalIndex = 0;
     let newIndex = 0;
     for (let i = 0; i < submodelBuffer.length; i++) {
-        if (!idsToRemove.has(submodelBuffer[i])) {
+        if (!submodelIDs.has(submodelBuffer[i])) {
             originalPositionBuffer[originalIndex * 3] = positionBuffer[i * 3];
             originalPositionBuffer[originalIndex * 3 + 1] = positionBuffer[i * 3 + 1];
             originalPositionBuffer[originalIndex * 3 + 2] = positionBuffer[i * 3 + 2];
@@ -74,27 +80,8 @@ export async function splitModel(scene: GL.Scene, model: EditorModel, selectedSu
         }
     }
 
-    const originalMetadata = originalModelData.metadata.data;
-    const newMetadata = newModelData.metadata.data;
-
-    for (let id in model.data) {
-        if (!idsToRemove.has(parseInt(id))) {
-            originalMetadata[id] = model.data[id];
-        } else {
-            newMetadata[id] = model.data[id];
-        }
-    }
-
-    await addEditorModels({
+    return {
         models: [originalModelData, newModelData],
-        coordMode: CoordinateMode.None,
-        scene: scene,
-        globalShift: null,
-        rotation: model.rotation,
-        scale: model.scale,
-        position: model.position,
-        uniforms: model.uniforms,
-    });
-
-    scene.remove(model);
+        submodelIDs: [submodelIDs, otherSubmodelIDs],
+    };
 }

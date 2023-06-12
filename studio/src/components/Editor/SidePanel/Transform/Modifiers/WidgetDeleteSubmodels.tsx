@@ -1,23 +1,23 @@
-import React from 'react';
 import { TbLayersSubtract } from 'react-icons/tb';
 
-import { deleteSubmodels } from '@utils/utils';
-import { useScene, useSelection } from '@utils/utils';
+import { useRemoveSubmodels, useSelectedModels } from '@utils/utils';
 
 import { useProcessing } from '@editor/Context/EditorContext';
 
 import { Widget, WidgetDescription, WidgetLine, WidgetTitle } from '@elements/Widgets';
 
-export function DeleteSubmodelsWidget() {
-    const scene = useScene();
-    const [, selectedModel, selectedSubmodels] = useSelection();
+import { WidgetProps } from './Widget';
+
+export function DeleteSubmodelsWidget(props: WidgetProps) {
+    const removeSubmodels = useRemoveSubmodels();
+    const selection = useSelectedModels();
     const [, setProcessing] = useProcessing();
 
-    if (selectedModel === null) return null;
-
     const apply = async () => {
+        const selectedSubmodels = selection.get(props.model);
+        if (!selectedSubmodels) return; //TODO handle with a popup
         setProcessing(true);
-        await deleteSubmodels(scene, selectedModel, selectedSubmodels);
+        await removeSubmodels(props.model, selectedSubmodels);
         setProcessing(false);
     };
 

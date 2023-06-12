@@ -8,7 +8,7 @@ import { Model } from './Model';
 
 export function ModelList() {
     const models = useModels();
-    const [select, selectedModel] = useSelection();
+    const [select, selection] = useSelection();
 
     return (
         <div className="overflow-x-auto w-full h-full">
@@ -19,9 +19,12 @@ export function ModelList() {
                         <Model
                             model={model}
                             key={model.name + index}
-                            selected={selectedModel === model}
+                            selected={selection.has(model)}
                             onSelect={() =>
-                                selectedModel === model ? select(null) : select(model)
+                                //TODO how to handle this??
+                                selection.has(model)
+                                    ? select(new Map())
+                                    : select(new Map([[model, new Set()]]))
                             }
                         />
                     ))}

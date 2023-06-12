@@ -1,23 +1,23 @@
-import React from 'react';
 import { TbLayersIntersect } from 'react-icons/tb';
 
-import { splitModel } from '@utils/utils';
-import { useScene, useSelection } from '@utils/utils';
+import { useSelectedModels, useSplitModel } from '@utils/utils';
 
 import { useProcessing } from '@editor/Context/EditorContext';
 
 import { Widget, WidgetDescription, WidgetLine, WidgetTitle } from '@elements/Widgets';
 
-export function SplitModelWidget() {
-    const scene = useScene();
-    const [, selectedModel, selectedSubmodels] = useSelection();
+import { WidgetProps } from './Widget';
+
+export function SplitModelWidget(props: WidgetProps) {
+    const split = useSplitModel();
+    const selection = useSelectedModels();
     const [, setProcessing] = useProcessing();
 
-    if (selectedModel === null) return null;
-
     const apply = async () => {
+        const submodelIDs = selection.get(props.model);
+        if (!submodelIDs) return; //TODO handle with a popup
         setProcessing(true);
-        await splitModel(scene, selectedModel, selectedSubmodels);
+        await split(props.model, submodelIDs);
         setProcessing(false);
     };
 

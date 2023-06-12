@@ -3,7 +3,6 @@ import { GeometryMode, PrimitiveType } from '@utils/types';
 import * as GL from '@bananagl/bananagl';
 
 export class EditorModel extends GL.Pickable implements GL.Selectable {
-    protected data_: { [submodel: number]: any } = {};
     public name = 'Default Model Name';
     public primitive: PrimitiveType = PrimitiveType.UNDEFINED;
 
@@ -23,16 +22,11 @@ export class EditorModel extends GL.Pickable implements GL.Selectable {
         super();
     }
 
-    set data(data: { [name: number]: any }) {
-        for (const name in data) {
-            const value = data[name];
-            if (value === this.data_[name]) continue;
-            this.data_[name] = value;
-        }
-    }
-
-    get data() {
-        return this.data_;
+    get submodelIDs() {
+        const attr = this.attributes.getAttribute('submodel');
+        if (!attr) throw new Error('No submodel attribute found');
+        const submodel = attr.buffer.getView(Uint32Array) as Uint32Array;
+        return new Set(submodel);
     }
 
     get geometryMode() {
@@ -48,7 +42,7 @@ export class EditorModel extends GL.Pickable implements GL.Selectable {
         }
     }
 
-    select(submodelIDs: number[]) {
+    select(submodelIDs: Set<number>) {
         this.colorForId(
             submodelIDs,
             this.selectedColor_[0],
@@ -58,7 +52,7 @@ export class EditorModel extends GL.Pickable implements GL.Selectable {
         );
     }
 
-    deselect(submodelIDs: number[]) {
+    deselect(submodelIDs: Set<number>) {
         this.colorForId(submodelIDs, this.baseColor_[0], this.baseColor_[1], this.baseColor_[2], 0);
     }
 
@@ -71,11 +65,9 @@ export class EditorModel extends GL.Pickable implements GL.Selectable {
         return this.bbox;
     }
 
-    private colorForId(submodelIDs: number[], r: number, g: number, b: number, s: number = 1) {
+    private colorForId(submodelIDs: Set<number>, r: number, g: number, b: number, s: number = 1) {
         if (this.disposed) return;
-        if (submodelIDs.length === 0) return;
-        const set = new Set(submodelIDs);
-
+        if (submodelIDs.size === 0) return;
         const color = this.attributes.getAttribute('color');
         const selected = this.attributes.getAttribute('selected');
         const submodel = this.attributes.getAttribute('submodel');
@@ -88,7 +80,7 @@ export class EditorModel extends GL.Pickable implements GL.Selectable {
         let updateStart = 0,
             updateEnd = 0;
         for (let i = 0; i < submodelBuffer.length; i++) {
-            if (set.has(submodelBuffer[i])) {
+            if (submodelIDs.has(submodelBuffer[i])) {
                 const scidx = i * 3;
                 color.buffer.data[scidx] = r;
                 color.buffer.data[scidx + 1] = g;

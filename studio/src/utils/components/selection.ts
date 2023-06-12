@@ -1,94 +1,141 @@
 import { EditorModel } from '@utils/models/EditorModel';
 
+import { SelectionType } from './Context';
+
 export function changeSelection(
-    oldModel: EditorModel | null,
-    newModel: EditorModel | null,
-    oldSubmodelIDs: number[],
-    newSubmodelIDs: number[],
+    oldSelection: SelectionType,
+    newSelection: SelectionType,
     toggleSelection: boolean,
     extendSelection: boolean
 ) {
-    if (oldModel !== null) {
-        if (oldModel !== newModel) {
-            return caseDifferentModelsUpdate(oldModel, newModel, newSubmodelIDs);
+    if (oldSelection.size > 0) {
+        if (toggleSelection) {
+            return caseToggleSelection(oldSelection, newSelection);
+        } else if (extendSelection) {
+            return caseExtendSelection(oldSelection, newSelection);
         } else {
-            if (toggleSelection)
-                return caseSameModelToggleUpdate(oldModel, oldSubmodelIDs, newSubmodelIDs);
-            else if (extendSelection)
-                return caseSameModelExtendUpdate(oldModel, oldSubmodelIDs, newSubmodelIDs);
-            else return caseSameModelUpdate(oldModel, oldSubmodelIDs, newSubmodelIDs);
+            return caseDifferentUpdate(oldSelection, newSelection);
         }
     } else {
-        return caseOnlyNewModelUpdate(newModel, newSubmodelIDs);
+        return caseOnlyNewUpdate(newSelection);
     }
 }
 
-function caseDifferentModelsUpdate(
-    oldModel: EditorModel,
-    newModel: EditorModel | null,
-    newSubmodelIDs: number[]
-) {
-    oldModel.selected = false;
-    return caseOnlyNewModelUpdate(newModel, newSubmodelIDs);
+function caseToggleSelection(oldSelection: SelectionType, newSelection: SelectionType) {
+    const combinedSelection: SelectionType = new Map();
+    for (const [oldModel, oldSubmodelIDs] of oldSelection) {
+        let newSubmodelIDs = newSelection.get(oldModel);
+        if (!newSubmodelIDs) {
+            //since it is in the old, it already has to be selected
+            combinedSelection.set(oldModel, oldSubmodelIDs);
+        } else {
+            //make a diff
+            const submodelIDs = caseSameModelToggleUpdate(oldModel, oldSubmodelIDs, newSubmodelIDs);
+            if (submodelIDs.length > 0) combinedSelection.set(oldModel, new Set(submodelIDs));
+            else oldModel.selected = false;
+        }
+    }
+
+    for (const [newModel, newModelSelection] of newSelection) {
+        let found = oldSelection.get(newModel);
+        //if the model is not in the old, it has to be selected
+        if (!found)
+            combinedSelection.set(newModel, caseOnlyNewModelUpdate(newModel, newModelSelection));
+    }
+
+    return combinedSelection;
+}
+
+function caseExtendSelection(oldSelection: SelectionType, newSelection: SelectionType) {
+    const combinedSelection: SelectionType = new Map(oldSelection);
+    for (const [newModel, newSubmodelIDs] of newSelection) {
+        let oldSubmodelIDs = oldSelection.get(newModel);
+        if (!oldSubmodelIDs) {
+            combinedSelection.set(newModel, caseOnlyNewModelUpdate(newModel, newSubmodelIDs));
+        } else {
+            //extend
+            const submodelIDs = caseSameModelExtendUpdate(newModel, oldSubmodelIDs, newSubmodelIDs);
+            combinedSelection.set(newModel, submodelIDs);
+        }
+    }
+
+    return combinedSelection;
+}
+
+function caseDifferentUpdate(oldSelection: SelectionType, newSelection: SelectionType) {
+    for (const [oldModel, oldSelectionIds] of oldSelection) {
+        let newSubmodelIDs = newSelection.get(oldModel);
+        if (!newSubmodelIDs) {
+            oldModel.selected = false;
+        } else {
+            caseSameModelUpdate(oldModel, oldSelectionIds, newSubmodelIDs);
+        }
+    }
+
+    for (const [newModel, newModelIDs] of newSelection) {
+        let found = oldSelection.get(newModel);
+        if (!found) caseOnlyNewModelUpdate(newModel, newModelIDs);
+    }
+
+    return newSelection;
 }
 
 function caseSameModelToggleUpdate(
     model: EditorModel,
-    oldSubmodelIDs: number[],
-    newSubmodelIDs: number[]
+    oldSubmodelIDs: Set<number>,
+    newSubmodelIDs: Set<number>
 ) {
-    const oldSet = new Set(oldSubmodelIDs);
-    const newSet = new Set(newSubmodelIDs);
     const toDeselect = [];
     const toSelect = [];
     const toKeep = [];
 
-    for (const id of oldSet) {
-        if (newSet.has(id)) toDeselect.push(id);
+    for (const id of oldSubmodelIDs) {
+        if (newSubmodelIDs.has(id)) toDeselect.push(id);
         else toKeep.push(id);
     }
 
-    for (const id of newSet) {
-        if (!oldSet.has(id)) toSelect.push(id);
+    for (const id of newSubmodelIDs) {
+        if (!oldSubmodelIDs.has(id)) toSelect.push(id);
     }
 
-    model.deselect(toDeselect);
-    model.select(toSelect);
+    model.deselect(new Set(toDeselect));
+    model.select(new Set(toSelect));
     return toKeep.concat(toSelect);
 }
 
 function caseSameModelExtendUpdate(
     model: EditorModel,
-    oldSubmodelIDs: number[],
-    newSubmodelIDs: number[]
+    oldSubmodelIDs: Set<number>,
+    newSubmodelIDs: Set<number>
 ) {
-    const oldSet = new Set(oldSubmodelIDs);
-
     const toSelect = [];
     for (const id of newSubmodelIDs) {
-        if (!oldSet.has(id)) toSelect.push(id);
+        if (!oldSubmodelIDs.has(id)) toSelect.push(id);
     }
 
-    model.select(toSelect);
-    return oldSubmodelIDs.concat(toSelect);
+    model.select(new Set(toSelect));
+    toSelect.forEach((id) => oldSubmodelIDs.add(id));
+    return oldSubmodelIDs;
 }
 
 function caseSameModelUpdate(
     model: EditorModel,
-    oldSubmodelIDs: number[],
-    newSubmodelIDs: number[]
+    oldSubmodelIDs: Set<number>,
+    newSubmodelIDs: Set<number>
 ) {
     model.deselect(oldSubmodelIDs);
     model.select(newSubmodelIDs);
     return newSubmodelIDs;
 }
 
-function caseOnlyNewModelUpdate(newModel: EditorModel | null, newSubmodelIDs: number[]) {
-    if (newModel !== null) {
-        newModel.selected = true;
-        newModel.select(newSubmodelIDs);
-        return newSubmodelIDs;
-    } else {
-        return [];
-    }
+function caseOnlyNewUpdate(newSelection: SelectionType) {
+    for (const [newModel, newSubmodelIDs] of newSelection)
+        caseOnlyNewModelUpdate(newModel, newSubmodelIDs);
+    return newSelection;
+}
+
+function caseOnlyNewModelUpdate(model: EditorModel, submodelIDs: Set<number>) {
+    model.selected = true;
+    model.select(submodelIDs);
+    return submodelIDs;
 }

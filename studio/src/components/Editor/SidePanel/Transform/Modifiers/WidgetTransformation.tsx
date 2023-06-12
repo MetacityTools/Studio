@@ -2,12 +2,14 @@ import { vec3 } from 'gl-matrix';
 import React from 'react';
 import { TiArrowMove } from 'react-icons/ti';
 
-import { useRenderer, useSelection } from '@utils/utils';
+import { useRenderer } from '@utils/utils';
 
 import * as GL from '@bananagl/bananagl';
 
 import { Input } from '@elements/Input';
 import { Widget, WidgetDescription, WidgetLine, WidgetTitle } from '@elements/Widgets';
+
+import { WidgetProps } from './Widget';
 
 function VectorComponentInput(props: {
     label: string;
@@ -23,6 +25,7 @@ function VectorComponentInput(props: {
                 className="p-2 bg-transparent border-0 text-right focus:outline-none w-full"
                 value={isNaN(value) ? '' : value}
                 onChange={(e) => onChange(parseFloat(e.target.value))}
+                title={label}
             />
         </td>
     );
@@ -48,13 +51,9 @@ function VectorControls(props: VectorControlsProps) {
     );
 }
 
-export function ModelTransformationWidget() {
+export function ModelTransformationWidget(props: WidgetProps) {
+    const { model } = props;
     const renderer = useRenderer();
-    const [, selectedModel] = useSelection();
-
-    if (selectedModel === null) return null;
-    const model = selectedModel;
-
     const [position, setPosition] = React.useState(model.position);
     const [rotation, setRotation] = React.useState(model.rotation);
     const [scale, setScale] = React.useState(model.scale);

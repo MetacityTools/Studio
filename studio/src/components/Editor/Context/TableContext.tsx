@@ -1,14 +1,12 @@
 import React from 'react';
 
-import { GroupNode, ModelGraph, Node, Tables } from '@utils/utils';
+import { GroupNode, Node, Tables, useGraph } from '@utils/utils';
 
 interface TablesContextProps {
-    graph: ModelGraph;
-    setGraph: React.Dispatch<React.SetStateAction<ModelGraph>>;
     nodeToMove: Node | undefined;
     setNodeToMove: React.Dispatch<React.SetStateAction<Node | undefined>>;
-    nodeToLink: Node | undefined;
-    setNodeToLink: React.Dispatch<React.SetStateAction<Node | undefined>>;
+    nodeToEdit: Node | undefined;
+    setNodeToEdit: React.Dispatch<React.SetStateAction<Node | undefined>>;
     tables: Tables;
     setTables: React.Dispatch<React.SetStateAction<Tables>>;
     activeSheet: number;
@@ -18,29 +16,18 @@ interface TablesContextProps {
 const context = React.createContext<TablesContextProps>({} as TablesContextProps);
 
 export function TablesContext(props: { children: React.ReactNode }) {
-    const [graph, setGraph] = React.useState<ModelGraph>(new ModelGraph());
     const [nodeToMove, setNodeToMove] = React.useState<Node | undefined>();
-    const [nodeToLink, setNodeToLink] = React.useState<Node | undefined>();
+    const [nodeToEdit, setNodeToEdit] = React.useState<Node | undefined>();
     const [tables, setTables] = React.useState<Tables>(new Tables([]));
     const [activeSheet, setActiveSheet] = React.useState<number>(0);
-
-    React.useEffect(() => {
-        graph.addChangeListener(() => {
-            const updated = new ModelGraph();
-            updated.copy(graph);
-            setGraph(updated);
-        });
-    }, [graph]);
 
     return (
         <context.Provider
             value={{
-                graph,
-                setGraph,
                 nodeToMove,
                 setNodeToMove,
-                nodeToLink,
-                setNodeToLink,
+                nodeToEdit,
+                setNodeToEdit,
                 tables,
                 setTables,
                 activeSheet,
@@ -56,13 +43,9 @@ export function useTablesContext(): TablesContextProps {
     return React.useContext(context);
 }
 
-export function useGraph(): [ModelGraph, React.Dispatch<React.SetStateAction<ModelGraph>>] {
-    const ctx = React.useContext(context);
-    return [ctx.graph, ctx.setGraph];
-}
-
 export function useMovingNode(): [Node | undefined, (node: Node | undefined) => void] {
     const ctx = React.useContext(context);
+    const [graph] = useGraph();
 
     const updateNodeToMove = (node: Node | undefined) => {
         ctx.setNodeToMove((prev) => {
@@ -72,7 +55,7 @@ export function useMovingNode(): [Node | undefined, (node: Node | undefined) => 
             else {
                 if (node instanceof GroupNode) {
                     if (node.isDescendantOf(prev)) return undefined;
-                    ctx.graph.moveNode(prev, node);
+                    graph.moveNode(prev, node);
                     return undefined;
                 } else {
                     //fallback
@@ -85,11 +68,11 @@ export function useMovingNode(): [Node | undefined, (node: Node | undefined) => 
     return [ctx.nodeToMove, updateNodeToMove];
 }
 
-export function useLinkingNode(): [Node | undefined, (node: Node | undefined) => void] {
+export function useEditingNode(): [Node | undefined, (node: Node | undefined) => void] {
     const ctx = React.useContext(context);
 
     const updateNodeToLink = (node: Node | undefined) => {
-        ctx.setNodeToLink((prev) => {
+        ctx.setNodeToEdit((prev) => {
             if (prev === node || node === undefined) {
                 return undefined;
             } else {
@@ -98,7 +81,7 @@ export function useLinkingNode(): [Node | undefined, (node: Node | undefined) =>
         });
     };
 
-    return [ctx.nodeToLink, updateNodeToLink];
+    return [ctx.nodeToEdit, updateNodeToLink];
 }
 
 export function useTables(): [Tables, React.Dispatch<React.SetStateAction<Tables>>] {

@@ -4,10 +4,10 @@ import { FiDelete } from 'react-icons/fi';
 import { MdDriveFileMoveRtl, MdOutlineDriveFileMove } from 'react-icons/md';
 import { VscJson } from 'react-icons/vsc';
 
-import { EditorModel, GroupNode as GroupNodeClass, deleteGroup } from '@utils/utils';
+import { GroupNode as GroupNodeClass, SelectionType, deleteGroup, useGraph } from '@utils/utils';
 import { useSelection } from '@utils/utils';
 
-import { useGraph, useLinkingNode, useMovingNode } from '@editor/Context/TableContext';
+import { useEditingNode, useMovingNode } from '@editor/Context/TableContext';
 
 import {
     HierarchyButton,
@@ -21,20 +21,19 @@ import { If } from '@elements/If';
 import { GroupNodeChildren } from './NodeGroupChildren';
 
 export interface GroupNodeProps {
-    model: EditorModel;
-    submodels: Set<number>;
     node: GroupNodeClass;
+    selectedModels: SelectionType;
 }
 
 export function GroupNode(props: GroupNodeProps) {
-    const { model, node, submodels } = props;
+    const { node, selectedModels } = props;
     const [select] = useSelection();
     const [graph] = useGraph();
     const [nodeToMove, updateNodeToMove] = useMovingNode();
-    const [nodeToLink, updateNodeToLink] = useLinkingNode();
+    const [nodeToLink, updateNodeToLink] = useEditingNode();
     const [open, setOpen] = React.useState(true);
 
-    const isSelected = React.useMemo(() => node.selected(submodels), [node, submodels]);
+    const isSelected = React.useMemo(() => node.selected(selectedModels), [node, selectedModels]);
     const isLinking = React.useMemo(() => node === nodeToLink, [node, nodeToLink]);
     const isMoving = React.useMemo(() => node === nodeToMove, [node, nodeToMove]);
     const isDescendant = React.useMemo(
@@ -43,9 +42,9 @@ export function GroupNode(props: GroupNodeProps) {
     );
 
     const handleSelect = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-        const children = node.getAllLeaveIds();
-        if (!isSelected) select(model, children, false, true);
-        else select(model, children, true, true);
+        const children = node.getTreeSelection();
+        if (!isSelected) select(children, false, true);
+        else select(children, true, true);
         e.stopPropagation();
     };
 
