@@ -172,6 +172,9 @@ export function useSplitModel() {
             ctx.scene.add(newModel);
             ctx.graph.updateModel(oldModel, newModel, submodelIDsB);
         }
+
+        ctx.scene.remove(oldModel);
+        ctx.graph.needsUpdate = true;
     };
 
     return split;
@@ -181,9 +184,12 @@ export function useJoinSubmodels() {
     const ctx = React.useContext(context);
 
     const join = async (model: EditorModel, submodels: Set<number>) => {
-        const newSubmodelId = joinSubmodels(model, submodels);
+        const newSubmodelId = await joinSubmodels(model, submodels);
         if (!newSubmodelId) return;
+        submodels.delete(newSubmodelId);
+        //TODO merge metadata
         ctx.graph.removeSubmodels(model, submodels);
+        ctx.graph.needsUpdate = true;
     };
 
     return join;

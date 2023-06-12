@@ -1,7 +1,7 @@
 import { EditorModel } from '@utils/models/EditorModel';
 
 export async function joinSubmodels(model: EditorModel, idsToJoin: Set<number>) {
-    if (idsToJoin.size === 0) return new Set<number>();
+    if (idsToJoin.size === 0) return;
 
     let minId = Infinity;
     for (const id of idsToJoin) if (id < minId) minId = id;
