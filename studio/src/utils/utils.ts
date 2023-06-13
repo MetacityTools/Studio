@@ -4,6 +4,7 @@ import {
     useActiveView,
     useCameraZ,
     useCreateModels,
+    useExport,
     useGlobalShift,
     useGraph,
     useGridVisible,
@@ -69,6 +70,7 @@ export {
     useRemoveSubmodels,
     useSplitModel,
     useJoinSubmodels,
+    useExport,
     createFlatHierarchy,
     CoordinateMode,
 };

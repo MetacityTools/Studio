@@ -1,4 +1,4 @@
-import { EditorModel } from '@utils/utils';
+import { EditorModel, ModelHierarchyModel } from '@utils/utils';
 
 import { Node } from './node';
 
@@ -11,5 +11,12 @@ export class ModelNode extends Node {
         const m = selectedModels.get(this.model);
         if (!m) return false;
         return m.has(this.submodelId);
+    }
+
+    exportNode(): ModelHierarchyModel {
+        return {
+            id: this.submodelId,
+            data: this.data,
+        };
     }
 }

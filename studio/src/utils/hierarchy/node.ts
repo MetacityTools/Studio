@@ -1,6 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 
 import { SelectionType } from '@utils/components/Context';
+import { ModelHierarchyNode } from '@utils/types';
 
 import { GroupNode } from './nodeGroup';
 
@@ -18,4 +19,6 @@ export abstract class Node {
     setData(data: { [key: string]: any }) {
         this.data = data;
     }
+
+    abstract exportNode(): ModelHierarchyNode;
 }

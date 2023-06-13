@@ -160,4 +160,11 @@ export class GroupNode extends Node {
     isDescendantOf(node: Node): boolean {
         return this.parent === node || ((this.parent && this.parent.isDescendantOf(node)) ?? false);
     }
+
+    exportNode(): ModelHierarchyGroup {
+        return {
+            children: this.children?.map((child) => child.exportNode()),
+            data: this.data,
+        };
+    }
 }

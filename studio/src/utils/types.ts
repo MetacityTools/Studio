@@ -56,7 +56,11 @@ export interface IFCModelData {
 
 export interface UserInputModel {
     name: string;
-    data: IFCData | GLTFData | ShapefileData;
+    data: IFCData | GLTFData | ShapefileData | MetacityData;
+}
+
+export interface MetacityData {
+    buffer: ArrayBuffer;
 }
 
 export interface IFCData {
@@ -107,12 +111,14 @@ export interface ModelHierarchy {
     root: ModelHierarchyGroup;
 }
 
-export interface ModelHierarchyGroup {
-    children: (ModelHierarchyGroup | ModelHierarchyModel)[];
+export interface ModelHierarchyNode {
     data: { [data: string]: any };
 }
 
-export interface ModelHierarchyModel {
+export interface ModelHierarchyGroup extends ModelHierarchyNode {
+    children: ModelHierarchyNode[];
+}
+
+export interface ModelHierarchyModel extends ModelHierarchyNode {
     id: number;
-    data: { [data: string]: any };
 }

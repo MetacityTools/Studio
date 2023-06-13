@@ -5,6 +5,7 @@ import {
     ModelData,
     load,
     useCreateModels,
+    useExport,
     useRenderer,
     useScene,
 } from '@utils/utils';
@@ -20,6 +21,7 @@ export function TransformMenu() {
     const renderer = useRenderer();
     const scene = useScene();
     const create = useCreateModels();
+    const exportProject = useExport();
     const [, setProcessing] = useProcessing();
     const [, setLoadingStatus] = useLoadingStatus();
 
@@ -46,12 +48,18 @@ export function TransformMenu() {
         setImportedModels([]);
     };
 
+    const handleExport = () => {
+        setProcessing(true);
+        exportProject();
+        setProcessing(false);
+    };
+
     return (
         <div className="flex flex-row p-4 w-full space-x-2 border-b">
             <ButtonFileInput id="models" onChange={onModelsSelected} multiple>
                 Import
             </ButtonFileInput>
-            <Button>Export</Button>
+            <Button onClick={handleExport}>Export</Button>
             <Vitals scenes={[scene]} renderer={renderer} />
             <ImportDialog isOpen={importOpen} onClose={handleModelsAdded} />
         </div>

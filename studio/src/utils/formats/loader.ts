@@ -1,6 +1,7 @@
-import GLTFWorker from '@utils/formats/gltf?worker';
-import IFCWorker from '@utils/formats/ifc?worker';
-import ShapefileWorker from '@utils/formats/shapefile?worker';
+import GLTFWorker from '@utils/formats/gltf.worker?worker';
+import IFCWorker from '@utils/formats/ifc.worker?worker';
+import MetacityWorker from '@utils/formats/metacity.worker?worker';
+import ShapefileWorker from '@utils/formats/shapefile.worker?worker';
 import { ModelData, UserInputModel } from '@utils/types';
 
 import { WorkerPool } from './pool';
@@ -23,8 +24,26 @@ export async function loadFiles(event: React.ChangeEvent<HTMLInputElement>) {
     const gltf = await prepareGLTF(files);
     const ifc = await prepareIFC(files);
     const shapefile = await prepareShapefile(files);
+    const metacity = await prepareMetacity(files);
 
-    return [...gltf, ...ifc, ...shapefile];
+    return [...gltf, ...ifc, ...shapefile, ...metacity];
+}
+
+async function prepareMetacity(files: FileList): Promise<UserInputModel[]> {
+    const data = [];
+    for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        if (file.name.endsWith('metacity')) {
+            const buffer = await file.arrayBuffer();
+            data.push({
+                name: file.name,
+                data: {
+                    buffer,
+                },
+            });
+        }
+    }
+    return data;
 }
 
 async function prepareGLTF(files: FileList): Promise<UserInputModel[]> {
@@ -110,6 +129,8 @@ export async function loadModels(
             jobs.push(loadWorker(model, IFCWorker, updateStatus));
         } else if (model.name.endsWith('shp')) {
             jobs.push(loadWorker(model, ShapefileWorker, updateStatus));
+        } else if (model.name.endsWith('metacity')) {
+            jobs.push(loadWorker(model, MetacityWorker, updateStatus));
         }
     }
 

@@ -1,10 +1,12 @@
 import { vec3 } from 'gl-matrix';
 import React from 'react';
 
+import { exportModel } from '@utils/formats/metacity/write';
 import { ModelGraph } from '@utils/hierarchy/graph';
 import { EditorModel } from '@utils/models/EditorModel';
 import { addTriangleModel } from '@utils/models/TriangleModel';
 import { CoordinateMode, alignModels } from '@utils/modifiers/alignVertices';
+import { joinModels } from '@utils/modifiers/joinModels';
 import { removeSubmodels } from '@utils/modifiers/removeSubmodels';
 import { PrimitiveType } from '@utils/types';
 import { EditorModelData, joinSubmodels, splitModel } from '@utils/utils';
@@ -210,4 +212,16 @@ export function useJoinSubmodels() {
     };
 
     return join;
+}
+
+export function useExport() {
+    const ctx = React.useContext(context);
+
+    const exportProject = async () => {
+        const model = await joinModels(ctx.models, ctx.graph);
+        if (!model) return;
+        exportModel(model);
+    };
+
+    return exportProject;
 }

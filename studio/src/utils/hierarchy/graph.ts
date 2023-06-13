@@ -57,4 +57,10 @@ export class ModelGraph {
         this.needsUpdate = true;
         if (prevParent?.children.length === 0) prevParent.parent?.removeChild(prevParent);
     }
+
+    exportGraph() {
+        return {
+            root: this.root.exportNode(),
+        };
+    }
 }
