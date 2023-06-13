@@ -12,9 +12,10 @@ import {
 } from 'shpts';
 import { BaseRecord } from 'shpts/dist/geometry/base';
 
-import { PrimitiveType, ShapefileData, UserInputModel } from '@utils/types';
+import { createFlatHierarchy } from '@utils/modifiers/createFlatHierarchy';
+import { ModelData, PrimitiveType, ShapefileData, UserInputModel } from '@utils/types';
 
-export async function parse(model: UserInputModel) {
+export async function parse(model: UserInputModel): Promise<ModelData> {
     const data = model.data as ShapefileData;
 
     if (!data.shp || !data.shx || !data.dbf)
@@ -31,9 +32,9 @@ export async function parse(model: UserInputModel) {
         },
         metadata: {
             name: model.name,
-            data: metadata,
             primitive: type,
         },
+        hierarchy: createFlatHierarchy(metadata),
     };
 }
 

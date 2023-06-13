@@ -53,12 +53,12 @@ export function SpashScreen() {
                     </ul>
                 </div>
                 <div className="flex flex-row items-center">
-                    <TbSquareRoundedNumber2Filled className="mr-2 text-xl text-neutral-500" />
+                    <TbSquareRoundedNumber2Filled className="mr-2 text-xl text-blue-500" />
                     connect metadata
                 </div>
-                <div className="border-l h-4 ml-2 border-neutral-500 border-dashed"></div>
+                <div className="border-l h-4 ml-2 border-blue-500 border-dashed"></div>
                 <div className="flex flex-row items-center">
-                    <TbSquareRoundedNumber3Filled className="mr-2 text-xl text-neutral-500" />
+                    <TbSquareRoundedNumber3Filled className="mr-2 text-xl text-blue-500" />
                     export
                 </div>
             </div>

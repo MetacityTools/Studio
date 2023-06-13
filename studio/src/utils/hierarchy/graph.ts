@@ -1,5 +1,5 @@
 import { SelectionType } from '@utils/components/Context';
-import { EditorModel } from '@utils/utils';
+import { EditorModel, ModelHierarchyGroup } from '@utils/utils';
 
 import { Node } from './node';
 import { GroupNode } from './nodeGroup';
@@ -9,15 +9,8 @@ export class ModelGraph {
     root: GroupNode = new GroupNode();
     private onUpdateCallbacks: ((graph: ModelGraph) => void)[] = [];
 
-    addModel(model: EditorModel, data: { [key: number]: any } = {}) {
-        const submodelIDs = model.submodelIDs;
-        console.log('addModel', submodelIDs, data);
-        for (const submodelID of submodelIDs) {
-            const node = new ModelNode(model, submodelID);
-            node.data = data[submodelID] ?? {};
-            this.root.addChild(node);
-            node.addParent(this.root);
-        }
+    addModel(model: EditorModel, data: ModelHierarchyGroup) {
+        this.root.addModel(model, data);
     }
 
     getModel(model: EditorModel, modelId: number): ModelNode | undefined {

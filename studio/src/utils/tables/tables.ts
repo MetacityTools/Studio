@@ -8,7 +8,6 @@ export class Tables {
     constructor(public contents: string[][][], rowTypes?: rowType[][]) {
         if (!rowTypes) {
             for (const sheet of contents) {
-                console.log(sheet);
                 this.rowTypes.push(sheet.map(() => 'value'));
             }
         } else {

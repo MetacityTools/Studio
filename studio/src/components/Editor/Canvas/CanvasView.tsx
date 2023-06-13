@@ -5,6 +5,8 @@ import { useRenderer, useScene } from '@utils/utils';
 
 import * as GL from '@bananagl/bananagl';
 
+import { Button } from '@elements/Button';
+
 import { Controls } from './Controls';
 import { Help } from './Help';
 import { Settings } from './Settings';

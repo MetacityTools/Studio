@@ -24,9 +24,7 @@ export function TableRow(props: TableRowProps) {
     };
 
     const handleCopyClipboard = () => {
-        console.log('copy to clipboard');
         const json = tables.getJSON(activeSheet, index);
-        console.log(json);
         navigator.clipboard.writeText(JSON.stringify(json, null, 4));
     };
 

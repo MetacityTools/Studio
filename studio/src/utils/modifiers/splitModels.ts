@@ -1,3 +1,5 @@
+import { vec3 } from 'gl-matrix';
+
 import { EditorModel } from '@utils/models/EditorModel';
 import { EditorModelData } from '@utils/utils';
 
@@ -28,12 +30,11 @@ export function splitModel(model: EditorModel, submodelIDs: Set<number>) {
         },
         metadata: {
             name: 'partA_' + model.name,
-            data: {},
             primitive: model.primitive,
         },
-        rotation: model.rotation,
-        scale: model.scale,
-        position: model.position,
+        rotation: vec3.clone(model.rotation),
+        scale: vec3.clone(model.scale),
+        position: vec3.clone(model.position),
         uniforms: model.uniforms,
     };
 
@@ -44,7 +45,6 @@ export function splitModel(model: EditorModel, submodelIDs: Set<number>) {
         },
         metadata: {
             name: 'partB_' + model.name,
-            data: {},
             primitive: model.primitive,
         },
         rotation: model.rotation,
@@ -82,6 +82,6 @@ export function splitModel(model: EditorModel, submodelIDs: Set<number>) {
 
     return {
         models: [originalModelData, newModelData],
-        submodelIDs: [submodelIDs, otherSubmodelIDs],
+        submodelIDs: [otherSubmodelIDs, submodelIDs],
     };
 }

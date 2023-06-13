@@ -1,11 +1,30 @@
 import { SelectionType } from '@utils/components/Context';
-import { EditorModel } from '@utils/utils';
+import { EditorModel, ModelHierarchyGroup, ModelHierarchyModel } from '@utils/utils';
 
 import { Node } from './node';
 import { ModelNode } from './nodeModel';
 
 export class GroupNode extends Node {
     children: Node[] = [];
+
+    addModel(model: EditorModel, data: ModelHierarchyGroup) {
+        for (const childNode of data.children) {
+            if ((childNode as ModelHierarchyGroup).children) {
+                const nodeData = childNode as ModelHierarchyGroup;
+                const node = new GroupNode();
+                node.data = nodeData.data ?? {};
+                this.addChild(node);
+                node.addParent(this);
+                node.addModel(model, nodeData);
+            } else {
+                const nodeData = childNode as ModelHierarchyModel;
+                const node = new ModelNode(model, nodeData.id);
+                node.data = nodeData.data ?? {};
+                this.addChild(node);
+                node.addParent(this);
+            }
+        }
+    }
 
     addChild(child: Node) {
         if (!this.children) this.children = [];
@@ -36,7 +55,9 @@ export class GroupNode extends Node {
         if (!this.children) return;
         for (const child of this.children) {
             if (child instanceof ModelNode && child.model === oldModel) {
-                if (!submodelIDs || submodelIDs.has(child.submodelId)) child.model = newModel;
+                if (!submodelIDs || submodelIDs.has(child.submodelId)) {
+                    child.model = newModel;
+                }
             }
             if (child instanceof GroupNode) {
                 child.updateModel(oldModel, newModel, submodelIDs);

@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { TbSquareRoundedNumber1Filled } from 'react-icons/tb';
 
 import {
     CoordinateMode,
@@ -13,7 +12,7 @@ import {
 import { useLoadingStatus, useProcessing } from '@editor/Context/EditorContext';
 import { Vitals } from '@editor/Utils/Vitals';
 
-import { ButtonFileInput } from '@elements/Button';
+import { Button, ButtonFileInput } from '@elements/Button';
 
 import { ImportDialog } from './DialogImport';
 
@@ -50,8 +49,9 @@ export function TransformMenu() {
     return (
         <div className="flex flex-row p-4 w-full space-x-2 border-b">
             <ButtonFileInput id="models" onChange={onModelsSelected} multiple>
-                <TbSquareRoundedNumber1Filled className="mr-2 text-xl text-blue-500" /> Import
+                Import
             </ButtonFileInput>
+            <Button>Export</Button>
             <Vitals scenes={[scene]} renderer={renderer} />
             <ImportDialog isOpen={importOpen} onClose={handleModelsAdded} />
         </div>

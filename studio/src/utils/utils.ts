@@ -28,6 +28,7 @@ import { EditorModelData } from './models/TriangleModel';
 import { addGridModel } from './models/addGridModel';
 import { CoordinateMode, alignModels } from './modifiers/alignVertices';
 import { computeDots, computeNormals } from './modifiers/computeNormals';
+import { createFlatHierarchy } from './modifiers/createFlatHierarchy';
 import { createGroup } from './modifiers/createGroup';
 import { deleteGroup } from './modifiers/deleteGroup';
 import { joinSubmodels } from './modifiers/joinSubmodels';
@@ -68,6 +69,7 @@ export {
     useRemoveSubmodels,
     useSplitModel,
     useJoinSubmodels,
+    createFlatHierarchy,
     CoordinateMode,
 };
 

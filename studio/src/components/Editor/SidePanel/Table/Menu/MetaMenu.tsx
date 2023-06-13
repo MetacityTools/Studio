@@ -4,18 +4,15 @@ import { useRenderer, useScene } from '@utils/utils';
 
 import { Vitals } from '@editor/Utils/Vitals';
 
-import { Button } from '@elements/Button';
-
 export function MetaMenu(props: { status?: 'editing' | 'saved' | 'failed' }) {
     const renderer = useRenderer();
     const scene = useScene();
 
     return (
         <div className="flex flex-row p-4 w-full space-x-2 border-b items-center">
-            <Button>Export</Button>
-            {props.status == 'editing' && <Editing />}
-            {props.status == 'saved' && <Saved />}
-            {props.status == 'failed' && <Failed />}
+            {props.status === 'editing' && <Editing />}
+            {props.status === 'saved' && <Saved />}
+            {props.status === 'failed' && <Failed />}
             <Vitals scenes={[scene]} renderer={renderer} />
         </div>
     );

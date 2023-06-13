@@ -92,6 +92,12 @@ export interface EditorImportOptions {
     coordMode?: CoordinateMode;
 }
 
+async function importModel(model: EditorModelData) {
+    if (model.metadata.primitive === PrimitiveType.TRIANGLES) {
+        return await addTriangleModel(model);
+    }
+}
+
 export function useCreateModels() {
     const ctx = React.useContext(context);
 
@@ -104,11 +110,11 @@ export function useCreateModels() {
 
         //generate geometry and metadata
         for (const model of data) {
-            if (model.metadata.primitive === PrimitiveType.TRIANGLES) {
-                let glmodel = await addTriangleModel(model);
-                ctx.scene.add(glmodel);
-                ctx.graph.addModel(glmodel, model.metadata.data);
-            }
+            const glmodel = await importModel(model);
+            if (!glmodel) continue;
+            ctx.scene.add(glmodel);
+            //TODO
+            ctx.graph.addModel(glmodel, model.hierarchy.root);
         }
 
         ctx.setGlobalShift(shift);

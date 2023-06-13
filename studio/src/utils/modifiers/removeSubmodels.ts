@@ -22,7 +22,6 @@ export function removeSubmodels(model: EditorModel, idsToRemove: Set<number>) {
         },
         metadata: {
             name: model.name,
-            data: {},
             primitive: model.primitive,
         },
         position: model.position,

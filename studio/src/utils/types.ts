@@ -78,6 +78,7 @@ export interface ShapefileData {
 export interface ModelData {
     geometry: ModelGeometry;
     metadata: ModelMetadata;
+    hierarchy: ModelHierarchy;
 }
 
 export interface ModelGeometry {
@@ -94,11 +95,24 @@ export enum PrimitiveType {
 
 export interface ModelMetadata {
     name: string;
-    data: { [submodel: number]: any };
     primitive: PrimitiveType;
 }
 
 export enum GeometryMode {
     WIREFRAME,
     SOLID,
+}
+
+export interface ModelHierarchy {
+    root: ModelHierarchyGroup;
+}
+
+export interface ModelHierarchyGroup {
+    children: (ModelHierarchyGroup | ModelHierarchyModel)[];
+    data: { [data: string]: any };
+}
+
+export interface ModelHierarchyModel {
+    id: number;
+    data: { [data: string]: any };
 }

@@ -1,5 +1,6 @@
 import { IFCLoader } from 'web-ifc-three';
 
+import { createFlatHierarchy } from '@utils/modifiers/createFlatHierarchy';
 import { IFCData, ModelData, PrimitiveType, UserInputModel } from '@utils/types';
 
 import { retrieveMetadata } from './metadata';
@@ -22,9 +23,9 @@ export async function parse(model: UserInputModel): Promise<ModelData> {
         geometry,
         metadata: {
             name: model.name,
-            data: metadata,
             primitive: PrimitiveType.TRIANGLES,
         },
+        hierarchy: createFlatHierarchy(metadata),
     };
 }
 

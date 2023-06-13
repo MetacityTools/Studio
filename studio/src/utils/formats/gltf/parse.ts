@@ -1,6 +1,7 @@
 import { parse as parseGLTF } from '@loaders.gl/core';
 import { GLTFLoader } from '@loaders.gl/gltf';
 
+import { createFlatHierarchy } from '@utils/modifiers/createFlatHierarchy';
 import { GLTFData, GLTFParsedData, ModelData, PrimitiveType, UserInputModel } from '@utils/types';
 
 import { unindexGeometry } from './unindex';
@@ -17,9 +18,9 @@ export async function parse(model: UserInputModel): Promise<ModelData> {
         },
         metadata: {
             name: model.name,
-            data: metadata,
             primitive: PrimitiveType.TRIANGLES,
         },
+        hierarchy: createFlatHierarchy(metadata),
     };
 }
 
