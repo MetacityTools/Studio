@@ -31,23 +31,23 @@ The project is in active development. The roadmap is as follows:
 -   [ ] Hide and show models
 -   [ ] Viewer - Details TBA
 
-### v0.3.1
+### v0.3.1 - 👨‍💻 In progress
 
+-   [ ] Projecting models onto models (2D onto 3D) - ✨WIP https://github.com/vojtatom/geometry
+-   [ ] Styling???
 -   [ ] Loading points and lines from SHP
 -   [ ] Extract Utils to separate SDK form metacity editors
 
-### v0.3.0 - 👨‍💻 In progress
+### v0.3.0 - ✅ Released
 
 -   [x] Remove the conversion process and support switching between transform and table mode
     -   [x] add create/remove modifiers for hierarchy
     -   [x] move hierarchy to Editor Context
--   [ ] Project export and import - ✨WIP
+-   [x] Project export and import
     -   [x] Hierarchy - matadata convert
-    -   [ ] Join Models, serialize
-    -   [ ] Export
-    -   [ ] Import
--   [ ] Projecting models onto models (2D onto 3D) - ✨WIP https://github.com/vojtatom/geometry
--   [ ] Styling???
+    -   [x] Join Models, serialize
+    -   [x] Export
+    -   [x] Import
 
 ### v0.2.1 - ✅ Released
 

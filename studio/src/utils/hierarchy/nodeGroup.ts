@@ -8,11 +8,11 @@ export class GroupNode extends Node {
     children: Node[] = [];
 
     addModel(model: EditorModel, data: ModelHierarchyGroup) {
+        this.data = data.data ?? {};
         for (const childNode of data.children) {
             if ((childNode as ModelHierarchyGroup).children) {
                 const nodeData = childNode as ModelHierarchyGroup;
                 const node = new GroupNode();
-                node.data = nodeData.data ?? {};
                 this.addChild(node);
                 node.addParent(this);
                 node.addModel(model, nodeData);
