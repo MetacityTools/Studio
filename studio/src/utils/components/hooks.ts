@@ -113,8 +113,8 @@ export function useCreateModels() {
             const glmodel = await importModel(model);
             if (!glmodel) continue;
             ctx.scene.add(glmodel);
-            //TODO
-            ctx.graph.addModel(glmodel, model.hierarchy.root);
+
+            if (model.hierarchy) ctx.graph.addModel(glmodel, model.hierarchy.root);
         }
 
         ctx.setGlobalShift(shift);

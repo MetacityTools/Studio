@@ -5,6 +5,7 @@ interface MenuButtonProps {
     children: React.ReactNode;
     tipTitle?: string;
     active?: boolean;
+    column?: boolean;
     onClick?: () => void;
 }
 
@@ -12,7 +13,11 @@ export function MenuButton(props: MenuButtonProps) {
     return (
         <button
             className={clsx(
-                'text-xs last:rounded-r-md first:rounded-l-md transition-colors outline-none focus:outline-none border-y first:border-l last:border-r p-2',
+                'text-xs transition-colors outline-none focus:outline-none p-2',
+                !props.column &&
+                    'first:border-l last:border-r border-y last:rounded-r-md first:rounded-l-md',
+                props.column &&
+                    'first:border-t last:border-b border-l last:rounded-bl-md first:rounded-tl-md',
                 props.active
                     ? 'text-amber-600 bg-amber-100 hover:bg-amber-200'
                     : 'text-neutral-600 bg-white hover:bg-neutral-300'
@@ -25,12 +30,12 @@ export function MenuButton(props: MenuButtonProps) {
     );
 }
 
-export function MenuGroup(props: { children: React.ReactNode; row?: boolean; column?: boolean }) {
+export function MenuGroup(props: { children: React.ReactNode; column?: boolean }) {
     return (
         <div
             className={clsx(
-                'flex rounded-md shadow-even',
-                (!props.column && 'flex-row') || (!props.row && 'flex-col space-y-2')
+                'flex',
+                props.column ? 'flex-col rounded-r' : 'flex-row rounded-md shadow-even'
             )}
         >
             {props.children}

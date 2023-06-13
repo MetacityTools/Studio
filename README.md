@@ -41,8 +41,12 @@ The project is in active development. The roadmap is as follows:
 -   [x] Remove the conversion process and support switching between transform and table mode
     -   [x] add create/remove modifiers for hierarchy
     -   [x] move hierarchy to Editor Context
+-   [ ] Project export and import - ✨WIP
+    -   [x] Hierarchy - matadata convert
+    -   [ ] Join Models, serialize
+    -   [ ] Export
+    -   [ ] Import
 -   [ ] Projecting models onto models (2D onto 3D) - ✨WIP https://github.com/vojtatom/geometry
--   [ ] Project export
 -   [ ] Styling???
 
 ### v0.2.1 - ✅ Released

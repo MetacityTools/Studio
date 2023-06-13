@@ -1,5 +1,4 @@
 import 'allotment/dist/style.css';
-import React from 'react';
 
 import { EditingMode, useEditingMode } from '@editor/Context/EditorContext';
 

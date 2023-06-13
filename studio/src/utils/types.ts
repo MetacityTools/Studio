@@ -78,7 +78,7 @@ export interface ShapefileData {
 export interface ModelData {
     geometry: ModelGeometry;
     metadata: ModelMetadata;
-    hierarchy: ModelHierarchy;
+    hierarchy?: ModelHierarchy;
 }
 
 export interface ModelGeometry {
