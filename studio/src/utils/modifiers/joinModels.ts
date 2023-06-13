@@ -1,17 +1,30 @@
 import { vec3 } from 'gl-matrix';
 
 import { EditorModel } from '@utils/models/EditorModel';
-import { CoordinateMode, addEditorModels } from '@utils/models/addEditorModel';
-import { ModelData } from '@utils/types';
+import { ModelHierarchyGroup, ModelHierarchyModel } from '@utils/types';
+import { EditorModelData, ModelGraph } from '@utils/utils';
 
-import { Scene } from '@bananagl/bananagl';
+function getAllSubmodels(
+    model: EditorModel,
+    node: ModelHierarchyGroup,
+    map: Map<number, ModelHierarchyModel> = new Map()
+) {
+    for (const child of node.children) {
+        if ((child as ModelHierarchyGroup).children) {
+            getAllSubmodels(model, child as ModelHierarchyGroup, map);
+        } else {
+            const modelNode = child as ModelHierarchyModel;
+            map.set(modelNode.id, modelNode);
+        }
+    }
+    return map;
+}
 
-export async function joinModels(scene: Scene, models: EditorModel[]) {
+export async function joinModels(models: EditorModel[], graph: ModelGraph) {
     if (models.length === 0) throw new Error('No models to convert.');
 
     const positions: Float32Array[] = [];
     const submodels: Uint32Array[] = [];
-    const meta: any[] = [];
     let submodelCount = 0;
 
     const uniforms = {
@@ -19,14 +32,20 @@ export async function joinModels(scene: Scene, models: EditorModel[]) {
         uZMax: 0,
     };
 
+    const graphCopy = graph.exportGraph();
+
     for (const model of models) {
         //get required attributes
         const p = model.attributes.getAttribute('position');
         const s = model.attributes.getAttribute('submodel');
         if (!p || !s) throw new Error('Required attributes not found during conversion.');
 
+        //get model nodes
+        const modelNodes = getAllSubmodels(model, graphCopy.root);
+
         //convert positions
-        const pi = p.buffer.data;
+        const pi = new Float32Array(p.buffer.data.length);
+        pi.set(p.buffer.data);
         const v = vec3.create();
         for (let i = 0; i < pi.length; i += 3) {
             vec3.set(v, pi[i], pi[i + 1], pi[i + 2]);
@@ -38,11 +57,20 @@ export async function joinModels(scene: Scene, models: EditorModel[]) {
         positions.push(pi as Float32Array);
 
         //convert submodels
-        const si = new Uint32Array(s.buffer.data.buffer);
+        const view = s.buffer.getView(Uint32Array);
+        const si = new Uint32Array(view.length);
+        si.set(view);
         const ids = Array.from(new Set<number>(si));
         const map = new Map<number, number>();
-        for (let i = 0; i < ids.length; i++) map.set(ids[i], i), meta.push(model.data[ids[i]]);
-        for (let i = 0; i < si.length; i++) si[i] = map.get(si[i])! + submodelCount;
+        let n: ModelHierarchyModel | undefined, id: number | undefined;
+        for (let i = 0; i < ids.length; i++) map.set(ids[i], i);
+        for (let i = 0; i < si.length; i++) {
+            id = si[i];
+            si[i] = map.get(id)! + submodelCount;
+            n = modelNodes.get(id);
+            if (!n) throw new Error('Model node not found during conversion.');
+            n.id = si[i];
+        }
         submodels.push(si);
 
         uniforms.uZMin = model.uniforms.uZMin as number;
@@ -50,7 +78,6 @@ export async function joinModels(scene: Scene, models: EditorModel[]) {
 
         //epilogue
         submodelCount += ids.length;
-        scene.remove(model);
     }
 
     //concat buffers
@@ -69,26 +96,18 @@ export async function joinModels(scene: Scene, models: EditorModel[]) {
     }
 
     //create model data
-    const modelData: ModelData = {
+    const modelData: EditorModelData = {
         geometry: {
             position,
             submodel,
         },
         metadata: {
-            name: 'main',
-            data: {},
+            name: 'Joined Model',
             primitive: models[0].primitive, //TODO this is gonna be triangle but maybe we should change it up in the future
         },
+        uniforms,
+        hierarchy: graphCopy,
     };
 
-    //create model
-    await addEditorModels({
-        models: [modelData],
-        scene,
-        coordMode: CoordinateMode.None,
-        uniforms,
-        globalShift: [0, 0, 0],
-    });
-
-    return { submodelCount, meta };
+    return modelData;
 }

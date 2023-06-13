@@ -1,14 +1,14 @@
 import Editor from '@monaco-editor/react';
 import React from 'react';
 
-import { useLinkingNode } from '@editor/Context/TableContext';
+import { useEditingNode } from '@editor/Context/TableContext';
 
 import { EmptyMetaEditor } from '@elements/Empty';
 
 import { MetaMenu } from '../Menu/MetaMenu';
 
 export function Meta() {
-    const [nodeToLink, setNodeToLink] = useLinkingNode();
+    const [nodeToLink, setNodeToLink] = useEditingNode();
     const timeRef = React.useRef<NodeJS.Timeout>();
     const [status, setStatus] = React.useState<'editing' | 'saved' | 'failed' | undefined>();
 

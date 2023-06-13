@@ -2,17 +2,18 @@ import { Allotment } from 'allotment';
 import 'allotment/dist/style.css';
 import React from 'react';
 
+import { Button } from '@elements/Button';
 import { SizeGuard } from '@elements/SizeGuard';
 
 import { CanvasView } from './Canvas/CanvasView';
-import { EditingStage, useEditingStage } from './Context/EditorContext';
+import { EditingMode, useEditingMode } from './Context/EditorContext';
 import { SidePanel } from './SidePanel/SidePanel';
 import { ProcessingScreen } from './Utils/Processing';
 import { SpashScreen } from './Utils/Splash';
 
 export function ModelEditor() {
-    const [editingStage] = useEditingStage();
-    const minSize = editingStage === EditingStage.Table ? 800 : 450;
+    const [editingMode] = useEditingMode();
+    const minSize = editingMode === EditingMode.Table ? 800 : 450;
     return (
         <SizeGuard minWidth={600} minHeight={400}>
             <Allotment separator={false}>

@@ -1,6 +1,30 @@
 import { vec3 } from 'gl-matrix';
 
-export function alignToCenter(model: Float32Array, shift: vec3 | null = null) {
+export enum CoordinateMode {
+    Keep,
+    Center,
+    None,
+}
+
+export function alignModels(
+    model: Float32Array,
+    coordMode: CoordinateMode,
+    shift: vec3 | null = null
+) {
+    if (coordMode === CoordinateMode.Center) alignToCenter(model);
+    if (coordMode === CoordinateMode.Keep) {
+        if (shift === null) {
+            shift = vec3.create();
+            alignToCenter(model, shift);
+        } else {
+            shiftModel(model, shift);
+        }
+    }
+
+    return shift;
+}
+
+function alignToCenter(model: Float32Array, shift: vec3 | null = null) {
     const minCoords = [Infinity, Infinity, Infinity];
     const maxCoords = [-Infinity, -Infinity, -Infinity];
 
@@ -39,7 +63,7 @@ export function alignToCenter(model: Float32Array, shift: vec3 | null = null) {
     return model;
 }
 
-export function shiftModel(model: Float32Array, shift: vec3) {
+function shiftModel(model: Float32Array, shift: vec3) {
     for (let i = 0; i < model.length; i += 3) {
         model[i] += shift[0];
         model[i + 1] += shift[1];

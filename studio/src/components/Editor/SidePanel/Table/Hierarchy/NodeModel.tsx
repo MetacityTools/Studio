@@ -1,12 +1,12 @@
 import React from 'react';
 import { BsFillStopFill } from 'react-icons/bs';
 import { MdOutlineDriveFileMove } from 'react-icons/md';
-import { VscJson, VscSymbolInterface } from 'react-icons/vsc';
+import { VscJson } from 'react-icons/vsc';
 
-import { EditorModel, ModelNode as ModelNodeClass } from '@utils/utils';
+import { ModelNode as ModelNodeClass, SelectionType } from '@utils/utils';
 import { useSelection } from '@utils/utils';
 
-import { useLinkingNode, useMovingNode } from '@editor/Context/TableContext';
+import { useEditingNode, useMovingNode } from '@editor/Context/TableContext';
 
 import {
     HierarchyButton,
@@ -17,23 +17,23 @@ import {
 import { If } from '@elements/If';
 
 type ModelNodeProps = {
-    model: EditorModel;
-    submodels: Set<number>;
+    selectedModels: SelectionType;
     node: ModelNodeClass;
 };
 
 export function ModelNode(props: ModelNodeProps) {
-    const { model, submodels, node } = props;
+    const { selectedModels, node } = props;
     const [select] = useSelection();
     const [nodeToMove, updateNodeToMove] = useMovingNode();
-    const [nodeToLink, updatenodeToLink] = useLinkingNode();
+    const [nodeToLink, updatenodeToLink] = useEditingNode();
 
-    const isSelected = React.useMemo(() => node.selected(submodels), [node, submodels]);
+    const isSelected = React.useMemo(() => node.selected(selectedModels), [node, selectedModels]);
     const isMoving = React.useMemo(() => node === nodeToMove, [node, nodeToMove]);
     const isLinking = React.useMemo(() => node === nodeToLink, [node, nodeToLink]);
 
     const handleSelect = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-        select(model, [node.submodelId!], true, true);
+        const s: SelectionType = new Map([[node.model, new Set([node.submodelId!])]]);
+        select(s, true, true);
         e.stopPropagation();
     };
 

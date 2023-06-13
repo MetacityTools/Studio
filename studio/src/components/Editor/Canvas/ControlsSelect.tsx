@@ -9,7 +9,7 @@ export function SelectionControls() {
     const [select] = useSelection();
 
     const deselect = () => {
-        select(null);
+        select(new Map());
     };
 
     return (

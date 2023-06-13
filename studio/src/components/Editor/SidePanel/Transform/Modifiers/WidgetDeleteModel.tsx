@@ -1,18 +1,16 @@
-import React from 'react';
 import { FiDelete } from 'react-icons/fi';
 
-import { useScene, useSelection } from '@utils/utils';
+import { useRemoveModels } from '@utils/utils';
 
 import { Widget, WidgetDescription, WidgetLine, WidgetTitle } from '@elements/Widgets';
 
-export function DeleteModelWidget() {
-    const scene = useScene();
-    const [, selectedModel] = useSelection();
+import { WidgetProps } from './Widget';
 
-    if (selectedModel === null) return null;
+export function DeleteModelWidget(props: WidgetProps) {
+    const remove = useRemoveModels();
 
     const apply = () => {
-        scene.remove(selectedModel);
+        remove(props.model);
     };
 
     return (

@@ -1,19 +1,18 @@
 import React from 'react';
 
-import { createGroup } from '@utils/utils';
-import { useSelectedSubmodels } from '@utils/utils';
+import { createGroup, useGraph, useSelectedModels } from '@utils/utils';
 
-import { useGraph, useMovingNode } from '@editor/Context/TableContext';
+import { useMovingNode } from '@editor/Context/TableContext';
 
 import { Button } from '@elements/Button';
 
 export function HierarchyMenu() {
-    const [selectedSubmodels] = useSelectedSubmodels();
+    const selection = useSelectedModels();
     const [graph] = useGraph();
     const [nodeToMove, updateNodeToMove] = useMovingNode();
 
     const group = () => {
-        createGroup(selectedSubmodels, graph);
+        createGroup(selection, graph);
     };
 
     const unmove = () => {

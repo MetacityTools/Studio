@@ -1,6 +1,5 @@
 import { vec3 } from 'gl-matrix';
 
-import { alignToCenter, shiftModel } from '@utils/modifiers/alignVertices';
 import { computeNormals } from '@utils/modifiers/computeNormals';
 import { ModelData, PrimitiveType } from '@utils/types';
 
@@ -8,31 +7,26 @@ import * as GL from '@bananagl/bananagl';
 
 import { DEFAULT_UNIFORMS, EditorModel } from './EditorModel';
 import { solidShader, wireframeShader } from './EditorModelShader';
-import { CoordinateMode, EditorModelData } from './addEditorModel';
 
-export async function addTriangleModel(model: ModelData, ctx: EditorModelData) {
-    let { coordMode, globalShift, position, rotation, scale, scene, uniforms } = ctx;
+export interface EditorModelData extends ModelData {
+    position?: vec3;
+    rotation?: vec3;
+    scale?: vec3;
+    uniforms?: { [name: string]: any };
+}
+
+export async function addTriangleModel(data: EditorModelData) {
+    let { geometry, metadata, position, rotation, scale, uniforms } = data;
 
     position = position || vec3.create();
     rotation = rotation || vec3.create();
     scale = scale || vec3.fromValues(1, 1, 1);
 
     const glmodel = new EditorModel();
-    const vertices = model.geometry.position;
-    const submodel = model.geometry.submodel;
+    const vertices = geometry.position;
+    const submodel = geometry.submodel;
 
     const byteSubmodel = new Uint8Array(submodel.buffer);
-
-    if (coordMode === CoordinateMode.Center) alignToCenter(vertices);
-    if (coordMode === CoordinateMode.Keep) {
-        if (globalShift === null) {
-            globalShift = vec3.create();
-            alignToCenter(vertices, globalShift);
-        } else {
-            shiftModel(vertices, globalShift);
-        }
-    }
-
     const colors = new Uint8Array(vertices.length).fill(255);
     const selected = new Uint8Array(vertices.length).fill(0);
     const bar = new Uint8Array(vertices.length);
@@ -48,8 +42,7 @@ export async function addTriangleModel(model: ModelData, ctx: EditorModelData) {
     glmodel.shader = solidShader;
     glmodel.solidShader = solidShader;
     glmodel.wireframeShader = wireframeShader;
-    glmodel.data = model.metadata.data;
-    glmodel.name = model.metadata.name;
+    glmodel.name = metadata.name;
     if (uniforms) glmodel.uniforms = GL.cloneUniforms(uniforms);
     else glmodel.uniforms = DEFAULT_UNIFORMS;
     glmodel.position = position.slice() as vec3;
@@ -59,6 +52,5 @@ export async function addTriangleModel(model: ModelData, ctx: EditorModelData) {
     glmodel.mode = 4;
 
     await glmodel.initTrianglePicking();
-    scene.add(glmodel);
-    return globalShift;
+    return glmodel;
 }

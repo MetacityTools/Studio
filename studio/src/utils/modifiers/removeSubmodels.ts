@@ -1,17 +1,8 @@
 import { EditorModel } from '@utils/models/EditorModel';
-import { CoordinateMode, addEditorModels } from '@utils/models/addEditorModel';
-import { ModelData } from '@utils/types';
+import { EditorModelData } from '@utils/models/TriangleModel';
 
-import * as GL from '@bananagl/bananagl';
-
-export async function deleteSubmodels(
-    scene: GL.Scene,
-    model: EditorModel,
-    selectedSubmodels: number[]
-) {
-    if (selectedSubmodels.length === 0) return;
-    const idsToRemove = new Set(selectedSubmodels);
-
+export function removeSubmodels(model: EditorModel, idsToRemove: Set<number>) {
+    if (idsToRemove.size === 0) return;
     let originalModelVertexCount = 0;
 
     const submodel = model.attributes.getAttribute('submodel');
@@ -24,16 +15,19 @@ export async function deleteSubmodels(
         }
     }
 
-    const modelData: ModelData = {
+    const modelData: EditorModelData = {
         geometry: {
             position: new Float32Array(originalModelVertexCount * 3),
             submodel: new Uint32Array(originalModelVertexCount),
         },
         metadata: {
             name: model.name,
-            data: {},
             primitive: model.primitive,
         },
+        position: model.position,
+        rotation: model.rotation,
+        scale: model.scale,
+        uniforms: model.uniforms,
     };
 
     const position = model.attributes.getAttribute('position');
@@ -54,24 +48,5 @@ export async function deleteSubmodels(
         }
     }
 
-    const originalMetadata = modelData.metadata.data;
-
-    for (let id in model.data) {
-        if (!idsToRemove.has(parseInt(id))) {
-            originalMetadata[id] = model.data[id];
-        }
-    }
-
-    await addEditorModels({
-        models: [modelData],
-        coordMode: CoordinateMode.None,
-        scene: scene,
-        globalShift: null,
-        rotation: model.rotation,
-        scale: model.scale,
-        position: model.position,
-        uniforms: model.uniforms,
-    });
-
-    scene.remove(model);
+    return modelData;
 }

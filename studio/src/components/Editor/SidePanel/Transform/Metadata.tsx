@@ -1,25 +1,28 @@
-import React from 'react';
 import JsonView from 'react18-json-view';
 import 'react18-json-view/src/style.css';
 
-import { useSelection } from '@utils/utils';
+import { useGraph, useSelection } from '@utils/utils';
 
-import { EmptyDetail, EmptyMetadata } from '@elements/Empty';
+import { EmptyMetadata } from '@elements/Empty';
 
 export function Metadata() {
-    const [, selectedModel, selectedSubmodels] = useSelection();
+    const [, selection] = useSelection();
+    const [graph] = useGraph();
 
-    if (selectedModel === null) return <EmptyDetail />;
-    if (selectedSubmodels.length === 0) return <EmptyMetadata />;
+    if (selection.size === 0) return <EmptyMetadata />;
 
     return (
         <div className="p-4 space-y-4">
-            {selectedSubmodels.map((id) => (
-                <div key={id}>
-                    <div className="text-2xl text-neutral-300">Part {id}</div>
-                    <JsonView src={selectedModel.data[id]} />
-                </div>
-            ))}
+            {Array.from(selection).map(([model, submodels]) =>
+                Array.from(submodels).map((id) => (
+                    <div key={id}>
+                        <div className="text-2xl text-neutral-300">
+                            Model {model.name} - Part {id}
+                        </div>
+                        <JsonView src={graph.getModel(model, id)?.data ?? 'No data found'} />
+                    </div>
+                ))
+            )}
         </div>
     );
 }

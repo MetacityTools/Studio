@@ -1,24 +1,25 @@
-import React from 'react';
 import { TbLayersUnion } from 'react-icons/tb';
 
-import { joinSubmodels } from '@utils/utils';
+import { useJoinSubmodels } from '@utils/utils';
 import { useScene, useSelection } from '@utils/utils';
 
 import { useProcessing } from '@editor/Context/EditorContext';
 
 import { Widget, WidgetDescription, WidgetLine, WidgetTitle } from '@elements/Widgets';
 
-export function JoinSubmodelWidget() {
+import { WidgetProps } from './Widget';
+
+export function JoinSubmodelWidget(props: WidgetProps) {
     const scene = useScene();
-    const [select, selectedModel, selectedSubmodels] = useSelection();
+    const join = useJoinSubmodels();
+    const [, selection] = useSelection();
     const [, setProcessing] = useProcessing();
 
-    if (selectedModel === null) return null;
-
     const apply = async () => {
+        const submodelIDs = selection.get(props.model);
+        if (!submodelIDs) return; //TODO handle with a popup
         setProcessing(true);
-        const joinedSubmodelIDs = await joinSubmodels(selectedModel, selectedSubmodels);
-        select(selectedModel, joinedSubmodelIDs);
+        await join(props.model, submodelIDs);
         setProcessing(false);
     };
 

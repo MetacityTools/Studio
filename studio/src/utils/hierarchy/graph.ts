@@ -1,3 +1,6 @@
+import { SelectionType } from '@utils/components/Context';
+import { EditorModel, ModelHierarchyGroup } from '@utils/utils';
+
 import { Node } from './node';
 import { GroupNode } from './nodeGroup';
 import { ModelNode } from './nodeModel';
@@ -6,15 +9,28 @@ export class ModelGraph {
     root: GroupNode = new GroupNode();
     private onUpdateCallbacks: ((graph: ModelGraph) => void)[] = [];
 
-    addModelToRoot(modelId: number, data: { [key: string]: any } = {}) {
-        const node = new ModelNode(modelId);
-        node.data = data;
-        this.root.addChild(node);
-        node.addParent(this.root);
+    addModel(model: EditorModel, data: ModelHierarchyGroup) {
+        this.root.addModel(model, data);
     }
 
-    getModelNode(modelId: number): ModelNode | undefined {
-        return this.root.getModelNode(modelId);
+    getModel(model: EditorModel, modelId: number): ModelNode | undefined {
+        return this.root.getModelNode(model, modelId);
+    }
+
+    removeModel(model: EditorModel) {
+        this.root.removeModel(model);
+    }
+
+    removeSubmodels(model: EditorModel, ids: Set<number>) {
+        this.root.removeSubmodels(model, ids);
+    }
+
+    updateModel(oldModel: EditorModel, newModel: EditorModel, submodelIDs?: Set<number>) {
+        this.root.updateModel(oldModel, newModel, submodelIDs);
+    }
+
+    getMetadata(model: EditorModel, submodelID: Set<number>) {
+        return this.root.getMetadata(model, submodelID);
     }
 
     set needsUpdate(value: boolean) {
@@ -29,7 +45,7 @@ export class ModelGraph {
         this.root = graph.root;
     }
 
-    getSelectedGroups(selectedModels: Set<number>) {
+    getSelectedGroups(selectedModels: SelectionType) {
         return this.root.getSelectedDescendantGroups(selectedModels);
     }
 
@@ -40,5 +56,11 @@ export class ModelGraph {
         node.addParent(newParent);
         this.needsUpdate = true;
         if (prevParent?.children.length === 0) prevParent.parent?.removeChild(prevParent);
+    }
+
+    exportGraph() {
+        return {
+            root: this.root.exportNode(),
+        };
     }
 }

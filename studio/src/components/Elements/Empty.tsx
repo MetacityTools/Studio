@@ -16,6 +16,14 @@ export function EmptyDetail() {
     );
 }
 
+export function TooManySelected() {
+    return (
+        <div className="w-full h-full flex flex-col items-center justify-center">
+            <div className="text-4xl text-neutral-300 text-center">Select only one model</div>
+        </div>
+    );
+}
+
 export function EmptyMetaEditor() {
     return (
         <div className="w-full h-full flex flex-col items-center justify-center">
@@ -27,7 +35,7 @@ export function EmptyMetaEditor() {
 export function EmptyMetadata() {
     return (
         <div className="w-full h-full flex flex-col items-center justify-center">
-            <div className="text-4xl text-neutral-300 text-center">Select a part of the model</div>
+            <div className="text-4xl text-neutral-300 text-center">Select a part of a model</div>
         </div>
     );
 }

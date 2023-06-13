@@ -56,7 +56,11 @@ export interface IFCModelData {
 
 export interface UserInputModel {
     name: string;
-    data: IFCData | GLTFData | ShapefileData;
+    data: IFCData | GLTFData | ShapefileData | MetacityData;
+}
+
+export interface MetacityData {
+    buffer: ArrayBuffer;
 }
 
 export interface IFCData {
@@ -78,6 +82,7 @@ export interface ShapefileData {
 export interface ModelData {
     geometry: ModelGeometry;
     metadata: ModelMetadata;
+    hierarchy?: ModelHierarchy;
 }
 
 export interface ModelGeometry {
@@ -94,11 +99,26 @@ export enum PrimitiveType {
 
 export interface ModelMetadata {
     name: string;
-    data: { [submodel: number]: any };
     primitive: PrimitiveType;
 }
 
 export enum GeometryMode {
     WIREFRAME,
     SOLID,
+}
+
+export interface ModelHierarchy {
+    root: ModelHierarchyGroup;
+}
+
+export interface ModelHierarchyNode {
+    data: { [data: string]: any };
+}
+
+export interface ModelHierarchyGroup extends ModelHierarchyNode {
+    children: ModelHierarchyNode[];
+}
+
+export interface ModelHierarchyModel extends ModelHierarchyNode {
+    id: number;
 }

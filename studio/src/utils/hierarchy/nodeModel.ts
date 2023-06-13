@@ -1,11 +1,22 @@
+import { EditorModel, ModelHierarchyModel } from '@utils/utils';
+
 import { Node } from './node';
 
 export class ModelNode extends Node {
-    constructor(public submodelId: number) {
+    constructor(public model: EditorModel, public submodelId: number) {
         super();
     }
 
-    selected(selectedModels: Set<number>) {
-        return selectedModels.has(this.submodelId);
+    selected(selectedModels: Map<EditorModel, Set<number>>) {
+        const m = selectedModels.get(this.model);
+        if (!m) return false;
+        return m.has(this.submodelId);
+    }
+
+    exportNode(): ModelHierarchyModel {
+        return {
+            id: this.submodelId,
+            data: this.data,
+        };
     }
 }
