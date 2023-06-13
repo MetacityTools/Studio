@@ -1,5 +1,5 @@
 import { SelectionType } from '@utils/components/Context';
-import { EditorModel, ModelHierarchyGroup } from '@utils/utils';
+import { EditorModel, ModelHierarchyGroupNode } from '@utils/utils';
 
 import { Node } from './node';
 import { GroupNode } from './nodeGroup';
@@ -9,7 +9,7 @@ export class ModelGraph {
     root: GroupNode = new GroupNode();
     private onUpdateCallbacks: ((graph: ModelGraph) => void)[] = [];
 
-    addModel(model: EditorModel, data: ModelHierarchyGroup) {
+    addModel(model: EditorModel, data: ModelHierarchyGroupNode) {
         this.root.addModel(model, data);
     }
 

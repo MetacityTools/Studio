@@ -108,17 +108,21 @@ export enum GeometryMode {
 }
 
 export interface ModelHierarchy {
-    root: ModelHierarchyGroup;
+    root: ModelHierarchyGroupNode;
 }
 
 export interface ModelHierarchyNode {
     data: { [data: string]: any };
 }
 
-export interface ModelHierarchyGroup extends ModelHierarchyNode {
+export interface ModelHierarchyGroupNode extends ModelHierarchyNode {
     children: ModelHierarchyNode[];
 }
 
-export interface ModelHierarchyModel extends ModelHierarchyNode {
+export interface ModelHierarchyModelNode extends ModelHierarchyNode {
     id: number;
+}
+
+export interface ExtendedModelHierarchyModelNode extends ModelHierarchyModelNode {
+    model?: any;
 }

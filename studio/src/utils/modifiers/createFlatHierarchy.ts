@@ -1,7 +1,7 @@
-import { ModelHierarchy, ModelHierarchyGroup } from '@utils/types';
+import { ModelHierarchy, ModelHierarchyGroupNode } from '@utils/types';
 
 export function createFlatHierarchy(data: { [data: number]: any }): ModelHierarchy {
-    const root: ModelHierarchyGroup = {
+    const root: ModelHierarchyGroupNode = {
         children: [],
         data: {},
     };

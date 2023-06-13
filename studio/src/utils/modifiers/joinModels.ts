@@ -1,20 +1,27 @@
 import { vec3 } from 'gl-matrix';
 
 import { EditorModel } from '@utils/models/EditorModel';
-import { ModelHierarchyGroup, ModelHierarchyModel } from '@utils/types';
+import {
+    ExtendedModelHierarchyModelNode,
+    ModelHierarchyGroupNode,
+    ModelHierarchyModelNode,
+} from '@utils/types';
 import { EditorModelData, ModelGraph } from '@utils/utils';
 
 function getAllSubmodels(
     model: EditorModel,
-    node: ModelHierarchyGroup,
-    map: Map<number, ModelHierarchyModel> = new Map()
+    node: ModelHierarchyGroupNode,
+    map: Map<number, ModelHierarchyModelNode> = new Map()
 ) {
     for (const child of node.children) {
-        if ((child as ModelHierarchyGroup).children) {
-            getAllSubmodels(model, child as ModelHierarchyGroup, map);
+        if ((child as ModelHierarchyGroupNode).children) {
+            getAllSubmodels(model, child as ModelHierarchyGroupNode, map);
         } else {
-            const modelNode = child as ModelHierarchyModel;
+            const modelNode = child as ExtendedModelHierarchyModelNode;
+            if (modelNode.model !== model) continue;
+            modelNode.data = modelNode.data ?? {};
             map.set(modelNode.id, modelNode);
+            delete modelNode.model;
         }
     }
     return map;
@@ -32,6 +39,7 @@ export async function joinModels(models: EditorModel[], graph: ModelGraph) {
         uZMax: 0,
     };
 
+    //TODO the problem is that there are no model references in the graph
     const graphCopy = graph.exportGraph();
 
     for (const model of models) {
@@ -56,13 +64,14 @@ export async function joinModels(models: EditorModel[], graph: ModelGraph) {
         }
         positions.push(pi as Float32Array);
 
+        //TODO there is probably a problem in the submodel conversion
         //convert submodels
         const view = s.buffer.getView(Uint32Array);
         const si = new Uint32Array(view.length);
         si.set(view);
         const ids = Array.from(new Set<number>(si));
         const map = new Map<number, number>();
-        let n: ModelHierarchyModel | undefined, id: number | undefined;
+        let n: ModelHierarchyModelNode | undefined, id: number | undefined;
         for (let i = 0; i < ids.length; i++) map.set(ids[i], i);
         for (let i = 0; i < si.length; i++) {
             id = si[i];
