@@ -64,7 +64,7 @@ jobs:
                   port: ${{ secrets.PORT }}
                   script: |
                       rm -rf Studio
-                      GIT_SSH_COMMAND="ssh -i ~/.ssh/github" git clone https://github.com/MetacityTools/Studio.git
+                      GIT_SSH_COMMAND="ssh -i ~/.ssh/github" git clone -b release git@github.com:MetacityTools/Studio.git 
                       cd Studio
                       npm i
                       npm run build
