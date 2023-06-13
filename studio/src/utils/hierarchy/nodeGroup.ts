@@ -1,5 +1,5 @@
 import { SelectionType } from '@utils/components/Context';
-import { EditorModel, ModelHierarchyGroup, ModelHierarchyModel } from '@utils/utils';
+import { EditorModel, ModelHierarchyGroupNode, ModelHierarchyModelNode } from '@utils/utils';
 
 import { Node } from './node';
 import { ModelNode } from './nodeModel';
@@ -7,17 +7,17 @@ import { ModelNode } from './nodeModel';
 export class GroupNode extends Node {
     children: Node[] = [];
 
-    addModel(model: EditorModel, data: ModelHierarchyGroup) {
+    addModel(model: EditorModel, data: ModelHierarchyGroupNode) {
         this.data = data.data ?? {};
         for (const childNode of data.children) {
-            if ((childNode as ModelHierarchyGroup).children) {
-                const nodeData = childNode as ModelHierarchyGroup;
+            if ((childNode as ModelHierarchyGroupNode).children) {
+                const nodeData = childNode as ModelHierarchyGroupNode;
                 const node = new GroupNode();
                 this.addChild(node);
                 node.addParent(this);
                 node.addModel(model, nodeData);
             } else {
-                const nodeData = childNode as ModelHierarchyModel;
+                const nodeData = childNode as ModelHierarchyModelNode;
                 const node = new ModelNode(model, nodeData.id);
                 node.data = nodeData.data ?? {};
                 this.addChild(node);
@@ -161,7 +161,7 @@ export class GroupNode extends Node {
         return this.parent === node || ((this.parent && this.parent.isDescendantOf(node)) ?? false);
     }
 
-    exportNode(): ModelHierarchyGroup {
+    exportNode(): ModelHierarchyGroupNode {
         return {
             children: this.children?.map((child) => child.exportNode()),
             data: this.data,
