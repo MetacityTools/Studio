@@ -27,19 +27,18 @@ export function GroupNodeChildren(props: GroupNodeChildrenProps) {
         (child) => child instanceof GroupNodeClass
     ) as GroupNodeClass[];
 
-    const activeChildren: Node[] = [];
-    const nonActiveChildren: Node[] = [];
-
-    node.children?.forEach((child) => {
-        if (
-            child instanceof ModelNodeClass &&
-            (isSelected(selectedModels, child) || child === nodeToMove || child === nodeToLink)
-        )
-            activeChildren.push(child);
-        else nonActiveChildren.push(child);
-    });
-
-    const concatChildren = activeChildren.concat(nonActiveChildren);
+    //const activeChildren: Node[] = [];
+    //const nonActiveChildren: Node[] = [];
+    //node.children?.forEach((child) => {
+    //    if (
+    //        child instanceof ModelNodeClass &&
+    //        (isSelected(selectedModels, child) || child === nodeToMove || child === nodeToLink)
+    //    )
+    //        activeChildren.push(child);
+    //    else nonActiveChildren.push(child);
+    //});
+    //const concatChildren = activeChildren.concat(nonActiveChildren);
+    const concatChildren = node.children;
 
     if (groups.length === 0 && concatChildren.length === 0)
         return <div className="text-neutral-400 pl-10">No models</div>;

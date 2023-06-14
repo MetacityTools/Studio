@@ -1,8 +1,6 @@
 import { Transition } from '@headlessui/react';
 import React from 'react';
 
-import { useLoadingStatus, useProcessing } from '@editor/Context/EditorContext';
-
 import chicken1 from '@assets/Chicken_Run.gif';
 import chicken3 from '@assets/Chicken_Strut.gif';
 
@@ -15,11 +13,10 @@ const messages = [
 
 const chickens = [chicken1, chicken3];
 
-export function ProcessingScreen() {
+export function ProcessingScreen(props: { status: string; processing: boolean }) {
+    const { status, processing } = props;
     const [message, setMessage] = React.useState(messages[0]);
     const [chicken, setChicken] = React.useState(chickens[0]);
-    const [loadingStatus] = useLoadingStatus();
-    const [processing] = useProcessing();
 
     React.useEffect(() => {
         if (processing) {
@@ -49,7 +46,7 @@ export function ProcessingScreen() {
                 <div className="text-neutral-500 flex flex-col items-center space-y-4">
                     <img src={chicken} className="w-12 h-12 grayscale" />
                     <p className="text-lg font-bold">{message}</p>
-                    <p>{loadingStatus}</p>
+                    <p>{status}</p>
                 </div>
             </div>
         </Transition>

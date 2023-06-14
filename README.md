@@ -27,16 +27,17 @@ The project is in active development. The roadmap is as follows:
 
 ### v0.4.0
 
--   [ ] Optional interactivity - build BVH only if user opts-in to make the loaded models clickable
--   [ ] Hide and show models
--   [ ] Viewer - Details TBA
-
-### v0.3.2 - 👨‍💻 In progress
-
 -   [ ] Projecting models onto models (2D onto 3D) - ✨WIP https://github.com/vojtatom/geometry
 -   [ ] Styling???
 -   [ ] Loading points and lines from SHP
 -   [ ] Extract Utils to separate SDK form metacity editors
+-   [ ] Optional interactivity - build BVH only if user opts-in to make the loaded models clickable
+
+### v0.3.2 - 👨‍💻 In progress
+
+-   [ ] Viewer
+-   [ ] Loading models to viewer
+-   [ ] Browsing hierarchy in viewer
 
 ### v0.3.1 - ✅ Released
 

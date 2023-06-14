@@ -3,8 +3,7 @@ import { TbLayersUnion } from 'react-icons/tb';
 import { useJoinSubmodels } from '@utils/utils';
 import { useScene, useSelection } from '@utils/utils';
 
-import { useProcessing } from '@editor/Context/EditorContext';
-
+import { useProcessing } from '@elements/Context';
 import { Widget, WidgetDescription, WidgetLine, WidgetTitle } from '@elements/Widgets';
 
 import { WidgetProps } from './Widget';

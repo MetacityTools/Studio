@@ -10,10 +10,10 @@ import {
     useScene,
 } from '@utils/utils';
 
-import { useLoadingStatus, useProcessing } from '@editor/Context/EditorContext';
 import { Vitals } from '@editor/Utils/Vitals';
 
 import { Button, ButtonFileInput } from '@elements/Button';
+import { useLoadingStatus, useProcessing } from '@elements/Context';
 
 import { ImportDialog } from './DialogImport';
 

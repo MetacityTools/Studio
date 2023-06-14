@@ -8,17 +8,19 @@ export function DialogOption(props: {
     onClick?: () => void;
     href?: string;
     className?: string;
+    secondary?: boolean;
 }) {
+    const sharedClasses = clsx(
+        !props.secondary
+            ? 'bg-blue-100 text-blue-900 hover:bg-blue-200 focus-visible:ring-blue-500'
+            : 'bg-neutral-100 text-neutral-900 hover:bg-neutral-200 focus-visible:ring-neutral-500',
+        'w-full text-left rounded-md px-4 py-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 transition-colors',
+        props.className
+    );
+
     if (props.onClick) {
         return (
-            <button
-                type="button"
-                className={clsx(
-                    'w-full text-left rounded-md border border-transparent bg-blue-100 px-4 py-2 text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 transition-colors',
-                    props.className
-                )}
-                onClick={props.onClick}
-            >
+            <button type="button" className={clsx(sharedClasses)} onClick={props.onClick}>
                 {/* span because it is incorrect to use a div inside a button */}
                 <span className="text-lg font-medium block">{props.title}</span>
                 <span className="text-sm block">{props.body}</span>
@@ -28,13 +30,7 @@ export function DialogOption(props: {
 
     if (props.href) {
         return (
-            <a
-                href={props.href}
-                className={clsx(
-                    'w-full text-left rounded-md border border-transparent bg-blue-100 px-4 py-2 text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 transition-colors block',
-                    props.className
-                )}
-            >
+            <a href={props.href} className={clsx(sharedClasses, 'block')}>
                 <span className="text-lg font-medium block">{props.title}</span>
                 <span className="text-sm block">{props.body}</span>
             </a>
