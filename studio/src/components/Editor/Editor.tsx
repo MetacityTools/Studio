@@ -12,8 +12,6 @@ import { SpashScreen } from './Utils/Splash';
 
 export function ModelEditor() {
     const [editingMode] = useEditingMode();
-    const [loadingStatus] = useLoadingStatus();
-    const [processing] = useProcessing();
     const minSize = editingMode === EditingMode.Table ? 800 : 450;
 
     return (
@@ -30,7 +28,7 @@ export function ModelEditor() {
                     <SidePanel />
                 </Allotment.Pane>
             </Allotment>
-            <ProcessingScreen processing={processing} status={loadingStatus} />
+            <ProcessingScreen />
             <SpashScreen />
         </SizeGuard>
     );

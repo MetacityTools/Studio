@@ -45,9 +45,10 @@ export function SpashScreen() {
             </div>
             <div className="mx-6 mt-6">
                 <DialogOption
-                    title="Open Viewer"
+                    title="Stay and use Viewer"
                     body="Editor allows you to create a new Studio project"
                     onClick={closeModal}
+                    secondary
                 />
             </div>
             <div className="mx-6 mt-2 mb-8">
@@ -55,7 +56,6 @@ export function SpashScreen() {
                     title="Go to Editor"
                     body="Viewer allows you to view an existing Studio project"
                     href="/editor"
-                    secondary
                 />
             </div>
         </OverlayDialog>

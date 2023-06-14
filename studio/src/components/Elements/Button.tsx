@@ -31,8 +31,9 @@ export function ButtonFileInput(props: {
             <label
                 htmlFor={props.id}
                 className={clsx(
+                    'cursor-pointer',
                     !props.unstyled &&
-                        'px-4 py-2 rounded-md transition-colors cursor-pointer bg-blue-100 text-blue-900 hover:bg-blue-200 flex items-center overflow-hidden whitespace-nowrap overflow-ellipsis text-sm flex flex-row items-center'
+                        'px-4 py-2 rounded-md transition-colors bg-blue-100 text-blue-900 hover:bg-blue-200 flex items-center overflow-hidden whitespace-nowrap overflow-ellipsis text-sm flex flex-row items-center'
                 )}
             >
                 {props.children}

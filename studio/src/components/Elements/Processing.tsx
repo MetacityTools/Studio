@@ -4,6 +4,8 @@ import React from 'react';
 import chicken1 from '@assets/Chicken_Run.gif';
 import chicken3 from '@assets/Chicken_Strut.gif';
 
+import { useLoadingStatus, useProcessing } from './Context';
+
 const messages = [
     'Processing your data',
     'This may take a while depending on the size of your model',
@@ -13,8 +15,9 @@ const messages = [
 
 const chickens = [chicken1, chicken3];
 
-export function ProcessingScreen(props: { status: string; processing: boolean }) {
-    const { status, processing } = props;
+export function ProcessingScreen() {
+    const [loadingStatus] = useLoadingStatus();
+    const [processing] = useProcessing();
     const [message, setMessage] = React.useState(messages[0]);
     const [chicken, setChicken] = React.useState(chickens[0]);
 
@@ -46,7 +49,7 @@ export function ProcessingScreen(props: { status: string; processing: boolean })
                 <div className="text-neutral-500 flex flex-col items-center space-y-4">
                     <img src={chicken} className="w-12 h-12 grayscale" />
                     <p className="text-lg font-bold">{message}</p>
-                    <p>{status}</p>
+                    <p>{loadingStatus}</p>
                 </div>
             </div>
         </Transition>
