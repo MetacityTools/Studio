@@ -1,8 +1,9 @@
-import { DirectionControls } from './ControlsDirection';
+import { DirectionControls } from '@elements/Controls/ControlsDirection';
+import { ProjectionControls } from '@elements/Controls/ControlsProjection';
+import { SelectionControls } from '@elements/Controls/ControlsSelect';
+import { ShaderControls } from '@elements/Controls/ControlsShader';
+
 import { ModeControls } from './ControlsMode';
-import { ProjectionControls } from './ControlsProjection';
-import { SelectionControls } from './ControlsSelect';
-import { ShaderControls } from './ControlsShader';
 
 export function Controls() {
     return (
@@ -13,7 +14,7 @@ export function Controls() {
                 <ShaderControls />
                 <SelectionControls />
             </div>
-            <div className="absolute mt-4 space-x-2 right-0 top-0 z-0 flex flex-row">
+            <div className="absolute m-4 space-x-2 right-0 top-0 z-0 flex flex-row">
                 <ModeControls />
             </div>
         </>

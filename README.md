@@ -36,8 +36,10 @@ The project is in active development. The roadmap is as follows:
 ### v0.3.2 - 👨‍💻 In progress
 
 -   [ ] Viewer
--   [ ] Loading models to viewer
--   [ ] Browsing hierarchy in viewer
+    -   [x] Loading models to viewer
+    -   [x] View Controls
+    -   [ ] Browsing hierarchy in viewer
+        -   [ ] List of nodes
 
 ### v0.3.1 - ✅ Released
 

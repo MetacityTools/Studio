@@ -20,7 +20,7 @@ export function MenuButton(props: MenuButtonProps) {
                     'first:border-t last:border-b border-l last:rounded-bl-md first:rounded-tl-md',
                 props.active
                     ? 'text-amber-600 bg-amber-100 hover:bg-amber-200'
-                    : 'text-neutral-600 bg-white hover:bg-neutral-100'
+                    : 'text-neutral-600 bg-white hover:text-amber-600 hover:bg-amber-200'
             )}
             onClick={props.onClick}
             title={props.tipTitle}
@@ -34,7 +34,7 @@ export function MenuGroup(props: { children: React.ReactNode; column?: boolean }
     return (
         <div
             className={clsx(
-                'flex hover:shadow-even transition-shadow',
+                'flex transition-shadow',
                 props.column ? 'flex-col rounded-l' : 'flex-row rounded-md'
             )}
         >
