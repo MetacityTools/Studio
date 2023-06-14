@@ -51,32 +51,30 @@ export function ModelNode(props: ModelNodeProps) {
     const bgMoving = colorNodeBackground(isMoving, isSelected || isLinking);
     const bgLinking = colorNodeBackground(isLinking, isSelected || isMoving);
 
-    if (isSelected || isMoving || isLinking)
-        return (
-            <HierarchyNodeRow>
-                <HierarchyMainButton onClick={handleSelect} bg={bg} padded>
-                    Model {node.submodelId}
-                </HierarchyMainButton>
-                <If cond={!nodeToMove}>
-                    <HierarchyButton onClick={handleToMove} bg={bgMoving} title="Move in hierarchy">
-                        <MdOutlineDriveFileMove />
-                    </HierarchyButton>
-                </If>
-                <If cond={isMoving}>
-                    <HierarchyButton onClick={handleToMove} bg={bgMoving} title="End Move">
-                        <BsFillStopFill />
-                    </HierarchyButton>
-                </If>
-                <If cond={!nodeToMove}>
-                    <HierarchyButton
-                        bg={bgLinking}
-                        onClick={handleLink}
-                        title="Link to selected rows in table"
-                    >
-                        <VscJson />
-                    </HierarchyButton>
-                </If>
-            </HierarchyNodeRow>
-        );
-    return null;
+    return (
+        <HierarchyNodeRow>
+            <HierarchyMainButton onClick={handleSelect} bg={bg} padded>
+                Model {node.submodelId}
+            </HierarchyMainButton>
+            <If cond={!nodeToMove}>
+                <HierarchyButton onClick={handleToMove} bg={bgMoving} title="Move in hierarchy">
+                    <MdOutlineDriveFileMove />
+                </HierarchyButton>
+            </If>
+            <If cond={isMoving}>
+                <HierarchyButton onClick={handleToMove} bg={bgMoving} title="End Move">
+                    <BsFillStopFill />
+                </HierarchyButton>
+            </If>
+            <If cond={!nodeToMove}>
+                <HierarchyButton
+                    bg={bgLinking}
+                    onClick={handleLink}
+                    title="Link to selected rows in table"
+                >
+                    <VscJson />
+                </HierarchyButton>
+            </If>
+        </HierarchyNodeRow>
+    );
 }

@@ -23,7 +23,7 @@ export function Settings() {
         );
 
     return (
-        <div className="absolute bottom-4 right-4 bg-white p-2 border rounded-md shadow-even w-80">
+        <div className="absolute bottom-4 right-4 bg-white p-2 border rounded-md w-80">
             <div className="flex flex-row justify-end absolute right-2 bottom-2">
                 <button
                     className="px-2 py-2 rounded-md hover:bg-neutral-200"

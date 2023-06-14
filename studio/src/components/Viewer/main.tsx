@@ -9,28 +9,22 @@ import { ErrorPage } from '@elements/Error';
 
 import '@assets/index.css';
 
-import { EditorContext } from './Context/EditorContext';
-import { TablesContext } from './Context/TableContext';
-import { ModelEditor } from './Editor';
+import { ModelViewer } from './Viewer';
 
 const router = createBrowserRouter([
     {
-        path: '/editor',
-        element: <ModelEditor />,
+        path: '/',
+        element: <ModelViewer />,
         errorElement: <ErrorPage />,
     },
 ]);
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     <React.StrictMode>
-        <GeneralContext>
-            <ViewContext>
-                <EditorContext>
-                    <TablesContext>
-                        <RouterProvider router={router} />
-                    </TablesContext>
-                </EditorContext>
-            </ViewContext>
-        </GeneralContext>
+        <ViewContext>
+            <GeneralContext>
+                <RouterProvider router={router} />
+            </GeneralContext>
+        </ViewContext>
     </React.StrictMode>
 );

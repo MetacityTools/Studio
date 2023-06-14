@@ -4,12 +4,13 @@ import React from 'react';
 import { exportModel } from '@utils/formats/metacity/write';
 import { ModelGraph } from '@utils/hierarchy/graph';
 import { EditorModel } from '@utils/models/EditorModel';
-import { addTriangleModel } from '@utils/models/TriangleModel';
+import { EditorModelData, addTriangleModel } from '@utils/models/TriangleModel';
 import { CoordinateMode, alignModels } from '@utils/modifiers/alignVertices';
 import { joinModels } from '@utils/modifiers/joinModels';
+import { joinSubmodels } from '@utils/modifiers/joinSubmodels';
 import { removeSubmodels } from '@utils/modifiers/removeSubmodels';
+import { splitModel } from '@utils/modifiers/splitModels';
 import { PrimitiveType } from '@utils/types';
-import { EditorModelData, joinSubmodels, splitModel } from '@utils/utils';
 
 import * as GL from '@bananagl/bananagl';
 

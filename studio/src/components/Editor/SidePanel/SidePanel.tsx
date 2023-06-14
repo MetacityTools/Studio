@@ -9,7 +9,7 @@ export function SidePanel() {
     const [editingMode] = useEditingMode();
 
     return (
-        <div className="w-full h-full flex flex-col items-start shadow-even bg-white">
+        <div className="w-full h-full flex flex-col items-start bg-white">
             {editingMode === EditingMode.Transform && <TransformSidePanel />}
             {editingMode === EditingMode.Table && <TableSidePanel />}
         </div>

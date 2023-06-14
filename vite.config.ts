@@ -8,7 +8,7 @@ const build = {
     rollupOptions: {
         input: {
             main: path.resolve(__dirname, 'studio/index.html'),
-            view: path.resolve(__dirname, 'studio/view/index.html'),
+            editor: path.resolve(__dirname, 'studio/editor/index.html'),
             privacy: path.resolve(__dirname, 'studio/privacy/index.html'),
         },
     },
@@ -20,6 +20,7 @@ export default defineConfig({
     resolve: {
         alias: {
             '@editor': path.resolve(__dirname, 'studio/src/components/Editor'),
+            '@viewer': path.resolve(__dirname, 'studio/src/components/Viewer'),
             '@elements': path.resolve(__dirname, 'studio/src/components/Elements'),
             '@utils': path.resolve(__dirname, 'studio/src/utils'),
             '@bananagl': path.resolve(__dirname, 'studio/src/bananagl'),

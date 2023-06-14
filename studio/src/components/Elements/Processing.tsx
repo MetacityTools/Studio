@@ -1,10 +1,10 @@
 import { Transition } from '@headlessui/react';
 import React from 'react';
 
-import { useLoadingStatus, useProcessing } from '@editor/Context/EditorContext';
-
 import chicken1 from '@assets/Chicken_Run.gif';
 import chicken3 from '@assets/Chicken_Strut.gif';
+
+import { useLoadingStatus, useProcessing } from './Context';
 
 const messages = [
     'Processing your data',
@@ -16,10 +16,10 @@ const messages = [
 const chickens = [chicken1, chicken3];
 
 export function ProcessingScreen() {
-    const [message, setMessage] = React.useState(messages[0]);
-    const [chicken, setChicken] = React.useState(chickens[0]);
     const [loadingStatus] = useLoadingStatus();
     const [processing] = useProcessing();
+    const [message, setMessage] = React.useState(messages[0]);
+    const [chicken, setChicken] = React.useState(chickens[0]);
 
     React.useEffect(() => {
         if (processing) {

@@ -18,13 +18,13 @@ export function Help() {
     if (!show)
         return (
             <div
-                className="absolute bottom-4 left-4 bg-white shadow-even text-md py-2 px-4 rounded-md flex flex-row space-x-4 text-xl cursor-pointer border"
+                className="absolute bottom-4 left-4 bg-white text-md py-2 px-4 rounded-md flex flex-row space-x-4 text-xl cursor-pointer border transition-all hover:text-amber-600 hover:bg-amber-100"
                 onClick={() => setShow(true)}
             >
                 <div className="flex space-x-2 items-center">
                     <TbHelp />
                     <HelpItem last>
-                        <div className="text-xs text-neutral-500">Controls</div>
+                        <div className="text-xs">Controls</div>
                         <div className="text-xs">Help</div>
                     </HelpItem>
                 </div>
@@ -33,7 +33,7 @@ export function Help() {
 
     return (
         <div
-            className="absolute bottom-4 left-4 bg-white shadow-even text-md py-2 px-4 rounded-md flex flex-row space-x-4 text-xl border cursor-pointer"
+            className="absolute bottom-4 left-4 bg-white text-md py-2 px-4 rounded-md flex flex-row space-x-4 text-xl border cursor-pointer transition-shadow"
             onClick={() => setShow(false)}
         >
             <div className="flex space-x-2 items-center">
