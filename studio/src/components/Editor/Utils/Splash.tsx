@@ -32,7 +32,7 @@ export function SpashScreen() {
                 Metacity Studio Editor
             </Dialog.Title>
             <div className="mx-6 mb-4">
-                <p className="text-neutral-500">v{APP_VERSION} - ⚠️ alpha release</p>
+                <p className="text-neutral-500">v{APP_VERSION}</p>
                 <p>
                     <a href="/privacy" className="underline text-neutral-500 text-xs outline-none">
                         Privacy Policy

@@ -20,6 +20,7 @@ Currently:
 -   SHP (Polygons and MultiPatch only for now)
 -   IFC
 -   GLTF (triangles only)
+-   Metacity File Format (binary Studio export)
 
 ## Roadmap
 
@@ -33,13 +34,16 @@ The project is in active development. The roadmap is as follows:
 -   [ ] Extract Utils to separate SDK form metacity editors
 -   [ ] Optional interactivity - build BVH only if user opts-in to make the loaded models clickable
 
-### v0.3.2 - 👨‍💻 In progress
+### v0.3.3 - 👨‍💻 In progress
 
--   [ ] Viewer
-    -   [x] Loading models to viewer
-    -   [x] View Controls
-    -   [ ] Browsing hierarchy in viewer
-        -   [ ] List of nodes
+-   [ ] Browsing hierarchy in viewer
+-   [ ] Styling based on data in hierarchy?
+
+### v0.3.2 - ✅ Released
+
+-   [x] Viewer Base - making it the default view
+-   [x] Loading models to viewer
+-   [x] View Controls
 
 ### v0.3.1 - ✅ Released
 
