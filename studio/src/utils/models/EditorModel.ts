@@ -17,6 +17,7 @@ export class EditorModel extends GL.Pickable implements GL.Selectable {
     private geometryMode_ = GeometryMode.SOLID;
     public solidShader?: GL.Shader;
     public wireframeShader?: GL.Shader;
+    public noEdgesShader?: GL.Shader;
 
     constructor() {
         super();
@@ -39,6 +40,8 @@ export class EditorModel extends GL.Pickable implements GL.Selectable {
             this.shader = this.solidShader;
         } else if (mode === GeometryMode.WIREFRAME && this.wireframeShader) {
             this.shader = this.wireframeShader;
+        } else if (mode === GeometryMode.NOEDGES && this.noEdgesShader) {
+            this.shader = this.noEdgesShader;
         }
     }
 

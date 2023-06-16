@@ -105,6 +105,7 @@ export interface ModelMetadata {
 export enum GeometryMode {
     WIREFRAME,
     SOLID,
+    NOEDGES,
 }
 
 export interface ModelHierarchy {
@@ -125,4 +126,45 @@ export interface ModelHierarchyModelNode extends ModelHierarchyNode {
 
 export interface ExtendedModelHierarchyModelNode extends ModelHierarchyModelNode {
     model?: any;
+}
+
+//------------------------------------------------------------
+export interface MetadataNode {
+    values?: MetadataValue;
+    children?: {
+        [key: string]: MetadataNode;
+    };
+}
+
+export enum MetadataType {
+    NONE,
+    STRING,
+    NUMBER,
+    BOOLEAN,
+    MIXED,
+}
+
+export interface MetadataValue {
+    type: MetadataType;
+    values: Set<string | number | boolean>;
+}
+
+export interface MetadataStringValue extends MetadataValue {
+    type: MetadataType.STRING;
+    values: Set<string>;
+}
+
+export interface MetadataNumberValue extends MetadataValue {
+    type: MetadataType.NUMBER;
+    values: Set<number>;
+}
+
+export interface MetadataBooleanValue extends MetadataValue {
+    type: MetadataType.BOOLEAN;
+    values: Set<boolean>;
+}
+
+export interface MetadataMixedValue extends MetadataValue {
+    type: MetadataType.MIXED;
+    values: Set<string | number | boolean>;
 }

@@ -1,7 +1,8 @@
 import React from 'react';
 import { VscFolderOpened } from 'react-icons/vsc';
 
-import { CoordinateMode, load, useCreateModels } from '@utils/utils';
+import { extractMetadataTree } from '@utils/hierarchy/metadata';
+import { CoordinateMode, load, useCreateModels, useGraph } from '@utils/utils';
 
 import { ButtonFileInput } from '@elements/Button';
 import { useLoadingStatus, useProcessing } from '@elements/Context';
@@ -13,6 +14,7 @@ import { MenuButton, MenuGroup } from '@elements/MenuButton';
 
 export function Menu() {
     const create = useCreateModels();
+    const [graph] = useGraph();
     const [, setProcessing] = useProcessing();
     const [, setLoadingStatue] = useLoadingStatus();
 
@@ -23,6 +25,11 @@ export function Menu() {
         await create(models, {
             coordMode: CoordinateMode.None,
         });
+
+        console.log('graph', graph);
+        const metadata = extractMetadataTree(graph);
+        console.log('metadata', metadata);
+
         setProcessing(false);
         event.target.value = '';
         event.preventDefault();

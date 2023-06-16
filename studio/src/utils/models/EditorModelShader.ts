@@ -4,7 +4,6 @@ const vertexShader = `
 in vec3 position;
 in vec3 normal;
 in vec3 color;
-in vec4 submodel;
 in float barCoord;
 
 const vec3 lightDirection = normalize(vec3(0.25, 0.25, 1.0));
@@ -140,3 +139,51 @@ void main() {
 `;
 
 export const wireframeShader = new GL.Shader(wvertexShader, wfragmentShader, true);
+
+const svertexShader = `
+in vec3 normal;
+in vec3 position;
+in vec3 color;
+
+const vec3 lightDirection = normalize(vec3(0.25, 0.25, 1.0));
+out vec3 oColor; 
+
+uniform mat4 uModelMatrix;
+uniform mat4 uProjectionMatrix;
+uniform mat4 uViewMatrix;
+
+uniform vec3 uCameraPosition;
+uniform vec3 uCameraTarget;
+
+uniform float uZMin;
+uniform float uZMax;
+
+
+void main() {
+    vec3 transformed = (uModelMatrix * vec4(position, 1.0)).xyz;
+    vec3 invNormal = -normal;
+    vec3 direction = normalize(uCameraPosition - uCameraTarget);
+    float factorA = dot(normal, lightDirection);
+    float factorB = dot(invNormal, lightDirection);
+
+    float factor = max(factorA, factorB);
+    //the weight of the 
+    oColor = vec3(factor) * 0.1 + vec3(0.8);
+    oColor *= mix(vec3(0.5), vec3(1.0), smoothstep(uZMin, uZMax, transformed.z));
+    oColor *= color;
+
+    gl_Position = uProjectionMatrix * uViewMatrix * vec4(transformed, 1.0);
+}
+`;
+
+const sfragmentShader = `
+in vec3 oColor;
+
+out vec4 fragColor;
+
+void main() {
+    fragColor = vec4(oColor, 1.0);
+}
+`;
+
+export const noEdgesShader = new GL.Shader(svertexShader, sfragmentShader);

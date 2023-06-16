@@ -34,9 +34,10 @@ The project is in active development. The roadmap is as follows:
 
 ### v0.4.0 - 👨‍💻 In progress
 
--   [ ] Browsing hierarchy in viewer
+-   [ ] Browsing metadata hierarchy in viewer
 -   [ ] Styling based on data in hierarchy?
 -   [ ] Hierarchy UI controls - close all/open all
+-   [ ] Export screenshot action
 
 ### v0.3.2 - ✅ Released
 

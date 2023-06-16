@@ -107,6 +107,7 @@ export function useCreateModels() {
     const create = async (data: EditorModelData[], options?: EditorImportOptions) => {
         let shift = ctx.globalShift;
         let coordMode = options?.coordMode ?? CoordinateMode.None;
+        const createdModels = [];
 
         //sort out the alignment
         for (const model of data) shift = alignModels(model.geometry.position, coordMode, shift);
@@ -116,12 +117,13 @@ export function useCreateModels() {
             const glmodel = await importModel(model);
             if (!glmodel) continue;
             ctx.scene.add(glmodel);
-
+            createdModels.push(glmodel);
             if (model.hierarchy) ctx.graph.addModel(glmodel, model.hierarchy.root);
         }
 
         ctx.setGlobalShift(shift);
         ctx.graph.needsUpdate = true;
+        return createdModels;
     };
 
     return create;

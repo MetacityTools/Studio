@@ -4,7 +4,7 @@ import { TbVectorTriangle } from 'react-icons/tb';
 import { EditorModel, GeometryMode } from '@utils/utils';
 import { useScene } from '@utils/utils';
 
-import { TriangleFull } from '@elements/Icons';
+import { TriangleFull, TriangleFullFilled } from '@elements/Icons';
 import { MenuButton, MenuGroup } from '@elements/MenuButton';
 
 export function ShaderControls() {
@@ -37,8 +37,28 @@ export function ShaderControls() {
         scene.shadersChanged = true;
     };
 
+    const setNoEdges = () => {
+        setGeometryMode(GeometryMode.NOEDGES);
+
+        scene.objects.forEach((obj) => {
+            if (obj instanceof EditorModel) {
+                obj.geometryMode = GeometryMode.NOEDGES;
+                obj.attributes.needsRebind = true;
+            }
+        });
+
+        scene.shadersChanged = true;
+    };
+
     return (
         <MenuGroup>
+            <MenuButton
+                onClick={setNoEdges}
+                tipTitle="Smooth Mode"
+                active={geometryMode === GeometryMode.NOEDGES}
+            >
+                <TriangleFullFilled className="text-2xl" />
+            </MenuButton>
             <MenuButton
                 onClick={setSolid}
                 tipTitle="Solid Mode"
