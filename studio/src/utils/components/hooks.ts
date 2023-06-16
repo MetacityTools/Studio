@@ -32,19 +32,11 @@ export function useRenderer(): GL.Renderer {
     return ctx.renderer;
 }
 
-/**
- * A hook that returns an array containing the current models, the selected model, and the selected submodels.
- * @returns An array containing the current models, the selected model, and the selected submodels.
- */
 export function useModels(): EditorModel[] {
     const ctx = React.useContext(context);
     return ctx.models;
 }
 
-/**
- * A hook that returns an array containing the currently selected model, an array of selected submodel IDs, and a function to update the selection.
- * @returns An array containing the currently selected model, an array of selected submodel IDs, and a function to update the selection.
- */
 export function useSelection(): [SelectFunction, SelectionType] {
     const ctx = React.useContext(context);
 
@@ -152,11 +144,10 @@ export function useRemoveSubmodels() {
         if (!data) return;
         ctx.graph.removeSubmodels(model, submodels);
 
-        if (data.metadata.primitive === PrimitiveType.TRIANGLES) {
-            let newModel = await addTriangleModel(data);
-            ctx.scene.add(newModel);
-            ctx.graph.updateModel(model, newModel);
-        }
+        const glmodel = await importModel(data);
+        if (!glmodel) return;
+        ctx.scene.add(glmodel);
+        ctx.graph.updateModel(model, glmodel);
 
         ctx.scene.remove(model);
         ctx.graph.needsUpdate = true;
@@ -177,17 +168,15 @@ export function useSplitModel() {
         const [modelA, modelB] = models;
         const [submodelIDsA, submodelIDsB] = submodelIDs;
 
-        if (modelA.metadata.primitive === PrimitiveType.TRIANGLES) {
-            let newModel = await addTriangleModel(modelA);
-            ctx.scene.add(newModel);
-            ctx.graph.updateModel(oldModel, newModel, submodelIDsA);
-        }
+        let glmodel = await importModel(modelA);
+        if (!glmodel) return;
+        ctx.scene.add(glmodel);
+        ctx.graph.updateModel(oldModel, glmodel, submodelIDsA);
 
-        if (modelB.metadata.primitive === PrimitiveType.TRIANGLES) {
-            let newModel = await addTriangleModel(modelB);
-            ctx.scene.add(newModel);
-            ctx.graph.updateModel(oldModel, newModel, submodelIDsB);
-        }
+        glmodel = await importModel(modelB);
+        if (!glmodel) return;
+        ctx.scene.add(glmodel);
+        ctx.graph.updateModel(oldModel, glmodel, submodelIDsB);
 
         ctx.scene.remove(oldModel);
         ctx.graph.needsUpdate = true;

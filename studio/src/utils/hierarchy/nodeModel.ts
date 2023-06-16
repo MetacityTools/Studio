@@ -1,4 +1,4 @@
-import { EditorModel, ExtendedModelHierarchyModelNode } from '@utils/utils';
+import { EditorModel, ExtHierarchyModelNode } from '@utils/utils';
 
 import { Node } from './node';
 
@@ -13,7 +13,7 @@ export class ModelNode extends Node {
         return m.has(this.submodelId);
     }
 
-    exportNode(): ExtendedModelHierarchyModelNode {
+    exportNode(): ExtHierarchyModelNode {
         return {
             model: this.model,
             id: this.submodelId,

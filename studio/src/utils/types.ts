@@ -82,7 +82,7 @@ export interface ShapefileData {
 export interface ModelData {
     geometry: ModelGeometry;
     metadata: ModelMetadata;
-    hierarchy?: ModelHierarchy;
+    hierarchy?: Hierarchy;
 }
 
 export interface ModelGeometry {
@@ -108,23 +108,25 @@ export enum GeometryMode {
     NOEDGES,
 }
 
-export interface ModelHierarchy {
-    root: ModelHierarchyGroupNode;
+//------------------------------------------------------------
+
+export interface Hierarchy {
+    root: HierarchyGroupNode;
 }
 
-export interface ModelHierarchyNode {
+export interface HierarchyNode {
     data: { [data: string]: any };
 }
 
-export interface ModelHierarchyGroupNode extends ModelHierarchyNode {
-    children: ModelHierarchyNode[];
+export interface HierarchyGroupNode extends HierarchyNode {
+    children: HierarchyNode[];
 }
 
-export interface ModelHierarchyModelNode extends ModelHierarchyNode {
+export interface HierarchyModelNode extends HierarchyNode {
     id: number;
 }
 
-export interface ExtendedModelHierarchyModelNode extends ModelHierarchyModelNode {
+export interface ExtHierarchyModelNode extends HierarchyModelNode {
     model?: any;
 }
 

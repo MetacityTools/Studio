@@ -1,23 +1,19 @@
 import { vec3 } from 'gl-matrix';
 
 import { EditorModel } from '@utils/models/EditorModel';
-import {
-    ExtendedModelHierarchyModelNode,
-    ModelHierarchyGroupNode,
-    ModelHierarchyModelNode,
-} from '@utils/types';
+import { ExtHierarchyModelNode, HierarchyGroupNode, HierarchyModelNode } from '@utils/types';
 import { EditorModelData, ModelGraph } from '@utils/utils';
 
 function getAllSubmodels(
     model: EditorModel,
-    node: ModelHierarchyGroupNode,
-    map: Map<number, ModelHierarchyModelNode> = new Map()
+    node: HierarchyGroupNode,
+    map: Map<number, HierarchyModelNode> = new Map()
 ) {
     for (const child of node.children) {
-        if ((child as ModelHierarchyGroupNode).children) {
-            getAllSubmodels(model, child as ModelHierarchyGroupNode, map);
+        if ((child as HierarchyGroupNode).children) {
+            getAllSubmodels(model, child as HierarchyGroupNode, map);
         } else {
-            const modelNode = child as ExtendedModelHierarchyModelNode;
+            const modelNode = child as ExtHierarchyModelNode;
             if (modelNode.model !== model) continue;
             modelNode.data = modelNode.data ?? {};
             map.set(modelNode.id, modelNode);
@@ -71,7 +67,7 @@ export async function joinModels(models: EditorModel[], graph: ModelGraph) {
         si.set(view);
         const ids = Array.from(new Set<number>(si));
         const map = new Map<number, number>();
-        let n: ModelHierarchyModelNode | undefined, id: number | undefined;
+        let n: HierarchyModelNode | undefined, id: number | undefined;
         for (let i = 0; i < ids.length; i++) map.set(ids[i], i);
         for (let i = 0; i < si.length; i++) {
             id = si[i];

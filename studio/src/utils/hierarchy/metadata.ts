@@ -20,8 +20,9 @@ function recursiveExtractMetadata(data: any, tree: MetadataNode) {
     if (typeof data === 'object') {
         for (const key in data) {
             checkChildren(tree);
-            if (!tree.children[key]) tree.children[key] = {};
-            recursiveExtractMetadata(data[key], tree.children[key]);
+            let k = key.trim();
+            if (!tree.children[k]) tree.children[k] = {};
+            recursiveExtractMetadata(data[k], tree.children[k]);
         }
     } else {
         checkValues(tree);

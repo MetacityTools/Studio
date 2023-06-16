@@ -9,6 +9,7 @@ import { ErrorPage } from '@elements/Error';
 
 import '@assets/index.css';
 
+import { ViewerContext } from './Context/ViewerContext';
 import { ModelViewer } from './Viewer';
 
 const router = createBrowserRouter([
@@ -23,7 +24,9 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     <React.StrictMode>
         <ViewContext>
             <GeneralContext>
-                <RouterProvider router={router} />
+                <ViewerContext>
+                    <RouterProvider router={router} />
+                </ViewerContext>
             </GeneralContext>
         </ViewContext>
     </React.StrictMode>

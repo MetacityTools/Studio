@@ -1,8 +1,7 @@
 import React from 'react';
 import { VscFolderOpened } from 'react-icons/vsc';
 
-import { extractMetadataTree } from '@utils/hierarchy/metadata';
-import { CoordinateMode, load, useCreateModels, useGraph } from '@utils/utils';
+import { CoordinateMode, load, useCreateModels } from '@utils/utils';
 
 import { ButtonFileInput } from '@elements/Button';
 import { useLoadingStatus, useProcessing } from '@elements/Context';
@@ -14,7 +13,6 @@ import { MenuButton, MenuGroup } from '@elements/MenuButton';
 
 export function Menu() {
     const create = useCreateModels();
-    const [graph] = useGraph();
     const [, setProcessing] = useProcessing();
     const [, setLoadingStatue] = useLoadingStatus();
 
@@ -25,11 +23,6 @@ export function Menu() {
         await create(models, {
             coordMode: CoordinateMode.None,
         });
-
-        console.log('graph', graph);
-        const metadata = extractMetadataTree(graph);
-        console.log('metadata', metadata);
-
         setProcessing(false);
         event.target.value = '';
         event.preventDefault();
@@ -39,11 +32,13 @@ export function Menu() {
         <div className="absolute m-4 space-x-2 left-0 top-0 z-0 flex flex-row">
             <MenuGroup>
                 <MenuButton>
-                    <ButtonFileInput id="models" onChange={onModelsSelected} unstyled>
-                        <div className="flex flex-row items-center">
-                            <VscFolderOpened className="text-xl mr-2" />
-                            Import Models
-                        </div>
+                    <ButtonFileInput
+                        id="models"
+                        onChange={onModelsSelected}
+                        className="flex flex-row items-center px-4 py-2"
+                    >
+                        <VscFolderOpened className="text-xl mr-2" />
+                        Import Models
                     </ButtonFileInput>
                 </MenuButton>
             </MenuGroup>

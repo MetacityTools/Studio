@@ -21,6 +21,7 @@ import {
 } from './components/hooks';
 import { load } from './formats/loader';
 import { ModelGraph } from './hierarchy/graph';
+import { extractMetadataTree } from './hierarchy/metadata';
 import { Node } from './hierarchy/node';
 import { GroupNode } from './hierarchy/nodeGroup';
 import { ModelNode } from './hierarchy/nodeModel';
@@ -72,6 +73,7 @@ export {
     useJoinSubmodels,
     useExport,
     createFlatHierarchy,
+    extractMetadataTree,
     CoordinateMode,
 };
 

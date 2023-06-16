@@ -24,7 +24,7 @@ export function ButtonFileInput(props: {
     onChange?: React.ChangeEventHandler<HTMLInputElement>;
     multiple?: boolean;
     id: string;
-    unstyled?: boolean;
+    className?: string;
 }) {
     return (
         <>
@@ -32,8 +32,9 @@ export function ButtonFileInput(props: {
                 htmlFor={props.id}
                 className={clsx(
                     'cursor-pointer',
-                    !props.unstyled &&
-                        'px-4 py-2 rounded-md transition-colors bg-blue-100 text-blue-900 hover:bg-blue-200 flex items-center overflow-hidden whitespace-nowrap overflow-ellipsis text-sm flex flex-row items-center'
+                    props.className
+                        ? props.className
+                        : 'px-4 py-2 rounded-md transition-colors bg-blue-100 text-blue-900 hover:bg-blue-200 flex items-center overflow-hidden whitespace-nowrap overflow-ellipsis text-sm flex flex-row items-center'
                 )}
             >
                 {props.children}
