@@ -26,18 +26,17 @@ Currently:
 
 The project is in active development. The roadmap is as follows:
 
-### v0.4.0
+### v0.4.1
 
 -   [ ] Projecting models onto models (2D onto 3D) - ✨WIP https://github.com/vojtatom/geometry
 -   [ ] Styling???
 -   [ ] Loading points and lines from SHP
--   [ ] Extract Utils to separate SDK form metacity editors
--   [ ] Optional interactivity - build BVH only if user opts-in to make the loaded models clickable
 
-### v0.3.3 - 👨‍💻 In progress
+### v0.4.0 - 👨‍💻 In progress
 
 -   [ ] Browsing hierarchy in viewer
 -   [ ] Styling based on data in hierarchy?
+-   [ ] Hierarchy UI controls - close all/open all
 
 ### v0.3.2 - ✅ Released
 
@@ -131,8 +130,10 @@ The project is in active development. The roadmap is as follows:
 
 ## Backlog
 
--   [ ] Merge whole models
 -   [ ] Loading GeoJSON
 -   [ ] Loading IFC metadata loading (memory-efficiency???)
--   [ ] Remesh models - intersection of triangles
 -   [ ] Frustum culling
+-   [ ] Optimize deleting models
+-   [ ] Connect to on-line storage and model admin
+-   [ ] Extract Utils to separate SDK form metacity editors
+-   [ ] Optional interactivity - build BVH only if user opts-in to make the loaded models clickable

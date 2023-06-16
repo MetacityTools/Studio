@@ -90,13 +90,13 @@ function recursiveInsert(keys: string[], value: any, obj: any) {
         const num = parseFloat(value);
 
         if (isNaN(num)) {
-            return value;
+            return String(value).replaceAll('\n', ' ');
         } else {
             return num;
         }
     }
 
-    const key = keys.shift()!;
+    const key = keys.shift()!.replaceAll('\n', ' ');
     obj[key] = recursiveInsert(keys, value, obj[key] ?? {});
     return obj;
 }
