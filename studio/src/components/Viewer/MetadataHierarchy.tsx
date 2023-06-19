@@ -28,11 +28,21 @@ export function MetadataHierarchy() {
     const last = path[path.length - 1];
     console.log(path);
     return (
-        <div className="h-[calc(100%-50px)] mt-[50px] absolute top-0 left-0 flex flex-row items-start">
-            <div className="h-[calc(100%-1rem)] bg-neutral-50 border-y border-r rounded-r-md min-w-[2rem] px-4 py-2 shadow-even">
-                test
+        <div className="h-[calc(100%-50px)] mt-[50px] absolute top-0 left-0">
+            <div className="flex flex-row bg-neutral-50 ml-4 rounded-t-md border-t border-x">
+                {path.map((node, i) => {
+                    return (
+                        <button
+                            className="px-4 py-2 flex flex-row items-center overflow-hidden overflow-ellipsis hover:text-amber-900 cursor-pointer first:rounded-t-md last:rounded-b-md first-letter:capitalize text-xs"
+                            onClick={() => setPath(path.slice(0, i + 1))}
+                            key={node.key}
+                        >
+                            <BiCategoryAlt className="mr-2" /> {node.key}
+                        </button>
+                    );
+                })}
             </div>
-            <MetadataNodeMenu node={last.node} onSelect={handleSelect} />
+            <MetadataMenu node={last.node} onSelect={handleSelect} />
         </div>
     );
 }
@@ -44,18 +54,21 @@ function getRoot(node: MetadataNode) {
     };
 }
 
-function MetadataNodeMenu(props: { node: MetadataNode; onSelect?: (node: MetadataNode) => void }) {
+function MetadataMenu(props: { node: MetadataNode; onSelect?: (node: MetadataNode) => void }) {
     return (
-        <div className="flex flex-col ml-4 bg-neutral-100 rounded-md border max-w-[35rem] overflow-auto">
+        <div className="flex flex-col ml-4 bg-neutral-50 rounded-b-md border max-w-[35rem] overflow-auto">
             {props.node.children &&
                 Object.entries(props.node.children).map(([key, value]) => {
                     return (
                         <button
-                            className="px-4 py-2 flex flex-row items-center overflow-hidden overflow-ellipsis hover:bg-amber-100 hover:text-amber-800 cursor-pointer first:rounded-t-md last:rounded-b-md"
+                            className="px-4 py-2 flex flex-row items-center overflow-hidden overflow-ellipsis hover:bg-amber-200 hover:text-amber-900 cursor-pointer last:rounded-b-md first-letter:capitalize text-left"
                             onClick={() => props.onSelect?.(value)}
                             key={key}
                         >
-                            <BiCategoryAlt className="mr-2" /> {key}
+                            <div>
+                                <BiCategoryAlt className="mr-2" />
+                            </div>
+                            <div>{key}</div>
                         </button>
                     );
                 })}
