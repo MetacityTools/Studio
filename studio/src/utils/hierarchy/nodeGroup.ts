@@ -1,6 +1,7 @@
 import { SelectionType } from '@utils/components/Context';
 import { EditorModel, HierarchyGroupNode, HierarchyModelNode } from '@utils/utils';
 
+import { cleanData } from './metadata';
 import { Node } from './node';
 import { ModelNode } from './nodeModel';
 

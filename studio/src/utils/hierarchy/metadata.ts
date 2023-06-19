@@ -20,9 +20,8 @@ function recursiveExtractMetadata(data: any, tree: MetadataNode) {
     if (typeof data === 'object') {
         for (const key in data) {
             checkChildren(tree);
-            let k = key.trim();
-            if (!tree.children[k]) tree.children[k] = {};
-            recursiveExtractMetadata(data[k], tree.children[k]);
+            if (!tree.children[key]) tree.children[key] = {};
+            recursiveExtractMetadata(data[key], tree.children[key]);
         }
     } else {
         checkValues(tree);
@@ -55,4 +54,24 @@ function checkValues(node: MetadataNode): asserts node is MetadataNode & { value
             type: MetadataType.NONE,
             values: new Set(),
         };
+}
+
+export function cleanString(str: string) {
+    return str.replaceAll('\n', ' ').replaceAll('\r', ' ').replaceAll('\t', ' ').trim();
+}
+
+export function cleanData(data: { [key: string]: any }) {
+    const keys = Object.keys(data);
+    for (const key of keys) {
+        const cleanKey = cleanString(key);
+        if (cleanKey !== key) {
+            data[cleanKey] = data[key];
+            delete data[key];
+        }
+
+        const value = data[cleanKey];
+        if (typeof value === 'object') cleanData(value);
+        console.log(cleanKey, key);
+    }
+    return data;
 }

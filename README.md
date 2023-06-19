@@ -134,7 +134,20 @@ The project is in active development. The roadmap is as follows:
 -   [ ] Loading GeoJSON
 -   [ ] Loading IFC metadata loading (memory-efficiency???)
 -   [ ] Frustum culling
--   [ ] Optimize deleting models
 -   [ ] Connect to on-line storage and model admin
 -   [ ] Extract Utils to separate SDK form metacity editors
 -   [ ] Optional interactivity - build BVH only if user opts-in to make the loaded models clickable
+-   [ ] Optimize deleting models - partition model BVH nodes based on submodels's ids
+-   [ ] Filter file inputs (add format filters)
+-   [ ] Remove metadata view from transform view
+-   [ ] Insert textured plane (location blueprints for reference)
+-   [ ] Named groups in hierarchy
+-   [ ] Click off model - deselect all
+-   [ ] Color indicating in group vs out of group in viewer
+-   [ ] Delete group action button in the hierarchy menu
+-   [ ] Group selection in hierarchy tree optimization (shift to select, deselect previous on selectiong previous)
+-   [ ] Open editor on Group select
+
+## Bugs and Validations
+
+-   [ ] Do not allow keys to be empty in table view during conversion

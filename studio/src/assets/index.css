@@ -44,9 +44,12 @@ body,
         -o-image-rendering: pixelated;
         image-rendering: pixelated;
     }
-}
 
-@layer components {
+    .text-upright {
+        writing-mode: vertical-rl;
+        text-orientation: upright;
+    }
+
     input[type='range'] {
         @apply appearance-none bg-transparent cursor-pointer outline-none;
     }

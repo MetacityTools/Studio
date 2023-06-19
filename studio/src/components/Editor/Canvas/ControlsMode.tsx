@@ -11,7 +11,7 @@ export function ModeControls() {
         <MenuGroup>
             <MenuButton
                 onClick={() => setMode(EditingMode.Transform)}
-                tipTitle="Transfomr Editing Mode"
+                tipTitle="Transform Editing Mode"
                 active={mode === EditingMode.Transform}
             >
                 <VscMove className="text-2xl" />

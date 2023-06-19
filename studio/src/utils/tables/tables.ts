@@ -1,5 +1,7 @@
 import { parse } from '@vojtatom/csvts';
 
+import { cleanString } from '@utils/hierarchy/metadata';
+
 type rowType = 'key' | 'value' | 'units';
 
 export class Tables {
@@ -90,13 +92,13 @@ function recursiveInsert(keys: string[], value: any, obj: any) {
         const num = parseFloat(value);
 
         if (isNaN(num)) {
-            return String(value).replaceAll('\n', ' ');
+            return cleanString(String(value));
         } else {
             return num;
         }
     }
 
-    const key = keys.shift()!.replaceAll('\n', ' ');
+    const key = cleanString(keys.shift()!);
     obj[key] = recursiveInsert(keys, value, obj[key] ?? {});
     return obj;
 }
