@@ -21,4 +21,15 @@ export abstract class Node {
     }
 
     abstract exportNode(): HierarchyNode;
+
+    getValue(keyChain: string[]) {
+        let i = 0;
+        let data = this.data;
+        while (i < keyChain.length) {
+            if (data === undefined) return undefined;
+            data = data[keyChain[i]];
+            i++;
+        }
+        return data;
+    }
 }

@@ -34,9 +34,18 @@ The project is in active development. The roadmap is as follows:
 
 ### v0.4.0 - 👨‍💻 In progress
 
--   [ ] Browsing metadata hierarchy in viewer
+-   [x] Browsing metadata hierarchy in viewer
 -   [ ] Styling based on data in hierarchy?
--   [ ] Hierarchy UI controls - close all/open all
+    -   [x] Base setup
+    -   [ ] Coloring number data
+    -   [ ] Coloring string data
+    -   [ ] Coloring mixed data
+    -   [ ] Coloring boolean data?
+-   [ ] Hierarchy UI controls
+    -   [ ] Selecting colormap
+    -   [ ] Display stats
+    -   [ ] Shortcut in menu for single-child groups
+-   [ ] Level control - showing grouped models based on group level
 -   [ ] Export screenshot action
 
 ### v0.3.2 - ✅ Released
@@ -147,6 +156,7 @@ The project is in active development. The roadmap is as follows:
 -   [ ] Delete group action button in the hierarchy menu
 -   [ ] Group selection in hierarchy tree optimization (shift to select, deselect previous on selectiong previous)
 -   [ ] Open editor on Group select
+-   [ ] Unselect all on clicking away
 
 ## Bugs and Validations
 

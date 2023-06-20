@@ -29,6 +29,7 @@ import { EditorModel } from './models/EditorModel';
 import { EditorModelData } from './models/TriangleModel';
 import { addGridModel } from './models/addGridModel';
 import { CoordinateMode, alignModels } from './modifiers/alignVertices';
+import { colorize, whiten } from './modifiers/colorize';
 import { computeDots, computeNormals } from './modifiers/computeNormals';
 import { createFlatHierarchy } from './modifiers/createFlatHierarchy';
 import { createGroup } from './modifiers/createGroup';
@@ -55,6 +56,8 @@ export {
     deleteGroup,
     joinSubmodels,
     splitModel,
+    colorize,
+    whiten,
     ViewContext,
     useActiveView,
     useScene,

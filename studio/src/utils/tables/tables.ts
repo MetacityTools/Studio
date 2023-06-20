@@ -69,9 +69,11 @@ export class Tables {
         const keys: string[] = [];
         const table = this.contents[sheet];
 
+        let k: string;
         for (let i = 0; i < table.length; i++) {
             if (this.rowTypes[sheet][i] === 'key') {
-                keys.push(table[i][column]);
+                k = cleanString(table[i][column]);
+                if (k !== '') keys.push(k);
             }
         }
 

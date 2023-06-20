@@ -1,8 +1,14 @@
 import * as GL from '@bananagl/bananagl';
 
+//const baseColor = [255, 255, 255];
+//const selectedColor = [255, 180, 50];
+//const highlitColor = [255, 245, 229];
+//const white = [255, 255, 255];
+
 const vertexShader = `
 in vec3 position;
 in vec3 normal;
+in float selected;
 in vec3 color;
 in float barCoord;
 
@@ -31,7 +37,7 @@ void main() {
     float factor = max(factorA, factorB);
     oColor = vec3(factor) * 0.2 + vec3(0.7);
     oColor *= mix(vec3(0.5), vec3(1.0), smoothstep(uZMin, uZMax, transformed.z));
-    oColor *= color;
+    oColor *= mix(color, vec3(1.0, 0.705, 0.196), selected);
     
     int b = int(barCoord);
     if (b == 0) oVbc = vec3(1.0, 0.0, 0.0);
@@ -71,7 +77,6 @@ const wvertexShader = `
 in vec3 normal;
 in vec3 position;
 in vec3 color;
-in vec4 submodel;
 in float selected;
 in float barCoord;
 
@@ -101,7 +106,7 @@ void main() {
     float factor = max(factorA, factorB);
     oColor = vec3(factor) * 0.2 + vec3(0.7);
     oColor *= mix(vec3(0.5), vec3(1.0), smoothstep(uZMin, uZMax, transformed.z));
-    oColor *= color;
+    oColor *= mix(color, vec3(1.0, 0.705, 0.196), selected);
     
     int b = int(barCoord);
     if (b == 0) oVbc = vec3(1.0, 0.0, 0.0);
@@ -143,6 +148,7 @@ export const wireframeShader = new GL.Shader(wvertexShader, wfragmentShader, tru
 const svertexShader = `
 in vec3 normal;
 in vec3 position;
+in float selected;
 in vec3 color;
 
 const vec3 lightDirection = normalize(vec3(0.25, 0.25, 1.0));
@@ -170,7 +176,7 @@ void main() {
     //the weight of the 
     oColor = vec3(factor) * 0.1 + vec3(0.8);
     oColor *= mix(vec3(0.5), vec3(1.0), smoothstep(uZMin, uZMax, transformed.z));
-    oColor *= color;
+    oColor *= mix(color, vec3(1.0, 0.705, 0.196), selected);
 
     gl_Position = uProjectionMatrix * uViewMatrix * vec4(transformed, 1.0);
 }

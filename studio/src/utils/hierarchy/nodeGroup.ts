@@ -119,6 +119,47 @@ export class GroupNode extends Node {
         return data;
     }
 
+    getKeyValueMap(
+        model: EditorModel,
+        keyChain: string[],
+        depth: number,
+        map: Map<number, any> = new Map()
+    ) {
+        if (depth > 0) {
+            for (const child of this.children) {
+                if (child instanceof GroupNode) {
+                    child.getKeyValueMap(model, keyChain, depth - 1, map);
+                }
+                if (child instanceof ModelNode && child.model === model) {
+                    const value = child.getValue(keyChain);
+                    if (value !== undefined) map.set(child.submodelId, value);
+                }
+            }
+        } else {
+            const value = this.getValue(keyChain);
+            if (value !== undefined) {
+                const submodelIds = this.getSubmodelIds(model);
+                for (const id of submodelIds) {
+                    if (!map.has(id)) map.set(id, value);
+                }
+            }
+        }
+
+        return map;
+    }
+
+    getSubmodelIds(model: EditorModel, ids: Set<number> = new Set()) {
+        for (const child of this.children) {
+            if (child instanceof ModelNode && child.model === model) {
+                ids.add(child.submodelId);
+            }
+            if (child instanceof GroupNode) {
+                child.getSubmodelIds(model, ids);
+            }
+        }
+        return ids;
+    }
+
     selected(selectedModels: SelectionType) {
         return this.children.every((child) => {
             return child.selected(selectedModels);

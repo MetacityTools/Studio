@@ -2,7 +2,7 @@ import { ProcessingScreen } from '@elements/Processing';
 
 import { CanvasView } from './CanvasView';
 import { Menu } from './Menu';
-import { MetadataHierarchy } from './MetadataHierarchy';
+import { MetadataHierarchy } from './Metadata/Hierarchy';
 import { SpashScreen } from './Splash';
 
 export function ModelViewer() {

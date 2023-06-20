@@ -32,7 +32,7 @@ function caseToggleSelection(oldSelection: SelectionType, newSelection: Selectio
             //make a diff
             const submodelIDs = caseSameModelToggleUpdate(oldModel, oldSubmodelIDs, newSubmodelIDs);
             if (submodelIDs.length > 0) combinedSelection.set(oldModel, new Set(submodelIDs));
-            else oldModel.selected = false;
+            else oldModel.deselectAll();
         }
     }
 
@@ -66,7 +66,7 @@ function caseDifferentUpdate(oldSelection: SelectionType, newSelection: Selectio
     for (const [oldModel, oldSelectionIds] of oldSelection) {
         let newSubmodelIDs = newSelection.get(oldModel);
         if (!newSubmodelIDs) {
-            oldModel.selected = false;
+            oldModel.deselectAll();
         } else {
             caseSameModelUpdate(oldModel, oldSelectionIds, newSubmodelIDs);
         }
@@ -135,7 +135,6 @@ function caseOnlyNewUpdate(newSelection: SelectionType) {
 }
 
 function caseOnlyNewModelUpdate(model: EditorModel, submodelIDs: Set<number>) {
-    model.selected = true;
     model.select(submodelIDs);
     return submodelIDs;
 }

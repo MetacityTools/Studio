@@ -63,4 +63,8 @@ export class ModelGraph {
             root: this.root.exportNode(),
         };
     }
+
+    getKeyValueMap(model: EditorModel, keyChain: string[], depth: number = 0) {
+        return this.root.getKeyValueMap(model, keyChain, depth);
+    }
 }

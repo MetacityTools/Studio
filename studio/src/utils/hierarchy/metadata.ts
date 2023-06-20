@@ -57,7 +57,12 @@ function checkValues(node: MetadataNode): asserts node is MetadataNode & { value
 }
 
 export function cleanString(str: string) {
-    return str.replaceAll('\n', ' ').replaceAll('\r', ' ').replaceAll('\t', ' ').trim();
+    return str
+        .replaceAll('\n', ' ')
+        .replaceAll('\r', ' ')
+        .replaceAll('\t', ' ')
+        .trim()
+        .replace(/ +(?= )/g, '');
 }
 
 export function cleanData(data: { [key: string]: any }) {

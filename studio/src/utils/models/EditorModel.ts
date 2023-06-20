@@ -1,16 +1,14 @@
+import { vec3 } from 'gl-matrix';
+
 import { GeometryMode, PrimitiveType } from '@utils/types';
 
 import * as GL from '@bananagl/bananagl';
 
+import { linearInterpolateColor } from './color';
+
 export class EditorModel extends GL.Pickable implements GL.Selectable {
     public name = 'Default Model Name';
     public primitive: PrimitiveType = PrimitiveType.UNDEFINED;
-
-    private baseColor_ = [255, 255, 255];
-    private selectedColor_ = [255, 180, 50];
-
-    private highlitColor_ = [255, 245, 229];
-    private white_ = [255, 255, 255];
 
     private bbox?: GL.BBox;
 
@@ -45,20 +43,6 @@ export class EditorModel extends GL.Pickable implements GL.Selectable {
         }
     }
 
-    select(submodelIDs: Set<number>) {
-        this.colorForId(
-            submodelIDs,
-            this.selectedColor_[0],
-            this.selectedColor_[1],
-            this.selectedColor_[2],
-            255
-        );
-    }
-
-    deselect(submodelIDs: Set<number>) {
-        this.colorForId(submodelIDs, this.baseColor_[0], this.baseColor_[1], this.baseColor_[2], 0);
-    }
-
     get boundingBox() {
         if (!this.bbox) {
             const pos = this.attributes.getAttribute('position');
@@ -68,61 +52,76 @@ export class EditorModel extends GL.Pickable implements GL.Selectable {
         return this.bbox;
     }
 
-    private colorForId(submodelIDs: Set<number>, r: number, g: number, b: number, s: number = 1) {
+    select(submodelIDs: Set<number>) {
+        this.selectSubmodels(submodelIDs, 255);
+    }
+
+    deselect(submodelIDs: Set<number>) {
+        this.selectSubmodels(submodelIDs, 0);
+    }
+
+    setColorMap(factors: Map<number, number>, colorMap: vec3[]) {
         if (this.disposed) return;
-        if (submodelIDs.size === 0) return;
+        if (factors.size === 0) return;
+
         const color = this.attributes.getAttribute('color');
-        const selected = this.attributes.getAttribute('selected');
         const submodel = this.attributes.getAttribute('submodel');
         const submodelBuffer = submodel!.buffer.getView(Uint32Array);
 
         if (!submodel) return;
         if (!color) return;
-        if (!selected) return;
 
-        let updateStart = 0,
-            updateEnd = 0;
+        let factor;
         for (let i = 0; i < submodelBuffer.length; i++) {
-            if (submodelIDs.has(submodelBuffer[i])) {
+            factor = factors.get(submodelBuffer[i])!;
+            if (factor !== undefined) {
+                const c = linearInterpolateColor(colorMap, factor);
                 const scidx = i * 3;
-                color.buffer.data[scidx] = r;
-                color.buffer.data[scidx + 1] = g;
-                color.buffer.data[scidx + 2] = b;
-                selected.buffer.data[i] = s;
-
-                if (updateStart === undefined) {
-                    updateStart = scidx;
-                    updateEnd = scidx + 3;
-                } else if (updateEnd === scidx) {
-                    updateEnd = scidx + 3;
-                } else {
-                    color.buffer.toUpdate(updateStart, updateEnd);
-                    selected.buffer.toUpdate(updateStart / 3, updateEnd / 3);
-                    updateStart = scidx;
-                    updateEnd = scidx + 3;
-                }
+                color.buffer.data[scidx] = c[0] * 155 + 100;
+                color.buffer.data[scidx + 1] = c[1] * 155 + 100;
+                color.buffer.data[scidx + 2] = c[2] * 155 + 100;
             }
         }
 
-        color.buffer.toUpdate(updateStart, updateEnd);
-        selected.buffer.toUpdate(updateStart / 3, updateEnd / 3);
+        color.buffer.toUpdate();
     }
 
-    set selected(isSelected: boolean) {
+    whiten() {
         if (this.disposed) return;
+        const color = this.attributes.getAttribute('color');
 
-        const color = isSelected ? this.highlitColor_ : this.white_;
-        const baseColor = this.attributes.getAttribute('color');
-        if (!baseColor) return;
+        if (!color) return;
 
-        for (let i = 0; i < baseColor.buffer.data.length; i += 3) {
-            baseColor.buffer.data[i] = color[0];
-            baseColor.buffer.data[i + 1] = color[1];
-            baseColor.buffer.data[i + 2] = color[2];
+        for (let i = 0; i < color.buffer.data.length; i++) {
+            color.buffer.data[i] = 255;
         }
 
-        baseColor.buffer.toUpdate();
-        this.baseColor_ = color;
+        color.buffer.toUpdate();
+    }
+
+    private selectSubmodels(submodelIDs: Set<number>, s: number) {
+        if (this.disposed) return;
+        if (submodelIDs.size === 0) return;
+        const selected = this.attributes.getAttribute('selected');
+        const submodel = this.attributes.getAttribute('submodel');
+        const submodelBuffer = submodel!.buffer.getView(Uint32Array);
+
+        if (!submodel) return;
+        if (!selected) return;
+
+        for (let i = 0; i < submodelBuffer.length; i++) {
+            if (submodelIDs.has(submodelBuffer[i])) selected.buffer.data[i] = s;
+        }
+
+        selected.buffer.toUpdate();
+    }
+
+    deselectAll() {
+        if (this.disposed) return;
+        const selected = this.attributes.getAttribute('selected');
+        if (!selected) return;
+        for (let i = 0; i < selected.buffer.data.length; i++) selected.buffer.data[i] = 0;
+        selected.buffer.toUpdate();
     }
 }
 
