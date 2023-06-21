@@ -17,7 +17,7 @@ import { useLoadingStatus, useProcessing } from '@elements/Context';
 
 import { ImportDialog } from './DialogImport';
 
-export function TransformMenu() {
+export function IOMenu() {
     const renderer = useRenderer();
     const scene = useScene();
     const create = useCreateModels();
@@ -55,7 +55,7 @@ export function TransformMenu() {
     };
 
     return (
-        <div className="flex flex-row p-4 w-full space-x-2 border-b">
+        <div className="flex flex-row p-4 w-full space-x-2">
             <ButtonFileInput id="models" onChange={onModelsSelected} multiple>
                 Import
             </ButtonFileInput>

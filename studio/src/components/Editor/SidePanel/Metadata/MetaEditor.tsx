@@ -1,16 +1,14 @@
 import Editor from '@monaco-editor/react';
 import React from 'react';
 
-import { useEditingNode } from '@editor/Context/TableContext';
+import { useEditingNode, useStatus } from '@editor/Context/TableContext';
 
 import { Empty } from '@elements/Empty';
 
-import { MetaMenu } from '../Menu/MetaMenu';
-
-export function Meta() {
+export function MetaEditor() {
     const [nodeToLink, setNodeToLink] = useEditingNode();
     const timeRef = React.useRef<NodeJS.Timeout>();
-    const [status, setStatus] = React.useState<'editing' | 'saved' | 'failed' | undefined>();
+    const [status, setStatus] = useStatus();
 
     const handleKey = (e: React.KeyboardEvent<HTMLDivElement>) => {
         e.stopPropagation();
@@ -42,7 +40,6 @@ export function Meta() {
 
     return (
         <div className="flex flex-col w-full h-full" onKeyDown={handleKey} onKeyUp={handleKey}>
-            <MetaMenu status={status} />
             {nodeToLink && (
                 <Editor
                     key={nodeToLink.uuid}

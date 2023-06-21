@@ -1,6 +1,8 @@
+import React from 'react';
+
 import { useSheets } from '@editor/Context/TableContext';
 
-import { Button, ButtonFileInput } from '@elements/Button';
+import { ButtonFileInput } from '@elements/Button';
 
 export function TableMenu() {
     const [addSheet] = useSheets();
@@ -15,10 +17,12 @@ export function TableMenu() {
     };
 
     return (
-        <div className="flex flex-row p-4 w-full space-x-2 border-b items-center">
-            <ButtonFileInput id="table" onChange={handleTableSelected}>
-                Import CSV Table
-            </ButtonFileInput>
+        <div className="flex flex-row p-4 w-full border-b items-center">
+            <div className="flex flex-row items-center space-x-2 w-full">
+                <ButtonFileInput id="table" onChange={handleTableSelected}>
+                    Import CSV Table
+                </ButtonFileInput>
+            </div>
         </div>
     );
 }

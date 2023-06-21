@@ -9,7 +9,6 @@ import { ErrorPage } from '@elements/Error';
 
 import '@assets/index.css';
 
-import { EditorContext } from './Context/EditorContext';
 import { TablesContext } from './Context/TableContext';
 import { ModelEditor } from './Editor';
 
@@ -25,11 +24,9 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     <React.StrictMode>
         <GeneralContext>
             <ViewContext>
-                <EditorContext>
-                    <TablesContext>
-                        <RouterProvider router={router} />
-                    </TablesContext>
-                </EditorContext>
+                <TablesContext>
+                    <RouterProvider router={router} />
+                </TablesContext>
             </ViewContext>
         </GeneralContext>
     </React.StrictMode>
