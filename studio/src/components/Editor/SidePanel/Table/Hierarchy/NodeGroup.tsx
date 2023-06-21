@@ -13,8 +13,8 @@ import {
     HierarchyButton,
     HierarchyChevronButton,
     HierarchyMainButton,
-    HierarchyNodeRow,
-    colorNodeBackground,
+    HierarchyNode,
+    HierarchyNodeGroup,
 } from '@elements/Hierarchy';
 import { If } from '@elements/If';
 
@@ -70,19 +70,22 @@ export function GroupNode(props: GroupNodeProps) {
         e.stopPropagation();
     };
 
-    const bg = colorNodeBackground(isSelected, isMoving || isLinking);
-    const bgMoving = colorNodeBackground(isMoving, isSelected || isLinking);
-    const bgLinking = colorNodeBackground(isLinking, isSelected || isMoving);
-
+    const light = isSelected || isMoving || isLinking;
     return (
-        <div className="flex flex-col rounded-md">
-            <HierarchyNodeRow>
-                <HierarchyChevronButton open={open} onClick={handleOpen} bg={bg} />
-                <HierarchyMainButton onClick={handleSelect} bg={bg}>
+        <HierarchyNodeGroup>
+            <HierarchyNode>
+                <HierarchyChevronButton
+                    open={open}
+                    onClick={handleOpen}
+                    active={isSelected}
+                    light={light}
+                    title="Show children parts"
+                />
+                <HierarchyMainButton onClick={handleSelect} active={isSelected} light={light}>
                     Group of {node.children.length} parts
                 </HierarchyMainButton>
                 <If cond={!nodeToMove}>
-                    <HierarchyButton bg={bg} onClick={handleRemove} title="Delete group">
+                    <HierarchyButton light={light} onClick={handleRemove} title="Delete group">
                         <FiDelete />
                     </HierarchyButton>
                 </If>
@@ -90,7 +93,8 @@ export function GroupNode(props: GroupNodeProps) {
                     <If cond={!nodeToMove}>
                         <HierarchyButton
                             onClick={handleToMove}
-                            bg={bgMoving}
+                            active={isMoving}
+                            light={light}
                             title="Move in hierarchy"
                         >
                             <MdOutlineDriveFileMove />
@@ -99,31 +103,38 @@ export function GroupNode(props: GroupNodeProps) {
                     <If cond={nodeToMove && !isMoving}>
                         <HierarchyButton
                             onClick={handleToMove}
-                            bg={bgMoving}
+                            active={isMoving}
+                            light={light}
                             title="Move here in hierarchy"
                         >
                             <MdDriveFileMoveRtl />
                         </HierarchyButton>
                     </If>
                     <If cond={isMoving}>
-                        <HierarchyButton onClick={handleToMove} bg={bgMoving} title="End Move">
+                        <HierarchyButton
+                            onClick={handleToMove}
+                            active={isMoving}
+                            light={light}
+                            title="End Move"
+                        >
                             <BsFillStopFill />
                         </HierarchyButton>
                     </If>
                 </If>
                 <If cond={!nodeToMove}>
                     <HierarchyButton
-                        bg={bgLinking}
+                        active={isLinking}
+                        light={light}
                         onClick={handleLink}
                         title="Link to selected rows in table"
                     >
                         <VscJson />
                     </HierarchyButton>
                 </If>
-            </HierarchyNodeRow>
+            </HierarchyNode>
             {open && (
                 <GroupNodeChildren {...props} nodeToMove={nodeToMove} nodeToLink={nodeToLink} />
             )}
-        </div>
+        </HierarchyNodeGroup>
     );
 }

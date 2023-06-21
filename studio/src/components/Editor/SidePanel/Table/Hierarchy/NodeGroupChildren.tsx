@@ -2,6 +2,8 @@ import React from 'react';
 
 import { GroupNode as GroupNodeClass, ModelNode as ModelNodeClass, Node } from '@utils/utils';
 
+import { HierarchyNodeGroupChildren } from '@elements/Hierarchy';
+
 import { GroupNode, GroupNodeProps } from './NodeGroup';
 import { ModelNode } from './NodeModel';
 
@@ -25,7 +27,7 @@ export function GroupNodeChildren(props: GroupNodeChildrenProps) {
         return <div className="text-neutral-400 pl-10">No models</div>;
 
     return (
-        <div className="mt-1 pl-8 space-y-1">
+        <HierarchyNodeGroupChildren>
             {groups.map((child) => (
                 <GroupNode key={child.uuid} selectedModels={selectedModels} node={child} />
             ))}
@@ -49,6 +51,6 @@ export function GroupNodeChildren(props: GroupNodeChildrenProps) {
                     + {concatChildren.length - countVisible} more models
                 </div>
             )}
-        </div>
+        </HierarchyNodeGroupChildren>
     );
 }

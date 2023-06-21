@@ -3,7 +3,7 @@ import { MdDeselect } from 'react-icons/md';
 
 import { useSelection } from '@utils/utils';
 
-import { MenuButton, MenuGroup } from '@elements/MenuButton';
+import { MenuButton, MenuGroup } from '@elements/Button';
 
 export function SelectionControls() {
     const [select] = useSelection();

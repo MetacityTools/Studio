@@ -2,7 +2,7 @@ import { VscJson, VscMove } from 'react-icons/vsc';
 
 import { EditingMode, useEditingMode } from '@editor/Context/EditorContext';
 
-import { MenuButton, MenuGroup } from '@elements/MenuButton';
+import { MenuButton, MenuGroup } from '@elements/Button';
 
 export function ModeControls() {
     const [mode, setMode] = useEditingMode();

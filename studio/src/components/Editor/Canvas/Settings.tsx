@@ -2,7 +2,7 @@ import React from 'react';
 import { GoSettings } from 'react-icons/go';
 import { MdOutlineClose } from 'react-icons/md';
 
-import { MenuButton, MenuGroup } from '@elements/MenuButton';
+import { MenuButton, MenuGroup } from '@elements/Button';
 
 import { CameraGroundWidget } from './WidgetCameraGround';
 import { ShadingWidget } from './WidgetShading';

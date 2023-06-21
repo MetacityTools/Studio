@@ -16,8 +16,8 @@ export function getRoot(node: MetadataNode) {
 
 export function findPath(
     node: MetadataNode,
-    nodeKey: string,
-    target: MetadataNode
+    target: MetadataNode,
+    nodeKey: string
 ): NodePath | null {
     if (node === target)
         return [
@@ -29,7 +29,7 @@ export function findPath(
     if (!node.children) return null;
 
     for (const [key, value] of Object.entries(node.children)) {
-        const path = findPath(value, key, target);
+        const path = findPath(value, target, key);
         if (path) return [{ node, key: nodeKey }, ...path];
     }
 

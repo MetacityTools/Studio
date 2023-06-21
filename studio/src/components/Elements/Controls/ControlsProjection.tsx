@@ -6,7 +6,7 @@ import { useActiveView, useRenderer } from '@utils/utils';
 
 import * as GL from '@bananagl/bananagl';
 
-import { MenuButton, MenuGroup } from '@elements/MenuButton';
+import { MenuButton, MenuGroup } from '@elements/Button';
 
 export function ProjectionControls() {
     const renderer = useRenderer();

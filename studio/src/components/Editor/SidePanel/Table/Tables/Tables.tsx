@@ -1,11 +1,10 @@
 import clsx from 'clsx';
-import React from 'react';
 import { IoClose } from 'react-icons/io5';
 
 import { useActiveSheet, useSheets, useTables } from '@editor/Context/TableContext';
 import { Sheet } from '@editor/SidePanel/Table/Tables/Sheet';
 
-import { EmptyTable } from '@elements/Empty';
+import { Empty } from '@elements/Empty';
 import { If } from '@elements/If';
 
 import { TableMenu } from '../Menu/TableMenu';
@@ -26,7 +25,7 @@ export function Tables() {
         <div className="flex flex-col w-full h-full">
             <TableMenu />
             <If cond={tables.empty}>
-                <EmptyTable />
+                <Empty>No tables</Empty>
             </If>
             <If cond={!tables.empty}>
                 <div className="w-full h-full overflow-scroll">

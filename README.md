@@ -29,12 +29,12 @@ The project is in active development. The roadmap is as follows:
 ### v0.4.1
 
 -   [ ] Projecting models onto models (2D onto 3D) - ✨WIP https://github.com/vojtatom/geometry
--   [ ] Styling???
 -   [ ] Loading points and lines from SHP
 
 ### v0.4.0 - 👨‍💻 In progress
 
 -   [x] Browsing metadata hierarchy in viewer
+-   [ ] Restructure menu in Editor (unify UI with viewer)
 -   [ ] Styling based on data in hierarchy?
     -   [x] Base setup
     -   [ ] Coloring number data

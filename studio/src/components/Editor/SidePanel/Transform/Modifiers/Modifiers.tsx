@@ -1,8 +1,6 @@
-import React from 'react';
-
 import { useSelectedModels } from '@utils/utils';
 
-import { EmptyDetail, TooManySelected } from '@elements/Empty';
+import { Empty } from '@elements/Empty';
 
 import { DeleteModelWidget } from './WidgetDeleteModel';
 import { DeleteSubmodelsWidget } from './WidgetDeleteSubmodels';
@@ -13,8 +11,8 @@ import { ModelTransformationWidget } from './WidgetTransformation';
 export function Modifiers() {
     const selection = useSelectedModels();
 
-    if (selection.size === 0) return <EmptyDetail />;
-    if (selection.size > 1) return <TooManySelected />;
+    if (selection.size === 0) return <Empty>Nothing selected</Empty>;
+    if (selection.size > 1) return <Empty>Select only a single model</Empty>;
     const model = Array.from(selection)[0][0];
 
     return (

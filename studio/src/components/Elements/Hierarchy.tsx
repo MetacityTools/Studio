@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import { FiChevronRight } from 'react-icons/fi';
 
-export function colorNodeBackground(active: boolean, light?: boolean) {
+function getNodeBackground(active: boolean, light?: boolean) {
     if (active)
         return 'text-amber-800 bg-amber-300 enabled:hover:bg-amber-400 outline-none transition-colors';
     if (light)
@@ -11,20 +11,25 @@ export function colorNodeBackground(active: boolean, light?: boolean) {
 
 export type ButtonHandler = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 
-interface HierarchyButtonProps {
+interface HierarchyButtonBase {
     onClick?: ButtonHandler;
     title?: string;
+    active?: boolean;
+    light?: boolean;
+}
+
+interface HierarchyButtonProps extends HierarchyButtonBase {
     children: React.ReactNode;
     disabled?: boolean;
-    bg: string;
 }
 
 export function HierarchyButton(props: HierarchyButtonProps) {
     const disabled = props.disabled ?? false;
+    const bg = getNodeBackground(props.active ?? false, props.light ?? false);
 
     return (
         <button
-            className={clsx(props.bg, 'px-4 py-2 last:rounded-r')}
+            className={clsx(bg, 'px-4 py-2 last:rounded-r')}
             onClick={props.onClick}
             title={props.title}
             disabled={disabled}
@@ -34,17 +39,39 @@ export function HierarchyButton(props: HierarchyButtonProps) {
     );
 }
 
+interface HierarchyChevronButtonProps extends HierarchyButtonBase {
+    open: boolean;
+}
+
+export function HierarchyChevronButton(props: HierarchyChevronButtonProps) {
+    const bg = getNodeBackground(props.active ?? false, props.light ?? false);
+
+    return (
+        <button
+            className={clsx('px-2 py-2 rounded-l', bg)}
+            onClick={props.onClick}
+            title={props.title}
+        >
+            <FiChevronRight
+                className={clsx('w-4 h-4 transition-all', props.open && 'transform rotate-90')}
+            />
+        </button>
+    );
+}
+
 interface HierarchyMainButtonProps extends HierarchyButtonProps {
     padded?: boolean;
 }
 
 export function HierarchyMainButton(props: HierarchyMainButtonProps) {
+    const bg = getNodeBackground(props.active ?? false, props.light ?? false);
+
     return (
         <button
             className={clsx(
                 props.padded ? 'px-4' : 'px-2',
                 'flex-1 text-left first:rounded-l text-ellipsis overflow-hidden whitespace-nowrap last:rounded-r',
-                props.bg
+                bg
             )}
             onClick={props.onClick}
         >
@@ -57,26 +84,18 @@ interface HierarchyNodeRowProps {
     children: React.ReactNode;
 }
 
-export function HierarchyNodeRow(props: HierarchyNodeRowProps) {
+export function HierarchyNode(props: HierarchyNodeRowProps) {
     return <div className="flex flex-row justify-between items-center">{props.children}</div>;
 }
 
-interface HierarchyChevronButtonProps {
-    bg: string;
-    open: boolean;
-    onClick?: ButtonHandler;
+interface HierarchyNodeGroupProps {
+    children: React.ReactNode;
 }
 
-export function HierarchyChevronButton(props: HierarchyChevronButtonProps) {
-    return (
-        <button
-            className={clsx('px-2 py-2 rounded-l', props.bg)}
-            onClick={props.onClick}
-            title="Show children parts"
-        >
-            <FiChevronRight
-                className={clsx('w-4 h-4 transition-all', props.open && 'transform rotate-90')}
-            />
-        </button>
-    );
+export function HierarchyNodeGroup(props: HierarchyNodeGroupProps) {
+    return <div className="flex flex-col rounded-md">{props.children}</div>;
+}
+
+export function HierarchyNodeGroupChildren(props: HierarchyNodeGroupProps) {
+    return <div className="mt-1 pl-8 space-y-1">{props.children}</div>;
 }

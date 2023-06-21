@@ -1,49 +1,9 @@
 import React from 'react';
 
-export function EmptyList() {
+export function Empty(props: { children?: React.ReactNode }) {
     return (
         <div className="w-full h-full flex flex-col items-center justify-center">
-            <div className="text-4xl text-neutral-300 text-center">No models</div>
-        </div>
-    );
-}
-
-export function EmptyDetail() {
-    return (
-        <div className="w-full h-full flex flex-col items-center justify-center">
-            <div className="text-4xl text-neutral-300 text-center">Select a model</div>
-        </div>
-    );
-}
-
-export function TooManySelected() {
-    return (
-        <div className="w-full h-full flex flex-col items-center justify-center">
-            <div className="text-4xl text-neutral-300 text-center">Select only one model</div>
-        </div>
-    );
-}
-
-export function EmptyMetaEditor() {
-    return (
-        <div className="w-full h-full flex flex-col items-center justify-center">
-            <div className="text-4xl text-neutral-300 text-center">Nothing selected</div>
-        </div>
-    );
-}
-
-export function EmptyMetadata() {
-    return (
-        <div className="w-full h-full flex flex-col items-center justify-center">
-            <div className="text-4xl text-neutral-300 text-center">Select a part of a model</div>
-        </div>
-    );
-}
-
-export function EmptyTable() {
-    return (
-        <div className="w-full h-full flex flex-col items-center justify-center">
-            <div className="text-4xl text-neutral-300 text-center">No tables</div>
+            <div className="text-4xl text-neutral-300 text-center">{props.children}</div>
         </div>
     );
 }

@@ -3,7 +3,7 @@ import React from 'react';
 
 import { useEditingNode } from '@editor/Context/TableContext';
 
-import { EmptyMetaEditor } from '@elements/Empty';
+import { Empty } from '@elements/Empty';
 
 import { MetaMenu } from '../Menu/MetaMenu';
 
@@ -52,7 +52,7 @@ export function Meta() {
                     onChange={handleChange}
                 />
             )}
-            {!nodeToLink && <EmptyMetaEditor />}
+            {!nodeToLink && <Empty>Nothing selected</Empty>}
         </div>
     );
 }

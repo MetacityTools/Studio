@@ -2,12 +2,22 @@ import React from 'react';
 
 import { MetadataNode, colorize, useGraph, useModels, whiten } from '@utils/utils';
 
-export function MetadataValueStrings(props: { values: any; keyChain: string[] }) {
+import { useMetadata } from '@viewer/ViewerContext';
+
+import { findPath } from './utils';
+
+export function MetadataValueStrings(props: { values: any }) {
     return <div className="px-4">metadata strings</div>;
 }
 
-export function MetadataValueNumbers(props: { node: MetadataNode; keyChain: string[] }) {
-    const { node, keyChain } = props;
+export function MetadataValueNumbers(props: { node: MetadataNode }) {
+    const { node } = props;
+    const [metadata] = useMetadata();
+    const path = findPath(metadata, node, 'root');
+
+    if (!path) return null;
+    const keyChain = path.map((node) => node.key);
+
     const models = useModels();
     const [graph] = useGraph();
 
@@ -26,16 +36,9 @@ export function MetadataValueNumbers(props: { node: MetadataNode; keyChain: stri
         };
     }, [node]);
 
-    return (
-        <div className="px-4">
-            <div className="flex flex-row justify-between">
-                <div className="text-xs text-gray-500">{min}</div>
-                <div className="text-xs text-gray-500">{max}</div>
-            </div>
-        </div>
-    );
+    return <div className="px-4">metadata number</div>;
 }
 
-export function MetadataValueMixed(props: { values: any; keyChain: string[] }) {
+export function MetadataValueMixed(props: { values: any }) {
     return <div className="px-4">metadata mixed</div>;
 }

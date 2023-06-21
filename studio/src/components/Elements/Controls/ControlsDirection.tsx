@@ -4,8 +4,8 @@ import { useActiveView, useRenderer } from '@utils/utils';
 
 import * as GL from '@bananagl/bananagl';
 
+import { MenuButton, MenuGroup } from '@elements/Button';
 import { CubeEmpty, CubeLeft, CubeRight, CubeTop } from '@elements/Icons';
-import { MenuButton, MenuGroup } from '@elements/MenuButton';
 
 export function DirectionControls() {
     const [mode, setMode] = React.useState<GL.CameraView>(GL.CameraView.Free);
