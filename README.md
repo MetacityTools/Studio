@@ -26,11 +26,13 @@ Currently:
 
 The project is in active development. The roadmap is as follows:
 
+---
+
 ## Backlog
 
 These features are planned for the future, but not yet scheduled.
 
-## Priority Backlog
+### Priority Backlog
 
 -   [ ] Filter file inputs (add format filters)
 -   [ ] Click off model - deselect all
@@ -42,7 +44,7 @@ These features are planned for the future, but not yet scheduled.
 -   [ ] Shortcuts for tab switching in editor
 -   [ ] When in Table view, click to select model and extend the selection based on groups on key/button/action
 
-## Backlog
+### Backlog
 
 -   [ ] Loading GeoJSON
 -   [ ] Loading IFC metadata loading (memory-efficiency???)
@@ -54,9 +56,11 @@ These features are planned for the future, but not yet scheduled.
 -   [ ] Named groups in hierarchy
 -   [ ] Insert textured plane (location blueprints for reference)
 
-## Bugs and Validations
+### Bugs and Validations
 
 -   [ ] Do not allow keys to be empty in table view during conversion
+
+---
 
 ## Planned Releases
 
@@ -66,8 +70,6 @@ These features are planned for the future, and scheduled for a specific release.
 
 -   [ ] Projecting models onto models (2D onto 3D) - ✨WIP https://github.com/vojtatom/geometry
 -   [ ] Loading points and lines from SHP
-
----
 
 🧠 Call for consultation (TB planned, beginning of July 2023)
 
@@ -118,8 +120,6 @@ These features are planned for the future, and scheduled for a specific release.
 -   [x] JSON metadata for nodes in hierarchy
     -   [x] Assign metadata to model nodes
 -   [x] Resize guard update graphics (The "Oops" message is pretty lame)
-
----
 
 🧠 Call for consultation
 
