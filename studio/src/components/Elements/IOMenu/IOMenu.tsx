@@ -10,14 +10,13 @@ import {
     useScene,
 } from '@utils/utils';
 
-import { Vitals } from '@editor/Utils/Vitals';
-
 import { Button, ButtonFileInput } from '@elements/Button';
 import { useLoadingStatus, useProcessing } from '@elements/Context';
+import { Vitals } from '@elements/IOMenu/Vitals';
 
 import { ImportDialog } from './DialogImport';
 
-export function IOMenu() {
+export function IOMenu(props: { export?: boolean }) {
     const renderer = useRenderer();
     const scene = useScene();
     const create = useCreateModels();
@@ -59,7 +58,7 @@ export function IOMenu() {
             <ButtonFileInput id="models" onChange={onModelsSelected} multiple>
                 Import
             </ButtonFileInput>
-            <Button onClick={handleExport}>Export</Button>
+            {props.export && <Button onClick={handleExport}>Export</Button>}
             <Vitals scenes={[scene]} renderer={renderer} />
             <ImportDialog isOpen={importOpen} onClose={handleModelsAdded} />
         </div>

@@ -31,10 +31,15 @@ The project is in active development. The roadmap is as follows:
 -   [ ] Projecting models onto models (2D onto 3D) - ✨WIP https://github.com/vojtatom/geometry
 -   [ ] Loading points and lines from SHP
 
-### v0.4.0 - 👨‍💻 In progress
+---
+
+🧠 Call for consultation (TB planned, beginning of July 2023)
+
+### v0.4.0 - In progress
 
 -   [x] Browsing metadata hierarchy in viewer
--   [ ] Restructure menu in Editor (unify UI with viewer)
+-   [x] Restructure menu in Editor (unify UI with viewer)
+-   [x] Remove metadata view from transform view
 -   [ ] Styling based on data in hierarchy?
     -   [x] Base setup
     -   [ ] Coloring number data
@@ -75,6 +80,10 @@ The project is in active development. The roadmap is as follows:
 -   [x] JSON metadata for nodes in hierarchy
     -   [x] Assign metadata to model nodes
 -   [x] Resize guard update graphics (The "Oops" message is pretty lame)
+
+---
+
+🧠 Call for consultation
 
 ### v0.2.0 - ✅ Released
 
@@ -148,7 +157,6 @@ The project is in active development. The roadmap is as follows:
 -   [ ] Optional interactivity - build BVH only if user opts-in to make the loaded models clickable
 -   [ ] Optimize deleting models - partition model BVH nodes based on submodels's ids
 -   [ ] Filter file inputs (add format filters)
--   [ ] Remove metadata view from transform view
 -   [ ] Insert textured plane (location blueprints for reference)
 -   [ ] Named groups in hierarchy
 -   [ ] Click off model - deselect all

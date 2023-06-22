@@ -6,6 +6,15 @@ import { VscJson } from 'react-icons/vsc';
 
 import { MetadataNode, MetadataType } from '@utils/types';
 
+import {
+    HierarchyBracketsButton,
+    HierarchyChevronButton,
+    HierarchyMainButton,
+    HierarchyNode,
+    HierarchyNodeGroup,
+    HierarchyNodeGroupChildren,
+} from '@elements/Hierarchy';
+
 import { MetadataValueMixed, MetadataValueNumbers, MetadataValueStrings } from './MetadataValues';
 
 export function MetadataCategory(props: { category: string; node: MetadataNode; depth: number }) {
@@ -19,55 +28,32 @@ export function MetadataCategory(props: { category: string; node: MetadataNode; 
         node = node.children[key];
     }
 
-    const handleToggle = () => {
+    const handleOpen = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         setOpen(!open);
+        e.stopPropagation();
     };
 
+    const isCategory = node.children && Object.keys(node.children).length > 0;
+
     return (
-        <>
-            <MetadataCategoryButton node={node} depth={depth} open={open} onClick={handleToggle}>
-                <MetadataCategoryButtonContent categories={categories} />
-            </MetadataCategoryButton>
+        <HierarchyNodeGroup>
+            <HierarchyNode hoverable>
+                {isCategory && (
+                    <HierarchyChevronButton
+                        open={open}
+                        onClick={handleOpen}
+                        title="Show subcategories"
+                        inheritStyles
+                    />
+                )}
+                {!isCategory && <HierarchyBracketsButton inheritStyles onClick={handleOpen} />}
+                <HierarchyMainButton inheritStyles onClick={handleOpen}>
+                    <MetadataCategoryButtonContent categories={categories} />
+                </HierarchyMainButton>
+            </HierarchyNode>
             {open && <MetadataCategoryChildren node={node} depth={depth + 1} />}
             {open && <MetadataCategoryValues node={node} />}
-        </>
-    );
-}
-
-export function MetadataCategoryButton(props: {
-    children?: React.ReactNode;
-    node: MetadataNode;
-    depth: number;
-    open?: boolean;
-    onClick?: () => void;
-}) {
-    const { children, node, depth, open, onClick } = props;
-    return (
-        <button
-            className="py-1 flex flex-row items-center hover:text-amber-800 hover:bg-amber-300 transition-colors outline-none"
-            onClick={onClick}
-            style={{
-                paddingLeft: `calc(${depth * 2}rem + 1rem)`,
-                paddingRight: `1rem`,
-            }}
-        >
-            {node.children && (
-                <div className="w-4">
-                    <FiChevronRight
-                        className={clsx(
-                            'w-4 h-4 transition-all flex-0',
-                            open && 'transform rotate-90'
-                        )}
-                    />
-                </div>
-            )}
-            {!node.children && (
-                <div className="w-4">
-                    <VscJson className="w-4 h-4" />
-                </div>
-            )}
-            <div className="px-2 flex flex-row items-center w-full">{children}</div>
-        </button>
+        </HierarchyNodeGroup>
     );
 }
 
@@ -94,15 +80,12 @@ export function MetadataCategoryButtonContent(props: { categories: string[] }) {
 export function MetadataCategoryChildren(props: { node: MetadataNode; depth: number }) {
     const { node, depth } = props;
     return (
-        <>
+        <HierarchyNodeGroupChildren>
             {node.children &&
                 Object.entries(node.children).map(([key, value]) => {
-                    if (value.children && Object.keys(value.children).length === 1) {
-                    }
-
                     return <MetadataCategory category={key} key={key} node={value} depth={depth} />;
                 })}
-        </>
+        </HierarchyNodeGroupChildren>
     );
 }
 

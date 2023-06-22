@@ -1,5 +1,6 @@
 import clsx from 'clsx';
 import { FiChevronRight } from 'react-icons/fi';
+import { VscJson } from 'react-icons/vsc';
 
 import {
     colorLightActive,
@@ -9,7 +10,8 @@ import {
     colorVividBaseBorder,
 } from './colors';
 
-function getNodeBackground(active: boolean, light?: boolean) {
+function getNodeBackground(active: boolean, light?: boolean, inherit?: boolean) {
+    if (inherit) return 'bg-transparent border-inherit text-inherit bg-inherit';
     if (active) return colorVividActive;
     if (light) return colorLightActive;
     return colorVividBase;
@@ -22,6 +24,7 @@ interface HierarchyButtonBase {
     title?: string;
     active?: boolean;
     light?: boolean;
+    inheritStyles?: boolean;
 }
 
 interface HierarchyButtonProps extends HierarchyButtonBase {
@@ -31,11 +34,16 @@ interface HierarchyButtonProps extends HierarchyButtonBase {
 
 export function HierarchyButton(props: HierarchyButtonProps) {
     const disabled = props.disabled ?? false;
-    const bg = getNodeBackground(props.active ?? false, props.light ?? false);
-
     return (
         <button
-            className={clsx(bg, 'px-4 py-2 border-y last:border-r last:rounded-r')}
+            className={clsx(
+                'px-4 py-2 border-y last:border-r last:rounded-r',
+                getNodeBackground(
+                    props.active ?? false,
+                    props.light ?? false,
+                    props.inheritStyles ?? false
+                )
+            )}
             onClick={props.onClick}
             title={props.title}
             disabled={disabled}
@@ -50,17 +58,44 @@ interface HierarchyChevronButtonProps extends HierarchyButtonBase {
 }
 
 export function HierarchyChevronButton(props: HierarchyChevronButtonProps) {
-    const bg = getNodeBackground(props.active ?? false, props.light ?? false);
-
     return (
         <button
-            className={clsx('px-2 py-2 rounded-l border-y border-l', bg)}
+            className={clsx(
+                'px-2 py-2 rounded-l border-y border-l',
+                getNodeBackground(
+                    props.active ?? false,
+                    props.light ?? false,
+                    props.inheritStyles ?? false
+                )
+            )}
             onClick={props.onClick}
             title={props.title}
         >
             <FiChevronRight
-                className={clsx('w-4 h-4 transition-all', props.open && 'transform rotate-90')}
+                className={clsx(
+                    'w-4 h-4 transition-transform',
+                    props.open && 'transform rotate-90'
+                )}
             />
+        </button>
+    );
+}
+
+export function HierarchyBracketsButton(props: HierarchyButtonBase) {
+    return (
+        <button
+            className={clsx(
+                'px-2 py-2 rounded-l border-y border-l',
+                getNodeBackground(
+                    props.active ?? false,
+                    props.light ?? false,
+                    props.inheritStyles ?? false
+                )
+            )}
+            onClick={props.onClick}
+            title={props.title}
+        >
+            <VscJson className={clsx('w-4 h-4')} />
         </button>
     );
 }
@@ -70,14 +105,17 @@ interface HierarchyMainButtonProps extends HierarchyButtonProps {
 }
 
 export function HierarchyMainButton(props: HierarchyMainButtonProps) {
-    const bg = getNodeBackground(props.active ?? false, props.light ?? false);
-
     return (
         <button
             className={clsx(
                 props.padded ? 'px-4' : 'px-2',
-                'flex-1 text-left first:rounded-l border-y first:border-l text-ellipsis overflow-hidden whitespace-nowrap last:rounded-r',
-                bg
+                'flex-1 text-left first:rounded-l last:rounded-r border-y first:border-l last:border-r last:rounded-r flex flex-row items-center',
+                'text-ellipsis overflow-hidden whitespace-nowrap',
+                getNodeBackground(
+                    props.active ?? false,
+                    props.light ?? false,
+                    props.inheritStyles ?? false
+                )
             )}
             onClick={props.onClick}
         >
@@ -87,6 +125,7 @@ export function HierarchyMainButton(props: HierarchyMainButtonProps) {
 }
 
 interface HierarchyNodeProps {
+    hoverable?: boolean;
     children: React.ReactNode;
     active?: boolean;
 }
@@ -96,7 +135,13 @@ export function HierarchyNode(props: HierarchyNodeProps) {
         <div
             className={clsx(
                 'flex flex-row justify-between items-center',
-                props.active ? colorVividActiveBorder : colorVividBaseBorder
+                props.hoverable
+                    ? props.active
+                        ? colorVividActive
+                        : colorVividBase
+                    : props.active
+                    ? colorVividActiveBorder
+                    : colorVividBaseBorder
             )}
         >
             {props.children}

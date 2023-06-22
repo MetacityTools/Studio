@@ -2,9 +2,9 @@ import { Tab } from '@headlessui/react';
 import 'allotment/dist/style.css';
 import { VscJson, VscMove, VscTable } from 'react-icons/vsc';
 
+import { IOMenu } from '@elements/IOMenu/IOMenu';
 import { TabButton, TabList, TabPanel } from '@elements/Tabs';
 
-import { IOMenu } from './Menu/IOMenu';
 import { MetadataSidePanel } from './Metadata/MetadataSidePanel';
 import { TableSidePanel } from './Tables/TableSidePanel';
 import { TransformSidePanel } from './Transform/TransformSidePanel';
@@ -12,7 +12,7 @@ import { TransformSidePanel } from './Transform/TransformSidePanel';
 export function SidePanel() {
     return (
         <div className="bg-white w-full h-screen flex flex-col">
-            <IOMenu />
+            <IOMenu export />
             <Tab.Group>
                 <TabList>
                     <TabButton>
