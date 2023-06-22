@@ -11,15 +11,11 @@ import {
 } from '@utils/utils';
 import { useGraph } from '@utils/utils';
 
-export type NodePath = {
-    node: MetadataNode;
-    key: string;
-}[];
-
 interface ViewerContextProps {
     metadata: MetadataNode;
     setMetadata: React.Dispatch<React.SetStateAction<MetadataNode>>;
     style: MetadataNode | undefined;
+    keychain: string[];
     setStyle: React.Dispatch<React.SetStateAction<MetadataNode | undefined>>;
 }
 
@@ -28,6 +24,7 @@ const context = React.createContext<ViewerContextProps>({} as ViewerContextProps
 export function ViewerContext(props: { children: React.ReactNode }) {
     const [metadata, setMetadata] = React.useState<MetadataNode>({});
     const [style, setStyle] = React.useState<MetadataNode | undefined>();
+    const [keychain, setKeychain] = React.useState<string[]>([]);
     const [graph] = useGraph();
     const models = useModels();
 
@@ -35,7 +32,6 @@ export function ViewerContext(props: { children: React.ReactNode }) {
         if (graph) {
             const metadata = extractMetadataTree(graph);
             setMetadata(metadata);
-            console.log(metadata);
         }
     }, [graph, setMetadata]);
 
@@ -44,8 +40,11 @@ export function ViewerContext(props: { children: React.ReactNode }) {
         if (!style) {
             models.forEach((model) => whiten(model));
         } else {
+            const keychain = findKeychain(metadata, style);
+            if (!keychain) return;
             if (style.values?.type === MetadataType.NUMBER)
-                colorizeNumbers(models, graph, metadata, style);
+                colorizeNumbers(models, graph, keychain, style);
+            setKeychain(keychain);
         }
     }, [style, models, graph]);
 
@@ -55,6 +54,7 @@ export function ViewerContext(props: { children: React.ReactNode }) {
                 metadata,
                 setMetadata,
                 style,
+                keychain,
                 setStyle,
             }}
         >
@@ -74,25 +74,26 @@ export function useMetadata(): [MetadataNode, React.Dispatch<React.SetStateActio
 
 export function useStyle(): [
     MetadataNode | undefined,
+    string[],
     React.Dispatch<React.SetStateAction<MetadataNode | undefined>>
 ] {
-    const { style, setStyle } = useViewerContext();
-    return [style, setStyle];
+    const { style, keychain, setStyle } = useViewerContext();
+    return [style, keychain, setStyle];
 }
 
-function findPath(node: MetadataNode, target: MetadataNode, nodeKey: string): NodePath | null {
-    if (node === target)
-        return [
-            {
-                node,
-                key: nodeKey,
-            },
-        ];
+function findKeychain(node: MetadataNode, target: MetadataNode, nodeKey?: string): string[] | null {
+    if (node === target) {
+        if (nodeKey) return [nodeKey];
+        return [];
+    }
     if (!node.children) return null;
 
     for (const [key, value] of Object.entries(node.children)) {
-        const path = findPath(value, target, key);
-        if (path) return [{ node, key: nodeKey }, ...path];
+        const path = findKeychain(value, target, key);
+        if (path) {
+            if (nodeKey) return [nodeKey, ...path];
+            return path;
+        }
     }
 
     return null;
@@ -111,14 +112,9 @@ function findLimits(values: Set<number>) {
 function colorizeNumbers(
     models: EditorModel[],
     graph: ModelGraph,
-    metadata: MetadataNode,
+    keychain: string[],
     style: MetadataNode
 ) {
-    const path = findPath(metadata, style, 'root');
-    if (!path) return;
-    const keyChain = path.map((node) => node.key);
     const [min, max] = findLimits(style.values?.values as Set<number>);
-
-    console.log(models, graph, keyChain.slice(1), min, max);
-    models.forEach((model) => colorize(model, graph, keyChain.slice(1), min, max));
+    models.forEach((model) => colorize(model, graph, keychain, min, max));
 }

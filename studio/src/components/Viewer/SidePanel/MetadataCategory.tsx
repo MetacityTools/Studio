@@ -17,7 +17,7 @@ import {
 export function MetadataCategory(props: { category: string; node: MetadataNode; depth: number }) {
     let { category, node, depth } = props;
     const [open, setOpen] = React.useState(false);
-    const [, setStyle] = useStyle();
+    const [style, keychain, setStyle] = useStyle();
 
     const categories: string[] = [category];
     while (node.children && Object.keys(node.children).length === 1) {

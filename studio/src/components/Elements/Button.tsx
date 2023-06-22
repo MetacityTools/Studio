@@ -1,8 +1,8 @@
 import clsx from 'clsx';
 import React from 'react';
 
+import { colorActive, colorBase } from './Colors';
 import { Input } from './Input';
-import { colorActive, colorBase } from './colors';
 
 interface MenuButtonProps {
     children: React.ReactNode;

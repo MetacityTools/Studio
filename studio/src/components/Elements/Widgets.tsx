@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import React from 'react';
 
-import { colorBase, colorBaseNoHover } from './colors';
+import { colorBase, colorBaseNoHover } from './Colors';
 
 export function Widget(props: { children?: React.ReactNode; onClick?: () => void }) {
     return (

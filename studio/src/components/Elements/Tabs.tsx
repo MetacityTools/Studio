@@ -2,7 +2,7 @@ import { Tab } from '@headlessui/react';
 import clsx from 'clsx';
 import React from 'react';
 
-import { colorActive, colorBase } from './colors';
+import { colorActive, colorBase } from './Colors';
 
 export function TabButton(props: { children: React.ReactNode }) {
     const base =

@@ -4,8 +4,8 @@ import { IoClose } from 'react-icons/io5';
 import { useActiveSheet, useSheets, useTables } from '@editor/EditorContext';
 import { Sheet } from '@editor/SidePanel/Tables/Tables/Sheet';
 
+import { colorActive, colorBase } from '@elements/Colors';
 import { Empty } from '@elements/Empty';
-import { colorActive, colorBase } from '@elements/colors';
 
 export function Tables() {
     const [tables] = useTables();

@@ -5,7 +5,7 @@ import { BiCube, BiCubeAlt } from 'react-icons/bi';
 
 import { EditorModel } from '@utils/utils';
 
-import { colorActive, colorBase } from '@elements/colors';
+import { colorActive, colorBase } from '@elements/Colors';
 
 interface ModelProps {
     selected: boolean;

@@ -2,8 +2,8 @@ import clsx from 'clsx';
 import React from 'react';
 import { TbHelp, TbHelpOff } from 'react-icons/tb';
 
+import { colorBase } from '@elements/Colors';
 import { MouseLeft, MouseRight, MouseWheel } from '@elements/Icons';
-import { colorBase } from '@elements/colors';
 
 function HelpItem(props: { children: React.ReactNode; last?: boolean }) {
     return (

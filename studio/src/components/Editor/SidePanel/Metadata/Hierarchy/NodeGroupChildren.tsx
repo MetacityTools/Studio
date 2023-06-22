@@ -13,7 +13,7 @@ interface GroupNodeChildrenProps extends GroupNodeProps {
 }
 
 export function GroupNodeChildren(props: GroupNodeChildrenProps) {
-    const { node, nodeToMove, nodeToLink, selectedModels } = props;
+    const { node, selectedModels } = props;
     const [countVisible, setCountVisible] = React.useState(10);
     const groups = node.children?.filter(
         (child) => child instanceof GroupNodeClass

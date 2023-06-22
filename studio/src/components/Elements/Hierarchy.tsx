@@ -8,7 +8,7 @@ import {
     colorVividActiveBorder,
     colorVividBase,
     colorVividBaseBorder,
-} from './colors';
+} from './Colors';
 
 function getNodeBackground(active: boolean, light?: boolean, inherit?: boolean) {
     if (inherit) return 'bg-transparent border-inherit text-inherit bg-inherit';

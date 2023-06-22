@@ -7,6 +7,7 @@ import { SizeGuard } from '@elements/SizeGuard';
 
 import { CanvasView } from './Canvas/CanvasView';
 import { Controls } from './Canvas/Controls';
+import { MetadataWidget } from './Canvas/MetadataWidget';
 import { MetadataHierarchy } from './SidePanel/Metadata';
 import { ViewerSplash } from './ViewerSplash';
 
@@ -21,6 +22,7 @@ export function ModelViewer() {
                 <Allotment.Pane preferredSize={1200}>
                     <CanvasView />
                     <Controls />
+                    <MetadataWidget />
                 </Allotment.Pane>
             </Allotment>
             <ProcessingScreen />
