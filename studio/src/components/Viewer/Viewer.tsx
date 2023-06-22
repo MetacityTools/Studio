@@ -5,10 +5,10 @@ import { IOMenu } from '@elements/IOMenu/IOMenu';
 import { ProcessingScreen } from '@elements/Processing';
 import { SizeGuard } from '@elements/SizeGuard';
 
-import { CanvasView } from './CanvasView';
-import { MetadataHierarchy } from './Metadata/Metadata';
-import { SpashScreen } from './Splash';
-import { Controls } from './ViewerControls';
+import { CanvasView } from './Canvas/CanvasView';
+import { Controls } from './Canvas/Controls';
+import { MetadataHierarchy } from './SidePanel/Metadata';
+import { ViewerSplash } from './ViewerSplash';
 
 export function ModelViewer() {
     return (
@@ -24,7 +24,7 @@ export function ModelViewer() {
                 </Allotment.Pane>
             </Allotment>
             <ProcessingScreen />
-            <SpashScreen />
+            <ViewerSplash />
         </SizeGuard>
     );
 }

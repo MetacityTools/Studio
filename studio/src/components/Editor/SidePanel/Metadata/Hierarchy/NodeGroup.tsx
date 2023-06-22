@@ -7,7 +7,7 @@ import { VscJson } from 'react-icons/vsc';
 import { GroupNode as GroupNodeClass, SelectionType, deleteGroup, useGraph } from '@utils/utils';
 import { useSelection } from '@utils/utils';
 
-import { useEditingNode, useMovingNode } from '@editor/Context/TableContext';
+import { useEditingNode, useMovingNode } from '@editor/EditorContext';
 
 import {
     HierarchyButton,

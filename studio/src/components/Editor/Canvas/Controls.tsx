@@ -1,8 +1,8 @@
 import { DirectionControls } from '@elements/Controls/ControlsDirection';
 import { ProjectionControls } from '@elements/Controls/ControlsProjection';
+import { RendererControls } from '@elements/Controls/ControlsRenderer';
 import { SelectionControls } from '@elements/Controls/ControlsSelect';
 import { ShaderControls } from '@elements/Controls/ControlsShader';
-import { ControlsView } from '@elements/Controls/ControlsView';
 
 export function Controls() {
     return (
@@ -11,7 +11,7 @@ export function Controls() {
             <DirectionControls />
             <ShaderControls />
             <SelectionControls />
-            <ControlsView />
+            <RendererControls />
         </div>
     );
 }

@@ -2,7 +2,7 @@ import { AiOutlineCheckCircle, AiOutlineClockCircle, AiOutlineCloseCircle } from
 
 import { createGroup, useGraph, useSelectedModels } from '@utils/utils';
 
-import { useMovingNode, useStatus } from '@editor/Context/TableContext';
+import { useMovingNode, useStatus } from '@editor/EditorContext';
 
 import { Button } from '@elements/Button';
 

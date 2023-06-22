@@ -10,7 +10,7 @@ import { DialogOption, OverlayDialog } from '@elements/Dialog';
 
 import splash from '@assets/bubny.png';
 
-export function SpashScreen() {
+export function EditorSpash() {
     let [isOpen, setIsOpen] = React.useState(true);
 
     function closeModal() {

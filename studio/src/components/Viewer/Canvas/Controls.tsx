@@ -1,17 +1,8 @@
-import clsx from 'clsx';
-import React from 'react';
-import { VscFolderOpened } from 'react-icons/vsc';
-
-import { CoordinateMode, load, useCreateModels } from '@utils/utils';
-
-import { ButtonFileInput } from '@elements/Button';
-import { MenuButton, MenuGroup, getMenuButtonStyle } from '@elements/Button';
-import { useLoadingStatus, useProcessing } from '@elements/Context';
 import { DirectionControls } from '@elements/Controls/ControlsDirection';
 import { ProjectionControls } from '@elements/Controls/ControlsProjection';
+import { RendererControls } from '@elements/Controls/ControlsRenderer';
 import { SelectionControls } from '@elements/Controls/ControlsSelect';
 import { ShaderControls } from '@elements/Controls/ControlsShader';
-import { ControlsView } from '@elements/Controls/ControlsView';
 
 export function Controls() {
     return (
@@ -20,7 +11,7 @@ export function Controls() {
             <DirectionControls />
             <ShaderControls />
             <SelectionControls />
-            <ControlsView />
+            <RendererControls />
         </div>
     );
 }

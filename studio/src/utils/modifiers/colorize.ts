@@ -24,6 +24,7 @@ export function colorize(
         nshades: 10,
         format: 'float',
     }).map((c) => vec3.fromValues(c[0], c[1], c[2]));
+
     model.setColorMap(normalizedValues, cm);
 }
 

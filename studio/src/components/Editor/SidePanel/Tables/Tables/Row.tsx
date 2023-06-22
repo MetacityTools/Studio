@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import { BiCopy } from 'react-icons/bi';
 
-import { useActiveSheet, useRowTypes, useTables } from '@editor/Context/TableContext';
+import { useActiveSheet, useRowTypes, useTables } from '@editor/EditorContext';
 
 interface TableRowProps {
     index: number;

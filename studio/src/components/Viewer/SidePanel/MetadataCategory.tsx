@@ -1,10 +1,9 @@
-import clsx from 'clsx';
 import React from 'react';
 import { BsChevronRight } from 'react-icons/bs';
-import { FiChevronRight } from 'react-icons/fi';
-import { VscJson } from 'react-icons/vsc';
 
-import { MetadataNode, MetadataType } from '@utils/types';
+import { MetadataNode } from '@utils/types';
+
+import { useStyle } from '@viewer/ViewerContext';
 
 import {
     HierarchyBracketsButton,
@@ -15,11 +14,10 @@ import {
     HierarchyNodeGroupChildren,
 } from '@elements/Hierarchy';
 
-import { MetadataValueMixed, MetadataValueNumbers, MetadataValueStrings } from './MetadataValues';
-
 export function MetadataCategory(props: { category: string; node: MetadataNode; depth: number }) {
     let { category, node, depth } = props;
     const [open, setOpen] = React.useState(false);
+    const [, setStyle] = useStyle();
 
     const categories: string[] = [category];
     while (node.children && Object.keys(node.children).length === 1) {
@@ -30,6 +28,11 @@ export function MetadataCategory(props: { category: string; node: MetadataNode; 
 
     const handleOpen = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         setOpen(!open);
+        e.stopPropagation();
+    };
+
+    const handleUseStyle = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        setStyle(node);
         e.stopPropagation();
     };
 
@@ -46,13 +49,15 @@ export function MetadataCategory(props: { category: string; node: MetadataNode; 
                         inheritStyles
                     />
                 )}
-                {!isCategory && <HierarchyBracketsButton inheritStyles onClick={handleOpen} />}
-                <HierarchyMainButton inheritStyles onClick={handleOpen}>
+                {!isCategory && <HierarchyBracketsButton inheritStyles onClick={handleUseStyle} />}
+                <HierarchyMainButton
+                    inheritStyles
+                    onClick={isCategory ? handleOpen : handleUseStyle}
+                >
                     <MetadataCategoryButtonContent categories={categories} />
                 </HierarchyMainButton>
             </HierarchyNode>
             {open && <MetadataCategoryChildren node={node} depth={depth + 1} />}
-            {open && <MetadataCategoryValues node={node} />}
         </HierarchyNodeGroup>
     );
 }
@@ -86,22 +91,5 @@ export function MetadataCategoryChildren(props: { node: MetadataNode; depth: num
                     return <MetadataCategory category={key} key={key} node={value} depth={depth} />;
                 })}
         </HierarchyNodeGroupChildren>
-    );
-}
-
-export function MetadataCategoryValues(props: { node: MetadataNode }) {
-    const { node } = props;
-    if (!node.values) return null;
-
-    return (
-        <>
-            {node.values.type === MetadataType.STRING && (
-                <MetadataValueStrings values={props.node.values} />
-            )}
-            {node.values.type === MetadataType.NUMBER && <MetadataValueNumbers node={props.node} />}
-            {node.values.type === MetadataType.MIXED && (
-                <MetadataValueMixed values={props.node.values} />
-            )}
-        </>
     );
 }

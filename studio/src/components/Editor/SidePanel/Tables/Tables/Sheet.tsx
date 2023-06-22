@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { useActiveSheet, useTables } from '@editor/Context/TableContext';
+import { useActiveSheet, useTables } from '@editor/EditorContext';
 
 import { TableRow } from './Row';
 

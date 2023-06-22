@@ -6,7 +6,7 @@ import { VscJson } from 'react-icons/vsc';
 import { ModelNode as ModelNodeClass, SelectionType } from '@utils/utils';
 import { useSelection } from '@utils/utils';
 
-import { useEditingNode, useMovingNode } from '@editor/Context/TableContext';
+import { useEditingNode, useMovingNode } from '@editor/EditorContext';
 
 import { HierarchyButton, HierarchyMainButton, HierarchyNode } from '@elements/Hierarchy';
 import { If } from '@elements/If';

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { useSheets } from '@editor/Context/TableContext';
+import { useSheets } from '@editor/EditorContext';
 
 import { ButtonFileInput } from '@elements/Button';
 

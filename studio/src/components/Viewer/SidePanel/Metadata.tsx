@@ -2,7 +2,9 @@ import { useMetadata } from '@viewer/ViewerContext';
 
 import { Empty } from '@elements/Empty';
 
-import { MetadataCategory, MetadataCategoryChildren } from './MetadataCategory';
+import { MetadataCategory } from './MetadataCategory';
+
+export const rootNodeLabel = 'Metadata';
 
 export function MetadataHierarchy() {
     const [metadata] = useMetadata();
@@ -16,7 +18,7 @@ export function MetadataHierarchy() {
     return (
         <div className="flex-1 h-full w-full relative border-t">
             <div className="absolute h-full w-full overflow-auto p-4">
-                <MetadataCategory category="Attributes" node={metadata} depth={0} />
+                <MetadataCategory category={rootNodeLabel} node={metadata} depth={0} />
             </div>
         </div>
     );

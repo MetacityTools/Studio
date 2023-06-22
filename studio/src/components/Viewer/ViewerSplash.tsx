@@ -5,7 +5,7 @@ import { DialogOption, OverlayDialog } from '@elements/Dialog';
 
 import splash from '@assets/viewer.png';
 
-export function SpashScreen() {
+export function ViewerSplash() {
     let [isOpen, setIsOpen] = React.useState(true);
 
     function closeModal() {

@@ -5,7 +5,7 @@ import { useRenderer, useScene } from '@utils/utils';
 
 import * as GL from '@bananagl/bananagl';
 
-export function CanvasView() {
+export function CanvasComponent() {
     const canvasRef = React.useRef<HTMLCanvasElement>(null);
     const scene = useScene();
     const renderer = useRenderer();
@@ -50,9 +50,5 @@ export function CanvasView() {
         }
     }, [renderer, scene]);
 
-    return (
-        <>
-            <Canvas canvasRef={canvasRef} />
-        </>
-    );
+    return <Canvas canvasRef={canvasRef} />;
 }

@@ -4,9 +4,11 @@ import 'allotment/dist/style.css';
 import { ProcessingScreen } from '@elements/Processing';
 import { SizeGuard } from '@elements/SizeGuard';
 
-import { CanvasView } from './Canvas/CanvasView';
+import { CanvasComponent } from './Canvas/CanvasComponent';
+import { Controls } from './Canvas/Controls';
+import { Help } from './Canvas/Help';
+import { EditorSpash } from './EditorSplash';
 import { SidePanel } from './SidePanel/SidePanel';
-import { SpashScreen } from './Utils/Splash';
 
 export function ModelEditor() {
     return (
@@ -14,7 +16,9 @@ export function ModelEditor() {
             <div className="w-full h-full">
                 <Allotment separator={false}>
                     <Allotment.Pane minSize={200} className="bg-neutral-100">
-                        <CanvasView />
+                        <CanvasComponent />
+                        <Help />
+                        <Controls />
                     </Allotment.Pane>
                     <Allotment.Pane
                         minSize={500}
@@ -26,7 +30,7 @@ export function ModelEditor() {
                 </Allotment>
             </div>
             <ProcessingScreen />
-            <SpashScreen />
+            <EditorSpash />
         </SizeGuard>
     );
 }

@@ -1,7 +1,7 @@
 import Editor from '@monaco-editor/react';
 import React from 'react';
 
-import { useEditingNode, useStatus } from '@editor/Context/TableContext';
+import { useEditingNode, useStatus } from '@editor/EditorContext';
 
 import { Empty } from '@elements/Empty';
 

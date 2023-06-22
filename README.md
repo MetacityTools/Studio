@@ -55,6 +55,7 @@ These features are planned for the future, but not yet scheduled.
 -   [ ] Optimize deleting models - partition model BVH nodes based on submodels's ids
 -   [ ] Named groups in hierarchy
 -   [ ] Insert textured plane (location blueprints for reference)
+-   [ ] Refactor General context - setting status messages, etc.
 
 ### Bugs and Validations
 
@@ -91,7 +92,6 @@ These features are planned for the future, and scheduled for a specific release.
 -   [ ] Level control - showing grouped models based on group level
 -   [ ] Export screenshot action
 -   [ ] Move metadata layer styling up and down (in view controls)
--   [ ]
 
 ### v0.3.2 - ✅ Released
 

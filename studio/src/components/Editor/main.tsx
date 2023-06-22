@@ -9,8 +9,8 @@ import { ErrorPage } from '@elements/Error';
 
 import '@assets/index.css';
 
-import { TablesContext } from './Context/TableContext';
 import { ModelEditor } from './Editor';
+import { EditorContext } from './EditorContext';
 
 const router = createBrowserRouter([
     {
@@ -24,9 +24,9 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     <React.StrictMode>
         <GeneralContext>
             <ViewContext>
-                <TablesContext>
+                <EditorContext>
                     <RouterProvider router={router} />
-                </TablesContext>
+                </EditorContext>
             </ViewContext>
         </GeneralContext>
     </React.StrictMode>

@@ -4,11 +4,11 @@ import { MdOutlineClose } from 'react-icons/md';
 
 import { MenuButton, MenuGroup } from '@elements/Button';
 
-import { CameraGroundWidget } from '../../Editor/Canvas/WidgetCameraGround';
-import { ShadingWidget } from '../../Editor/Canvas/WidgetShading';
-import { ShowGridWidget } from '../../Editor/Canvas/WidgetShowGrid';
+import { CameraGroundWidget } from './WidgetCameraGround';
+import { ShadingWidget } from './WidgetShading';
+import { ShowGridWidget } from './WidgetShowGrid';
 
-export function ControlsView() {
+export function RendererControls() {
     const [open, setOpen] = React.useState(false);
 
     return (

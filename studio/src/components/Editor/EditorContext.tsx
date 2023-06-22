@@ -2,7 +2,7 @@ import React from 'react';
 
 import { GroupNode, Node, Tables, useGraph } from '@utils/utils';
 
-interface TablesContextProps {
+interface EditorContextProps {
     nodeToMove: Node | undefined;
     setNodeToMove: React.Dispatch<React.SetStateAction<Node | undefined>>;
     nodeToEdit: Node | undefined;
@@ -15,9 +15,9 @@ interface TablesContextProps {
     setStatus: React.Dispatch<React.SetStateAction<'editing' | 'saved' | 'failed' | undefined>>;
 }
 
-const context = React.createContext<TablesContextProps>({} as TablesContextProps);
+const context = React.createContext<EditorContextProps>({} as EditorContextProps);
 
-export function TablesContext(props: { children: React.ReactNode }) {
+export function EditorContext(props: { children: React.ReactNode }) {
     const [nodeToMove, setNodeToMove] = React.useState<Node | undefined>();
     const [nodeToEdit, setNodeToEdit] = React.useState<Node | undefined>();
     const [tables, setTables] = React.useState<Tables>(new Tables([]));
@@ -44,7 +44,7 @@ export function TablesContext(props: { children: React.ReactNode }) {
     );
 }
 
-export function useTablesContext(): TablesContextProps {
+export function useTablesContext(): EditorContextProps {
     return React.useContext(context);
 }
 

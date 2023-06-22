@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import { IoClose } from 'react-icons/io5';
 
-import { useActiveSheet, useSheets, useTables } from '@editor/Context/TableContext';
+import { useActiveSheet, useSheets, useTables } from '@editor/EditorContext';
 import { Sheet } from '@editor/SidePanel/Tables/Tables/Sheet';
 
 import { Empty } from '@elements/Empty';
