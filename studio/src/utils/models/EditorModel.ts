@@ -1,10 +1,9 @@
 import { vec3 } from 'gl-matrix';
 
+import { linearInterpolateColor } from '@utils/modifiers/color';
 import { GeometryMode, PrimitiveType } from '@utils/types';
 
 import * as GL from '@bananagl/bananagl';
-
-import { linearInterpolateColor } from './color';
 
 export class EditorModel extends GL.Pickable implements GL.Selectable {
     public name = 'Default Model Name';
