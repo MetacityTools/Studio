@@ -5,9 +5,9 @@ import { useRenderer, useScene } from '@utils/utils';
 
 import * as GL from '@bananagl/bananagl';
 
+import { Settings } from '../../Elements/Controls/ControlsView';
 import { Controls } from './Controls';
 import { Help } from './Help';
-import { Settings } from './Settings';
 
 export function CanvasView() {
     const canvasRef = React.useRef<HTMLCanvasElement>(null);
@@ -59,7 +59,6 @@ export function CanvasView() {
             <Canvas canvasRef={canvasRef} />
             <Help />
             <Controls />
-            <Settings />
         </>
     );
 }

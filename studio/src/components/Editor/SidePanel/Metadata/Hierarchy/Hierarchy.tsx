@@ -8,7 +8,7 @@ export function Hierarchy() {
 
     return (
         <div className="flex flex-col w-full h-full">
-            <div className="flex flex-col flex-grow overflow-y-auto p-4 px-4">
+            <div className="overflow-y-auto p-4">
                 <GroupNode node={graph.root} selectedModels={selectedModels} />
             </div>
         </div>

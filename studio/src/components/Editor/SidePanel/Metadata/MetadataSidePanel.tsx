@@ -7,18 +7,21 @@ import { MetadataMenu } from './MetadataMenu';
 
 export function MetadataSidePanel() {
     return (
-        <>
+        <div className="w-full h-full flex flex-col">
             <MetadataMenu />
-            <Allotment separator={false}>
-                <Allotment.Pane minSize={200} preferredSize={300}>
-                    <Hierarchy />
-                </Allotment.Pane>
-                <Allotment.Pane minSize={400} className="flex flex-col border-l border-neutral-200">
-                    <MetaEditor />
-                </Allotment.Pane>
-            </Allotment>
-        </>
+            <div className="flex-1">
+                <Allotment separator={false}>
+                    <Allotment.Pane preferredSize={400} minSize={300}>
+                        <Hierarchy />
+                    </Allotment.Pane>
+                    <Allotment.Pane
+                        preferredSize={800}
+                        className="flex flex-col border-l border-neutral-200"
+                    >
+                        <MetaEditor />
+                    </Allotment.Pane>
+                </Allotment>
+            </div>
+        </div>
     );
 }
-
-//<TableMenu />

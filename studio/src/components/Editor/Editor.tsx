@@ -17,8 +17,8 @@ export function ModelEditor() {
                         <CanvasView />
                     </Allotment.Pane>
                     <Allotment.Pane
-                        minSize={450}
-                        preferredSize={450}
+                        minSize={500}
+                        preferredSize={500}
                         className="border-l border-neutral-200"
                     >
                         <SidePanel />

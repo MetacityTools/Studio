@@ -45,7 +45,7 @@ export function ModelNode(props: ModelNodeProps) {
     const light = isSelected || isMoving || isLinking;
 
     return (
-        <HierarchyNode>
+        <HierarchyNode active={light}>
             <HierarchyMainButton onClick={handleSelect} light={light} active={isSelected} padded>
                 Model {node.submodelId}
             </HierarchyMainButton>

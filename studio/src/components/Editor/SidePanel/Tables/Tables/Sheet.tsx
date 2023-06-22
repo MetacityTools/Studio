@@ -12,6 +12,8 @@ export function Sheet() {
     const sheet = tables.getSheet(activeSheet);
     const rowTypes = tables.getSheetRowTypes(activeSheet);
 
+    if (tables.empty) return null;
+
     return (
         <table className="table-fixed border-separate border-spacing-0">
             <thead>

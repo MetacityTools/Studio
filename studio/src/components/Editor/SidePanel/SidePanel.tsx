@@ -11,7 +11,7 @@ import { TransformSidePanel } from './Transform/TransformSidePanel';
 
 export function SidePanel() {
     return (
-        <div className="bg-white w-full h-full flex flex-col">
+        <div className="bg-white w-full h-screen flex flex-col">
             <IOMenu />
             <Tab.Group>
                 <TabList>
@@ -25,7 +25,7 @@ export function SidePanel() {
                         <VscTable className="mr-2" /> Tables
                     </TabButton>
                 </TabList>
-                <Tab.Panels className="w-full flex-1">
+                <Tab.Panels className="w-full h-full flex-1">
                     <TabPanel>
                         <TransformSidePanel />
                     </TabPanel>

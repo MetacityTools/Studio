@@ -1,12 +1,18 @@
 import clsx from 'clsx';
 import { FiChevronRight } from 'react-icons/fi';
 
+import {
+    colorLightActive,
+    colorVividActive,
+    colorVividActiveBorder,
+    colorVividBase,
+    colorVividBaseBorder,
+} from './colors';
+
 function getNodeBackground(active: boolean, light?: boolean) {
-    if (active)
-        return 'text-amber-800 bg-amber-300 enabled:hover:bg-amber-400 outline-none transition-colors';
-    if (light)
-        return 'text-amber-800 bg-amber-100 enabled:hover:bg-amber-400 outline-none transition-colors';
-    return 'text-neutral-800 bg-neutral-200 enabled:hover:bg-neutral-300 outline-none transition-colors';
+    if (active) return colorVividActive;
+    if (light) return colorLightActive;
+    return colorVividBase;
 }
 
 export type ButtonHandler = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
@@ -29,7 +35,7 @@ export function HierarchyButton(props: HierarchyButtonProps) {
 
     return (
         <button
-            className={clsx(bg, 'px-4 py-2 last:rounded-r')}
+            className={clsx(bg, 'px-4 py-2 border-y last:border-r last:rounded-r')}
             onClick={props.onClick}
             title={props.title}
             disabled={disabled}
@@ -48,7 +54,7 @@ export function HierarchyChevronButton(props: HierarchyChevronButtonProps) {
 
     return (
         <button
-            className={clsx('px-2 py-2 rounded-l', bg)}
+            className={clsx('px-2 py-2 rounded-l border-y border-l', bg)}
             onClick={props.onClick}
             title={props.title}
         >
@@ -70,7 +76,7 @@ export function HierarchyMainButton(props: HierarchyMainButtonProps) {
         <button
             className={clsx(
                 props.padded ? 'px-4' : 'px-2',
-                'flex-1 text-left first:rounded-l text-ellipsis overflow-hidden whitespace-nowrap last:rounded-r',
+                'flex-1 text-left first:rounded-l border-y first:border-l text-ellipsis overflow-hidden whitespace-nowrap last:rounded-r',
                 bg
             )}
             onClick={props.onClick}
@@ -80,12 +86,22 @@ export function HierarchyMainButton(props: HierarchyMainButtonProps) {
     );
 }
 
-interface HierarchyNodeRowProps {
+interface HierarchyNodeProps {
     children: React.ReactNode;
+    active?: boolean;
 }
 
-export function HierarchyNode(props: HierarchyNodeRowProps) {
-    return <div className="flex flex-row justify-between items-center">{props.children}</div>;
+export function HierarchyNode(props: HierarchyNodeProps) {
+    return (
+        <div
+            className={clsx(
+                'flex flex-row justify-between items-center',
+                props.active ? colorVividActiveBorder : colorVividBaseBorder
+            )}
+        >
+            {props.children}
+        </div>
+    );
 }
 
 interface HierarchyNodeGroupProps {

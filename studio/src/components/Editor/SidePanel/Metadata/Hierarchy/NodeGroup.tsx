@@ -73,7 +73,7 @@ export function GroupNode(props: GroupNodeProps) {
     const light = isSelected || isMoving || isLinking;
     return (
         <HierarchyNodeGroup>
-            <HierarchyNode>
+            <HierarchyNode active={light}>
                 <HierarchyChevronButton
                     open={open}
                     onClick={handleOpen}
