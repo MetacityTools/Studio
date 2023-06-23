@@ -1,6 +1,6 @@
-import { useSelectedModels } from '@utils/utils';
-
 import { Empty } from '@elements/Empty';
+
+import { useSelectedModels } from '@shared/Context/hooks';
 
 import { DeleteModelWidget } from './WidgetDeleteModel';
 import { DeleteSubmodelsWidget } from './WidgetDeleteSubmodels';

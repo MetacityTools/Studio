@@ -1,11 +1,9 @@
-import React from 'react';
 import { MdHeight } from 'react-icons/md';
-
-import { EditorModel } from '@utils/utils';
-import { useScene, useShadeRange } from '@utils/utils';
 
 import { Range } from '@elements/Range';
 import { Widget, WidgetDescription, WidgetLine, WidgetTitle } from '@elements/Widgets';
+
+import { useScene, useShadeRange } from '@shared/Context/hooks';
 
 export function ShadingWidget() {
     const scene = useScene();

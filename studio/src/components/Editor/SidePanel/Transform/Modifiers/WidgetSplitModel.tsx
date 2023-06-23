@@ -1,9 +1,9 @@
 import { TbLayersIntersect } from 'react-icons/tb';
 
-import { useSelectedModels, useSplitModel } from '@utils/utils';
-
 import { useProcessing } from '@elements/Context';
 import { Widget, WidgetDescription, WidgetLine, WidgetTitle } from '@elements/Widgets';
+
+import { useSelectedModels, useSplitModel } from '@shared/Context/hooks';
 
 import { WidgetProps } from './Widget';
 

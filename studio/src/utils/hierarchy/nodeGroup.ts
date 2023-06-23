@@ -1,7 +1,6 @@
-import { SelectionType } from '@utils/components/Context';
 import { EditorModel, HierarchyGroupNode, HierarchyModelNode } from '@utils/utils';
 
-import { Node } from './node';
+import { Node, SelectionType } from './node';
 import { ModelNode } from './nodeModel';
 
 export class GroupNode extends Node {

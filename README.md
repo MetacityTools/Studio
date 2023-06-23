@@ -56,6 +56,7 @@ These features are planned for the future, but not yet scheduled.
 -   [ ] Named groups in hierarchy
 -   [ ] Insert textured plane (location blueprints for reference)
 -   [ ] Refactor General context - setting status messages, etc.
+-   [ ] Add a button to open/hide the side panel
 
 ### Bugs and Validations
 

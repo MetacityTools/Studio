@@ -1,18 +1,11 @@
 import * as React from 'react';
 
-import {
-    CoordinateMode,
-    ModelData,
-    load,
-    useCreateModels,
-    useExport,
-    useRenderer,
-    useScene,
-} from '@utils/utils';
+import { CoordinateMode, ModelData, load } from '@utils/utils';
 
 import { Button, ButtonFileInput } from '@elements/Button';
 import { useLoadingStatus, useProcessing } from '@elements/Context';
 
+import { useCreateModels, useExport, useRenderer, useScene } from '@shared/Context/hooks';
 import { Vitals } from '@shared/IOMenu/Vitals';
 
 import { ImportDialog } from './DialogImport';

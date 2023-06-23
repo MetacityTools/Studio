@@ -1,4 +1,4 @@
-import { useGraph, useSelectedModels } from '@utils/utils';
+import { useGraph, useSelectedModels } from '@shared/Context/hooks';
 
 import { GroupNode } from './NodeGroup';
 

@@ -1,6 +1,5 @@
 import React from 'react';
 import { GoSettings } from 'react-icons/go';
-import { MdOutlineClose } from 'react-icons/md';
 
 import { MenuButton, MenuGroup } from '@elements/Button';
 

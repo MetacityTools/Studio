@@ -1,7 +1,8 @@
 import React from 'react';
 
 import { MetadataNode } from '@utils/types';
-import { useGraph } from '@utils/utils';
+
+import { useGraph } from '@shared/Context/hooks';
 
 interface ViewerContextProps {
     style: MetadataNode | undefined;

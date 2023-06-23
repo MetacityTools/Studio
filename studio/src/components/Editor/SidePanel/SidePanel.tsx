@@ -22,7 +22,7 @@ export function SidePanel() {
                         <VscMove className="mr-2" /> Transform
                     </TabButton>
                     <TabButton>
-                        <VscJson className="mr-2" /> Metadata
+                        <VscJson className="mr-2" /> Groups &amp; Meta
                     </TabButton>
                     <TabButton>
                         <VscTable className="mr-2" /> Tables

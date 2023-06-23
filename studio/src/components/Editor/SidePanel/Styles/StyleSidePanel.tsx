@@ -16,7 +16,7 @@ export function StyleSidePanel() {
         <ColumnContainer>
             <StretchContainer>
                 <Allotment separator={false}>
-                    <Allotment.Pane preferredSize={400} minSize={300}>
+                    <Allotment.Pane preferredSize={400} minSize={250}>
                         <OverflowContainer className="p-4">
                             <MetadataHierarchy onValuePick={onValuePick} />
                         </OverflowContainer>

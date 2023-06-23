@@ -1,10 +1,12 @@
 import { AiOutlineCheckCircle, AiOutlineClockCircle, AiOutlineCloseCircle } from 'react-icons/ai';
 
-import { createGroup, useGraph, useSelectedModels } from '@utils/utils';
+import { createGroup } from '@utils/utils';
 
 import { useMovingNode, useStatus } from '@editor/EditorContext';
 
 import { Button } from '@elements/Button';
+
+import { useGraph, useSelectedModels } from '@shared/Context/hooks';
 
 export function GroupMenu() {
     const selection = useSelectedModels();

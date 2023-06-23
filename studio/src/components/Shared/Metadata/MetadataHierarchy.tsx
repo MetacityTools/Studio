@@ -1,7 +1,8 @@
 import { MetadataNode } from '@utils/types';
-import { useMetadata } from '@utils/utils';
 
 import { Empty } from '@elements/Empty';
+
+import { useMetadata } from '@shared/Context/hooks';
 
 import { MetadataNodeComponent } from './MetadataNode';
 

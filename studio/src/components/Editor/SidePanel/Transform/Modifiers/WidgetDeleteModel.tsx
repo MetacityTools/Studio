@@ -1,8 +1,8 @@
 import { FiDelete } from 'react-icons/fi';
 
-import { useRemoveModels } from '@utils/utils';
-
 import { Widget, WidgetDescription, WidgetLine, WidgetTitle } from '@elements/Widgets';
+
+import { useRemoveModels } from '@shared/Context/hooks';
 
 import { WidgetProps } from './Widget';
 

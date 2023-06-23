@@ -11,10 +11,11 @@ import { joinSubmodels } from '@utils/modifiers/joinSubmodels';
 import { removeSubmodels } from '@utils/modifiers/removeSubmodels';
 import { splitModel } from '@utils/modifiers/splitModels';
 import { MetadataNode, PrimitiveType } from '@utils/types';
+import { SelectionType } from '@utils/utils';
 
 import * as GL from '@bananagl/bananagl';
 
-import { SelectFunction, SelectionType, context } from './Context';
+import { SelectFunction, context } from './Context';
 import { changeSelection } from './selection';
 
 export function useActiveView(): number {

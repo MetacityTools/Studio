@@ -1,10 +1,13 @@
 import { vec3 } from 'gl-matrix';
 import React from 'react';
 
-import { ModelGraph } from '@utils/hierarchy/graph';
-import { EditorModel } from '@utils/models/EditorModel';
-import { extractMetadataTree } from '@utils/styles/metadata';
-import { MetadataNode } from '@utils/types';
+import {
+    EditorModel,
+    MetadataNode,
+    ModelGraph,
+    SelectionType,
+    extractMetadataTree,
+} from '@utils/utils';
 
 import * as GL from '@bananagl/bananagl';
 
@@ -17,8 +20,6 @@ import * as GL from '@bananagl/bananagl';
  * @returns void
  */
 export type SelectFunction = (selection: SelectionType, toggle?: boolean, extend?: boolean) => void;
-
-export type SelectionType = Map<EditorModel, Set<number>>;
 
 interface ViewContextProps {
     scene: GL.Scene;
@@ -99,6 +100,8 @@ export function ViewContext(props: { children: React.ReactNode }) {
             const updated = new ModelGraph();
             updated.copy(graph);
             setGraph(updated);
+            const metadata = extractMetadataTree(updated);
+            setMetadata(metadata);
         });
     }, [graph]);
 
@@ -126,13 +129,6 @@ export function ViewContext(props: { children: React.ReactNode }) {
         const view = renderer.views[activeView].view;
         view.camera.z = camTargetZ;
     }, [activeView, renderer, camTargetZ]);
-
-    React.useEffect(() => {
-        if (graph) {
-            const metadata = extractMetadataTree(graph);
-            setMetadata(metadata);
-        }
-    }, [graph, setMetadata]);
 
     return (
         <context.Provider

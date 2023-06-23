@@ -1,7 +1,9 @@
-import { EditorModel, useModels, useSelection } from '@utils/utils';
+import { EditorModel } from '@utils/utils';
 
 import { ColumnContainer, OverflowContainer } from '@elements/Containers';
 import { Empty } from '@elements/Empty';
+
+import { useModels, useSelection } from '@shared/Context/hooks';
 
 import { Model } from './Model';
 

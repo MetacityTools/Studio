@@ -1,9 +1,11 @@
 import React from 'react';
 
-import { Canvas, addGridModel } from '@utils/utils';
-import { useRenderer, useScene } from '@utils/utils';
+import { addGridModel } from '@utils/utils';
 
 import * as GL from '@bananagl/bananagl';
+
+import { Canvas } from './Canvas';
+import { useRenderer, useScene } from './Context/hooks';
 
 export function CanvasComponent() {
     const canvasRef = React.useRef<HTMLCanvasElement>(null);

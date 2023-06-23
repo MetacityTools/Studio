@@ -1,9 +1,9 @@
 import React from 'react';
 import { MdDeselect } from 'react-icons/md';
 
-import { useSelection } from '@utils/utils';
-
 import { MenuButton, MenuGroup } from '@elements/Button';
+
+import { useSelection } from '@shared/Context/hooks';
 
 export function SelectionControls() {
     const [select] = useSelection();

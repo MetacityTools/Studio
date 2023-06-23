@@ -1,6 +1,8 @@
 import React from 'react';
 
-import { GroupNode, Node, Tables, useGraph } from '@utils/utils';
+import { GroupNode, Node, Tables } from '@utils/utils';
+
+import { useGraph } from '@shared/Context/hooks';
 
 interface EditorContextProps {
     nodeToMove: Node | undefined;

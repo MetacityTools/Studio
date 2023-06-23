@@ -48,10 +48,12 @@ export function MetadataCategory(props: MetadataCategoryProps) {
 
 export function MetadataCategoryChildren(props: MetadataCategoryProps) {
     const { node, onValuePick } = props;
-    return (
-        <HierarchyNodeGroupChildren>
-            {node.children &&
-                Object.entries(node.children).map(([key, value]) => {
+
+    if (node.children) {
+        const sortedEntires = Object.entries(node.children).sort(([a], [b]) => a.localeCompare(b));
+        return (
+            <HierarchyNodeGroupChildren>
+                {sortedEntires.map(([key, value]) => {
                     return (
                         <MetadataNodeComponent
                             onValuePick={onValuePick}
@@ -61,6 +63,9 @@ export function MetadataCategoryChildren(props: MetadataCategoryProps) {
                         />
                     );
                 })}
-        </HierarchyNodeGroupChildren>
-    );
+            </HierarchyNodeGroupChildren>
+        );
+    }
+
+    return null;
 }

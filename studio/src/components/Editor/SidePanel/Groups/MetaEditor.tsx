@@ -1,11 +1,11 @@
 import Editor from '@monaco-editor/react';
 import React from 'react';
 
-import { useGraph } from '@utils/utils';
-
 import { useEditingNode, useStatus } from '@editor/EditorContext';
 
 import { Empty } from '@elements/Empty';
+
+import { useGraph } from '@shared/Context/hooks';
 
 export function MetaEditor() {
     const [nodeToLink] = useEditingNode();

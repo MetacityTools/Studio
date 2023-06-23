@@ -4,8 +4,7 @@ import { FiDelete } from 'react-icons/fi';
 import { MdDriveFileMoveRtl, MdOutlineDriveFileMove } from 'react-icons/md';
 import { VscJson } from 'react-icons/vsc';
 
-import { GroupNode as GroupNodeClass, SelectionType, deleteGroup, useGraph } from '@utils/utils';
-import { useSelection } from '@utils/utils';
+import { GroupNode as GroupNodeClass, SelectionType, deleteGroup } from '@utils/utils';
 
 import { useEditingNode, useMovingNode } from '@editor/EditorContext';
 
@@ -17,6 +16,8 @@ import {
     HierarchyNodeGroup,
 } from '@elements/Hierarchy';
 import { If } from '@elements/If';
+
+import { useGraph, useSelection } from '@shared/Context/hooks';
 
 import { GroupNodeChildren } from './NodeGroupChildren';
 
@@ -126,7 +127,7 @@ export function GroupNode(props: GroupNodeProps) {
                         active={isLinking}
                         light={light}
                         onClick={handleLink}
-                        title="Link to selected rows in table"
+                        title="Open metadata in editor"
                     >
                         <VscJson />
                     </HierarchyButton>

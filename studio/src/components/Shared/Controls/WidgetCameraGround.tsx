@@ -1,9 +1,9 @@
 import { TbCircuitGround } from 'react-icons/tb';
 
-import { useCameraZ } from '@utils/utils';
-
 import { Range } from '@elements/Range';
 import { Widget, WidgetDescription, WidgetLine, WidgetTitle } from '@elements/Widgets';
+
+import { useCameraZ } from '@shared/Context/hooks';
 
 export function CameraGroundWidget() {
     const [camTargetZ, setCamTargetZ] = useCameraZ();

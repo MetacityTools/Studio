@@ -1,9 +1,11 @@
 import { v4 as uuidv4 } from 'uuid';
 
-import { SelectionType } from '@utils/components/Context';
+import { EditorModel } from '@utils/models/EditorModel';
 import { HierarchyNode } from '@utils/types';
 
 import { GroupNode } from './nodeGroup';
+
+export type SelectionType = Map<EditorModel, Set<number>>;
 
 export abstract class Node {
     parent?: GroupNode;

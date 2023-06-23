@@ -6,7 +6,7 @@ import { colorActive, colorBase } from './Colors';
 
 export function TabButton(props: { children: React.ReactNode }) {
     const base =
-        'outline-none px-2 py-1 text-center transition-colors flex-1 flex flex-col items-center border-y';
+        'outline-none px-2 py-1 text-center transition-colors flex-1 flex flex-col items-center border-y overflow-hidden whitespace-nowrap overflow-ellipsis';
     return (
         <Tab
             className={({ selected }) =>

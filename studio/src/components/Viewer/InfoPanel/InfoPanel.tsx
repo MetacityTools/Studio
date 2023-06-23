@@ -1,10 +1,9 @@
 import React from 'react';
 
-import { useMetadata } from '@utils/utils';
-
 import { findKeychain } from '@viewer/Context/Utils';
 import { useStyle } from '@viewer/Context/ViewerContext';
 
+import { useMetadata } from '@shared/Context/hooks';
 import { MetadataTitle } from '@shared/Metadata/MetadataTitle';
 
 export function InfoPanel() {

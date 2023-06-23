@@ -2,12 +2,12 @@ import { vec3 } from 'gl-matrix';
 import React from 'react';
 import { TiArrowMove } from 'react-icons/ti';
 
-import { useRenderer } from '@utils/utils';
-
 import * as GL from '@bananagl/bananagl';
 
 import { Input } from '@elements/Input';
 import { Widget, WidgetDescription, WidgetLine, WidgetTitle } from '@elements/Widgets';
+
+import { useRenderer } from '@shared/Context/hooks';
 
 import { WidgetProps } from './Widget';
 

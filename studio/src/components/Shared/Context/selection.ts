@@ -1,6 +1,5 @@
 import { EditorModel } from '@utils/models/EditorModel';
-
-import { SelectionType } from './Context';
+import { SelectionType } from '@utils/utils';
 
 export function changeSelection(
     oldSelection: SelectionType,

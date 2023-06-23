@@ -1,12 +1,11 @@
-import React from 'react';
 import { MdOutlineGrid3X3 } from 'react-icons/md';
-
-import { useGridVisible, useScene } from '@utils/utils';
 
 import * as GL from '@bananagl/bananagl';
 
 import { Input } from '@elements/Input';
 import { Widget, WidgetDescription, WidgetLine, WidgetTitle } from '@elements/Widgets';
+
+import { useGridVisible, useScene } from '@shared/Context/hooks';
 
 export function ShowGridWidget() {
     const scene = useScene();

@@ -4,12 +4,13 @@ import { MdOutlineDriveFileMove } from 'react-icons/md';
 import { VscJson } from 'react-icons/vsc';
 
 import { ModelNode as ModelNodeClass, SelectionType } from '@utils/utils';
-import { useSelection } from '@utils/utils';
 
 import { useEditingNode, useMovingNode } from '@editor/EditorContext';
 
 import { HierarchyButton, HierarchyMainButton, HierarchyNode } from '@elements/Hierarchy';
 import { If } from '@elements/If';
+
+import { useSelection } from '@shared/Context/hooks';
 
 type ModelNodeProps = {
     selectedModels: SelectionType;
@@ -74,7 +75,7 @@ export function ModelNode(props: ModelNodeProps) {
                     active={isLinking}
                     light={light}
                     onClick={handleLink}
-                    title="Link to selected rows in table"
+                    title="Open metadata in editor"
                 >
                     <VscJson />
                 </HierarchyButton>

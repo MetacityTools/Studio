@@ -2,10 +2,11 @@ import React from 'react';
 import { TbVectorTriangle } from 'react-icons/tb';
 
 import { EditorModel, GeometryMode } from '@utils/utils';
-import { useScene } from '@utils/utils';
 
 import { MenuButton, MenuGroup } from '@elements/Button';
 import { TriangleFull, TriangleFullFilled } from '@elements/Icons';
+
+import { useScene } from '@shared/Context/hooks';
 
 export function ShaderControls() {
     const [geometryMode, setGeometryMode] = React.useState<GeometryMode>(GeometryMode.SOLID);

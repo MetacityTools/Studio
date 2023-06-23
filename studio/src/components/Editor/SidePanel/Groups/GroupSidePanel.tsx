@@ -13,7 +13,7 @@ export function GroupSidePanel() {
             <GroupMenu />
             <StretchContainer>
                 <Allotment separator={false}>
-                    <Allotment.Pane preferredSize={400} minSize={300}>
+                    <Allotment.Pane preferredSize={400} minSize={250}>
                         <OverflowContainer className="p-4">
                             <GroupHierarchy />
                         </OverflowContainer>
