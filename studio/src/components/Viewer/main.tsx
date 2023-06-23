@@ -9,8 +9,8 @@ import { ErrorPage } from '@elements/Error';
 
 import '@assets/index.css';
 
+import { ViewerContext } from './Context/ViewerContext';
 import { ModelViewer } from './Viewer';
-import { ViewerContext } from './ViewerContext';
 
 const router = createBrowserRouter([
     {

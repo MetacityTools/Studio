@@ -1,14 +1,17 @@
 import Editor from '@monaco-editor/react';
 import React from 'react';
 
+import { useGraph } from '@utils/utils';
+
 import { useEditingNode, useStatus } from '@editor/EditorContext';
 
 import { Empty } from '@elements/Empty';
 
 export function MetaEditor() {
-    const [nodeToLink, setNodeToLink] = useEditingNode();
+    const [nodeToLink] = useEditingNode();
     const timeRef = React.useRef<NodeJS.Timeout>();
     const [status, setStatus] = useStatus();
+    const [graph] = useGraph();
 
     const handleKey = (e: React.KeyboardEvent<HTMLDivElement>) => {
         e.stopPropagation();
@@ -22,6 +25,7 @@ export function MetaEditor() {
                 try {
                     const data = JSON.parse(value || '');
                     nodeToLink?.setData(data);
+                    graph.needsUpdate = true;
                     setStatus('saved');
                 } catch (e) {
                     setStatus('failed');
@@ -39,11 +43,11 @@ export function MetaEditor() {
     }, [nodeToLink]);
 
     return (
-        <div className="flex flex-col w-full h-full" onKeyDown={handleKey} onKeyUp={handleKey}>
+        <div className="w-full h-full" onKeyDown={handleKey} onKeyUp={handleKey}>
             {nodeToLink && (
                 <Editor
                     key={nodeToLink.uuid}
-                    height="100vh"
+                    height="100%"
                     defaultLanguage="json"
                     defaultValue={JSON.stringify(nodeToLink.data, null, 4)}
                     onChange={handleChange}

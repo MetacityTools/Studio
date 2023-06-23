@@ -71,6 +71,7 @@ These features are planned for the future, and scheduled for a specific release.
 
 -   [ ] Projecting models onto models (2D onto 3D) - ✨WIP https://github.com/vojtatom/geometry
 -   [ ] Loading points and lines from SHP
+-   [ ] Export screenshot action
 
 🧠 Call for consultation (TB planned, beginning of July 2023)
 
@@ -79,18 +80,11 @@ These features are planned for the future, and scheduled for a specific release.
 -   [x] Browsing metadata hierarchy in viewer
 -   [x] Restructure menu in Editor (unify UI with viewer)
 -   [x] Remove metadata view from transform view
--   [ ] Styling based on data in hierarchy?
-    -   [x] Base setup
-    -   [ ] Coloring number data
-    -   [ ] Coloring string data
-    -   [ ] Coloring mixed data
-    -   [ ] Coloring boolean data?
--   [ ] Hierarchy UI controls
-    -   [ ] Selecting colormap
+-   [ ] Style editor in Studio Editor
     -   [ ] Display stats
-    -   [ ] Shortcut in menu for single-child groups
--   [ ] Level control - showing grouped models based on group level
--   [ ] Export screenshot action
+    -   [ ] Selecting colormap
+-   [ ] Styling based on data in hierarchy
+-   [ ] Hierarchy UI controls
 -   [ ] Move metadata layer styling up and down (in view controls)
 
 ### v0.3.2 - ✅ Released

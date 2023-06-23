@@ -1,11 +1,19 @@
+import { ColumnContainer, OverflowAbsoluteContainer, StretchContainer } from '@elements/Containers';
+
 import { TableMenu } from './TableMenu';
+import { TablesSheetList } from './Tables/SheetList';
 import { Tables } from './Tables/Tables';
 
 export function TableSidePanel() {
     return (
-        <div className="w-full h-full flex flex-col">
+        <ColumnContainer>
             <TableMenu />
-            <Tables />
-        </div>
+            <StretchContainer>
+                <OverflowAbsoluteContainer>
+                    <Tables />
+                </OverflowAbsoluteContainer>
+            </StretchContainer>
+            <TablesSheetList />
+        </ColumnContainer>
     );
 }

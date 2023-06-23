@@ -22,6 +22,7 @@ export default defineConfig({
             '@editor': path.resolve(__dirname, 'studio/src/components/Editor'),
             '@viewer': path.resolve(__dirname, 'studio/src/components/Viewer'),
             '@elements': path.resolve(__dirname, 'studio/src/components/Elements'),
+            '@shared': path.resolve(__dirname, 'studio/src/components/Shared'),
             '@utils': path.resolve(__dirname, 'studio/src/utils'),
             '@bananagl': path.resolve(__dirname, 'studio/src/bananagl'),
             '@assets': path.resolve(__dirname, 'studio/src/assets'),

@@ -9,6 +9,7 @@ import {
     useGraph,
     useGridVisible,
     useJoinSubmodels,
+    useMetadata,
     useModels,
     useRemoveModels,
     useRemoveSubmodels,
@@ -21,7 +22,6 @@ import {
 } from './components/hooks';
 import { load } from './formats/loader';
 import { ModelGraph } from './hierarchy/graph';
-import { extractMetadataTree } from './hierarchy/metadata';
 import { Node } from './hierarchy/node';
 import { GroupNode } from './hierarchy/nodeGroup';
 import { ModelNode } from './hierarchy/nodeModel';
@@ -36,6 +36,7 @@ import { createGroup } from './modifiers/createGroup';
 import { deleteGroup } from './modifiers/deleteGroup';
 import { joinSubmodels } from './modifiers/joinSubmodels';
 import { splitModel } from './modifiers/splitModels';
+import { extractMetadataTree } from './styles/metadata';
 import { Tables } from './tables/tables';
 
 export {
@@ -75,6 +76,7 @@ export {
     useSplitModel,
     useJoinSubmodels,
     useExport,
+    useMetadata,
     createFlatHierarchy,
     extractMetadataTree,
     CoordinateMode,

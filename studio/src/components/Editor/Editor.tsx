@@ -4,8 +4,9 @@ import 'allotment/dist/style.css';
 import { ProcessingScreen } from '@elements/Processing';
 import { SizeGuard } from '@elements/SizeGuard';
 
-import { CanvasComponent } from './Canvas/CanvasComponent';
-import { Controls } from './Canvas/Controls';
+import { CanvasComponent } from '@shared/CanvasComponent';
+import { Controls } from '@shared/Controls';
+
 import { Help } from './Canvas/Help';
 import { EditorSpash } from './EditorSplash';
 import { SidePanel } from './SidePanel/SidePanel';

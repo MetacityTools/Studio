@@ -6,7 +6,7 @@ import { useMovingNode, useStatus } from '@editor/EditorContext';
 
 import { Button } from '@elements/Button';
 
-export function MetadataMenu() {
+export function GroupMenu() {
     const selection = useSelectedModels();
     const [graph] = useGraph();
     const [nodeToMove, updateNodeToMove] = useMovingNode();

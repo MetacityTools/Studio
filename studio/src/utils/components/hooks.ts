@@ -10,7 +10,7 @@ import { joinModels } from '@utils/modifiers/joinModels';
 import { joinSubmodels } from '@utils/modifiers/joinSubmodels';
 import { removeSubmodels } from '@utils/modifiers/removeSubmodels';
 import { splitModel } from '@utils/modifiers/splitModels';
-import { PrimitiveType } from '@utils/types';
+import { MetadataNode, PrimitiveType } from '@utils/types';
 
 import * as GL from '@bananagl/bananagl';
 
@@ -216,4 +216,9 @@ export function useExport() {
     };
 
     return exportProject;
+}
+
+export function useMetadata(): MetadataNode {
+    const { metadata } = React.useContext(context);
+    return metadata;
 }

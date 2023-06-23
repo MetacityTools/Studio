@@ -6,15 +6,16 @@ import { EditorModel, ModelGraph } from '@utils/utils';
 export function colorize(
     model: EditorModel,
     graph: ModelGraph,
-    keyChain: string[],
+    keychain: string[],
     min: number,
     max: number
 ) {
-    const map = graph.getKeyValueMap(model, keyChain, 1);
+    const map = graph.getKeyValueMap(model, keychain, 1);
     let range = max - min;
     if (range === 0) range = 1;
     const normalizedValues = new Map<number, number>();
     for (const [id, value] of map.entries()) {
+        if (typeof value !== 'number') continue;
         const color = (value - min) / range;
         normalizedValues.set(id, color);
     }
@@ -25,6 +26,7 @@ export function colorize(
         format: 'float',
     }).map((c) => vec3.fromValues(c[0], c[1], c[2]));
 
+    console.log(normalizedValues, cm);
     model.setColorMap(normalizedValues, cm);
 }
 

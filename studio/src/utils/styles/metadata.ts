@@ -1,8 +1,8 @@
 import { MetadataNode, MetadataType, MetadataValue } from '@utils/types';
 
-import { ModelGraph } from './graph';
-import { Node } from './node';
-import { GroupNode } from './nodeGroup';
+import { ModelGraph } from '../hierarchy/graph';
+import { Node } from '../hierarchy/node';
+import { GroupNode } from '../hierarchy/nodeGroup';
 
 export function extractMetadataTree(hierarchy: ModelGraph) {
     const root = hierarchy.root;
@@ -26,17 +26,17 @@ function recursiveExtractMetadata(data: any, tree: MetadataNode) {
     } else {
         checkValues(tree);
         if (typeof data === 'string') {
-            tree.values.values.add(data);
+            tree.values.values.push(data);
             if (tree.values.type === MetadataType.NONE) tree.values.type = MetadataType.STRING;
             else if (tree.values.type !== MetadataType.STRING)
                 tree.values.type = MetadataType.MIXED;
         } else if (typeof data === 'number') {
-            tree.values.values.add(data);
+            tree.values.values.push(data);
             if (tree.values.type === MetadataType.NONE) tree.values.type = MetadataType.NUMBER;
             else if (tree.values.type !== MetadataType.NUMBER)
                 tree.values.type = MetadataType.MIXED;
         } else if (typeof data === 'boolean') {
-            tree.values.values.add(data);
+            tree.values.values.push(data);
             if (tree.values.type === MetadataType.NONE) tree.values.type = MetadataType.BOOLEAN;
             else if (tree.values.type !== MetadataType.BOOLEAN)
                 tree.values.type = MetadataType.MIXED;
@@ -52,31 +52,6 @@ function checkValues(node: MetadataNode): asserts node is MetadataNode & { value
     if (!node.values)
         node.values = {
             type: MetadataType.NONE,
-            values: new Set(),
+            values: [],
         };
-}
-
-export function cleanString(str: string) {
-    return str
-        .replaceAll('\n', ' ')
-        .replaceAll('\r', ' ')
-        .replaceAll('\t', ' ')
-        .trim()
-        .replace(/ +(?= )/g, '');
-}
-
-export function cleanData(data: { [key: string]: any }) {
-    const keys = Object.keys(data);
-    for (const key of keys) {
-        const cleanKey = cleanString(key);
-        if (cleanKey !== key) {
-            data[cleanKey] = data[key];
-            delete data[key];
-        }
-
-        const value = data[cleanKey];
-        if (typeof value === 'object') cleanData(value);
-        console.log(cleanKey, key);
-    }
-    return data;
 }

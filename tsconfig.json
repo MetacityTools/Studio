@@ -20,6 +20,7 @@
       "@editor/*": ["./components/Editor/*"],
       "@viewer/*": ["./components/Viewer/*"],
       "@elements/*": ["./components/Elements/*"],
+      "@shared/*": ["./components/Shared/*"],
       "@utils/*": ["./utils/*"],
       "@bananagl/*": ["./bananagl/*"],
       "@assets/*": ["./assets/*"],

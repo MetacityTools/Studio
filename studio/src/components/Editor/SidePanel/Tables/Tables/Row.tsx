@@ -9,8 +9,6 @@ interface TableRowProps {
     rowType: string;
 }
 
-const cellCls = 'border-r border-b whitespace-pre px-2 h-full';
-
 export function TableRow(props: TableRowProps) {
     const { index, row, rowType } = props;
     const [activeSheet] = useActiveSheet();
@@ -40,7 +38,7 @@ export function TableRow(props: TableRowProps) {
                     <BiCopy className="inline-block ml-1" />
                 </div>
             </td>
-            <td className={clsx(cellCls, 'text-neutral-500 bg-neutral-100')}>
+            <Td className="text-neutral-500 bg-neutral-100">
                 <select
                     name="rowType"
                     id="rowType"
@@ -52,12 +50,18 @@ export function TableRow(props: TableRowProps) {
                     <option value="value">value</option>
                     <option value="value">units</option>
                 </select>
-            </td>
+            </Td>
             {row.map((cell, cindex) => (
-                <td className={cellCls} key={activeSheet + '_' + index + '_' + cindex}>
-                    {cell}
-                </td>
+                <Td key={activeSheet + '_' + index + '_' + cindex}>{cell}</Td>
             ))}
         </tr>
+    );
+}
+
+export function Td(props: { children: React.ReactNode; className?: string }) {
+    return (
+        <td className={clsx('border-r border-b whitespace-pre px-2 h-full', props.className)}>
+            {props.children}
+        </td>
     );
 }

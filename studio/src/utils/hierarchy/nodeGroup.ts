@@ -1,7 +1,6 @@
 import { SelectionType } from '@utils/components/Context';
 import { EditorModel, HierarchyGroupNode, HierarchyModelNode } from '@utils/utils';
 
-import { cleanData } from './metadata';
 import { Node } from './node';
 import { ModelNode } from './nodeModel';
 
@@ -121,22 +120,22 @@ export class GroupNode extends Node {
 
     getKeyValueMap(
         model: EditorModel,
-        keyChain: string[],
+        keychain: string[],
         depth: number,
         map: Map<number, any> = new Map()
     ) {
         if (depth > 0) {
             for (const child of this.children) {
                 if (child instanceof GroupNode) {
-                    child.getKeyValueMap(model, keyChain, depth - 1, map);
+                    child.getKeyValueMap(model, keychain, depth - 1, map);
                 }
                 if (child instanceof ModelNode && child.model === model) {
-                    const value = child.getValue(keyChain);
+                    const value = child.getValue(keychain);
                     if (value !== undefined) map.set(child.submodelId, value);
                 }
             }
         } else {
-            const value = this.getValue(keyChain);
+            const value = this.getValue(keychain);
             if (value !== undefined) {
                 const submodelIds = this.getSubmodelIds(model);
                 for (const id of submodelIds) {

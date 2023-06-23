@@ -12,7 +12,8 @@ import {
 
 import { Button, ButtonFileInput } from '@elements/Button';
 import { useLoadingStatus, useProcessing } from '@elements/Context';
-import { Vitals } from '@elements/IOMenu/Vitals';
+
+import { Vitals } from '@shared/IOMenu/Vitals';
 
 import { ImportDialog } from './DialogImport';
 

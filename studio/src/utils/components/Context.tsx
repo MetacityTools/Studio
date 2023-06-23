@@ -3,6 +3,8 @@ import React from 'react';
 
 import { ModelGraph } from '@utils/hierarchy/graph';
 import { EditorModel } from '@utils/models/EditorModel';
+import { extractMetadataTree } from '@utils/styles/metadata';
+import { MetadataNode } from '@utils/types';
 
 import * as GL from '@bananagl/bananagl';
 
@@ -37,6 +39,7 @@ interface ViewContextProps {
     setGridVisible: React.Dispatch<React.SetStateAction<boolean>>;
     globalShift: vec3 | null;
     setGlobalShift: React.Dispatch<React.SetStateAction<vec3 | null>>;
+    metadata: MetadataNode;
 }
 
 export const context = React.createContext<ViewContextProps>({} as ViewContextProps);
@@ -52,6 +55,7 @@ export function ViewContext(props: { children: React.ReactNode }) {
     const [maxShade, setMaxShade] = React.useState<number>(10);
     const [gridVisible, setGridVisible] = React.useState<boolean>(true);
     const [globalShift, setGlobalShift] = React.useState<vec3 | null>(null);
+    const [metadata, setMetadata] = React.useState<MetadataNode>({});
     const activeView = 0;
 
     React.useEffect(() => {
@@ -123,6 +127,13 @@ export function ViewContext(props: { children: React.ReactNode }) {
         view.camera.z = camTargetZ;
     }, [activeView, renderer, camTargetZ]);
 
+    React.useEffect(() => {
+        if (graph) {
+            const metadata = extractMetadataTree(graph);
+            setMetadata(metadata);
+        }
+    }, [graph, setMetadata]);
+
     return (
         <context.Provider
             value={{
@@ -144,6 +155,7 @@ export function ViewContext(props: { children: React.ReactNode }) {
                 setGridVisible,
                 globalShift,
                 setGlobalShift,
+                metadata,
             }}
         >
             {props.children}

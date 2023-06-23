@@ -148,25 +148,25 @@ export enum MetadataType {
 
 export interface MetadataValue {
     type: MetadataType;
-    values: Set<string | number | boolean>;
+    values: (string | number | boolean)[];
 }
 
 export interface MetadataStringValue extends MetadataValue {
     type: MetadataType.STRING;
-    values: Set<string>;
+    values: string[];
 }
 
 export interface MetadataNumberValue extends MetadataValue {
     type: MetadataType.NUMBER;
-    values: Set<number>;
+    values: number[];
 }
 
 export interface MetadataBooleanValue extends MetadataValue {
     type: MetadataType.BOOLEAN;
-    values: Set<boolean>;
+    values: boolean[];
 }
 
 export interface MetadataMixedValue extends MetadataValue {
     type: MetadataType.MIXED;
-    values: Set<string | number | boolean>;
+    values: (string | number | boolean)[];
 }
