@@ -78,6 +78,8 @@ function HistogramGradientStrip(props: {
         return value.toFixed(2);
     });
 
+    const histogramBinWidth = range / histogram.length;
+
     return (
         <div className="flex flex-col">
             <div className="flex flex-row space-x-1 mr-1 justify-between">
