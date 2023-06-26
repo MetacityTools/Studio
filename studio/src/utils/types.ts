@@ -1,4 +1,4 @@
-import { mat4 } from 'gl-matrix';
+import { mat4, vec3 } from 'gl-matrix';
 
 //------------------------------------------------------------
 //GLTF MODEL INTERFACE
@@ -79,6 +79,8 @@ export interface ShapefileData {
     cpg?: ArrayBuffer;
 }
 
+//hierarchy is optional because some models don't use
+//the hierarchical structure
 export interface ModelData {
     geometry: ModelGeometry;
     metadata: ModelMetadata;
@@ -170,3 +172,11 @@ export interface MetadataMixedValue extends MetadataValue {
     type: MetadataType.MIXED;
     values: (string | number | boolean)[];
 }
+
+//------------------------------------------------------------
+export interface Style {
+    keychain: string[];
+    map: ColorKeyMap;
+}
+
+export type ColorKeyMap = { [key: string | number]: vec3 };

@@ -59,9 +59,9 @@ export class EditorModel extends GL.Pickable implements GL.Selectable {
         this.selectSubmodels(submodelIDs, 0);
     }
 
-    setColorMap(factors: Map<number, number>, colorMap: vec3[]) {
+    setColorMap(colormap: Map<number, vec3>) {
         if (this.disposed) return;
-        if (factors.size === 0) return;
+        if (colormap.size === 0) return;
 
         const color = this.attributes.getAttribute('color');
         const submodel = this.attributes.getAttribute('submodel');
@@ -70,15 +70,14 @@ export class EditorModel extends GL.Pickable implements GL.Selectable {
         if (!submodel) return;
         if (!color) return;
 
-        let factor;
+        let c;
         for (let i = 0; i < submodelBuffer.length; i++) {
-            factor = factors.get(submodelBuffer[i])!;
-            if (factor !== undefined) {
-                const c = linearInterpolateColor(colorMap, factor);
+            c = colormap.get(submodelBuffer[i])!;
+            if (c !== undefined) {
                 const scidx = i * 3;
-                color.buffer.data[scidx] = c[0] * 155 + 100;
-                color.buffer.data[scidx + 1] = c[1] * 155 + 100;
-                color.buffer.data[scidx + 2] = c[2] * 155 + 100;
+                color.buffer.data[scidx] = c[0] * 255;
+                color.buffer.data[scidx + 1] = c[1] * 255;
+                color.buffer.data[scidx + 2] = c[2] * 255;
             } else {
                 const scidx = i * 3;
                 color.buffer.data[scidx] = 255;

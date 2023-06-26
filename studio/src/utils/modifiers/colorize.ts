@@ -1,33 +1,17 @@
-import colormap from 'colormap';
 import { vec3 } from 'gl-matrix';
 
-import { EditorModel, ModelGraph } from '@utils/utils';
+import { EditorModel, ModelGraph, Style } from '@utils/utils';
 
-export function colorize(
-    model: EditorModel,
-    graph: ModelGraph,
-    keychain: string[],
-    min: number,
-    max: number
-) {
-    const map = graph.getKeyValueMap(model, keychain, 1);
-    let range = max - min;
-    if (range === 0) range = 1;
-    const normalizedValues = new Map<number, number>();
-    for (const [id, value] of map.entries()) {
-        if (typeof value !== 'number') continue;
-        const color = (value - min) / range;
-        normalizedValues.set(id, color);
-    }
+export function colorize(model: EditorModel, graph: ModelGraph, keychain: string[], style: Style) {
+    const valueMap = graph.getKeyValueMap(model, keychain, 1);
+    const colorMap = new Map<number, vec3>();
 
-    const cm: vec3[] = colormap({
-        colormap: 'plasma',
-        nshades: 10,
-        format: 'float',
-    }).map((c) => vec3.fromValues(c[0], c[1], c[2]));
+    valueMap.forEach((value: number | string, key) => {
+        if (style.map[value]) colorMap.set(key, style.map[value]);
+        else colorMap.set(key, [255, 255, 255]);
+    });
 
-    console.log(normalizedValues, cm);
-    model.setColorMap(normalizedValues, cm);
+    model.setColorMap(colorMap);
 }
 
 export function whiten(model: EditorModel) {

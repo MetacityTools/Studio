@@ -6,10 +6,15 @@ import {
     MetadataNode,
     ModelGraph,
     SelectionType,
+    Style,
+    colorize,
     extractMetadataTree,
+    whiten,
 } from '@utils/utils';
 
 import * as GL from '@bananagl/bananagl';
+
+import { getStyleFromKeychain } from './styles';
 
 /**
  * A function that updates the selection of models and submodels.
@@ -41,6 +46,10 @@ interface ViewContextProps {
     globalShift: vec3 | null;
     setGlobalShift: React.Dispatch<React.SetStateAction<vec3 | null>>;
     metadata: MetadataNode;
+    styleKeychain: string[];
+    setStyleKeychain: React.Dispatch<React.SetStateAction<string[]>>;
+    styles: Style[];
+    setStyles: React.Dispatch<React.SetStateAction<Style[]>>;
 }
 
 export const context = React.createContext<ViewContextProps>({} as ViewContextProps);
@@ -57,6 +66,8 @@ export function ViewContext(props: { children: React.ReactNode }) {
     const [gridVisible, setGridVisible] = React.useState<boolean>(true);
     const [globalShift, setGlobalShift] = React.useState<vec3 | null>(null);
     const [metadata, setMetadata] = React.useState<MetadataNode>({});
+    const [styleKeychain, setStyleKeychain] = React.useState<string[]>([]);
+    const [styles, setStyles] = React.useState<Style[]>([]);
     const activeView = 0;
 
     React.useEffect(() => {
@@ -130,6 +141,17 @@ export function ViewContext(props: { children: React.ReactNode }) {
         view.camera.z = camTargetZ;
     }, [activeView, renderer, camTargetZ]);
 
+    React.useEffect(() => {
+        const style = getStyleFromKeychain(metadata, styles, styleKeychain);
+        if (!style) {
+            models.forEach((object) => whiten(object));
+        } else {
+            models.forEach((object) => {
+                colorize(object, graph, styleKeychain, style);
+            });
+        }
+    }, [styleKeychain, styles, metadata, models, graph]);
+
     return (
         <context.Provider
             value={{
@@ -152,6 +174,10 @@ export function ViewContext(props: { children: React.ReactNode }) {
                 globalShift,
                 setGlobalShift,
                 metadata,
+                styleKeychain,
+                setStyleKeychain,
+                styles,
+                setStyles,
             }}
         >
             {props.children}

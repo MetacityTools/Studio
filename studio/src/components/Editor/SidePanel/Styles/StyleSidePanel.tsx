@@ -1,15 +1,27 @@
 import { Allotment } from 'allotment';
 import 'allotment/dist/style.css';
+import React from 'react';
 
 import { MetadataNode } from '@utils/types';
 
 import { ColumnContainer, OverflowContainer, StretchContainer } from '@elements/Containers';
 
+import { useStyleKeychain } from '@shared/Context/styles';
 import { MetadataHierarchy } from '@shared/Metadata/MetadataHierarchy';
 
+import { StyleDetailPanel } from './StyleDetail';
+
 export function StyleSidePanel() {
+    const [styleKeychain, setStyleKeychain] = useStyleKeychain();
+
+    React.useEffect(() => {
+        return () => {
+            setStyleKeychain([]);
+        };
+    }, []);
+
     const onValuePick = (value: MetadataNode) => {
-        console.log(value);
+        setStyleKeychain(value);
     };
 
     return (
@@ -22,7 +34,7 @@ export function StyleSidePanel() {
                         </OverflowContainer>
                     </Allotment.Pane>
                     <Allotment.Pane preferredSize={800} className="border-l">
-                        TODO
+                        <StyleDetailPanel />
                     </Allotment.Pane>
                 </Allotment>
             </StretchContainer>
