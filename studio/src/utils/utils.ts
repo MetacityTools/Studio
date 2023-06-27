@@ -1,43 +1,23 @@
-import { Canvas } from './components/Canvas';
-import { SelectionType, ViewContext } from './components/Context';
-import {
-    useActiveView,
-    useCameraZ,
-    useCreateModels,
-    useExport,
-    useGlobalShift,
-    useGraph,
-    useGridVisible,
-    useJoinSubmodels,
-    useModels,
-    useRemoveModels,
-    useRemoveSubmodels,
-    useRenderer,
-    useScene,
-    useSelectedModels,
-    useSelection,
-    useShadeRange,
-    useSplitModel,
-} from './components/hooks';
 import { load } from './formats/loader';
 import { ModelGraph } from './hierarchy/graph';
-import { Node } from './hierarchy/node';
+import { Node, SelectionType } from './hierarchy/node';
 import { GroupNode } from './hierarchy/nodeGroup';
 import { ModelNode } from './hierarchy/nodeModel';
 import { EditorModel } from './models/EditorModel';
 import { EditorModelData } from './models/TriangleModel';
 import { addGridModel } from './models/addGridModel';
 import { CoordinateMode, alignModels } from './modifiers/alignVertices';
+import { colorize, whiten } from './modifiers/colorize';
 import { computeDots, computeNormals } from './modifiers/computeNormals';
 import { createFlatHierarchy } from './modifiers/createFlatHierarchy';
 import { createGroup } from './modifiers/createGroup';
 import { deleteGroup } from './modifiers/deleteGroup';
+import { extractMetadataTree } from './modifiers/extractMetadata';
 import { joinSubmodels } from './modifiers/joinSubmodels';
 import { splitModel } from './modifiers/splitModels';
 import { Tables } from './tables/tables';
 
 export {
-    Canvas,
     load,
     Tables,
     Node,
@@ -50,28 +30,13 @@ export {
     computeDots,
     computeNormals,
     createGroup,
-    useGraph,
     deleteGroup,
     joinSubmodels,
     splitModel,
-    ViewContext,
-    useActiveView,
-    useScene,
-    useRenderer,
-    useModels,
-    useSelection,
-    useSelectedModels,
-    useCameraZ,
-    useShadeRange,
-    useGridVisible,
-    useGlobalShift,
-    useCreateModels,
-    useRemoveModels,
-    useRemoveSubmodels,
-    useSplitModel,
-    useJoinSubmodels,
-    useExport,
+    colorize,
+    whiten,
     createFlatHierarchy,
+    extractMetadataTree,
     CoordinateMode,
 };
 

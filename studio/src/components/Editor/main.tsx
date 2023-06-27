@@ -2,16 +2,15 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
-import { ViewContext } from '@utils/utils';
-
 import { GeneralContext } from '@elements/Context';
 import { ErrorPage } from '@elements/Error';
 
+import { ViewContext } from '@shared/Context/Context';
+
 import '@assets/index.css';
 
-import { EditorContext } from './Context/EditorContext';
-import { TablesContext } from './Context/TableContext';
 import { ModelEditor } from './Editor';
+import { EditorContext } from './EditorContext';
 
 const router = createBrowserRouter([
     {
@@ -26,9 +25,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
         <GeneralContext>
             <ViewContext>
                 <EditorContext>
-                    <TablesContext>
-                        <RouterProvider router={router} />
-                    </TablesContext>
+                    <RouterProvider router={router} />
                 </EditorContext>
             </ViewContext>
         </GeneralContext>

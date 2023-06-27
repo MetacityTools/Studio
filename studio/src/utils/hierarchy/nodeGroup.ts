@@ -1,23 +1,22 @@
-import { SelectionType } from '@utils/components/Context';
-import { EditorModel, ModelHierarchyGroupNode, ModelHierarchyModelNode } from '@utils/utils';
+import { EditorModel, HierarchyGroupNode, HierarchyModelNode } from '@utils/utils';
 
-import { Node } from './node';
+import { Node, SelectionType } from './node';
 import { ModelNode } from './nodeModel';
 
 export class GroupNode extends Node {
     children: Node[] = [];
 
-    addModel(model: EditorModel, data: ModelHierarchyGroupNode) {
+    addModel(model: EditorModel, data: HierarchyGroupNode) {
         this.data = data.data ?? {};
         for (const childNode of data.children) {
-            if ((childNode as ModelHierarchyGroupNode).children) {
-                const nodeData = childNode as ModelHierarchyGroupNode;
+            if ((childNode as HierarchyGroupNode).children) {
+                const nodeData = childNode as HierarchyGroupNode;
                 const node = new GroupNode();
                 this.addChild(node);
                 node.addParent(this);
                 node.addModel(model, nodeData);
             } else {
-                const nodeData = childNode as ModelHierarchyModelNode;
+                const nodeData = childNode as HierarchyModelNode;
                 const node = new ModelNode(model, nodeData.id);
                 node.data = nodeData.data ?? {};
                 this.addChild(node);
@@ -118,6 +117,47 @@ export class GroupNode extends Node {
         return data;
     }
 
+    getKeyValueMap(
+        model: EditorModel,
+        keychain: string[],
+        depth: number,
+        map: Map<number, any> = new Map()
+    ) {
+        if (depth > 0) {
+            for (const child of this.children) {
+                if (child instanceof GroupNode) {
+                    child.getKeyValueMap(model, keychain, depth - 1, map);
+                }
+                if (child instanceof ModelNode && child.model === model) {
+                    const value = child.getValue(keychain);
+                    if (value !== undefined) map.set(child.submodelId, value);
+                }
+            }
+        } else {
+            const value = this.getValue(keychain);
+            if (value !== undefined) {
+                const submodelIds = this.getSubmodelIds(model);
+                for (const id of submodelIds) {
+                    if (!map.has(id)) map.set(id, value);
+                }
+            }
+        }
+
+        return map;
+    }
+
+    getSubmodelIds(model: EditorModel, ids: Set<number> = new Set()) {
+        for (const child of this.children) {
+            if (child instanceof ModelNode && child.model === model) {
+                ids.add(child.submodelId);
+            }
+            if (child instanceof GroupNode) {
+                child.getSubmodelIds(model, ids);
+            }
+        }
+        return ids;
+    }
+
     selected(selectedModels: SelectionType) {
         return this.children.every((child) => {
             return child.selected(selectedModels);
@@ -161,7 +201,7 @@ export class GroupNode extends Node {
         return this.parent === node || ((this.parent && this.parent.isDescendantOf(node)) ?? false);
     }
 
-    exportNode(): ModelHierarchyGroupNode {
+    exportNode(): HierarchyGroupNode {
         return {
             children: this.children?.map((child) => child.exportNode()),
             data: this.data,

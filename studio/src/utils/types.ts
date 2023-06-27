@@ -1,4 +1,4 @@
-import { mat4 } from 'gl-matrix';
+import { mat4, vec3 } from 'gl-matrix';
 
 //------------------------------------------------------------
 //GLTF MODEL INTERFACE
@@ -79,10 +79,12 @@ export interface ShapefileData {
     cpg?: ArrayBuffer;
 }
 
+//hierarchy is optional because some models don't use
+//the hierarchical structure
 export interface ModelData {
     geometry: ModelGeometry;
     metadata: ModelMetadata;
-    hierarchy?: ModelHierarchy;
+    hierarchy?: Hierarchy;
 }
 
 export interface ModelGeometry {
@@ -105,24 +107,76 @@ export interface ModelMetadata {
 export enum GeometryMode {
     WIREFRAME,
     SOLID,
+    NOEDGES,
 }
 
-export interface ModelHierarchy {
-    root: ModelHierarchyGroupNode;
+//------------------------------------------------------------
+
+export interface Hierarchy {
+    root: HierarchyGroupNode;
 }
 
-export interface ModelHierarchyNode {
+export interface HierarchyNode {
     data: { [data: string]: any };
 }
 
-export interface ModelHierarchyGroupNode extends ModelHierarchyNode {
-    children: ModelHierarchyNode[];
+export interface HierarchyGroupNode extends HierarchyNode {
+    children: HierarchyNode[];
 }
 
-export interface ModelHierarchyModelNode extends ModelHierarchyNode {
+export interface HierarchyModelNode extends HierarchyNode {
     id: number;
 }
 
-export interface ExtendedModelHierarchyModelNode extends ModelHierarchyModelNode {
+export interface ExtHierarchyModelNode extends HierarchyModelNode {
     model?: any;
 }
+
+//------------------------------------------------------------
+export interface MetadataNode {
+    values?: MetadataValue;
+    children?: {
+        [key: string]: MetadataNode;
+    };
+}
+
+export enum MetadataType {
+    NONE,
+    STRING,
+    NUMBER,
+    BOOLEAN,
+    MIXED,
+}
+
+export interface MetadataValue {
+    type: MetadataType;
+    values: (string | number | boolean)[];
+}
+
+export interface MetadataStringValue extends MetadataValue {
+    type: MetadataType.STRING;
+    values: string[];
+}
+
+export interface MetadataNumberValue extends MetadataValue {
+    type: MetadataType.NUMBER;
+    values: number[];
+}
+
+export interface MetadataBooleanValue extends MetadataValue {
+    type: MetadataType.BOOLEAN;
+    values: boolean[];
+}
+
+export interface MetadataMixedValue extends MetadataValue {
+    type: MetadataType.MIXED;
+    values: (string | number | boolean)[];
+}
+
+//------------------------------------------------------------
+export interface Style {
+    keychain: string[];
+    map: ColorKeyMap;
+}
+
+export type ColorKeyMap = { [key: string | number]: vec3 };

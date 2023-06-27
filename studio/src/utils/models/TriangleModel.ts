@@ -6,7 +6,7 @@ import { ModelData, PrimitiveType } from '@utils/types';
 import * as GL from '@bananagl/bananagl';
 
 import { DEFAULT_UNIFORMS, EditorModel } from './EditorModel';
-import { solidShader, wireframeShader } from './EditorModelShader';
+import { noEdgesShader, solidShader, wireframeShader } from './EditorModelShader';
 
 export interface EditorModelData extends ModelData {
     position?: vec3;
@@ -42,6 +42,7 @@ export async function addTriangleModel(data: EditorModelData) {
     glmodel.shader = solidShader;
     glmodel.solidShader = solidShader;
     glmodel.wireframeShader = wireframeShader;
+    glmodel.noEdgesShader = noEdgesShader;
     glmodel.name = metadata.name;
     if (uniforms) glmodel.uniforms = GL.cloneUniforms(uniforms);
     else glmodel.uniforms = DEFAULT_UNIFORMS;

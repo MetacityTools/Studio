@@ -1,7 +1,6 @@
-import { SelectionType } from '@utils/components/Context';
-import { EditorModel, ModelHierarchyGroupNode } from '@utils/utils';
+import { EditorModel, HierarchyGroupNode } from '@utils/utils';
 
-import { Node } from './node';
+import { Node, SelectionType } from './node';
 import { GroupNode } from './nodeGroup';
 import { ModelNode } from './nodeModel';
 
@@ -9,7 +8,7 @@ export class ModelGraph {
     root: GroupNode = new GroupNode();
     private onUpdateCallbacks: ((graph: ModelGraph) => void)[] = [];
 
-    addModel(model: EditorModel, data: ModelHierarchyGroupNode) {
+    addModel(model: EditorModel, data: HierarchyGroupNode) {
         this.root.addModel(model, data);
     }
 
@@ -62,5 +61,9 @@ export class ModelGraph {
         return {
             root: this.root.exportNode(),
         };
+    }
+
+    getKeyValueMap(model: EditorModel, keychain: string[], depth: number = 0) {
+        return this.root.getKeyValueMap(model, keychain, depth);
     }
 }

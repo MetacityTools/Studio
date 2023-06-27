@@ -1,9 +1,9 @@
 import { TbLayersSubtract } from 'react-icons/tb';
 
-import { useRemoveSubmodels, useSelectedModels } from '@utils/utils';
-
 import { useProcessing } from '@elements/Context';
 import { Widget, WidgetDescription, WidgetLine, WidgetTitle } from '@elements/Widgets';
+
+import { useRemoveSubmodels, useSelectedModels } from '@shared/Context/hooks';
 
 import { WidgetProps } from './Widget';
 

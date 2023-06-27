@@ -1,15 +1,13 @@
 import { TbLayersUnion } from 'react-icons/tb';
 
-import { useJoinSubmodels } from '@utils/utils';
-import { useScene, useSelection } from '@utils/utils';
-
 import { useProcessing } from '@elements/Context';
 import { Widget, WidgetDescription, WidgetLine, WidgetTitle } from '@elements/Widgets';
+
+import { useJoinSubmodels, useSelection } from '@shared/Context/hooks';
 
 import { WidgetProps } from './Widget';
 
 export function JoinSubmodelWidget(props: WidgetProps) {
-    const scene = useScene();
     const join = useJoinSubmodels();
     const [, selection] = useSelection();
     const [, setProcessing] = useProcessing();

@@ -2,6 +2,7 @@ import clsx from 'clsx';
 import React from 'react';
 import { TbHelp, TbHelpOff } from 'react-icons/tb';
 
+import { colorBase } from '@elements/Colors';
 import { MouseLeft, MouseRight, MouseWheel } from '@elements/Icons';
 
 function HelpItem(props: { children: React.ReactNode; last?: boolean }) {
@@ -18,7 +19,10 @@ export function Help() {
     if (!show)
         return (
             <div
-                className="absolute bottom-4 left-4 bg-white text-md py-2 px-4 rounded-md flex flex-row space-x-4 text-xl cursor-pointer border transition-all hover:text-amber-600 hover:bg-amber-100"
+                className={clsx(
+                    'absolute bottom-4 left-4 bg-white text-md py-2 px-4 rounded-md flex flex-row space-x-4 text-xl cursor-pointer border',
+                    colorBase
+                )}
                 onClick={() => setShow(true)}
             >
                 <div className="flex space-x-2 items-center">

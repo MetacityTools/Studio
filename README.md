@@ -26,18 +26,66 @@ Currently:
 
 The project is in active development. The roadmap is as follows:
 
-### v0.4.0
+---
 
--   [ ] Projecting models onto models (2D onto 3D) - ✨WIP https://github.com/vojtatom/geometry
--   [ ] Styling???
--   [ ] Loading points and lines from SHP
+## Backlog
+
+These features are planned for the future, but not yet scheduled.
+
+### Priority Backlog
+
+-   [ ] Filter file inputs (add format filters)
+-   [ ] Click off model - deselect all
+-   [ ] Color indicating in group vs out of group in viewer
+-   [ ] Delete group action button in the hierarchy menu
+-   [ ] Group selection in hierarchy tree optimization (shift to select, deselect previous on selectiong previous)
+-   [ ] Open editor on Group select
+-   [ ] Unselect all on clicking away
+-   [ ] Shortcuts for tab switching in editor
+-   [ ] When in Table view, click to select model and extend the selection based on groups on key/button/action
+
+### Backlog
+
+-   [ ] Loading GeoJSON
+-   [ ] Loading IFC metadata loading (memory-efficiency???)
+-   [ ] Frustum culling
+-   [ ] Connect to on-line storage and model admin
 -   [ ] Extract Utils to separate SDK form metacity editors
 -   [ ] Optional interactivity - build BVH only if user opts-in to make the loaded models clickable
+-   [ ] Optimize deleting models - partition model BVH nodes based on submodels's ids
+-   [ ] Named groups in hierarchy
+-   [ ] Insert textured plane (location blueprints for reference)
+-   [ ] Refactor General context - setting status messages, etc.
+-   [ ] Add a button to open/hide the side panel
 
-### v0.3.3 - 👨‍💻 In progress
+### Bugs and Validations
 
--   [ ] Browsing hierarchy in viewer
--   [ ] Styling based on data in hierarchy?
+-   [ ] Do not allow keys to be empty in table view during conversion
+
+---
+
+## Planned Releases
+
+These features are planned for the future, and scheduled for a specific release.
+
+### v0.4.1
+
+-   [ ] Projecting models onto models (2D onto 3D) - ✨WIP https://github.com/vojtatom/geometry
+-   [ ] Loading points and lines from SHP
+-   [ ] Export screenshot action
+-   [ ] Selecting colormap
+-   [ ] Hierarchy UI controls
+
+🧠 Call for consultation (TB planned, beginning of July 2023)
+
+### v0.4.0 - ✅ Released
+
+-   [x] Browsing metadata hierarchy in viewer
+-   [x] Restructure menu in Editor (unify UI with viewer)
+-   [x] Remove metadata view from transform view
+-   [x] Display stats
+-   [x] Styling based on data in hierarchy
+-   [x] Move metadata layer styling up and down (in view controls)
 
 ### v0.3.2 - ✅ Released
 
@@ -66,6 +114,8 @@ The project is in active development. The roadmap is as follows:
 -   [x] JSON metadata for nodes in hierarchy
     -   [x] Assign metadata to model nodes
 -   [x] Resize guard update graphics (The "Oops" message is pretty lame)
+
+🧠 Call for consultation
 
 ### v0.2.0 - ✅ Released
 
@@ -128,11 +178,3 @@ The project is in active development. The roadmap is as follows:
 -   [x] Split models
 -   [x] Hide models
 -   [x] Delete model
-
-## Backlog
-
--   [ ] Merge whole models
--   [ ] Loading GeoJSON
--   [ ] Loading IFC metadata loading (memory-efficiency???)
--   [ ] Remesh models - intersection of triangles
--   [ ] Frustum culling
