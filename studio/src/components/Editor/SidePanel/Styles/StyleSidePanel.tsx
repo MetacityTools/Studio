@@ -3,7 +3,7 @@ import React from 'react';
 
 import { MetadataNode } from '@utils/types';
 
-import { ColumnContainer, OverflowContainer, StretchContainer } from '@elements/Containers';
+import { ColumnContainer, OverflowAbsoluteContainer, StretchContainer } from '@elements/Containers';
 
 import { useStyleKeychain } from '@shared/Context/styles';
 import { MetadataHierarchy } from '@shared/Metadata/MetadataHierarchy';
@@ -24,9 +24,9 @@ export function StyleSidePanel() {
     return (
         <ColumnContainer>
             <StretchContainer>
-                <OverflowContainer className="p-4">
+                <OverflowAbsoluteContainer className="p-4">
                     <MetadataHierarchy onValuePick={onValuePick} />
-                </OverflowContainer>
+                </OverflowAbsoluteContainer>
             </StretchContainer>
         </ColumnContainer>
     );
