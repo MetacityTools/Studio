@@ -18,7 +18,7 @@ export function ModelViewer() {
                 <Allotment.Pane className="border-r" minSize={300}>
                     <SidePanel />
                 </Allotment.Pane>
-                <Allotment.Pane preferredSize={1200}>
+                <Allotment.Pane preferredSize={1200} className="relative">
                     <CanvasComponent />
                     <Controls />
                     <StyleDetailPanel className="absolute left-0 bottom-0 m-4" />

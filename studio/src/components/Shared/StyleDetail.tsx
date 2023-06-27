@@ -10,6 +10,12 @@ import {
     Style,
 } from '@utils/types';
 
+import {
+    ColumnContainer,
+    OverflowAbsoluteContainer,
+    OverflowContainer,
+} from '@elements/Containers';
+
 import { useStyleKeychain, useStyles, useTraverseMetadata } from '@shared/Context/styles';
 import { MetadataTitle } from '@shared/Metadata/MetadataTitle';
 
@@ -29,23 +35,30 @@ export function StyleDetailPanel(props: { className?: string }) {
     if (!style || !node) return null;
 
     return (
-        <div className={clsx('p-4 bg-white rounded-md border w-[300px]', props.className)}>
-            <div className="flex flex-row items-center mb-8 text-neutral-500 lowercase">
+        <div
+            className={clsx(
+                'bg-white rounded-md border w-[300px] max-h-[50%] flex flex-col',
+                props.className
+            )}
+        >
+            <div className="flex flex-row items-center text-neutral-500 lowercase p-4">
                 <MetadataTitle categories={keychain} />
             </div>
-            {node.values?.type === MetadataType.NUMBER && (
-                <StyleDetailNumber values={node.values as MetadataNumberValue} style={style} />
-            )}
-            {node.values?.type === MetadataType.STRING && (
-                <StyleDetailString values={node.values as MetadataStringValue} style={style} />
-            )}
+            <div className="overflow-auto">
+                {node.values?.type === MetadataType.NUMBER && (
+                    <StyleDetailNumber values={node.values as MetadataNumberValue} style={style} />
+                )}
+                {node.values?.type === MetadataType.STRING && (
+                    <StyleDetailString values={node.values as MetadataStringValue} style={style} />
+                )}
+            </div>
         </div>
     );
 }
 
 function StyleDetailNumber(props: { values: MetadataNumberValue; style: Style }) {
     return (
-        <div>
+        <div className="p-4">
             <HistogramGradientStrip map={props.style.map} values={props.values} />
         </div>
     );
@@ -98,7 +111,6 @@ function HistogramGradientStrip(props: HistogramGradientStripProps) {
                     </div>
                 ))}
             </div>
-            <div>Change colormap</div>
         </div>
     );
 }
@@ -155,5 +167,29 @@ function getNumericStats(map: { [key: number]: vec3 }, values: MetadataNumberVal
 }
 
 function StyleDetailString(props: { values: MetadataStringValue; style: Style }) {
-    return null;
+    const { values, style } = props;
+
+    let keys = Object.keys(style.map).map((key) => String(key));
+
+    return (
+        <div className="p-4">
+            <OverflowContainer>
+                <div>
+                    {keys.map((key, index) => (
+                        <div key={`${key}_${index}`} className="flex flex-row items-center">
+                            <div
+                                className="w-4 h-4 mr-2 rounded"
+                                style={{
+                                    background: `rgb(${style.map[key][0] * 255}, ${
+                                        style.map[key][1] * 255
+                                    }, ${style.map[key][2] * 255})`,
+                                }}
+                            ></div>
+                            <div>{key}</div>
+                        </div>
+                    ))}
+                </div>
+            </OverflowContainer>
+        </div>
+    );
 }
