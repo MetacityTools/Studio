@@ -1,18 +1,24 @@
+import React from 'react';
+
 import { MetadataNode } from '@utils/types';
 
 import { ColumnContainer, OverflowAbsoluteContainer, StretchContainer } from '@elements/Containers';
 
+import { useStyleKeychain } from '@shared/Context/styles';
 import { IOMenu } from '@shared/IOMenu/IOMenu';
 import { MetadataHierarchy } from '@shared/Metadata/MetadataHierarchy';
 
-import { useStyle } from './Context/ViewerContext';
-
 export function SidePanel() {
-    const [style, setStyle] = useStyle();
+    const [styleKeychain, setStyleKeychain] = useStyleKeychain();
+
+    React.useEffect(() => {
+        return () => {
+            setStyleKeychain([]);
+        };
+    }, []);
 
     const onValuePick = (value: MetadataNode) => {
-        setStyle(value);
-        console.log(value);
+        setStyleKeychain(value);
     };
 
     return (

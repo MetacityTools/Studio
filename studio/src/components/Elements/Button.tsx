@@ -1,30 +1,41 @@
 import clsx from 'clsx';
 import React from 'react';
 
-import { colorActive, colorBase } from './Colors';
+import { colorActive, colorActiveNoHover, colorBase, colorBaseNoHover } from './Colors';
 import { Input } from './Input';
 
 interface MenuButtonProps {
     children: React.ReactNode;
     tipTitle?: string;
     active?: boolean;
+    disabled?: boolean;
     onClick?: () => void;
 }
 
-export function getMenuButtonStyle(active?: boolean) {
+export function getMenuButtonStyle(active?: boolean, disabled?: boolean) {
     return clsx(
         'text-xs transition-colors outline-none focus:outline-none',
         'first:border-l last:border-r border-y last:rounded-r-md first:rounded-l-md',
-        active ? colorActive : colorBase
+        active
+            ? disabled
+                ? colorActiveNoHover
+                : colorActive
+            : disabled
+            ? colorBaseNoHover
+            : colorBase
     );
 }
 
 export function MenuButton(props: MenuButtonProps) {
     return (
         <button
-            className={clsx(getMenuButtonStyle(props.active || false), props.onClick && 'p-2')}
+            className={clsx(
+                getMenuButtonStyle(props.active || false, props.disabled || false),
+                props.onClick && 'p-2'
+            )}
             onClick={props.onClick}
             title={props.tipTitle}
+            disabled={props.disabled || false}
         >
             {props.children}
         </button>

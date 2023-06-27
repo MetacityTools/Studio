@@ -6,8 +6,8 @@ import { SizeGuard } from '@elements/SizeGuard';
 
 import { CanvasComponent } from '@shared/CanvasComponent';
 import { Controls } from '@shared/Controls';
+import { StyleDetailPanel } from '@shared/StyleDetail';
 
-import { InfoPanel } from './InfoPanel/InfoPanel';
 import { SidePanel } from './SidePanel';
 import { ViewerSplash } from './ViewerSplash';
 
@@ -21,7 +21,7 @@ export function ModelViewer() {
                 <Allotment.Pane preferredSize={1200}>
                     <CanvasComponent />
                     <Controls />
-                    <InfoPanel />
+                    <StyleDetailPanel className="absolute left-0 bottom-0 m-4" />
                 </Allotment.Pane>
             </Allotment>
             <ProcessingScreen />

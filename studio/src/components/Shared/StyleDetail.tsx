@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import { vec3 } from 'gl-matrix';
 import React from 'react';
 
@@ -9,12 +10,10 @@ import {
     Style,
 } from '@utils/types';
 
-import { Empty } from '@elements/Empty';
-
 import { useStyleKeychain, useStyles, useTraverseMetadata } from '@shared/Context/styles';
 import { MetadataTitle } from '@shared/Metadata/MetadataTitle';
 
-export function StyleDetailPanel() {
+export function StyleDetailPanel(props: { className?: string }) {
     const [keychain] = useStyleKeychain();
     const [getStyleGlobal, _, styles] = useStyles();
     const findNode = useTraverseMetadata();
@@ -27,10 +26,10 @@ export function StyleDetailPanel() {
         setNode(findNode(keychain));
     }, [keychain, styles]);
 
-    if (!style || !node) return <Empty>No metadata</Empty>;
+    if (!style || !node) return null;
 
     return (
-        <div className="p-4">
+        <div className={clsx('p-4 bg-white rounded-md border w-[300px]', props.className)}>
             <div className="flex flex-row items-center mb-8 text-neutral-500 lowercase">
                 <MetadataTitle categories={keychain} />
             </div>
@@ -52,25 +51,16 @@ function StyleDetailNumber(props: { values: MetadataNumberValue; style: Style })
     );
 }
 
-function HistogramGradientStrip(props: {
+interface HistogramGradientStripProps {
     map: { [key: number]: vec3 };
     values: MetadataNumberValue;
-}) {
+}
+
+function HistogramGradientStrip(props: HistogramGradientStripProps) {
     const { map, values } = props;
-    const { keys, min, range, histogram, maxHistoValue } = getNumericStats(map, values);
-
-    const gradient = keys
-        .map((key) => {
-            const color = props.map[key];
-            const percent = (key - min) / range;
-            return `rgb(${color[0] * 255}, ${color[1] * 255}, ${color[2] * 255}) ${percent * 100}%`;
-        })
-        .join(', ');
-
-    const style = {
-        background: `linear-gradient(to right, ${gradient})`,
-    };
-
+    const { unique, min, range, histogram, histogramColors } = getNumericStats(map, values);
+    const maxHistoValue = Math.max(...histogram);
+    const gradient = getGradientStyle(unique, map, min, range);
     const ytickCount = 5;
     const yticks = new Array(ytickCount).fill(0).map((_, index) => {
         const percent = index / (ytickCount - 1);
@@ -78,10 +68,29 @@ function HistogramGradientStrip(props: {
         return value.toFixed(2);
     });
 
-    const histogramBinWidth = range / histogram.length;
-
     return (
         <div className="flex flex-col">
+            <div className="flex flex-row w-full h-[50px] space-x-1 mb-1 items-end">
+                {histogram.map((value, index) => (
+                    <div
+                        key={index}
+                        className="flex-1 h-full rounded"
+                        style={{
+                            height: `${(value * 100) / maxHistoValue}%`,
+                            background: `rgb(${histogramColors[index * 3] * 255}, ${
+                                histogramColors[index * 3 + 1] * 255
+                            }, ${histogramColors[index * 3 + 2] * 255})`,
+                        }}
+                        title={`${value} records`}
+                    ></div>
+                ))}
+            </div>
+            <div
+                className="rounded w-full h-8"
+                style={{
+                    background: `linear-gradient(to right, ${gradient})`,
+                }}
+            ></div>
             <div className="flex flex-row space-x-1 mr-1 justify-between">
                 {yticks.map((value, index) => (
                     <div key={index} className="text-xs text-neutral-400 text-right">
@@ -89,32 +98,35 @@ function HistogramGradientStrip(props: {
                     </div>
                 ))}
             </div>
-            <div className="rounded w-full h-8" style={style}></div>
-            <div className="flex flex-row w-full h-[100px] space-x-1 mt-1">
-                {histogram.map((value, index) => (
-                    <div
-                        key={index}
-                        className="flex-1 h-full rounded border bg-neutral-100"
-                        style={{
-                            height: `${(value * 100) / maxHistoValue}%`,
-                        }}
-                        title={`${value} records`}
-                    ></div>
-                ))}
-            </div>
+            <div>Change colormap</div>
         </div>
     );
 }
 
+function getGradientStyle(
+    unique: number[],
+    map: { [key: number]: vec3 },
+    min: number,
+    range: number
+) {
+    return unique
+        .map((value) => {
+            const color = map[value];
+            const percent = (value - min) / range;
+            return `rgb(${color[0] * 255}, ${color[1] * 255}, ${color[2] * 255}) ${percent * 100}%`;
+        })
+        .join(', ');
+}
+
 function getNumericStats(map: { [key: number]: vec3 }, values: MetadataNumberValue) {
-    let keys = Object.keys(map).map((key) => Number(key));
-    keys = keys.sort((a, b) => a - b);
+    let unique = Object.keys(map).map((key) => Number(key));
+    unique = unique.sort((a, b) => a - b);
 
     let min = Infinity;
     let max = -Infinity;
-    for (const key of keys) {
-        min = Math.min(min, key);
-        max = Math.max(max, key);
+    for (const value of unique) {
+        min = Math.min(min, value);
+        max = Math.max(max, value);
     }
 
     let range = max - min;
@@ -122,13 +134,24 @@ function getNumericStats(map: { [key: number]: vec3 }, values: MetadataNumberVal
 
     const bins = 10;
     const histogram = new Array(bins + 1).fill(0);
+    const histogramColors = new Array(3 * (bins + 1)).fill(0);
+
     for (const value of values.values) {
         const percent = (value - min) / range;
         const index = Math.floor(percent * bins);
+        histogramColors[index * 3 + 0] =
+            (histogram[index] * histogramColors[index * 3 + 0] + map[value][0]) /
+            (histogram[index] + 1);
+        histogramColors[index * 3 + 1] =
+            (histogram[index] * histogramColors[index * 3 + 1] + map[value][1]) /
+            (histogram[index] + 1);
+        histogramColors[index * 3 + 2] =
+            (histogram[index] * histogramColors[index * 3 + 2] + map[value][2]) /
+            (histogram[index] + 1);
         histogram[index] += 1;
     }
-    const maxHistoValue = Math.max(...histogram);
-    return { keys, min, range, histogram, maxHistoValue };
+
+    return { unique, min, range, histogram, histogramColors };
 }
 
 function StyleDetailString(props: { values: MetadataStringValue; style: Style }) {

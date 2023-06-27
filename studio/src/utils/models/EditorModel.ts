@@ -1,6 +1,5 @@
 import { vec3 } from 'gl-matrix';
 
-import { linearInterpolateColor } from '@utils/modifiers/color';
 import { GeometryMode, PrimitiveType } from '@utils/types';
 
 import * as GL from '@bananagl/bananagl';
@@ -61,7 +60,6 @@ export class EditorModel extends GL.Pickable implements GL.Selectable {
 
     setColorMap(colormap: Map<number, vec3>) {
         if (this.disposed) return;
-        if (colormap.size === 0) return;
 
         const color = this.attributes.getAttribute('color');
         const submodel = this.attributes.getAttribute('submodel');

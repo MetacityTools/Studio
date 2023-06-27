@@ -50,6 +50,8 @@ interface ViewContextProps {
     setStyleKeychain: React.Dispatch<React.SetStateAction<string[]>>;
     styles: Style[];
     setStyles: React.Dispatch<React.SetStateAction<Style[]>>;
+    level: number;
+    setLevel: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export const context = React.createContext<ViewContextProps>({} as ViewContextProps);
@@ -68,6 +70,7 @@ export function ViewContext(props: { children: React.ReactNode }) {
     const [metadata, setMetadata] = React.useState<MetadataNode>({});
     const [styleKeychain, setStyleKeychain] = React.useState<string[]>([]);
     const [styles, setStyles] = React.useState<Style[]>([]);
+    const [level, setLevel] = React.useState<number>(1);
     const activeView = 0;
 
     React.useEffect(() => {
@@ -87,6 +90,18 @@ export function ViewContext(props: { children: React.ReactNode }) {
             setMinShade(minZ);
             setMaxShade(maxZ);
             if (isFinite(minZ)) setCamTargetZ(minZ);
+        };
+
+        scene.addChangeListener(onChange);
+
+        return () => {
+            scene.removeChangeListener(onChange);
+        };
+    }, [scene]);
+
+    React.useEffect(() => {
+        const onChange = () => {
+            const copy = scene.objects.filter((obj) => obj instanceof EditorModel) as EditorModel[];
 
             let selectionCopy = new Map(selection);
             let changed = false;
@@ -147,10 +162,10 @@ export function ViewContext(props: { children: React.ReactNode }) {
             models.forEach((object) => whiten(object));
         } else {
             models.forEach((object) => {
-                colorize(object, graph, styleKeychain, style);
+                colorize(object, graph, styleKeychain, style, level);
             });
         }
-    }, [styleKeychain, styles, metadata, models, graph]);
+    }, [styleKeychain, styles, metadata, models, graph, level]);
 
     return (
         <context.Provider
@@ -178,6 +193,8 @@ export function ViewContext(props: { children: React.ReactNode }) {
                 setStyleKeychain,
                 styles,
                 setStyles,
+                level,
+                setLevel,
             }}
         >
             {props.children}

@@ -8,7 +8,10 @@ export function MetadataTitle(props: { categories: string[] }) {
             {categories.map((category, index) => {
                 return (
                     <React.Fragment key={index}>
-                        <span className="overflow-ellipsis overflow-hidden whitespace-nowrap">
+                        <span
+                            className="overflow-ellipsis overflow-hidden whitespace-nowrap"
+                            title={category}
+                        >
                             {category}
                         </span>
                         {index < categories.length - 1 && (

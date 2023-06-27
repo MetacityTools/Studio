@@ -1,3 +1,4 @@
+import { LevelControls } from './Controls/ControlLevel';
 import { DirectionControls } from './Controls/ControlsDirection';
 import { ProjectionControls } from './Controls/ControlsProjection';
 import { RendererControls } from './Controls/ControlsRenderer';
@@ -11,6 +12,7 @@ export function Controls() {
             <DirectionControls />
             <ShaderControls />
             <SelectionControls />
+            <LevelControls />
             <RendererControls />
         </div>
     );

@@ -129,7 +129,7 @@ export function getStyleFromKeychain(metadata: MetadataNode, styles: Style[], ke
     if (keychain.length === 0) return null;
     const node = findNode(metadata, keychain);
     if (!node) return null;
-    const style = styles.findLast((style) => equalKeychains(keychain, style.keychain));
+    const style = styles.find((style) => equalKeychains(keychain, style.keychain));
     if (!style) return defaultStyle(node, keychain);
     return style;
 }
@@ -142,7 +142,7 @@ export function useStyles() {
     };
 
     const setStyle = (keychain: string[], value: Style) => {
-        const style = styles.findLast((style) => equalKeychains(keychain, style.keychain));
+        const style = styles.find((style) => equalKeychains(keychain, style.keychain));
         if (style)
             setStyles([
                 ...styles.filter((style) => !equalKeychains(keychain, style.keychain)),

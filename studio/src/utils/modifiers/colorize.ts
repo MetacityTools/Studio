@@ -2,8 +2,15 @@ import { vec3 } from 'gl-matrix';
 
 import { EditorModel, ModelGraph, Style } from '@utils/utils';
 
-export function colorize(model: EditorModel, graph: ModelGraph, keychain: string[], style: Style) {
-    const valueMap = graph.getKeyValueMap(model, keychain, 1);
+export function colorize(
+    model: EditorModel,
+    graph: ModelGraph,
+    keychain: string[],
+    style: Style,
+    treeLevel: number
+) {
+    const valueMap = graph.getKeyValueMap(model, keychain, treeLevel);
+    console.log(valueMap);
     const colorMap = new Map<number, vec3>();
 
     valueMap.forEach((value: number | string, key) => {

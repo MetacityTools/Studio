@@ -223,3 +223,8 @@ export function useMetadata(): MetadataNode {
     const { metadata } = React.useContext(context);
     return metadata;
 }
+
+export function useLevel(): [number, React.Dispatch<React.SetStateAction<number>>] {
+    const ctx = React.useContext(context);
+    return [ctx.level, ctx.setLevel];
+}
