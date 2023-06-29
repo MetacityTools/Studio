@@ -36,11 +36,7 @@ These features are planned for the future, but not yet scheduled.
 
 -   [ ] Filter file inputs (add format filters)
 -   [ ] Click off model - deselect all
--   [ ] Color indicating in group vs out of group in viewer
--   [ ] Delete group action button in the hierarchy menu
 -   [ ] Group selection in hierarchy tree optimization (shift to select, deselect previous on selectiong previous)
--   [ ] Open editor on Group select
--   [ ] Unselect all on clicking away
 -   [ ] Shortcuts for tab switching in editor
 -   [ ] When in Table view, click to select model and extend the selection based on groups on key/button/action
 
@@ -53,7 +49,6 @@ These features are planned for the future, but not yet scheduled.
 -   [ ] Extract Utils to separate SDK form metacity editors
 -   [ ] Optional interactivity - build BVH only if user opts-in to make the loaded models clickable
 -   [ ] Optimize deleting models - partition model BVH nodes based on submodels's ids
--   [ ] Named groups in hierarchy
 -   [ ] Insert textured plane (location blueprints for reference)
 -   [ ] Refactor General context - setting status messages, etc.
 -   [ ] Add a button to open/hide the side panel
