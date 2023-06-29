@@ -68,13 +68,28 @@ These features are planned for the future, but not yet scheduled.
 
 These features are planned for the future, and scheduled for a specific release.
 
-### v0.4.1
+### v0.5.2
 
 -   [ ] Projecting models onto models (2D onto 3D) - ✨WIP https://github.com/vojtatom/geometry
 -   [ ] Loading points and lines from SHP
 -   [ ] Export screenshot action
--   [ ] Selecting colormap
--   [ ] Hierarchy UI controls
+
+### v0.5.1
+
+-   [ ] Styling engine
+-   [ ] Styling language (?) - something like CSS but for metadata
+
+### v0.5.0
+
+Breaking changes, old `.metacity` files will not be compatible.
+
+-   [ ] Remove groups and hierarchy - all models will be in a flat list
+-   [ ] Metadata editor replacing Hierarchy editor
+    -   [ ] Diffing metadata between models
+    -   [ ] Edit metadata on selection
+    -   [ ] Editor part 1 - allow editing common attributes
+    -   [ ] Editor part 2 - show which attributes are different (can be overwritten and changed to common)
+-   [ ] Updated metadata format - binary buffers + attributes + styling
 
 🧠 Call for consultation (TB planned, beginning of July 2023)
 

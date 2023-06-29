@@ -78,7 +78,7 @@ function findLimits(values: number[]) {
 function defaultNumberStyle(values: MetadataNumberValue, keychain: string[]): Style {
     const unique = new Set<number>(values.values);
     const cm: vec3[] = colormap({
-        colormap: 'plasma',
+        colormap: 'viridis',
         nshades: 9,
         format: 'float',
     }).map((c) => vec3.fromValues(c[0], c[1], c[2]));
@@ -98,8 +98,8 @@ function defaultNumberStyle(values: MetadataNumberValue, keychain: string[]): St
 function defaultStringStyle(values: MetadataStringValue, keychain: string[]): Style {
     const unique = new Set<string>(values.values);
     const cm: vec3[] = colormap({
-        colormap: 'plasma',
-        nshades: 9,
+        colormap: 'hsv',
+        nshades: 15,
         format: 'float',
     }).map((c) => vec3.fromValues(c[0], c[1], c[2]));
 

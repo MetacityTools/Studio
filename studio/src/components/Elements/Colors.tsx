@@ -29,6 +29,34 @@ export const colorVividBase = clsx(
     trans
 );
 
+//Plain colors
+export const colorPlainActiveBorder = clsx();
+export const colorPlainActiveNoHover = 'text-amber-700 bg-amber-200';
+export const colorPlainActive = clsx(
+    colorPlainActiveNoHover,
+    'hover:text-amber-800 hover:bg-amber-300',
+    colorPlainActiveBorder,
+    trans
+);
+
+export const colorPlainLightBorder = clsx();
+export const colorPlainLightNoHover = 'text-amber-700 bg-amber-100';
+export const colorPlainLightActive = clsx(
+    colorPlainLightNoHover,
+    'hover:text-amber-600 hover:bg-amber-200',
+    colorPlainLightBorder
+);
+
+export const colorPlainBaseBorder = clsx();
+export const colorPlainBaseNoHover = 'text-neutral-800 bg-white';
+export const colorPlainBase = clsx(
+    colorPlainBaseNoHover,
+    'hover:text-amber-600 hover:bg-amber-200',
+    colorPlainBaseBorder,
+    trans
+);
+
+//base colors
 export const colorActiveBorder = clsx('border-amber-300 hover:border-amber-400', trans);
 export const colorActiveNoHover = 'text-amber-600 bg-amber-100';
 export const colorActive = clsx(colorActiveNoHover, 'hover:bg-amber-200', colorActiveBorder, trans);

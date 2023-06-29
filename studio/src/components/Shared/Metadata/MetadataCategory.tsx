@@ -21,7 +21,7 @@ interface MetadataCategoryProps {
 
 export function MetadataCategory(props: MetadataCategoryProps) {
     const { categories } = props;
-    const [open, setOpen] = React.useState(true);
+    const [open, setOpen] = React.useState(false);
 
     const handleOpen = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         setOpen(!open);
