@@ -29,7 +29,7 @@ export function IOMenu(props: { export?: boolean }) {
         const { models, tables } = await load(event, setLoadingStatus);
         setImportedModels(models);
         tables.forEach((table) => addSheet(table));
-        setImportOpen(true);
+        if (models.length > 0) setImportOpen(true);
         setProcessing(false);
         event.target.value = '';
         event.preventDefault();
