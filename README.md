@@ -74,11 +74,11 @@ These features are planned for the future, and scheduled for a specific release.
 -   [ ] Styling engine
 -   [ ] Styling language (?) - something like CSS but for metadata
 
-### v0.5.0
+### v0.5.0 - Work in progress
 
-Breaking changes, old `.metacity` files will not be compatible.
+⚠️ Breaking changes, old `.metacity` files will not be compatible.
 
--   [ ] Remove groups and hierarchy - all models will be in a flat list
+-   [x] Remove groups and hierarchy - all models will be in a flat list
 -   [ ] Metadata editor replacing Hierarchy editor
     -   [ ] Diffing metadata between models
     -   [ ] Edit metadata on selection
