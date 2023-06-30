@@ -1,29 +1,12 @@
 import { vec3 } from 'gl-matrix';
 import React from 'react';
 
-import {
-    EditorModel,
-    MetadataNode,
-    ModelGraph,
-    SelectionType,
-    Style,
-    colorize,
-    extractMetadataTree,
-    whiten,
-} from '@utils/utils';
+import { EditorModel, MetadataNode } from '@utils/utils';
 
 import * as GL from '@bananagl/bananagl';
 
-import { getStyleFromKeychain } from './styles';
+import { SelectionType } from './selection';
 
-/**
- * A function that updates the selection of models and submodels.
- * @param model The model to select.
- * @param submodelIDs An array of submodel IDs to select.
- * @param toggle A boolean indicating whether to toggle the selection or not.
- * @param extend A boolean indicating whether to extend the selection or not.
- * @returns void
- */
 export type SelectFunction = (selection: SelectionType, toggle?: boolean, extend?: boolean) => void;
 
 interface ViewContextProps {
@@ -33,8 +16,6 @@ interface ViewContextProps {
     models: EditorModel[];
     selection: SelectionType;
     setSelection: React.Dispatch<React.SetStateAction<SelectionType>>;
-    graph: ModelGraph;
-    setGraph: React.Dispatch<React.SetStateAction<ModelGraph>>;
     camTargetZ: number;
     setCamTargetZ: React.Dispatch<React.SetStateAction<number>>;
     minShade: number;
@@ -46,12 +27,6 @@ interface ViewContextProps {
     globalShift: vec3 | null;
     setGlobalShift: React.Dispatch<React.SetStateAction<vec3 | null>>;
     metadata: MetadataNode;
-    styleKeychain: string[];
-    setStyleKeychain: React.Dispatch<React.SetStateAction<string[]>>;
-    styles: Style[];
-    setStyles: React.Dispatch<React.SetStateAction<Style[]>>;
-    level: number;
-    setLevel: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export const context = React.createContext<ViewContextProps>({} as ViewContextProps);
@@ -61,16 +36,12 @@ export function ViewContext(props: { children: React.ReactNode }) {
     const [scene] = React.useState(new GL.Scene());
     const [models, setModels] = React.useState<EditorModel[]>([]);
     const [selection, setSelection] = React.useState<SelectionType>(new Map());
-    const [graph, setGraph] = React.useState<ModelGraph>(new ModelGraph());
     const [camTargetZ, setCamTargetZ] = React.useState<number>(0);
     const [minShade, setMinShade] = React.useState<number>(0);
     const [maxShade, setMaxShade] = React.useState<number>(10);
-    const [gridVisible, setGridVisible] = React.useState<boolean>(true);
+    const [gridVisible, setGridVisible] = React.useState<boolean>(false);
     const [globalShift, setGlobalShift] = React.useState<vec3 | null>(null);
     const [metadata, setMetadata] = React.useState<MetadataNode>({});
-    const [styleKeychain, setStyleKeychain] = React.useState<string[]>([]);
-    const [styles, setStyles] = React.useState<Style[]>([]);
-    const [level, setLevel] = React.useState<number>(1);
     const activeView = 0;
 
     React.useEffect(() => {
@@ -122,16 +93,6 @@ export function ViewContext(props: { children: React.ReactNode }) {
     }, [scene, selection]);
 
     React.useEffect(() => {
-        graph.addChangeListener(() => {
-            const updated = new ModelGraph();
-            updated.copy(graph);
-            setGraph(updated);
-            const metadata = extractMetadataTree(updated);
-            setMetadata(metadata);
-        });
-    }, [graph]);
-
-    React.useEffect(() => {
         models.forEach((object) => {
             if (object instanceof EditorModel) {
                 object.uniforms = {
@@ -156,17 +117,6 @@ export function ViewContext(props: { children: React.ReactNode }) {
         view.camera.z = camTargetZ;
     }, [activeView, renderer, camTargetZ]);
 
-    React.useEffect(() => {
-        const style = getStyleFromKeychain(metadata, styles, styleKeychain);
-        if (!style) {
-            models.forEach((object) => whiten(object));
-        } else {
-            models.forEach((object) => {
-                colorize(object, graph, styleKeychain, style, level);
-            });
-        }
-    }, [styleKeychain, styles, metadata, models, graph, level]);
-
     return (
         <context.Provider
             value={{
@@ -176,8 +126,6 @@ export function ViewContext(props: { children: React.ReactNode }) {
                 models,
                 selection,
                 setSelection,
-                graph,
-                setGraph,
                 camTargetZ,
                 setCamTargetZ,
                 minShade,
@@ -189,12 +137,6 @@ export function ViewContext(props: { children: React.ReactNode }) {
                 globalShift,
                 setGlobalShift,
                 metadata,
-                styleKeychain,
-                setStyleKeychain,
-                styles,
-                setStyles,
-                level,
-                setLevel,
             }}
         >
             {props.children}

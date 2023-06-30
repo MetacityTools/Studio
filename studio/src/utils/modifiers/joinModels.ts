@@ -1,29 +1,9 @@
 import { vec3 } from 'gl-matrix';
 
 import { EditorModel } from '@utils/models/EditorModel';
-import { ExtHierarchyModelNode, HierarchyGroupNode, HierarchyModelNode } from '@utils/types';
-import { EditorModelData, ModelGraph } from '@utils/utils';
+import { EditorModelData, Metadata } from '@utils/utils';
 
-function getAllSubmodels(
-    model: EditorModel,
-    node: HierarchyGroupNode,
-    map: Map<number, HierarchyModelNode> = new Map()
-) {
-    for (const child of node.children) {
-        if ((child as HierarchyGroupNode).children) {
-            getAllSubmodels(model, child as HierarchyGroupNode, map);
-        } else {
-            const modelNode = child as ExtHierarchyModelNode;
-            if (modelNode.model !== model) continue;
-            modelNode.data = modelNode.data ?? {};
-            map.set(modelNode.id, modelNode);
-            delete modelNode.model;
-        }
-    }
-    return map;
-}
-
-export async function joinModels(models: EditorModel[], graph: ModelGraph) {
+export async function joinModels(models: EditorModel[]) {
     if (models.length === 0) throw new Error('No models to convert.');
 
     const positions: Float32Array[] = [];
@@ -35,8 +15,7 @@ export async function joinModels(models: EditorModel[], graph: ModelGraph) {
         uZMax: 0,
     };
 
-    //TODO the problem is that there are no model references in the graph
-    const graphCopy = graph.exportGraph();
+    const joinedMetadata: Metadata = {};
 
     for (const model of models) {
         //get required attributes
@@ -45,9 +24,9 @@ export async function joinModels(models: EditorModel[], graph: ModelGraph) {
         if (!p || !s) throw new Error('Required attributes not found during conversion.');
 
         //get model nodes
-        const modelNodes = getAllSubmodels(model, graphCopy.root);
+        const modelMetadata = model.metadata;
 
-        //convert positions
+        //apply positions
         const pi = new Float32Array(p.buffer.data.length);
         pi.set(p.buffer.data);
         const v = vec3.create();
@@ -60,29 +39,33 @@ export async function joinModels(models: EditorModel[], graph: ModelGraph) {
         }
         positions.push(pi as Float32Array);
 
-        //TODO there is probably a problem in the submodel conversion
         //convert submodels
         const view = s.buffer.getView(Uint32Array);
+        //init updated submodel ids
         const si = new Uint32Array(view.length);
         si.set(view);
-        const ids = Array.from(new Set<number>(si));
+        //array of unique old ids
+        const uniqueOldIDs = Array.from(new Set<number>(si));
+        //conversion map
         const map = new Map<number, number>();
-        let n: HierarchyModelNode | undefined, id: number | undefined;
-        for (let i = 0; i < ids.length; i++) map.set(ids[i], i);
+        let data: any, id: number | undefined;
+        //create mapping
+        for (let i = 0; i < uniqueOldIDs.length; i++) map.set(uniqueOldIDs[i], i);
+        //apply mapping
         for (let i = 0; i < si.length; i++) {
+            //update submodel id
             id = si[i];
             si[i] = map.get(id)! + submodelCount;
-            n = modelNodes.get(id);
-            if (!n) throw new Error('Model node not found during conversion.');
-            n.id = si[i];
+            //update metadata
+            data = modelMetadata[id];
+            joinedMetadata[si[i]] = data ?? {};
         }
         submodels.push(si);
-
         uniforms.uZMin = model.uniforms.uZMin as number;
         uniforms.uZMax = model.uniforms.uZMax as number;
 
         //epilogue
-        submodelCount += ids.length;
+        submodelCount += uniqueOldIDs.length;
     }
 
     //concat buffers
@@ -107,11 +90,11 @@ export async function joinModels(models: EditorModel[], graph: ModelGraph) {
             submodel,
         },
         metadata: {
+            data: joinedMetadata,
             name: 'Joined Model',
             primitive: models[0].primitive, //TODO this is gonna be triangle but maybe we should change it up in the future
         },
         uniforms,
-        hierarchy: graphCopy,
     };
 
     return modelData;

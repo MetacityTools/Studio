@@ -12,8 +12,8 @@ export function exportModel(model: EditorModelData) {
     writeTypedArray(model.geometry.submodel, stream);
     console.log('expected length', model.geometry.submodel.length);
 
-    const hierarchy = JSON.stringify(model.hierarchy);
-    writeString(hierarchy, stream);
+    const metadata = JSON.stringify(model.metadata);
+    writeString(metadata, stream);
     writeString(model.metadata.name, stream);
     stream.writeInt32(model.metadata.primitive);
     stream.close();

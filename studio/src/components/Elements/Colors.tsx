@@ -58,14 +58,18 @@ export const colorPlainBase = clsx(
 
 //base colors
 export const colorActiveBorder = clsx('border-amber-300 hover:border-amber-400', trans);
-export const colorActiveNoHover = 'text-amber-600 bg-amber-100';
+export const colorActiveText = 'text-amber-600';
+export const colorActiveNoHover = clsx(colorActiveText, 'bg-amber-100');
 export const colorActive = clsx(colorActiveNoHover, 'hover:bg-amber-200', colorActiveBorder, trans);
+export const colorActiveNoBackground = clsx(colorActiveText, colorActiveBorder, trans);
 
 export const colorBaseBorder = clsx('border-neutral-200 hover:border-amber-400', trans);
-export const colorBaseNoHover = 'text-neutral-600 bg-white';
-export const colorBase = clsx(
+export const colorBaseText = 'text-neutral-600';
+export const colorBaseNoHover = clsx(colorBaseText, 'bg-white');
+export const colorBaseNoBackground = clsx(
     colorBaseNoHover,
-    'hover:text-amber-600 hover:bg-amber-200',
     colorBaseBorder,
+    'hover:text-amber-600',
     trans
 );
+export const colorBase = clsx(colorBaseNoBackground, 'hover:bg-amber-200', trans);

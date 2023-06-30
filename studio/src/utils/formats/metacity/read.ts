@@ -21,8 +21,8 @@ export function readModel(buffer: ArrayBuffer): ModelData {
     const stream = new ReadOnlyMemoryStream(buffer);
     const positions = readTypedArray(stream, Float32Array) as Float32Array;
     const submodel = readTypedArray(stream, Uint32Array) as Uint32Array;
-    const hierString = readString(stream);
-    const hierarchy = JSON.parse(hierString);
+    const metaString = readString(stream);
+    const metadata = JSON.parse(metaString);
     const name = readString(stream);
     const primitive = stream.readInt32();
     //stream.close();
@@ -32,8 +32,8 @@ export function readModel(buffer: ArrayBuffer): ModelData {
             position: positions,
             submodel: submodel,
         },
-        hierarchy: hierarchy,
         metadata: {
+            data: metadata,
             name: name,
             primitive: primitive,
         },

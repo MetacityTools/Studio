@@ -7,16 +7,13 @@ import { ColumnContainer, OverflowContainer, StretchContainer } from '@elements/
 
 import { MetadataHierarchy } from '@shared/Metadata/MetadataHierarchy';
 
-import { GroupHierarchy } from './GroupHierarchy/GroupHierarchy';
-import { GroupMenu } from './GroupMenu';
 import { MetaEditor } from './MetaEditor';
 
-export function GroupSidePanel() {
+export function MetadataSidePanel() {
     const handlePick = (value: MetadataNode) => {};
 
     return (
         <ColumnContainer>
-            <GroupMenu />
             <StretchContainer>
                 <Allotment separator={false}>
                     <Allotment.Pane preferredSize={400} minSize={250}>

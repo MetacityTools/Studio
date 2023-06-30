@@ -2,6 +2,8 @@ import * as React from 'react';
 
 import { CoordinateMode, ModelData, load } from '@utils/utils';
 
+import { useSheets } from '@editor/EditorContext';
+
 import { Button, ButtonFileInput } from '@elements/Button';
 import { useLoadingStatus, useProcessing } from '@elements/Context';
 
@@ -17,14 +19,16 @@ export function IOMenu(props: { export?: boolean }) {
     const exportProject = useExport();
     const [, setProcessing] = useProcessing();
     const [, setLoadingStatus] = useLoadingStatus();
+    const [addSheet] = useSheets();
 
     const [importOpen, setImportOpen] = React.useState(false);
     const [importedModels, setImportedModels] = React.useState<ModelData[]>([]);
 
     const onModelsSelected = async (event: React.ChangeEvent<HTMLInputElement>) => {
         setProcessing(true);
-        const models = await load(event, setLoadingStatus);
+        const { models, tables } = await load(event, setLoadingStatus);
         setImportedModels(models);
+        tables.forEach((table) => addSheet(table));
         setImportOpen(true);
         setProcessing(false);
         event.target.value = '';
@@ -48,8 +52,13 @@ export function IOMenu(props: { export?: boolean }) {
     };
 
     return (
-        <div className="flex flex-row p-4 w-full space-x-2">
-            <ButtonFileInput id="models" onChange={onModelsSelected} multiple>
+        <div className="flex flex-row w-full space-x-2 border-b">
+            <ButtonFileInput
+                id="models"
+                onChange={onModelsSelected}
+                multiple
+                accept=".gltf, .glb, .shp, .metacity, .csv"
+            >
                 Import
             </ButtonFileInput>
             {props.export && <Button onClick={handleExport}>Export</Button>}

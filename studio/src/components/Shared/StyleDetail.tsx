@@ -1,29 +1,7 @@
-import clsx from 'clsx';
-import { vec3 } from 'gl-matrix';
-import React from 'react';
-
-import {
-    MetadataNode,
-    MetadataNumberValue,
-    MetadataStringValue,
-    MetadataType,
-    Style,
-} from '@utils/types';
-
-import {
-    ColumnContainer,
-    OverflowAbsoluteContainer,
-    OverflowContainer,
-} from '@elements/Containers';
-
-import { useStyleKeychain, useStyles, useTraverseMetadata } from '@shared/Context/styles';
-import { MetadataTitle } from '@shared/Metadata/MetadataTitle';
-
 export function StyleDetailPanel(props: { className?: string }) {
-    const [keychain] = useStyleKeychain();
-    const [getStyleGlobal, _, styles] = useStyles();
-    const findNode = useTraverseMetadata();
+    return null;
 
+    /*
     const [style, setStyle] = React.useState<Style | null>(null);
     const [node, setNode] = React.useState<MetadataNode | null>(null);
 
@@ -191,5 +169,5 @@ function StyleDetailString(props: { values: MetadataStringValue; style: Style })
                 </div>
             </OverflowContainer>
         </div>
-    );
+    );*/
 }

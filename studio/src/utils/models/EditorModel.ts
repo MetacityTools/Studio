@@ -1,6 +1,6 @@
 import { vec3 } from 'gl-matrix';
 
-import { GeometryMode, PrimitiveType } from '@utils/types';
+import { GeometryMode, Metadata, PrimitiveType } from '@utils/types';
 
 import * as GL from '@bananagl/bananagl';
 
@@ -14,6 +14,7 @@ export class EditorModel extends GL.Pickable implements GL.Selectable {
     public solidShader?: GL.Shader;
     public wireframeShader?: GL.Shader;
     public noEdgesShader?: GL.Shader;
+    public metadata: Metadata = {};
 
     constructor() {
         super();

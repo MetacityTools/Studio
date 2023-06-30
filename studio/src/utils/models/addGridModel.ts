@@ -38,6 +38,8 @@ export function addGridModel(scene: GL.Scene, span: number = 100000, step: numbe
         uUnit: step,
     };
 
+    glmodel.visible = false;
+
     scene.add(glmodel);
 }
 

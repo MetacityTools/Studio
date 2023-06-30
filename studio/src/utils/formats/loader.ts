@@ -10,16 +10,23 @@ export async function load(
     event: React.ChangeEvent<HTMLInputElement>,
     updateStatus?: (status: string) => void
 ) {
-    const files = await loadFiles(event);
+    const files = await loadModelFiles(event);
+    const tables = await loadTables(event);
     const models = await loadModels(files, updateStatus);
-    return models;
+    return { models, tables };
 }
 
-export async function loadFiles(event: React.ChangeEvent<HTMLInputElement>) {
+export async function loadTables(event: React.ChangeEvent<HTMLInputElement>) {
     const files = event.target.files;
-    if (!files) {
-        return [];
-    }
+    if (!files) return [];
+
+    const csv = await prepareCSV(files);
+    return csv;
+}
+
+export async function loadModelFiles(event: React.ChangeEvent<HTMLInputElement>) {
+    const files = event.target.files;
+    if (!files) return [];
 
     const gltf = await prepareGLTF(files);
     const ifc = await prepareIFC(files);
@@ -75,6 +82,18 @@ async function prepareIFC(files: FileList): Promise<UserInputModel[]> {
                     buffer,
                 },
             });
+        }
+    }
+    return data;
+}
+
+async function prepareCSV(files: FileList): Promise<string[]> {
+    const data = [];
+    for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        if (file.name.endsWith('csv')) {
+            const content = await file.text();
+            data.push(content);
         }
     }
     return data;
