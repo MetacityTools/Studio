@@ -5,6 +5,7 @@ import { EditorModel, MetadataNode } from '@utils/utils';
 
 import * as GL from '@bananagl/bananagl';
 
+import { extractMetadata } from './metadata';
 import { SelectionType } from './selection';
 
 export type SelectFunction = (selection: SelectionType, toggle?: boolean, extend?: boolean) => void;
@@ -27,6 +28,7 @@ interface ViewContextProps {
     globalShift: vec3 | null;
     setGlobalShift: React.Dispatch<React.SetStateAction<vec3 | null>>;
     metadata: MetadataNode;
+    setMetadata: React.Dispatch<React.SetStateAction<MetadataNode>>;
 }
 
 export const context = React.createContext<ViewContextProps>({} as ViewContextProps);
@@ -61,6 +63,10 @@ export function ViewContext(props: { children: React.ReactNode }) {
             setMinShade(minZ);
             setMaxShade(maxZ);
             if (isFinite(minZ)) setCamTargetZ(minZ);
+
+            const data = extractMetadata(copy);
+            setMetadata(data);
+            console.log(data);
         };
 
         scene.addChangeListener(onChange);
@@ -137,6 +143,7 @@ export function ViewContext(props: { children: React.ReactNode }) {
                 globalShift,
                 setGlobalShift,
                 metadata,
+                setMetadata,
             }}
         >
             {props.children}

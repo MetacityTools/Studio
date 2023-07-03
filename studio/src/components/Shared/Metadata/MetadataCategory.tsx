@@ -17,6 +17,7 @@ interface MetadataCategoryProps {
     categories: string[];
     node: MetadataNode;
     onValuePick: (value: MetadataNode) => void;
+    depth?: number;
 }
 
 export function MetadataCategory(props: MetadataCategoryProps) {
@@ -30,7 +31,7 @@ export function MetadataCategory(props: MetadataCategoryProps) {
 
     return (
         <HierarchyNodeGroup>
-            <HierarchyNode hoverable>
+            <HierarchyNode depth={props.depth}>
                 <HierarchyChevronButton
                     open={open}
                     onClick={handleOpen}
@@ -47,10 +48,10 @@ export function MetadataCategory(props: MetadataCategoryProps) {
 }
 
 export function MetadataCategoryChildren(props: MetadataCategoryProps) {
-    const { node, onValuePick } = props;
+    const { node, onValuePick, depth } = props;
 
     if (node.children) {
-        const sortedEntires = Object.entries(node.children).sort(([a], [b]) => a.localeCompare(b));
+        const sortedEntires = [...node.children].sort(([keyA], [keyB]) => keyA.localeCompare(keyB));
         return (
             <HierarchyNodeGroupChildren>
                 {sortedEntires.map(([key, value]) => {
@@ -60,6 +61,7 @@ export function MetadataCategoryChildren(props: MetadataCategoryProps) {
                             category={key}
                             node={value}
                             key={key}
+                            depth={(depth !== undefined && depth + 1) || undefined}
                         />
                     );
                 })}

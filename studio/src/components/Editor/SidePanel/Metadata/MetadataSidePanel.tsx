@@ -4,7 +4,10 @@ import 'allotment/dist/style.css';
 import { MetadataNode } from '@utils/types';
 
 import { ColumnContainer, OverflowContainer, StretchContainer } from '@elements/Containers';
+import { PanelTitle } from '@elements/PanelTitle';
 
+import { useSelectedModels } from '@shared/Context/hooks';
+import { combineData } from '@shared/Context/metadata';
 import { MetadataHierarchy } from '@shared/Metadata/MetadataHierarchy';
 
 import { MetaEditor } from './MetaEditor';
@@ -16,13 +19,19 @@ export function MetadataSidePanel() {
         <ColumnContainer>
             <StretchContainer>
                 <Allotment separator={false}>
-                    <Allotment.Pane preferredSize={400} minSize={250}>
-                        <OverflowContainer className="p-4">
-                            <MetadataHierarchy onValuePick={handlePick} />
-                        </OverflowContainer>
+                    <Allotment.Pane preferredSize={400} minSize={200}>
+                        <ColumnContainer>
+                            <PanelTitle title="Metadata" />
+                            <OverflowContainer>
+                                <MetadataHierarchy onValuePick={handlePick} />
+                            </OverflowContainer>
+                        </ColumnContainer>
                     </Allotment.Pane>
-                    <Allotment.Pane preferredSize={800} className="border-l">
-                        <MetaEditor />
+                    <Allotment.Pane preferredSize={800} minSize={200} className="border-l">
+                        <ColumnContainer>
+                            <PanelTitle title="Shared Metadata Editor" />
+                            <MetaEditor />
+                        </ColumnContainer>
                     </Allotment.Pane>
                 </Allotment>
             </StretchContainer>

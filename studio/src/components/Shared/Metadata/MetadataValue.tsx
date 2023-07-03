@@ -15,10 +15,11 @@ interface MetadataValueProps {
     categories: string[];
     node: MetadataNode;
     onValuePick: (value: MetadataNode) => void;
+    depth?: number;
 }
 
 export function MetadataValue(props: MetadataValueProps) {
-    const { categories, node, onValuePick } = props;
+    const { categories, node, onValuePick, depth } = props;
 
     const handleUseStyle = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         onValuePick(node);
@@ -27,7 +28,7 @@ export function MetadataValue(props: MetadataValueProps) {
 
     return (
         <HierarchyNodeGroup>
-            <HierarchyNode hoverable>
+            <HierarchyNode depth={depth}>
                 <HierarchyBracketsButton inheritStyles onClick={handleUseStyle} />
                 <HierarchyMainButton inheritStyles onClick={handleUseStyle}>
                     <MetadataTitle categories={categories} />

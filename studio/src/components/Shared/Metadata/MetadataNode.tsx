@@ -7,22 +7,33 @@ interface MetadataNodeComponentProps {
     onValuePick: (value: MetadataNode) => void;
     category: string;
     node: MetadataNode;
+    depth?: number;
 }
 
 export function MetadataNodeComponent(props: MetadataNodeComponentProps) {
-    let { category, onValuePick } = props;
+    let { category, onValuePick, depth } = props;
     const { categories, node } = aggregateLabel(category, props.node);
 
-    const isCategory = node.children && Object.keys(node.children).length > 0;
+    const isCategory = node.children && node.children.size > 0;
     const isValue = node.values !== undefined;
 
     return (
         <>
             {isCategory && (
-                <MetadataCategory categories={categories} node={node} onValuePick={onValuePick} />
+                <MetadataCategory
+                    categories={categories}
+                    node={node}
+                    onValuePick={onValuePick}
+                    depth={depth}
+                />
             )}
             {isValue && (
-                <MetadataValue categories={categories} node={node} onValuePick={onValuePick} />
+                <MetadataValue
+                    categories={categories}
+                    node={node}
+                    onValuePick={onValuePick}
+                    depth={depth}
+                />
             )}
         </>
     );
@@ -33,7 +44,7 @@ function aggregateLabel(category: string, node: MetadataNode) {
     while (node.children && Object.keys(node.children).length === 1) {
         const key = Object.keys(node.children)[0];
         categories.push(key);
-        node = node.children[key];
+        node = node.children.get(key)!;
     }
     return { categories, node };
 }

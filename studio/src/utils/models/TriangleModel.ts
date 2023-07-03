@@ -44,6 +44,7 @@ export async function addTriangleModel(data: EditorModelData) {
     glmodel.wireframeShader = wireframeShader;
     glmodel.noEdgesShader = noEdgesShader;
     glmodel.name = metadata.name;
+    glmodel.metadata = metadata.data;
     if (uniforms) glmodel.uniforms = GL.cloneUniforms(uniforms);
     else glmodel.uniforms = DEFAULT_UNIFORMS;
     glmodel.position = position.slice() as vec3;

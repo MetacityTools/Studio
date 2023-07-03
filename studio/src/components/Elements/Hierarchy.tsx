@@ -32,28 +32,6 @@ interface HierarchyButtonProps extends HierarchyButtonBase {
     disabled?: boolean;
 }
 
-export function HierarchyButton(props: HierarchyButtonProps) {
-    const disabled = props.disabled ?? false;
-    return (
-        <button
-            className={clsx(
-                'outline-none',
-                'px-4 py-2 border-y last:border-r last:rounded-r',
-                getNodeBackground(
-                    props.active ?? false,
-                    props.light ?? false,
-                    props.inheritStyles ?? false
-                )
-            )}
-            onClick={props.onClick}
-            title={props.title}
-            disabled={disabled}
-        >
-            {props.children}
-        </button>
-    );
-}
-
 interface HierarchyChevronButtonProps extends HierarchyButtonBase {
     open: boolean;
 }
@@ -63,7 +41,7 @@ export function HierarchyChevronButton(props: HierarchyChevronButtonProps) {
         <button
             className={clsx(
                 'outline-none',
-                'px-2 py-2 rounded-l border-y border-l',
+                'px-2 py-2',
                 getNodeBackground(
                     props.active ?? false,
                     props.light ?? false,
@@ -88,7 +66,7 @@ export function HierarchyBracketsButton(props: HierarchyButtonBase) {
         <button
             className={clsx(
                 'outline-none',
-                'px-2 py-2 rounded-l border-y border-l',
+                'px-2 py-2',
                 getNodeBackground(
                     props.active ?? false,
                     props.light ?? false,
@@ -113,7 +91,7 @@ export function HierarchyMainButton(props: HierarchyMainButtonProps) {
             className={clsx(
                 'outline-none',
                 props.padded ? 'px-4' : 'px-2',
-                'flex-1 text-left first:rounded-l last:rounded-r border-y first:border-l last:border-r last:rounded-r flex flex-row items-center',
+                'flex-1 text-left flex flex-row items-center',
                 'text-ellipsis overflow-hidden whitespace-nowrap',
                 getNodeBackground(
                     props.active ?? false,
@@ -132,21 +110,20 @@ interface HierarchyNodeProps {
     hoverable?: boolean;
     children: React.ReactNode;
     active?: boolean;
+    depth?: number;
 }
 
 export function HierarchyNode(props: HierarchyNodeProps) {
+    console.log(props.depth);
     return (
         <div
             className={clsx(
-                'flex flex-row justify-between items-center',
+                'flex flex-row justify-between items-center hover:bg-neutral-100',
                 props.hoverable
-                    ? props.active
-                        ? colorVividActive
-                        : colorVividBase
-                    : props.active
-                    ? colorVividActiveBorder
-                    : colorVividBaseBorder
             )}
+            style={{
+                paddingLeft: `${props.depth ?? 0}rem`,
+            }}
         >
             {props.children}
         </div>
@@ -158,9 +135,9 @@ interface HierarchyNodeGroupProps {
 }
 
 export function HierarchyNodeGroup(props: HierarchyNodeGroupProps) {
-    return <div className="flex flex-col rounded-md">{props.children}</div>;
+    return <div className="flex flex-col">{props.children}</div>;
 }
 
 export function HierarchyNodeGroupChildren(props: HierarchyNodeGroupProps) {
-    return <div className="mt-1 pl-8 space-y-1">{props.children}</div>;
+    return <div>{props.children}</div>;
 }

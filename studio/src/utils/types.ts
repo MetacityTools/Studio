@@ -116,43 +116,8 @@ export enum GeometryMode {
 
 //------------------------------------------------------------
 export interface MetadataNode {
-    values?: MetadataValue;
-    children?: {
-        [key: string]: MetadataNode;
-    };
-}
-
-export enum MetadataType {
-    NONE,
-    STRING,
-    NUMBER,
-    BOOLEAN,
-    MIXED,
-}
-
-export interface MetadataValue {
-    type: MetadataType;
-    values: (string | number | boolean)[];
-}
-
-export interface MetadataStringValue extends MetadataValue {
-    type: MetadataType.STRING;
-    values: string[];
-}
-
-export interface MetadataNumberValue extends MetadataValue {
-    type: MetadataType.NUMBER;
-    values: number[];
-}
-
-export interface MetadataBooleanValue extends MetadataValue {
-    type: MetadataType.BOOLEAN;
-    values: boolean[];
-}
-
-export interface MetadataMixedValue extends MetadataValue {
-    type: MetadataType.MIXED;
-    values: (string | number | boolean)[];
+    values?: any[];
+    children?: Map<string, MetadataNode>;
 }
 
 //------------------------------------------------------------

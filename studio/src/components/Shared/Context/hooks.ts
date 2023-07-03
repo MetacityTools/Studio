@@ -14,6 +14,7 @@ import { MetadataNode, PrimitiveType } from '@utils/types';
 import * as GL from '@bananagl/bananagl';
 
 import { SelectFunction, context } from './Context';
+import { extractMetadata } from './metadata';
 import { SelectionType, changeSelection } from './selection';
 
 export function useActiveView(): number {
@@ -190,7 +191,13 @@ export function useExport() {
     return exportProject;
 }
 
-export function useMetadata(): MetadataNode {
-    const { metadata } = React.useContext(context);
-    return metadata;
+export function useMetadata(): [MetadataNode, () => void] {
+    const { metadata, setMetadata, models } = React.useContext(context);
+
+    const update = () => {
+        const data = extractMetadata(models);
+        setMetadata(data);
+    };
+
+    return [metadata, update];
 }
