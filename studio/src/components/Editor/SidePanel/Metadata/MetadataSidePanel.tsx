@@ -29,7 +29,7 @@ export function MetadataSidePanel() {
                     </Allotment.Pane>
                     <Allotment.Pane preferredSize={800} minSize={200} className="border-l">
                         <ColumnContainer>
-                            <PanelTitle title="Shared Metadata Editor" />
+                            <PanelTitle title="Metadata Editor (only shared values)" />
                             <MetaEditor />
                         </ColumnContainer>
                     </Allotment.Pane>
