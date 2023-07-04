@@ -14,7 +14,10 @@ export function ModelList() {
     const handleSelect = (model: EditorModel) => {
         if (selection.size > 1) select(new Map([[model, new Set()]]));
         else if (selection.has(model)) select(new Map());
-        else select(new Map([[model, new Set()]]));
+        else {
+            const submodels = Object.keys(model.metadata).map((submodel) => parseInt(submodel));
+            select(new Map([[model, new Set(submodels)]]));
+        }
     };
 
     return (

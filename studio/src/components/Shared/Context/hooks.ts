@@ -201,3 +201,86 @@ export function useMetadata(): [MetadataNode, () => void] {
 
     return [metadata, update];
 }
+
+export function useMetadataQuery() {
+    const { metadata } = React.useContext(context);
+
+    const findKeychainRecursive = (
+        node: MetadataNode,
+        target: MetadataNode,
+        nodeKey?: string
+    ): null | string[] => {
+        if (node === target) {
+            if (nodeKey) return [nodeKey];
+            return [];
+        }
+        if (!node.children) return null;
+
+        for (const [key, value] of node.children.entries()) {
+            const path = findKeychainRecursive(value, target, key);
+            if (path) {
+                if (nodeKey) return [nodeKey, ...path];
+                return path;
+            }
+        }
+
+        return null;
+    };
+
+    const queryMetadata = (target: MetadataNode) => {
+        return findKeychainRecursive(metadata, target);
+    };
+
+    return queryMetadata;
+}
+
+function filterSubmodelRecursive(metadata: any, keychain: string[], value: any, depth: number = 0) {
+    if (keychain.length === depth) {
+        if (metadata === value) return true;
+        return false;
+    } else {
+        const key = keychain[depth];
+        const subdata = metadata[key];
+        if (subdata === undefined) return false;
+        return filterSubmodelRecursive(subdata, keychain, value, depth + 1);
+    }
+}
+
+function filterSubmodels(model: EditorModel, keychain: string[], value: any) {
+    const submodels = new Set<number>();
+    let parsedId;
+    for (const id of Object.keys(model.metadata)) {
+        parsedId = parseInt(id);
+        if (filterSubmodelRecursive(model.metadata[parsedId], keychain, value))
+            submodels.add(parsedId);
+    }
+    return submodels;
+}
+
+export function useSelectionByMetadata(): (
+    metadata: MetadataNode,
+    value: any,
+    extend?: boolean
+) => void {
+    const { models } = React.useContext(context);
+    const [select] = useSelection();
+    const query = useMetadataQuery();
+
+    const selectByMetadata = (metadata: MetadataNode, value: any, extend: boolean = false) => {
+        const path = query(metadata);
+        if (!path) return;
+        const newSelection = new Map();
+        for (const model of models) {
+            const submodels = filterSubmodels(model, path, value);
+            if (submodels.size) newSelection.set(model, submodels);
+        }
+        select(newSelection, false, extend);
+    };
+
+    return selectByMetadata;
+}
+
+export function useKeymap() {
+    const ctx = React.useContext(context);
+    return ctx.renderer.controls?.keyboard.keyMap;
+}

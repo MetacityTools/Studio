@@ -12,10 +12,12 @@ import {
 
 import { MetadataTitle } from './MetadataTitle';
 
+export type MetadataMenuPickFunciton = (node: MetadataNode, value: any) => void;
+
 interface MetadataValueProps {
     categories: string[];
     node: MetadataNode;
-    onValuePick: (value: MetadataNode) => void;
+    onValuePick: MetadataMenuPickFunciton;
     depth?: number;
 }
 
@@ -24,8 +26,8 @@ export function MetadataValue(props: MetadataValueProps) {
     const [displayCount, setDisplayCount] = React.useState(10);
     const [open, setOpen] = React.useState(false);
 
-    const handleUseStyle = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-        onValuePick(node);
+    const handleUseStyle = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, value: any) => {
+        onValuePick(node, value);
         e.stopPropagation();
     };
 
@@ -51,8 +53,14 @@ export function MetadataValue(props: MetadataValueProps) {
                         key={value}
                         depth={(depth !== undefined && depth + 1) || undefined}
                     >
-                        <HierarchyBracketsButton inheritStyles onClick={handleUseStyle} />
-                        <HierarchyMainButton inheritStyles onClick={handleUseStyle}>
+                        <HierarchyBracketsButton
+                            inheritStyles
+                            onClick={(e) => handleUseStyle(e, value)}
+                        />
+                        <HierarchyMainButton
+                            inheritStyles
+                            onClick={(e) => handleUseStyle(e, value)}
+                        >
                             {value}
                         </HierarchyMainButton>
                     </HierarchyNode>

@@ -20,7 +20,7 @@ export function TabButton(props: { children: React.ReactNode; title: string }) {
 }
 
 export function TabPanel(props: { children: React.ReactNode }) {
-    return <Tab.Panel className="w-full h-full">{props.children}</Tab.Panel>;
+    return <Tab.Panel className="w-full h-full outline-none">{props.children}</Tab.Panel>;
 }
 
 //containers

@@ -12,17 +12,19 @@ import {
 
 import { MetadataNodeComponent } from './MetadataNode';
 import { MetadataTitle } from './MetadataTitle';
+import { MetadataMenuPickFunciton } from './MetadataValue';
 
 interface MetadataCategoryProps {
     categories: string[];
     node: MetadataNode;
-    onValuePick: (value: MetadataNode) => void;
+    onValuePick: MetadataMenuPickFunciton;
     depth?: number;
+    initialOpen?: boolean;
 }
 
 export function MetadataCategory(props: MetadataCategoryProps) {
     const { categories } = props;
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = React.useState(props.initialOpen || false);
 
     const handleOpen = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         setOpen(!open);

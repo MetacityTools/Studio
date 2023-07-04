@@ -1,12 +1,27 @@
 import clsx from 'clsx';
-import { BiCopy } from 'react-icons/bi';
+import { BiCopy, BiLink } from 'react-icons/bi';
 
 import { useActiveSheet, useRowTypes, useTables } from '@editor/EditorContext';
+
+export type AssignToGeometryCallback = (data: any) => void;
 
 interface TableRowProps {
     index: number;
     row: string[];
     rowType: string;
+    assignToGeometry: AssignToGeometryCallback;
+}
+
+function ActionButton(props: { children: React.ReactNode; onClick?: () => void; title?: string }) {
+    return (
+        <button
+            className="hover:text-amber-500 active:text-amber-600 cursor-pointer"
+            onClick={props.onClick}
+            title={props.title}
+        >
+            {props.children}
+        </button>
+    );
 }
 
 export function TableRow(props: TableRowProps) {
@@ -26,16 +41,24 @@ export function TableRow(props: TableRowProps) {
         navigator.clipboard.writeText(JSON.stringify(json, null, 4));
     };
 
+    const handleLinkToSelection = () => {
+        const json = tables.getJSON(activeSheet, index);
+        props.assignToGeometry(json);
+    };
+
     return (
         <tr className="odd:bg-neutral-50">
-            <td
-                className="text-neutral-500 px-2 bg-neutral-100 border-r border-b sticky left-0 cursor-pointer hover:bg-amber-200 hover:text-amber-800"
-                onClick={handleCopyClipboard}
-                title="Copy row to clipboard"
-            >
-                <div className="flex flex-row items-center">
-                    {String(index + 1).padStart(4, '0')}
-                    <BiCopy className="inline-block ml-1" />
+            <td className="text-neutral-400 bg-neutral-100 border-r border-b sticky left-0">
+                <div className="w-full h-full flex flex-row text-xl space-x-2 px-1">
+                    <ActionButton title="Copy to clipboard" onClick={handleCopyClipboard}>
+                        <BiCopy className="inline-block ml-1" />
+                    </ActionButton>
+                    <ActionButton
+                        title="Assign to selected geometry"
+                        onClick={handleLinkToSelection}
+                    >
+                        <BiLink className="inline-block ml-1" />
+                    </ActionButton>
                 </div>
             </td>
             <Td className="text-neutral-500 bg-neutral-100">

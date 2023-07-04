@@ -84,6 +84,7 @@ These features are planned for the future, and scheduled for a specific release.
     -   [ ] Edit metadata on selection
     -   [ ] Editor part 1 - allow editing common attributes
     -   [ ] Editor part 2 - show which attributes are different (can be overwritten and changed to common)
+    -   [ ] fulltext search filtering - values only
 -   [ ] Updated metadata format - binary buffers + attributes + styling
 
 🧠 Call for consultation (TB planned, beginning of July 2023)

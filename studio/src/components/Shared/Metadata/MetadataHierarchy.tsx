@@ -9,12 +9,11 @@ import { MetadataNodeComponent } from './MetadataNode';
 export const rootNodeLabel = 'Metadata';
 
 interface MetadataHierarchyProps {
-    onValuePick: (value: MetadataNode) => void;
+    onValuePick: (node: MetadataNode, value: any) => void;
 }
 
 export function MetadataHierarchy(props: MetadataHierarchyProps) {
     const [metadata] = useMetadata();
-    console.log(metadata);
     if (!metadata.children && !metadata.values) return <Empty>No metadata</Empty>;
     return (
         <MetadataNodeComponent
@@ -22,6 +21,7 @@ export function MetadataHierarchy(props: MetadataHierarchyProps) {
             node={metadata}
             onValuePick={props.onValuePick}
             depth={0}
+            initialOpen={true}
         />
     );
 }

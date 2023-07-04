@@ -2,13 +2,7 @@ import clsx from 'clsx';
 import { FiChevronRight } from 'react-icons/fi';
 import { VscJson } from 'react-icons/vsc';
 
-import {
-    colorLightActive,
-    colorVividActive,
-    colorVividActiveBorder,
-    colorVividBase,
-    colorVividBaseBorder,
-} from './Colors';
+import { colorLightActive, colorVividActive, colorVividBase } from './Colors';
 
 function getNodeBackground(active: boolean, light?: boolean, inherit?: boolean) {
     if (inherit) return 'bg-transparent border-inherit text-inherit bg-inherit';
@@ -114,7 +108,6 @@ interface HierarchyNodeProps {
 }
 
 export function HierarchyNode(props: HierarchyNodeProps) {
-    console.log(props.depth);
     return (
         <div
             className={clsx(

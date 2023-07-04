@@ -3,19 +3,6 @@ import { EditorModel } from '@utils/utils';
 
 import { SelectionType } from './selection';
 
-function deepCopy(obj: any) {
-    if (typeof obj !== 'object') return obj;
-    if (obj === null) return null;
-
-    //does not take into accoutnt typed arrays and circular references
-    const copy: any = Array.isArray(obj) ? [] : {};
-    for (const [key, value] of Object.entries(obj)) {
-        copy[key] = deepCopy(value);
-    }
-
-    return copy;
-}
-
 export function combineData(selection: SelectionType) {
     let recordCount = 0;
     const aggregated: MetadataNode = {};
@@ -29,8 +16,8 @@ export function combineData(selection: SelectionType) {
     });
 
     if (recordCount === 0) return { aggregated: {}, common: {} };
-    const common = extractCommonData(aggregated, {}, recordCount);
-    return { aggregated, common };
+    const common = extractCommonData(aggregated, recordCount);
+    return { common };
 }
 
 export function extractMetadata(models: EditorModel[]) {
@@ -67,15 +54,19 @@ function checkValues(node: MetadataNode): asserts node is MetadataNode & { value
     if (!node.values) node.values = [];
 }
 
-function extractCommonData(node: MetadataNode, extracted: any, expectedRecordCount: number) {
+function extractCommonData(node: MetadataNode, expectedRecordCount: number) {
     if (node.children && node.values) {
         //node has both children and values - no need to extract
+        return undefined;
     } else if (node.children) {
+        const extracted: any = {};
         //node has children but no values - extract all children
         for (const [key, child] of node.children) {
-            const value = extractCommonData(child, {}, expectedRecordCount);
+            const value = extractCommonData(child, expectedRecordCount);
             if (value !== undefined) extracted[key] = value;
         }
+
+        if (Object.keys(extracted).length === 0) return undefined;
         return extracted;
     } else if (node.values) {
         //node has values but no children - extract values
@@ -99,6 +90,16 @@ export function applyEdits(selection: SelectionType, original: any, edits: any) 
             const data = model.metadata[submodel];
             if (removed) recursiveRemove(data, removed);
             if (added) recursiveAdd(data, added);
+        });
+    });
+}
+
+export function assignDataNoDelete(selection: SelectionType, edits: any) {
+    selection.forEach((submodels, model) => {
+        submodels.forEach((submodel) => {
+            if (model.metadata[submodel] === undefined) model.metadata[submodel] = {};
+            const data = model.metadata[submodel];
+            if (edits) recursiveAdd(data, edits);
         });
     });
 }

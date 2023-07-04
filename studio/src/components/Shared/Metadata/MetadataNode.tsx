@@ -1,13 +1,14 @@
 import { MetadataNode } from '@utils/types';
 
 import { MetadataCategory } from './MetadataCategory';
-import { MetadataValue } from './MetadataValue';
+import { MetadataMenuPickFunciton, MetadataValue } from './MetadataValue';
 
 interface MetadataNodeComponentProps {
-    onValuePick: (value: MetadataNode) => void;
+    onValuePick: MetadataMenuPickFunciton;
     category: string;
     node: MetadataNode;
     depth?: number;
+    initialOpen?: boolean;
 }
 
 export function MetadataNodeComponent(props: MetadataNodeComponentProps) {
@@ -25,6 +26,7 @@ export function MetadataNodeComponent(props: MetadataNodeComponentProps) {
                     node={node}
                     onValuePick={onValuePick}
                     depth={depth}
+                    initialOpen={props.initialOpen}
                 />
             )}
             {isValue && (
@@ -41,8 +43,8 @@ export function MetadataNodeComponent(props: MetadataNodeComponentProps) {
 
 function aggregateLabel(category: string, node: MetadataNode) {
     const categories: string[] = [category];
-    while (node.children && Object.keys(node.children).length === 1) {
-        const key = Object.keys(node.children)[0];
+    while (node.children && node.children.size === 1) {
+        const key = node.children.keys().next().value;
         categories.push(key);
         node = node.children.get(key)!;
     }
