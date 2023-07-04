@@ -234,7 +234,12 @@ export function useMetadataQuery() {
     return queryMetadata;
 }
 
-function filterSubmodelRecursive(metadata: any, keychain: string[], value: any, depth: number = 0) {
+function filterSubmodelRecursive(
+    metadata: any,
+    keychain: string[],
+    value: any,
+    depth: number = 0
+): boolean {
     if (keychain.length === depth) {
         if (metadata === value) return true;
         return false;

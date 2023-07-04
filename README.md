@@ -80,12 +80,15 @@ These features are planned for the future, and scheduled for a specific release.
 
 -   [x] Remove groups and hierarchy - all models will be in a flat list
 -   [ ] Metadata editor replacing Hierarchy editor
-    -   [ ] Diffing metadata between models
-    -   [ ] Edit metadata on selection
-    -   [ ] Editor part 1 - allow editing common attributes
-    -   [ ] Editor part 2 - show which attributes are different (can be overwritten and changed to common)
+    -   [x] Diffing metadata between models
+    -   [x] Edit metadata on selection
+    -   [x] Editor part 1 - allow editing common attributes
+    -   ~~[ ] Editor part 2 - show which attributes are different (can be overwritten and changed to common)~~ - will not implement for now
     -   [ ] fulltext search filtering - values only
+-   [ ] Styling
 -   [ ] Updated metadata format - binary buffers + attributes + styling
+    -   [x] Metadata export/import
+    -   [x] Styles
 
 🧠 Call for consultation (TB planned, beginning of July 2023)
 

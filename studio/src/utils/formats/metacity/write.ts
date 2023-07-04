@@ -12,7 +12,7 @@ export function exportModel(model: EditorModelData) {
     writeTypedArray(model.geometry.submodel, stream);
     console.log('expected length', model.geometry.submodel.length);
 
-    const metadata = JSON.stringify(model.metadata);
+    const metadata = JSON.stringify(model.metadata.data);
     writeString(metadata, stream);
     writeString(model.metadata.name, stream);
     stream.writeInt32(model.metadata.primitive);

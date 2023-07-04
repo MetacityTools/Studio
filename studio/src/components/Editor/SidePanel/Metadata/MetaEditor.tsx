@@ -49,7 +49,9 @@ export function MetaEditor() {
         );
     }, [selected, setContent]);
 
-    if (selected.size === 0) return <Empty>Nothing selected</Empty>;
+    let size = 0;
+    selected.forEach((set) => (size += set.size));
+    if (size === 0) return <Empty>Nothing selected</Empty>;
 
     return (
         <div className="w-full h-full" onKeyDown={handleKey} onKeyUp={handleKey}>

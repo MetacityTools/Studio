@@ -27,6 +27,8 @@ export function readModel(buffer: ArrayBuffer): ModelData {
     const primitive = stream.readInt32();
     //stream.close();
 
+    console.log('metadata', metadata);
+
     return {
         geometry: {
             position: positions,
