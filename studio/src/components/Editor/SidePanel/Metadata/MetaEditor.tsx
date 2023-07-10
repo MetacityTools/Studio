@@ -18,7 +18,7 @@ export function MetaEditor() {
     const [content, setContent] = React.useState({});
     const [key, setKey] = React.useState('');
     const [_, updateGlobalMetadata] = useMetadata();
-    const [status, setStatus] = useStatus();
+    const [__, setStatus] = useStatus();
 
     const handleKey = (e: React.KeyboardEvent<HTMLDivElement>) => {
         e.stopPropagation();

@@ -4,6 +4,8 @@ import { FaBrush } from 'react-icons/fa';
 
 import { autoUpdateStyle } from '@utils/utils';
 
+import { useStatus } from '@editor/EditorContext';
+
 import {
     BottomRowContainer,
     ColumnContainer,
@@ -13,11 +15,13 @@ import {
 import { PanelTitle } from '@elements/PanelTitle';
 
 import { useMetadata, useStyle } from '@shared/Context/hooks';
+import { Status } from '@shared/Status';
 
 import { StyleEditor } from './StyleEditor';
 
 export function StyleSidePanel() {
     const [style, setStyle] = useStyle();
+    const [status] = useStatus();
     const [metadata] = useMetadata();
 
     const handleAutoStyle = () => {
@@ -33,14 +37,15 @@ export function StyleSidePanel() {
                     <StyleEditor />
                 </OverflowAbsoluteContainer>
             </StretchContainer>
-            <BottomRowContainer>
+            <BottomRowContainer className="flex flex-row items-center">
                 <button
                     className="flex flex-row items-center text-neutral-400 hover:bg-neutral-200 px-2"
                     onClick={handleAutoStyle}
                 >
                     <FaBrush className="mr-2" />
-                    click to apply auto style
+                    apply auto style
                 </button>
+                <Status status={status} />
             </BottomRowContainer>
         </ColumnContainer>
     );

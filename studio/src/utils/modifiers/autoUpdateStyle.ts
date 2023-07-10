@@ -38,10 +38,10 @@ export function autoUpdateStyle(metadata: MetadataNode, style: StyleNode) {
         }
 
         if (categorical.size > 0) {
-            if (!style.style.categories) style.style.categories = {};
             if (categorical.size > 500) {
                 style.style.random = true;
             } else {
+                if (!style.style.categories) style.style.categories = {};
                 categorical.forEach((value) => {
                     if (!style.style!.categories![value])
                         style.style!.categories![value] = randomColor();
