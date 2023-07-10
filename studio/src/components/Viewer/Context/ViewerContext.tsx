@@ -28,7 +28,7 @@ export function useViewerContext(): ViewerContextProps {
     return React.useContext(context);
 }
 
-export function useStyle(): [
+export function useActiveMetaNode(): [
     MetadataNode | undefined,
     React.Dispatch<React.SetStateAction<MetadataNode | undefined>>
 ] {

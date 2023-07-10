@@ -79,7 +79,7 @@ These features are planned for the future, and scheduled for a specific release.
 ⚠️ Breaking changes, old `.metacity` files will not be compatible.
 
 -   [x] Remove groups and hierarchy - all models will be in a flat list
--   [ ] Metadata editor replacing Hierarchy editor
+-   [x] Metadata editor replacing Hierarchy editor
     -   [x] Diffing metadata between models
     -   [x] Edit metadata on selection
     -   [x] Editor part 1 - allow editing common attributes

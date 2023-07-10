@@ -3,7 +3,9 @@ import { EditorModel } from './models/EditorModel';
 import { EditorModelData } from './models/TriangleModel';
 import { addGridModel } from './models/addGridModel';
 import { CoordinateMode, alignModels } from './modifiers/alignVertices';
+import { autoUpdateStyle } from './modifiers/autoUpdateStyle';
 import { computeDots, computeNormals } from './modifiers/computeNormals';
+import { filterMetadata } from './modifiers/filterMetadata';
 import { joinSubmodels } from './modifiers/joinSubmodels';
 import { splitModel } from './modifiers/splitModels';
 import { Tables } from './tables/tables';
@@ -18,6 +20,8 @@ export {
     computeNormals,
     joinSubmodels,
     splitModel,
+    autoUpdateStyle,
+    filterMetadata,
     CoordinateMode,
 };
 

@@ -1,7 +1,7 @@
 import { vec3 } from 'gl-matrix';
 import React from 'react';
 
-import { EditorModel, MetadataNode } from '@utils/utils';
+import { EditorModel, MetadataNode, StyleNode } from '@utils/utils';
 
 import * as GL from '@bananagl/bananagl';
 
@@ -29,6 +29,8 @@ interface ViewContextProps {
     setGlobalShift: React.Dispatch<React.SetStateAction<vec3 | null>>;
     metadata: MetadataNode;
     setMetadata: React.Dispatch<React.SetStateAction<MetadataNode>>;
+    styles: StyleNode;
+    setStyles: React.Dispatch<React.SetStateAction<StyleNode>>;
 }
 
 export const context = React.createContext<ViewContextProps>({} as ViewContextProps);
@@ -44,6 +46,7 @@ export function ViewContext(props: { children: React.ReactNode }) {
     const [gridVisible, setGridVisible] = React.useState<boolean>(false);
     const [globalShift, setGlobalShift] = React.useState<vec3 | null>(null);
     const [metadata, setMetadata] = React.useState<MetadataNode>({});
+    const [styles, setStyles] = React.useState<StyleNode>({});
     const activeView = 0;
 
     React.useEffect(() => {
@@ -144,6 +147,8 @@ export function ViewContext(props: { children: React.ReactNode }) {
                 setGlobalShift,
                 metadata,
                 setMetadata,
+                styles,
+                setStyles,
             }}
         >
             {props.children}

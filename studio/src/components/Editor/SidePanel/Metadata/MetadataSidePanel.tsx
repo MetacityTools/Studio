@@ -5,7 +5,12 @@ import { MetadataNode } from '@utils/types';
 
 import { useStatus } from '@editor/EditorContext';
 
-import { ColumnContainer, OverflowContainer, StretchContainer } from '@elements/Containers';
+import {
+    BottomRowContainer,
+    ColumnContainer,
+    OverflowContainer,
+    StretchContainer,
+} from '@elements/Containers';
 import { PanelTitle } from '@elements/PanelTitle';
 
 import { useKeymap, useSelectedModels, useSelectionByMetadata } from '@shared/Context/hooks';
@@ -49,12 +54,12 @@ export function MetadataSidePanel() {
                             <ColumnContainer>
                                 <MetaEditor />
                             </ColumnContainer>
-                            <div className="border-t px-2 text-neutral-400 whitespace-nowrap overflow-ellipsis overflow-hidden">
+                            <BottomRowContainer>
                                 <Status status={status} />
                                 Common data for {countSelectedSubmodels} submodel
                                 {countSelectedSubmodels != 1 ? 's' : ''} in {countSelectedModels}{' '}
                                 model{countSelectedModels != 1 ? 's' : ''}
-                            </div>
+                            </BottomRowContainer>
                         </ColumnContainer>
                     </Allotment.Pane>
                 </Allotment>
@@ -76,13 +81,13 @@ function Status(props: { status: string | undefined }) {
 }
 
 function EditingStatus() {
-    return <span className="text-neutral-600 pr-2">Editing</span>;
+    return <span className="text-neutral-600 px-2">Editing</span>;
 }
 
 function SavedStatus() {
-    return <span className="text-green-600 pr-2">Edits Saved</span>;
+    return <span className="text-green-600 px-2">Edits Saved</span>;
 }
 
 function FailedStatus() {
-    return <span className="text-red-600 pr-2">Editing Failed</span>;
+    return <span className="text-red-600 px-2">Editing Failed</span>;
 }

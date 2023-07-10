@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { filterMetadata } from '@utils/modifiers/filterMetadata';
 import { MetadataNode } from '@utils/types';
+import { filterMetadata } from '@utils/utils';
 
 import { Empty } from '@elements/Empty';
 import { Input } from '@elements/Input';

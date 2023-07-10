@@ -62,3 +62,7 @@ export function parseColor(color: vec3 | undefined): vec3 | undefined {
 
     throw new Error(`Invalid color: ${color}`);
 }
+
+export function randomColor() {
+    return colorHexToStr(Math.floor(Math.random() * 16777215));
+}

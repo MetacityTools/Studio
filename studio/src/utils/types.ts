@@ -121,9 +121,19 @@ export interface MetadataNode {
 }
 
 //------------------------------------------------------------
-export interface Style {
-    keychain: string[];
-    map: ColorKeyMap;
+export interface StyleNode {
+    style?: {
+        random?: boolean;
+        scalars?: {
+            colormap: string[];
+            min: number;
+            max: number;
+        };
+        categories?: {
+            [key: string]: string;
+        };
+    };
+    children?: {
+        [key: string]: StyleNode;
+    };
 }
-
-export type ColorKeyMap = { [key: string | number]: vec3 };

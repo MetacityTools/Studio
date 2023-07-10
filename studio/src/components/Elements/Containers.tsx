@@ -37,3 +37,21 @@ export function StretchContainer(props: { children: React.ReactNode; className?:
         </div>
     );
 }
+
+export function BottomRowContainer(props: {
+    children: React.ReactNode;
+    className?: string;
+    style?: React.CSSProperties;
+}) {
+    return (
+        <div
+            className={clsx(
+                'border-t text-neutral-400 whitespace-nowrap overflow-ellipsis overflow-hidden',
+                props.className
+            )}
+            style={props.style}
+        >
+            {props.children}
+        </div>
+    );
+}

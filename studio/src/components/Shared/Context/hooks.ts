@@ -9,7 +9,7 @@ import { joinModels } from '@utils/modifiers/joinModels';
 import { joinSubmodels } from '@utils/modifiers/joinSubmodels';
 import { removeSubmodels } from '@utils/modifiers/removeSubmodels';
 import { splitModel } from '@utils/modifiers/splitModels';
-import { MetadataNode, PrimitiveType } from '@utils/types';
+import { MetadataNode, PrimitiveType, StyleNode } from '@utils/types';
 
 import * as GL from '@bananagl/bananagl';
 
@@ -279,4 +279,9 @@ export function useSelectionByMetadata(): (
 export function useKeymap() {
     const ctx = React.useContext(context);
     return ctx.renderer.controls?.keyboard.keyMap;
+}
+
+export function useStyle(): [StyleNode, React.Dispatch<React.SetStateAction<StyleNode>>] {
+    const ctx = React.useContext(context);
+    return [ctx.styles, ctx.setStyles];
 }

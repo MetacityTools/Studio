@@ -36,7 +36,7 @@ export function MetadataValue(props: MetadataValueProps) {
         e.stopPropagation();
     };
 
-    const unique = Array.from(new Set(node.values));
+    const unique = Array.from(new Set(node.values)).sort();
 
     return (
         <HierarchyNodeGroup>
