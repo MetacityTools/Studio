@@ -18,6 +18,7 @@ export function MetaEditor() {
     const [content, setContent] = React.useState({});
     const [key, setKey] = React.useState('');
     const [_, updateGlobalMetadata] = useMetadata();
+    const [status, setStatus] = useStatus();
 
     const handleKey = (e: React.KeyboardEvent<HTMLDivElement>) => {
         e.stopPropagation();
@@ -25,6 +26,7 @@ export function MetaEditor() {
 
     const handleChange = (value: string | undefined, event: any) => {
         if (timeRef.current) clearTimeout(timeRef.current);
+        setStatus('editing');
         timeRef.current = setTimeout(() => {
             try {
                 try {
@@ -32,8 +34,10 @@ export function MetaEditor() {
                     applyEdits(selected, content, edited);
                     setContent(edited);
                     updateGlobalMetadata();
+                    setStatus('saved');
                 } catch (e) {
                     console.error(e);
+                    setStatus('failed');
                 }
             } catch (e) {}
         }, 1000);

@@ -3,6 +3,8 @@ import 'allotment/dist/style.css';
 
 import { MetadataNode } from '@utils/types';
 
+import { useStatus } from '@editor/EditorContext';
+
 import { ColumnContainer, OverflowContainer, StretchContainer } from '@elements/Containers';
 import { PanelTitle } from '@elements/PanelTitle';
 
@@ -16,10 +18,11 @@ export function MetadataSidePanel() {
     const select = useSelectionByMetadata();
     const keymap = useKeymap();
     const selection = useSelectedModels();
+    const [status] = useStatus();
 
-    const handlePick: MetadataMenuPickFunciton = (node: MetadataNode, value: any) => {
+    const handlePick = (root: MetadataNode, node: MetadataNode, value: any) => {
         const extend = keymap?.shift ?? false;
-        select(node, value, extend);
+        select(root, node, value, extend);
     };
 
     let countSelectedSubmodels = 0;
@@ -47,6 +50,7 @@ export function MetadataSidePanel() {
                                 <MetaEditor />
                             </ColumnContainer>
                             <div className="border-t px-2 text-neutral-400 whitespace-nowrap overflow-ellipsis overflow-hidden">
+                                <Status status={status} />
                                 Common data for {countSelectedSubmodels} submodel
                                 {countSelectedSubmodels != 1 ? 's' : ''} in {countSelectedModels}{' '}
                                 model{countSelectedModels != 1 ? 's' : ''}
@@ -57,4 +61,28 @@ export function MetadataSidePanel() {
             </StretchContainer>
         </ColumnContainer>
     );
+}
+function Status(props: { status: string | undefined }) {
+    switch (props.status) {
+        case 'editing':
+            return <EditingStatus />;
+        case 'saved':
+            return <SavedStatus />;
+        case 'failed':
+            return <FailedStatus />;
+        default:
+            return null;
+    }
+}
+
+function EditingStatus() {
+    return <span className="text-neutral-600 pr-2">Editing</span>;
+}
+
+function SavedStatus() {
+    return <span className="text-green-600 pr-2">Edits Saved</span>;
+}
+
+function FailedStatus() {
+    return <span className="text-red-600 pr-2">Editing Failed</span>;
 }

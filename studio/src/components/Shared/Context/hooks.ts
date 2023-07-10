@@ -202,36 +202,22 @@ export function useMetadata(): [MetadataNode, () => void] {
     return [metadata, update];
 }
 
-export function useMetadataQuery() {
-    const { metadata } = React.useContext(context);
+function findKeychain(node: MetadataNode, target: MetadataNode, nodeKey?: string): null | string[] {
+    if (node === target) {
+        if (nodeKey) return [nodeKey];
+        return [];
+    }
+    if (!node.children) return null;
 
-    const findKeychainRecursive = (
-        node: MetadataNode,
-        target: MetadataNode,
-        nodeKey?: string
-    ): null | string[] => {
-        if (node === target) {
-            if (nodeKey) return [nodeKey];
-            return [];
+    for (const [key, value] of node.children.entries()) {
+        const path = findKeychain(value, target, key);
+        if (path) {
+            if (nodeKey) return [nodeKey, ...path];
+            return path;
         }
-        if (!node.children) return null;
+    }
 
-        for (const [key, value] of node.children.entries()) {
-            const path = findKeychainRecursive(value, target, key);
-            if (path) {
-                if (nodeKey) return [nodeKey, ...path];
-                return path;
-            }
-        }
-
-        return null;
-    };
-
-    const queryMetadata = (target: MetadataNode) => {
-        return findKeychainRecursive(metadata, target);
-    };
-
-    return queryMetadata;
+    return null;
 }
 
 function filterSubmodelRecursive(
@@ -263,16 +249,21 @@ function filterSubmodels(model: EditorModel, keychain: string[], value: any) {
 }
 
 export function useSelectionByMetadata(): (
+    root: MetadataNode,
     metadata: MetadataNode,
     value: any,
     extend?: boolean
 ) => void {
     const { models } = React.useContext(context);
     const [select] = useSelection();
-    const query = useMetadataQuery();
 
-    const selectByMetadata = (metadata: MetadataNode, value: any, extend: boolean = false) => {
-        const path = query(metadata);
+    const selectByMetadata = (
+        root: MetadataNode,
+        metadata: MetadataNode,
+        value: any,
+        extend: boolean = false
+    ) => {
+        const path = findKeychain(root, metadata);
         if (!path) return;
         const newSelection = new Map();
         for (const model of models) {

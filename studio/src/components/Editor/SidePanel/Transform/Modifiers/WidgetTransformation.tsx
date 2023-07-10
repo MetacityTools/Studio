@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import { vec3 } from 'gl-matrix';
 import React from 'react';
 import { TiArrowMove } from 'react-icons/ti';
@@ -11,6 +12,16 @@ import { useRenderer } from '@shared/Context/hooks';
 
 import { WidgetProps } from './Widget';
 
+function CustomInput(props: React.InputHTMLAttributes<HTMLInputElement>) {
+    const { className, ...rest } = props;
+    return (
+        <Input
+            {...props}
+            className={clsx('bg-white bg-opacity-50 focus:bg-amber-100', className)}
+        />
+    );
+}
+
 function VectorComponentInput(props: {
     label: string;
     value: number;
@@ -20,7 +31,7 @@ function VectorComponentInput(props: {
 
     return (
         <td className="bg-white">
-            <Input
+            <CustomInput
                 type="number"
                 className="p-2 bg-transparent border-0 text-right focus:outline-none w-full"
                 value={isNaN(value) ? '' : value}

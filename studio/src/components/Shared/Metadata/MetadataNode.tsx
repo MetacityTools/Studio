@@ -43,7 +43,7 @@ export function MetadataNodeComponent(props: MetadataNodeComponentProps) {
 
 function aggregateLabel(category: string, node: MetadataNode) {
     const categories: string[] = [category];
-    while (node.children && node.children.size === 1) {
+    while (node.children && node.children.size === 1 && !node.values) {
         const key = node.children.keys().next().value;
         categories.push(key);
         node = node.children.get(key)!;
