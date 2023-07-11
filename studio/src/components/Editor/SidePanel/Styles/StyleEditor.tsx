@@ -1,5 +1,6 @@
 import Editor from '@monaco-editor/react';
 import { useMonaco } from '@monaco-editor/react';
+import equal from 'fast-deep-equal/es6';
 import React from 'react';
 
 import { useStatus } from '@editor/EditorContext';
@@ -10,7 +11,8 @@ export function StyleEditor() {
     const timeRef = React.useRef<NodeJS.Timeout>();
     const monaco = useMonaco();
     const [style, setStyle] = useStyle();
-    const [content, setContent] = React.useState(style);
+    //keep the content sepearate so you can diferenciate between internal and external updates of style
+    const [content, setContent] = React.useState<string>(JSON.stringify(style, null, 4));
     const [_, setStatus] = useStatus();
 
     const handleKey = (e: React.KeyboardEvent<HTMLDivElement>) => {
@@ -40,8 +42,8 @@ export function StyleEditor() {
                 try {
                     const edited = JSON.parse(value || '');
                     setStyle(edited);
-                    setContent(edited);
                     setStatus('saved');
+                    setContent(value ?? '');
                 } catch (e) {
                     console.error(e);
                     setStatus('failed');
@@ -50,22 +52,24 @@ export function StyleEditor() {
         }, 1000);
     };
 
-    //refactor to allow content injection
-    //React.useEffect(() => {
-    //    setContent(style);
-    //    if (monaco) {
-    //        monaco.editor
-    //            .getModels()
-    //            .forEach((model) => model.setValue(JSON.stringify(style, null, 4)));
-    //    }
-    //}, [style, setContent]);
+    React.useEffect(() => {
+        if (!equal(style, JSON.parse(content))) {
+            setContent(JSON.stringify(style, null, 4));
+            if (monaco) {
+                monaco.editor
+                    .getModels()
+                    .forEach((model) => model.setValue(JSON.stringify(style, null, 4)));
+            }
+        }
+    }, [style, content]);
 
     return (
         <div className="w-full h-full" onKeyDown={handleKey} onKeyUp={handleKey}>
             <Editor
+                key="StyleEditor"
                 height="100%"
                 defaultLanguage="json"
-                defaultValue={JSON.stringify(content, null, 4)}
+                defaultValue={content}
                 onChange={handleChange}
             />
         </div>

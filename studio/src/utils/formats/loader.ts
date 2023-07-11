@@ -2,7 +2,7 @@ import GLTFWorker from '@utils/formats/gltf.worker?worker';
 import IFCWorker from '@utils/formats/ifc.worker?worker';
 import MetacityWorker from '@utils/formats/metacity.worker?worker';
 import ShapefileWorker from '@utils/formats/shapefile.worker?worker';
-import { ModelData, UserInputModel } from '@utils/types';
+import { ModelData, StyleNode, UserInputModel } from '@utils/types';
 
 import { WorkerPool } from './pool';
 
@@ -12,8 +12,17 @@ export async function load(
 ) {
     const files = await loadModelFiles(event);
     const tables = await loadTables(event);
+    const styles = await loadStyles(event);
     const models = await loadModels(files, updateStatus);
-    return { models, tables };
+    return { models, tables, styles };
+}
+
+export async function loadStyles(event: React.ChangeEvent<HTMLInputElement>) {
+    const files = event.target.files;
+    if (!files) return [];
+
+    const styles = await prepareStyleJSON(files);
+    return styles;
 }
 
 export async function loadTables(event: React.ChangeEvent<HTMLInputElement>) {
@@ -40,7 +49,7 @@ async function prepareMetacity(files: FileList): Promise<UserInputModel[]> {
     const data = [];
     for (let i = 0; i < files.length; i++) {
         const file = files[i];
-        if (file.name.endsWith('metacity')) {
+        if (file.name.endsWith('metacity') && !file.name.endsWith('json.metacity')) {
             const buffer = await file.arrayBuffer();
             data.push({
                 name: file.name,
@@ -94,6 +103,22 @@ async function prepareCSV(files: FileList): Promise<string[]> {
         if (file.name.endsWith('csv')) {
             const content = await file.text();
             data.push(content);
+        }
+    }
+    return data;
+}
+
+async function prepareStyleJSON(files: FileList): Promise<StyleNode[]> {
+    const data = [];
+    for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        if (file.name.endsWith('.json.metacity')) {
+            const content = await file.text();
+            try {
+                data.push(JSON.parse(content));
+            } catch (e) {
+                console.error(e);
+            }
         }
     }
     return data;

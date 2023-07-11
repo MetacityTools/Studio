@@ -7,7 +7,7 @@ import { Tables } from './Tables/Tables';
 export function TableSidePanel() {
     return (
         <ColumnContainer>
-            <PanelTitle title="Tables" />
+            <PanelTitle title="Imported Tables" />
             <StretchContainer>
                 <OverflowAbsoluteContainer>
                     <Tables />

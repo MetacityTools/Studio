@@ -3,6 +3,7 @@ import React from 'react';
 import { MetadataNode } from '@utils/types';
 import { filterMetadata } from '@utils/utils';
 
+import { ColumnContainer, OverflowAbsoluteContainer, StretchContainer } from '@elements/Containers';
 import { Empty } from '@elements/Empty';
 import { Input } from '@elements/Input';
 
@@ -42,22 +43,30 @@ export function MetadataHierarchy(props: MetadataHierarchyProps) {
     };
 
     return (
-        <>
-            <Input
-                placeholder="Search..."
-                className="mb-2 px-2 focus:bg-neutral-100 w-full"
-                onChange={handleSearchChange}
-            />
-            {!fitlered.children && !fitlered.values && <Empty>No metadata</Empty>}
-            {(fitlered.children || fitlered.values) && (
-                <MetadataNodeComponent
-                    category={rootNodeLabel}
-                    node={fitlered}
-                    onValuePick={(node, value) => props.onValuePick(fitlered, node, value)}
-                    depth={0}
-                    initialOpen={true}
+        <div className="flex-1 w-full">
+            <ColumnContainer>
+                <Input
+                    placeholder="Search..."
+                    className="px-2 bg-neutral-100 w-full"
+                    onChange={handleSearchChange}
                 />
-            )}
-        </>
+                <StretchContainer>
+                    <OverflowAbsoluteContainer>
+                        {!fitlered.children && !fitlered.values && <Empty>No metadata</Empty>}
+                        {(fitlered.children || fitlered.values) && (
+                            <MetadataNodeComponent
+                                category={rootNodeLabel}
+                                node={fitlered}
+                                onValuePick={(node, value) =>
+                                    props.onValuePick(fitlered, node, value)
+                                }
+                                depth={0}
+                                initialOpen={true}
+                            />
+                        )}
+                    </OverflowAbsoluteContainer>
+                </StretchContainer>
+            </ColumnContainer>
+        </div>
     );
 }

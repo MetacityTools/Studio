@@ -182,10 +182,10 @@ export function useJoinSubmodels() {
 export function useExport() {
     const ctx = React.useContext(context);
 
-    const exportProject = async () => {
+    const exportProject = async (title: string) => {
         const model = await joinModels(ctx.models);
         if (!model) return;
-        exportModel(model);
+        exportModel(model, ctx.styles, title);
     };
 
     return exportProject;

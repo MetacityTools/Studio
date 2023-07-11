@@ -85,10 +85,13 @@ These features are planned for the future, and scheduled for a specific release.
     -   [x] Editor part 1 - allow editing common attributes
     -   ~~[ ] Editor part 2 - show which attributes are different (can be overwritten and changed to common)~~ - will not implement for now
     -   [x] fulltext search filtering - values only
--   [ ] Styling
--   [ ] Updated metadata format - binary buffers + attributes + styling
+-   [x] Styling
+    -   [x] Style Editor
+    -   [x] Auto generate/update styles
+    -   [ ] Apply styles to the geometry
+-   [x] Updated metadata format - binary buffers + attributes + styling
     -   [x] Metadata export/import
-    -   [ ] Styles
+    -   [x] Styles
 
 🧠 Call for consultation (TB planned, beginning of July 2023)
 

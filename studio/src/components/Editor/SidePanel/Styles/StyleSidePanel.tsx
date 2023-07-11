@@ -1,3 +1,4 @@
+import { Allotment } from 'allotment';
 import 'allotment/dist/style.css';
 import React from 'react';
 import { FaBrush } from 'react-icons/fa';
@@ -31,22 +32,35 @@ export function StyleSidePanel() {
 
     return (
         <ColumnContainer>
-            <PanelTitle title="Style Editor" />
             <StretchContainer>
-                <OverflowAbsoluteContainer>
-                    <StyleEditor />
-                </OverflowAbsoluteContainer>
+                <Allotment separator={false} vertical>
+                    <Allotment.Pane preferredSize={400} minSize={200}>
+                        <ColumnContainer>
+                            <PanelTitle title="Styles" />
+                            TODO list styles
+                        </ColumnContainer>
+                    </Allotment.Pane>
+                    <Allotment.Pane preferredSize={800} minSize={200} className="border-t">
+                        <ColumnContainer>
+                            <PanelTitle title="Style Editor" />
+                            <StretchContainer>
+                                <OverflowAbsoluteContainer>
+                                    <StyleEditor />
+                                </OverflowAbsoluteContainer>
+                            </StretchContainer>
+                            <BottomRowContainer>
+                                <Status status={status} />
+                                <button
+                                    className="text-neutral-400 hover:bg-neutral-200 px-1 py-0 my-0"
+                                    onClick={handleAutoStyle}
+                                >
+                                    apply auto style
+                                </button>
+                            </BottomRowContainer>
+                        </ColumnContainer>
+                    </Allotment.Pane>
+                </Allotment>
             </StretchContainer>
-            <BottomRowContainer className="flex flex-row items-center">
-                <button
-                    className="flex flex-row items-center text-neutral-400 hover:bg-neutral-200 px-2"
-                    onClick={handleAutoStyle}
-                >
-                    <FaBrush className="mr-2" />
-                    apply auto style
-                </button>
-                <Status status={status} />
-            </BottomRowContainer>
         </ColumnContainer>
     );
 }

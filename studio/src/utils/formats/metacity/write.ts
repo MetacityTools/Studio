@@ -1,10 +1,10 @@
-import { EditorModelData } from '@utils/utils';
+import { EditorModelData, StyleNode } from '@utils/utils';
 
 import { TypedArray } from '@bananagl/bananagl';
 
 import { WriteOnlyMemoryStream } from './streams';
 
-export function exportModel(model: EditorModelData) {
+export function exportModel(model: EditorModelData, styles: StyleNode, title: string) {
     const stream = new WriteOnlyMemoryStream();
 
     writeTypedArray(model.geometry.position, stream);
@@ -22,10 +22,21 @@ export function exportModel(model: EditorModelData) {
     const url = URL.createObjectURL(file);
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'project.metacity';
+    a.download = `${title}.metacity`;
     a.click();
-
     URL.revokeObjectURL(url);
+
+    //sleep a bit
+    setTimeout(() => {
+        const styleData = JSON.stringify(styles);
+        const styleFile = new File([styleData], 'styles.json', { type: 'application/json' });
+        const styleUrl = URL.createObjectURL(styleFile);
+        const styleA = document.createElement('a');
+        styleA.href = styleUrl;
+        styleA.download = `${title}.json.metacity`;
+        styleA.click();
+        URL.revokeObjectURL(styleUrl);
+    }, 1000);
 }
 
 export interface ConstructableTypedArray {

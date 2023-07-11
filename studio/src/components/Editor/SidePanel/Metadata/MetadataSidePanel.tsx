@@ -5,17 +5,11 @@ import { MetadataNode } from '@utils/types';
 
 import { useStatus } from '@editor/EditorContext';
 
-import {
-    BottomRowContainer,
-    ColumnContainer,
-    OverflowContainer,
-    StretchContainer,
-} from '@elements/Containers';
+import { BottomRowContainer, ColumnContainer, StretchContainer } from '@elements/Containers';
 import { PanelTitle } from '@elements/PanelTitle';
 
 import { useKeymap, useSelectedModels, useSelectionByMetadata } from '@shared/Context/hooks';
 import { MetadataHierarchy } from '@shared/Metadata/MetadataHierarchy';
-import { MetadataMenuPickFunciton } from '@shared/Metadata/MetadataValue';
 import { Status } from '@shared/Status';
 
 import { MetaEditor } from './MetaEditor';
@@ -40,16 +34,14 @@ export function MetadataSidePanel() {
     return (
         <ColumnContainer>
             <StretchContainer>
-                <Allotment separator={false}>
+                <Allotment separator={false} vertical>
                     <Allotment.Pane preferredSize={400} minSize={200}>
                         <ColumnContainer>
                             <PanelTitle title="Metadata" />
-                            <OverflowContainer>
-                                <MetadataHierarchy onValuePick={handlePick} />
-                            </OverflowContainer>
+                            <MetadataHierarchy onValuePick={handlePick} />
                         </ColumnContainer>
                     </Allotment.Pane>
-                    <Allotment.Pane preferredSize={800} minSize={200} className="border-l">
+                    <Allotment.Pane preferredSize={800} minSize={200} className="border-t">
                         <ColumnContainer>
                             <PanelTitle title="Metadata Editor" />
                             <ColumnContainer>
@@ -57,9 +49,11 @@ export function MetadataSidePanel() {
                             </ColumnContainer>
                             <BottomRowContainer>
                                 <Status status={status} />
-                                Common data for {countSelectedSubmodels} submodel
-                                {countSelectedSubmodels != 1 ? 's' : ''} in {countSelectedModels}{' '}
-                                model{countSelectedModels != 1 ? 's' : ''}
+                                <div>
+                                    Common data for {countSelectedSubmodels} submodel
+                                    {countSelectedSubmodels != 1 ? 's' : ''} in{' '}
+                                    {countSelectedModels} model{countSelectedModels != 1 ? 's' : ''}
+                                </div>
                             </BottomRowContainer>
                         </ColumnContainer>
                     </Allotment.Pane>

@@ -46,7 +46,7 @@ export function BottomRowContainer(props: {
     return (
         <div
             className={clsx(
-                'border-t text-neutral-400 whitespace-nowrap overflow-ellipsis overflow-hidden',
+                'border-t text-neutral-400 whitespace-nowrap overflow-ellipsis overflow-hidden flex flex-row items-center',
                 props.className
             )}
             style={props.style}
