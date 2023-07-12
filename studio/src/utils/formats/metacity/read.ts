@@ -5,7 +5,6 @@ import { ConstructableTypedArray } from './write';
 
 function readTypedArray(stream: ReadOnlyMemoryStream, array: ConstructableTypedArray) {
     const length = stream.readInt32();
-    console.log('length', length);
     const buffer = stream.readUint8Array(length * array.BYTES_PER_ELEMENT);
     return new array(buffer.buffer);
 }
@@ -26,8 +25,6 @@ export function readModel(buffer: ArrayBuffer): ModelData {
     const name = readString(stream);
     const primitive = stream.readInt32();
     //stream.close();
-
-    console.log('metadata', metadata);
 
     return {
         geometry: {

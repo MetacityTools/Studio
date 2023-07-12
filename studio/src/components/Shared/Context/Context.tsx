@@ -69,7 +69,6 @@ export function ViewContext(props: { children: React.ReactNode }) {
 
             const data = extractMetadata(copy);
             setMetadata(data);
-            console.log(data);
         };
 
         scene.addChangeListener(onChange);

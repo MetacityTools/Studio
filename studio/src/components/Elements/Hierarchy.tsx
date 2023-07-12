@@ -1,4 +1,6 @@
 import clsx from 'clsx';
+import React from 'react';
+import { BsChevronRight } from 'react-icons/bs';
 import { FiChevronRight } from 'react-icons/fi';
 import { VscJson } from 'react-icons/vsc';
 
@@ -133,4 +135,27 @@ export function HierarchyNodeGroup(props: HierarchyNodeGroupProps) {
 
 export function HierarchyNodeGroupChildren(props: HierarchyNodeGroupProps) {
     return <div>{props.children}</div>;
+}
+
+export function HierarchyTitle(props: { categories: string[] }) {
+    let { categories } = props;
+    return (
+        <>
+            {categories.map((category, index) => {
+                return (
+                    <React.Fragment key={index}>
+                        <span
+                            className="overflow-ellipsis overflow-hidden whitespace-nowrap"
+                            title={category}
+                        >
+                            {category}
+                        </span>
+                        {index < categories.length - 1 && (
+                            <BsChevronRight className="mx-2 text-xs" />
+                        )}
+                    </React.Fragment>
+                );
+            })}
+        </>
+    );
 }

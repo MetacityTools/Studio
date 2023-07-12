@@ -1,25 +1,25 @@
 import React from 'react';
 
-import { MetadataNode } from '@utils/types';
-import { filterMetadata } from '@utils/utils';
+import { filterStyles } from '@utils/modifiers/filterStyles';
+import { StyleNode } from '@utils/types';
 
 import { ColumnContainer, OverflowAbsoluteContainer, StretchContainer } from '@elements/Containers';
 import { Empty } from '@elements/Empty';
 import { Input } from '@elements/Input';
 
-import { useMetadata } from '@shared/Context/hooks';
+import { useStyle } from '@shared/Context/hooks';
 
-import { MetadataNodeComponent } from './MetadataNode';
+import { StyleNodeComponent } from './StyleNode';
 
-export const rootNodeLabel = 'Metadata';
+export const rootNodeLabel = 'Styles';
 
-interface MetadataHierarchyProps {
-    onValuePick: (root: MetadataNode, node: MetadataNode, value: any) => void;
+interface StyleHierarchyProps {
+    onValuePick: (root: StyleNode, node: StyleNode) => void;
 }
 
-export function MetadataHierarchy(props: MetadataHierarchyProps) {
-    const [metadata] = useMetadata();
-    const [fitlered, setFiltered] = React.useState<MetadataNode>(metadata);
+export function StyleHierarchy(props: StyleHierarchyProps) {
+    const [style] = useStyle();
+    const [fitlered, setFiltered] = React.useState<StyleNode>(style);
     const [search, setSearch] = React.useState<string>('');
     const timerRef = React.useRef<NodeJS.Timeout>();
 
@@ -30,8 +30,8 @@ export function MetadataHierarchy(props: MetadataHierarchyProps) {
     }, []);
 
     React.useEffect(() => {
-        setFiltered(filterMetadata(metadata, '', search));
-    }, [metadata, search]);
+        setFiltered(filterStyles(style, '', search));
+    }, [style, search]);
 
     const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
@@ -51,14 +51,12 @@ export function MetadataHierarchy(props: MetadataHierarchyProps) {
                 />
                 <StretchContainer>
                     <OverflowAbsoluteContainer>
-                        {!fitlered.children && !fitlered.values && <Empty>No metadata</Empty>}
-                        {(fitlered.children || fitlered.values) && (
-                            <MetadataNodeComponent
+                        {!fitlered.children && !fitlered.style && <Empty>No metadata</Empty>}
+                        {(fitlered.children || fitlered.style) && (
+                            <StyleNodeComponent
                                 category={rootNodeLabel}
                                 node={fitlered}
-                                onValuePick={(node, value) =>
-                                    props.onValuePick(fitlered, node, value)
-                                }
+                                onValuePick={(node) => props.onValuePick(fitlered, node)}
                                 depth={0}
                                 initialOpen={true}
                             />

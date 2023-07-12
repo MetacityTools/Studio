@@ -1,27 +1,28 @@
-import { MetadataNode } from '@utils/types';
+import { StyleNode } from '@utils/types';
 
 import { HierarchyNodeGroupChildren } from '@elements/Hierarchy';
 
-import { MetadataNodeComponent } from './MetadataNode';
-import { MetadataMenuPickFunciton } from './MetadataValue';
+import { StyleMenuPickFunciton, StyleNodeComponent } from './StyleNode';
 
 interface MetadataCategoryProps {
     categories: string[];
-    node: MetadataNode;
-    onValuePick: MetadataMenuPickFunciton;
+    node: StyleNode;
+    onValuePick: StyleMenuPickFunciton;
     depth?: number;
 }
 
-export function MetadataCategoryChildren(props: MetadataCategoryProps) {
+export function StyleCategoryChildren(props: MetadataCategoryProps) {
     const { node, onValuePick, depth } = props;
 
     if (node.children) {
-        const sortedEntires = [...node.children].sort(([keyA], [keyB]) => keyA.localeCompare(keyB));
+        const sortedEntires = Object.entries(node.children).sort(([keyA], [keyB]) =>
+            keyA.localeCompare(keyB)
+        );
         return (
             <HierarchyNodeGroupChildren>
                 {sortedEntires.map(([key, value]) => {
                     return (
-                        <MetadataNodeComponent
+                        <StyleNodeComponent
                             onValuePick={onValuePick}
                             category={key}
                             node={value}

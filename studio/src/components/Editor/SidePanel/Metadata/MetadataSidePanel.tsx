@@ -1,5 +1,6 @@
 import { Allotment } from 'allotment';
 import 'allotment/dist/style.css';
+import React from 'react';
 
 import { MetadataNode } from '@utils/types';
 
@@ -18,7 +19,7 @@ export function MetadataSidePanel() {
     const select = useSelectionByMetadata();
     const keymap = useKeymap();
     const selection = useSelectedModels();
-    const [status] = useStatus();
+    const [status, setStatus] = useStatus();
 
     const handlePick = (root: MetadataNode, node: MetadataNode, value: any) => {
         const extend = keymap?.shift ?? false;
@@ -30,6 +31,12 @@ export function MetadataSidePanel() {
         countSelectedSubmodels += submodels.size;
     });
     let countSelectedModels = selection.size;
+
+    React.useEffect(() => {
+        return () => {
+            setStatus(undefined);
+        };
+    }, []);
 
     return (
         <ColumnContainer>
@@ -44,9 +51,7 @@ export function MetadataSidePanel() {
                     <Allotment.Pane preferredSize={800} minSize={200} className="border-t">
                         <ColumnContainer>
                             <PanelTitle title="Metadata Editor" />
-                            <ColumnContainer>
-                                <MetaEditor />
-                            </ColumnContainer>
+                            <MetaEditor />
                             <BottomRowContainer>
                                 <Status status={status} />
                                 <div>

@@ -2,71 +2,41 @@ import React from 'react';
 
 import { MetadataNode } from '@utils/types';
 
-import {
-    HierarchyBracketsButton,
-    HierarchyChevronButton,
-    HierarchyMainButton,
-    HierarchyNode,
-    HierarchyNodeGroup,
-} from '@elements/Hierarchy';
-
-import { MetadataTitle } from './MetadataTitle';
+import { HierarchyBracketsButton, HierarchyMainButton, HierarchyNode } from '@elements/Hierarchy';
 
 export type MetadataMenuPickFunciton = (node: MetadataNode, value: any) => void;
 
 interface MetadataValueProps {
-    categories: string[];
     node: MetadataNode;
     onValuePick: MetadataMenuPickFunciton;
     depth?: number;
 }
 
 export function MetadataValue(props: MetadataValueProps) {
-    const { categories, node, onValuePick, depth } = props;
+    const { node, onValuePick, depth } = props;
     const [displayCount, setDisplayCount] = React.useState(10);
-    const [open, setOpen] = React.useState(false);
 
-    const handleUseStyle = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, value: any) => {
+    const handleUseMetadata = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, value: any) => {
         onValuePick(node, value);
-        e.stopPropagation();
-    };
-
-    const handleOpen = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-        setOpen(!open);
         e.stopPropagation();
     };
 
     const unique = Array.from(new Set(node.values)).sort();
 
     return (
-        <HierarchyNodeGroup>
-            <HierarchyNode depth={depth}>
-                <HierarchyChevronButton inheritStyles onClick={handleOpen} open={open} />
-                <HierarchyMainButton inheritStyles onClick={handleOpen}>
-                    <MetadataTitle categories={categories} />
-                </HierarchyMainButton>
-            </HierarchyNode>
-
-            {open &&
-                unique.slice(0, displayCount).map((value, i) => (
-                    <HierarchyNode
-                        key={value}
-                        depth={(depth !== undefined && depth + 1) || undefined}
-                    >
-                        <HierarchyBracketsButton
-                            inheritStyles
-                            onClick={(e) => handleUseStyle(e, value)}
-                        />
-                        <HierarchyMainButton
-                            inheritStyles
-                            onClick={(e) => handleUseStyle(e, value)}
-                        >
-                            {value}
-                        </HierarchyMainButton>
-                    </HierarchyNode>
-                ))}
-
-            {open && unique.length > displayCount && (
+        <>
+            {unique.slice(0, displayCount).map((value, i) => (
+                <HierarchyNode key={value} depth={(depth !== undefined && depth + 1) || undefined}>
+                    <HierarchyBracketsButton
+                        inheritStyles
+                        onClick={(e) => handleUseMetadata(e, value)}
+                    />
+                    <HierarchyMainButton inheritStyles onClick={(e) => handleUseMetadata(e, value)}>
+                        {value}
+                    </HierarchyMainButton>
+                </HierarchyNode>
+            ))}
+            {unique.length > displayCount && (
                 <HierarchyNode depth={(depth !== undefined && depth + 1) || undefined}>
                     <button
                         onClick={() =>
@@ -78,6 +48,6 @@ export function MetadataValue(props: MetadataValueProps) {
                     </button>
                 </HierarchyNode>
             )}
-        </HierarchyNodeGroup>
+        </>
     );
 }

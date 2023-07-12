@@ -69,7 +69,7 @@ export function IOMenu(props: { export?: boolean }) {
                 id="models"
                 onChange={onModelsSelected}
                 multiple
-                accept=".gltf, .glb, .shp, .metacity, .csv, .ifc"
+                accept=".gltf, .glb, .shp, .shx, .prj, .dbf, .cpg, .metacity, .csv, .ifc"
             >
                 Import
             </ButtonFileInput>
