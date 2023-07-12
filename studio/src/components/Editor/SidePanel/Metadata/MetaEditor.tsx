@@ -36,7 +36,7 @@ export function MetaEditor() {
                     updateGlobalMetadata();
                     setStatus('saved');
                 } catch (e) {
-                    console.error(e);
+                    console.warn(e);
                     setStatus('failed');
                 }
             } catch (e) {}

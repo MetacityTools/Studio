@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import React from 'react';
 import { BsChevronRight } from 'react-icons/bs';
 import { FiChevronRight } from 'react-icons/fi';
-import { VscJson } from 'react-icons/vsc';
+import { VscJson, VscSymbolColor } from 'react-icons/vsc';
 
 import { colorLightActive, colorVividActive, colorVividBase } from './Colors';
 
@@ -73,6 +73,26 @@ export function HierarchyBracketsButton(props: HierarchyButtonBase) {
             title={props.title}
         >
             <VscJson className={clsx('w-4 h-4')} />
+        </button>
+    );
+}
+
+export function HierarchyStyleButton(props: HierarchyButtonBase) {
+    return (
+        <button
+            className={clsx(
+                'outline-none',
+                'px-2 py-2',
+                getNodeBackground(
+                    props.active ?? false,
+                    props.light ?? false,
+                    props.inheritStyles ?? false
+                )
+            )}
+            onClick={props.onClick}
+            title={props.title}
+        >
+            <VscSymbolColor className={clsx('w-4 h-4')} />
         </button>
     );
 }

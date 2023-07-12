@@ -60,7 +60,12 @@ export function Canvas(props: { canvasRef: React.RefObject<HTMLCanvasElement> })
               ];
         const selectionObj = primitiveIndicesToSubmodelIndices(arrayedSelection);
         let { toggle, extend } = selectionFlags(multiselect, shiftKey);
+        console.log(selectionObj, toggle, extend);
         select(selectionObj, toggle, extend);
+    }
+
+    function deselecteAll() {
+        select(new Map(), false, false);
     }
 
     const handleWheel = (event: WheelEvent) => {
@@ -90,8 +95,10 @@ export function Canvas(props: { canvasRef: React.RefObject<HTMLCanvasElement> })
             }}
             onPointerUp={(e) => {
                 let selection = renderer.controls?.pointerUp(e.nativeEvent);
+                console.log(selection);
                 const shift = renderer.controls?.keyboard.keyMap.shift ?? false;
                 if (selection) handlePick(selection, shift);
+                else deselecteAll();
             }}
             onWheel={(e) => {
                 renderer.controls?.wheel(e.nativeEvent);

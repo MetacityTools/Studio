@@ -14,8 +14,9 @@ import { MetadataNode, PrimitiveType, StyleNode } from '@utils/types';
 import * as GL from '@bananagl/bananagl';
 
 import { SelectFunction, context } from './Context';
-import { extractMetadata } from './metadata';
+import { extractMetadata, filterSubmodels, findKeychain } from './metadata';
 import { SelectionType, changeSelection } from './selection';
+import { findStyleKeychain } from './style';
 
 export function useActiveView(): number {
     const ctx = React.useContext(context);
@@ -133,9 +134,11 @@ export function useRemoveSubmodels() {
     const remove = async (model: EditorModel, submodels: Set<number>) => {
         const data = removeSubmodels(model, submodels);
         if (!data) return;
-        const glmodel = await importModel(data);
-        if (!glmodel) return;
-        ctx.scene.add(glmodel);
+        if (data.geometry.position.length > 0) {
+            const glmodel = await importModel(data);
+            if (!glmodel) return;
+            ctx.scene.add(glmodel);
+        }
         ctx.scene.remove(model);
         select(new Map());
     };
@@ -202,52 +205,6 @@ export function useMetadata(): [MetadataNode, () => void] {
     return [metadata, update];
 }
 
-function findKeychain(node: MetadataNode, target: MetadataNode, nodeKey?: string): null | string[] {
-    if (node === target) {
-        if (nodeKey) return [nodeKey];
-        return [];
-    }
-    if (!node.children) return null;
-
-    for (const [key, value] of node.children.entries()) {
-        const path = findKeychain(value, target, key);
-        if (path) {
-            if (nodeKey) return [nodeKey, ...path];
-            return path;
-        }
-    }
-
-    return null;
-}
-
-function filterSubmodelRecursive(
-    metadata: any,
-    keychain: string[],
-    value: any,
-    depth: number = 0
-): boolean {
-    if (keychain.length === depth) {
-        if (metadata === value) return true;
-        return false;
-    } else {
-        const key = keychain[depth];
-        const subdata = metadata[key];
-        if (subdata === undefined) return false;
-        return filterSubmodelRecursive(subdata, keychain, value, depth + 1);
-    }
-}
-
-function filterSubmodels(model: EditorModel, keychain: string[], value: any) {
-    const submodels = new Set<number>();
-    let parsedId;
-    for (const id of Object.keys(model.metadata)) {
-        parsedId = parseInt(id);
-        if (filterSubmodelRecursive(model.metadata[parsedId], keychain, value))
-            submodels.add(parsedId);
-    }
-    return submodels;
-}
-
 export function useSelectionByMetadata(): (
     root: MetadataNode,
     metadata: MetadataNode,
@@ -284,4 +241,15 @@ export function useKeymap() {
 export function useStyle(): [StyleNode, React.Dispatch<React.SetStateAction<StyleNode>>] {
     const ctx = React.useContext(context);
     return [ctx.styles, ctx.setStyles];
+}
+
+export function useApplyStyle() {
+    const ctx = React.useContext(context);
+
+    const applyStyle = (root: StyleNode, style: StyleNode) => {
+        const keychain = findStyleKeychain(root, style);
+        console.log('keychain', keychain, style);
+    };
+
+    return applyStyle;
 }

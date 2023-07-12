@@ -40,6 +40,36 @@ export function DialogOption(props: {
     return null;
 }
 
+export function DialogButton(props: {
+    title: string;
+    body: string;
+    onClick?: () => void;
+    href?: string;
+    className?: string;
+    secondary?: boolean;
+}) {
+    const sharedClasses = clsx(
+        !props.secondary
+            ? 'bg-blue-100 text-blue-900 hover:bg-blue-200 focus-visible:ring-blue-500'
+            : 'bg-neutral-100 text-neutral-900 hover:bg-neutral-200 focus-visible:ring-neutral-500',
+        'text-left rounded-md px-4 py-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 transition-colors',
+        props.className
+    );
+
+    return (
+        <button
+            type="button"
+            className={clsx(sharedClasses)}
+            onClick={props.onClick}
+            title={props.title}
+        >
+            {props.body}
+        </button>
+    );
+
+    return null;
+}
+
 export function OverlayDialog(props: {
     isOpen: boolean;
     onClose: () => void;

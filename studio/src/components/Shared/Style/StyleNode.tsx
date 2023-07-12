@@ -3,11 +3,11 @@ import React from 'react';
 import { StyleNode } from '@utils/types';
 
 import {
-    HierarchyBracketsButton,
     HierarchyChevronButton,
     HierarchyMainButton,
     HierarchyNode,
     HierarchyNodeGroup,
+    HierarchyStyleButton,
     HierarchyTitle,
 } from '@elements/Hierarchy';
 
@@ -59,7 +59,7 @@ export function StyleNodeComponent(props: StyleNodeComponentProps) {
                     </HierarchyNode>
                     {isValue && open && (
                         <HierarchyNode depth={(depth !== undefined && depth + 1) || undefined}>
-                            <HierarchyBracketsButton inheritStyles onClick={handleUseStyle} />
+                            <HierarchyStyleButton inheritStyles onClick={handleUseStyle} />
                             <HierarchyMainButton inheritStyles onClick={handleUseStyle}>
                                 Apply Style
                             </HierarchyMainButton>
@@ -78,7 +78,7 @@ export function StyleNodeComponent(props: StyleNodeComponentProps) {
             {!isCategory && isValue && (
                 <>
                     <HierarchyNode depth={props.depth}>
-                        <HierarchyBracketsButton inheritStyles onClick={handleUseStyle} />
+                        <HierarchyStyleButton inheritStyles onClick={handleUseStyle} />
                         <HierarchyMainButton inheritStyles onClick={handleUseStyle}>
                             <HierarchyTitle categories={categories} />
                         </HierarchyMainButton>

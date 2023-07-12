@@ -6,7 +6,12 @@ import { MetadataNode } from '@utils/types';
 
 import { useStatus } from '@editor/EditorContext';
 
-import { BottomRowContainer, ColumnContainer, StretchContainer } from '@elements/Containers';
+import {
+    BottomRowContainer,
+    ColumnContainer,
+    OverflowAbsoluteContainer,
+    StretchContainer,
+} from '@elements/Containers';
 import { PanelTitle } from '@elements/PanelTitle';
 
 import { useKeymap, useSelectedModels, useSelectionByMetadata } from '@shared/Context/hooks';
@@ -44,22 +49,29 @@ export function MetadataSidePanel() {
                 <Allotment separator={false} vertical>
                     <Allotment.Pane preferredSize={400} minSize={200}>
                         <ColumnContainer>
-                            <PanelTitle title="Metadata" />
+                            <PanelTitle title="Metadata Outline" />
                             <MetadataHierarchy onValuePick={handlePick} />
                         </ColumnContainer>
                     </Allotment.Pane>
                     <Allotment.Pane preferredSize={800} minSize={200} className="border-t">
                         <ColumnContainer>
                             <PanelTitle title="Metadata Editor" />
-                            <MetaEditor />
-                            <BottomRowContainer>
-                                <Status status={status} />
-                                <div>
-                                    Common data for {countSelectedSubmodels} submodel
-                                    {countSelectedSubmodels != 1 ? 's' : ''} in{' '}
-                                    {countSelectedModels} model{countSelectedModels != 1 ? 's' : ''}
-                                </div>
-                            </BottomRowContainer>
+                            <ColumnContainer>
+                                <StretchContainer>
+                                    <OverflowAbsoluteContainer>
+                                        <MetaEditor />
+                                    </OverflowAbsoluteContainer>
+                                </StretchContainer>
+                                <BottomRowContainer>
+                                    <Status status={status} />
+                                    <div>
+                                        Common data for {countSelectedSubmodels} submodel
+                                        {countSelectedSubmodels != 1 ? 's' : ''} in{' '}
+                                        {countSelectedModels} model
+                                        {countSelectedModels != 1 ? 's' : ''}
+                                    </div>
+                                </BottomRowContainer>
+                            </ColumnContainer>
                         </ColumnContainer>
                     </Allotment.Pane>
                 </Allotment>

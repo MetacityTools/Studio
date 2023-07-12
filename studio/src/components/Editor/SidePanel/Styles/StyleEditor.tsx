@@ -45,7 +45,7 @@ export function StyleEditor() {
                     setStatus('saved');
                     setContent(value ?? '');
                 } catch (e) {
-                    console.error(e);
+                    console.warn(e);
                     setStatus('failed');
                 }
             } catch (e) {}

@@ -169,3 +169,53 @@ function addedDiff(original: any, edited: any) {
         return edited;
     }
 }
+
+export function findKeychain(
+    node: MetadataNode,
+    target: MetadataNode,
+    nodeKey?: string
+): null | string[] {
+    if (node === target) {
+        if (nodeKey) return [nodeKey];
+        return [];
+    }
+    if (!node.children) return null;
+
+    for (const [key, value] of node.children.entries()) {
+        const path = findKeychain(value, target, key);
+        if (path) {
+            if (nodeKey) return [nodeKey, ...path];
+            return path;
+        }
+    }
+
+    return null;
+}
+
+function filterSubmodelRecursive(
+    metadata: any,
+    keychain: string[],
+    value: any,
+    depth: number = 0
+): boolean {
+    if (keychain.length === depth) {
+        if (metadata === value) return true;
+        return false;
+    } else {
+        const key = keychain[depth];
+        const subdata = metadata[key];
+        if (subdata === undefined) return false;
+        return filterSubmodelRecursive(subdata, keychain, value, depth + 1);
+    }
+}
+
+export function filterSubmodels(model: EditorModel, keychain: string[], value: any) {
+    const submodels = new Set<number>();
+    let parsedId;
+    for (const id of Object.keys(model.metadata)) {
+        parsedId = parseInt(id);
+        if (filterSubmodelRecursive(model.metadata[parsedId], keychain, value))
+            submodels.add(parsedId);
+    }
+    return submodels;
+}

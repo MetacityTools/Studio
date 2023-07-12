@@ -34,11 +34,7 @@ These features are planned for the future, but not yet scheduled.
 
 ### Priority Backlog
 
--   [ ] Filter file inputs (add format filters)
--   [ ] Click off model - deselect all
--   [ ] Group selection in hierarchy tree optimization (shift to select, deselect previous on selectiong previous)
 -   [ ] Shortcuts for tab switching in editor
--   [ ] When in Table view, click to select model and extend the selection based on groups on key/button/action
 
 ### Backlog
 
@@ -52,9 +48,6 @@ These features are planned for the future, but not yet scheduled.
 -   [ ] Insert textured plane (location blueprints for reference)
 -   [ ] Refactor General context - setting status messages, etc.
 -   [ ] Add a button to open/hide the side panel
-
-### Bugs and Validations
-
 -   [ ] Do not allow keys to be empty in table view during conversion
 
 ---
@@ -63,16 +56,11 @@ These features are planned for the future, but not yet scheduled.
 
 These features are planned for the future, and scheduled for a specific release.
 
-### v0.5.2
+### v0.5.1
 
 -   [ ] Projecting models onto models (2D onto 3D) - ✨WIP https://github.com/vojtatom/geometry
 -   [ ] Loading points and lines from SHP
 -   [ ] Export screenshot action
-
-### v0.5.1
-
--   [ ] Styling engine
--   [ ] Styling language (?) - something like CSS but for metadata
 
 ### v0.5.0 - Work in progress
 
@@ -88,10 +76,16 @@ These features are planned for the future, and scheduled for a specific release.
 -   [x] Styling
     -   [x] Style Editor
     -   [x] Auto generate/update styles
+    -   [x] Stle outline
     -   [ ] Apply styles to the geometry
+    -   [ ] Styling engine
 -   [x] Updated metadata format - binary buffers + attributes + styling
     -   [x] Metadata export/import
     -   [x] Styles
+-   [x] Filter file inputs (add format filters)
+-   [x] Click off model - deselect all
+-   [x] Group selection in hierarchy tree optimization (shift to select, deselect previous on selectiong previous)
+-   [x] When in Table view, click to select model and extend the selection based on groups on key/button/action
 
 🧠 Call for consultation (TB planned, beginning of July 2023)
 

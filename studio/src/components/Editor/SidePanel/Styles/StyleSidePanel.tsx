@@ -15,7 +15,7 @@ import {
 } from '@elements/Containers';
 import { PanelTitle } from '@elements/PanelTitle';
 
-import { useMetadata, useStyle } from '@shared/Context/hooks';
+import { useApplyStyle, useMetadata, useStyle } from '@shared/Context/hooks';
 import { Status } from '@shared/Status';
 import { StyleHierarchy } from '@shared/Style/StyleHierarchy';
 
@@ -23,6 +23,7 @@ import { StyleEditor } from './StyleEditor';
 
 export function StyleSidePanel() {
     const [style, setStyle] = useStyle();
+    const applyStyle = useApplyStyle();
     const [status, setStatus] = useStatus();
     const [metadata] = useMetadata();
 
@@ -38,8 +39,7 @@ export function StyleSidePanel() {
     }, []);
 
     const handlePick = (root: StyleNode, node: StyleNode) => {
-        console.log('pick', root, node);
-        //TODO
+        applyStyle(root, node);
     };
 
     return (
@@ -48,23 +48,29 @@ export function StyleSidePanel() {
                 <Allotment separator={false} vertical>
                     <Allotment.Pane preferredSize={400} minSize={200}>
                         <ColumnContainer>
-                            <PanelTitle title="Styles" />
+                            <PanelTitle title="Style Outline" />
                             <StyleHierarchy onValuePick={handlePick} />
                         </ColumnContainer>
                     </Allotment.Pane>
                     <Allotment.Pane preferredSize={800} minSize={200} className="border-t">
                         <ColumnContainer>
                             <PanelTitle title="Style Editor" />
-                            <StyleEditor />
-                            <BottomRowContainer>
-                                <Status status={status} />
-                                <button
-                                    onClick={handleAutoStyle}
-                                    className="text-neutral-400 hover:text-neutral-800"
-                                >
-                                    Apply auto style
-                                </button>
-                            </BottomRowContainer>
+                            <ColumnContainer>
+                                <StretchContainer>
+                                    <OverflowAbsoluteContainer>
+                                        <StyleEditor />
+                                    </OverflowAbsoluteContainer>
+                                </StretchContainer>
+                                <BottomRowContainer>
+                                    <Status status={status} />
+                                    <button
+                                        onClick={handleAutoStyle}
+                                        className="text-neutral-400 hover:text-neutral-800"
+                                    >
+                                        Apply auto style
+                                    </button>
+                                </BottomRowContainer>
+                            </ColumnContainer>
                         </ColumnContainer>
                     </Allotment.Pane>
                 </Allotment>
