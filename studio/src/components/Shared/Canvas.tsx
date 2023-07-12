@@ -95,10 +95,9 @@ export function Canvas(props: { canvasRef: React.RefObject<HTMLCanvasElement> })
             }}
             onPointerUp={(e) => {
                 let selection = renderer.controls?.pointerUp(e.nativeEvent);
-                console.log(selection);
                 const shift = renderer.controls?.keyboard.keyMap.shift ?? false;
                 if (selection) handlePick(selection, shift);
-                else deselecteAll();
+                //else deselecteAll(); //TODO handle only if clicked, no drag and move
             }}
             onWheel={(e) => {
                 renderer.controls?.wheel(e.nativeEvent);
