@@ -16,7 +16,7 @@ import * as GL from '@bananagl/bananagl';
 import { SelectFunction, context } from './Context';
 import { extractMetadata, filterSubmodels, findKeychain } from './metadata';
 import { SelectionType, changeSelection } from './selection';
-import { findStyleKeychain } from './style';
+import { colorize, findStyleKeychain } from './style';
 
 export function useActiveView(): number {
     const ctx = React.useContext(context);
@@ -248,7 +248,8 @@ export function useApplyStyle() {
 
     const applyStyle = (root: StyleNode, style: StyleNode) => {
         const keychain = findStyleKeychain(root, style);
-        console.log('keychain', keychain, style);
+        if (!keychain) return;
+        colorize(keychain, style, ctx.models);
     };
 
     return applyStyle;

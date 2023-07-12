@@ -26,6 +26,10 @@ export function findStyleKeychain(
 export function colorize(keychain: string[], style: StyleNode, models: EditorModel[]) {
     models.forEach((model) => {
         //prepare colormap
+        //for each record in metadata
+        const metadata = model.metadata;
+        const submodels = Object.keys(metadata);
+
         //apply colormap
     });
 }
