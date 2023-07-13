@@ -17,7 +17,7 @@ export function linearInterpolateColor(colorHexMap: vec3[], indicator: number) {
 
 export function sampleColor(color: vec3 | vec3[], indicator: number) {
     if (Array.isArray(color[0])) {
-        return linearInterpolateColor(color as vec3[], indicator);
+        return linearInterpolateColor(color as vec3[], Math.min(Math.max(indicator, 0), 1));
     }
     return color as vec3;
 }
@@ -49,7 +49,7 @@ export function colorHexToStr(hex: number): string {
     return '#' + hex.toString(16).padEnd(6, '0');
 }
 
-export function parseColor(color: vec3 | undefined): vec3 | undefined {
+export function parseColor(color: number | string | vec3 | undefined): vec3 | undefined {
     if (color === undefined) {
         return undefined;
     } else if (typeof color === 'number') {
