@@ -15,10 +15,10 @@ export function ModelViewer() {
     return (
         <SizeGuard minWidth={600} minHeight={400}>
             <Allotment separator={false}>
-                <Allotment.Pane className="border-r" minSize={300}>
+                <Allotment.Pane className="border-r" preferredSize={400}>
                     <SidePanel />
                 </Allotment.Pane>
-                <Allotment.Pane preferredSize={1200} className="relative">
+                <Allotment.Pane className="relative">
                     <CanvasComponent />
                     <Controls />
                     <StyleDetailPanel className="absolute left-0 bottom-0 m-4" />

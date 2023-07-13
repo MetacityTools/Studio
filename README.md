@@ -61,6 +61,8 @@ These features are planned for the future, and scheduled for a specific release.
 -   [ ] Projecting models onto models (2D onto 3D) - ✨WIP https://github.com/vojtatom/geometry
 -   [ ] Loading points and lines from SHP
 -   [ ] Export screenshot action
+-   [ ] Import and export data separated into models (do not join on export)
+-   [ ] Tooltip on hover over model
 
 ### v0.5.0 - Work in progress
 

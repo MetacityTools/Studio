@@ -55,7 +55,7 @@ export function ViewerSplash() {
                 <DialogOption
                     title="Go to Editor"
                     body="Editor allows you to create a new Studio project"
-                    href="/editor"
+                    href="/editor/"
                 />
             </div>
         </OverlayDialog>
