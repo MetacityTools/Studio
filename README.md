@@ -77,8 +77,8 @@ These features are planned for the future, and scheduled for a specific release.
     -   [x] Style Editor
     -   [x] Auto generate/update styles
     -   [x] Style outline
-    -   [ ] Apply styles to the geometry
-    -   [ ] Styling engine
+    -   [x] Apply styles to the geometry
+    -   [ ] Styling UI - show data infographics
 -   [x] Updated metadata format - binary buffers + attributes + styling
     -   [x] Metadata export/import
     -   [x] Styles
