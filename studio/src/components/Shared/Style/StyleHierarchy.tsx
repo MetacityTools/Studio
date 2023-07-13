@@ -51,7 +51,7 @@ export function StyleHierarchy(props: StyleHierarchyProps) {
                 />
                 <StretchContainer>
                     <OverflowAbsoluteContainer>
-                        {!fitlered.children && !fitlered.style && <Empty>No metadata</Empty>}
+                        {!fitlered.children && !fitlered.style && <Empty>No Styles</Empty>}
                         {(fitlered.children || fitlered.style) && (
                             <StyleNodeComponent
                                 category={rootNodeLabel}

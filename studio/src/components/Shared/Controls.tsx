@@ -11,6 +11,7 @@ export function Controls() {
             <DirectionControls />
             <ShaderControls />
             <SelectionControls />
+            <RendererControls />
         </div>
     );
 }
