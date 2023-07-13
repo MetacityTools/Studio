@@ -84,6 +84,7 @@ These features are planned for the future, and scheduled for a specific release.
 -   [x] Updated metadata format - binary buffers + attributes + styling
     -   [x] Metadata export/import
     -   [x] Styles
+-   [x] Updated viewer to sync with studio
 -   [x] Filter file inputs (add format filters)
 -   [x] Click off model - deselect all
 -   [x] Group selection in hierarchy tree optimization (shift to select, deselect previous on selectiong previous)
