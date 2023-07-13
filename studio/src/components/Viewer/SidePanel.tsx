@@ -11,7 +11,7 @@ import { StyleSidePanel } from './Style/Styles';
 export function SidePanel() {
     return (
         <ColumnContainer>
-            <IOMenu export />
+            <IOMenu />
             <TabGroup>
                 <TabList>
                     <TabButton title="Metadata">
