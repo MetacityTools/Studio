@@ -47,13 +47,13 @@ export function MetadataSidePanel() {
         <ColumnContainer>
             <StretchContainer>
                 <Allotment separator={false} vertical>
-                    <Allotment.Pane preferredSize={400} minSize={200}>
+                    <Allotment.Pane preferredSize={400} minSize={20}>
                         <ColumnContainer>
                             <PanelTitle title="Metadata Outline" />
                             <MetadataHierarchy onValuePick={handlePick} />
                         </ColumnContainer>
                     </Allotment.Pane>
-                    <Allotment.Pane preferredSize={800} minSize={200} className="border-t">
+                    <Allotment.Pane preferredSize={400} minSize={20} className="border-t">
                         <ColumnContainer>
                             <PanelTitle title="Metadata Editor" />
                             <ColumnContainer>

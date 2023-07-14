@@ -42,9 +42,8 @@ export function MetadataNodeComponent(props: MetadataNodeComponentProps) {
                         open={open}
                         onClick={handleOpen}
                         title="Show subcategories"
-                        inheritStyles
                     />
-                    <HierarchyMainButton inheritStyles onClick={handleOpen}>
+                    <HierarchyMainButton onClick={handleOpen}>
                         <HierarchyTitle categories={categories} />
                     </HierarchyMainButton>
                 </HierarchyNode>

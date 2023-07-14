@@ -4,23 +4,13 @@ import { BsChevronRight } from 'react-icons/bs';
 import { FiChevronRight } from 'react-icons/fi';
 import { VscJson, VscSymbolColor } from 'react-icons/vsc';
 
-import { colorLightActive, colorVividActive, colorVividBase } from './Colors';
-
-function getNodeBackground(active: boolean, light?: boolean, inherit?: boolean) {
-    if (inherit) return 'bg-transparent border-inherit text-inherit bg-inherit';
-    if (active) return colorVividActive;
-    if (light) return colorLightActive;
-    return colorVividBase;
-}
+import { colorHierarchyPart } from './Colors';
 
 export type ButtonHandler = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 
 interface HierarchyButtonBase {
     onClick?: ButtonHandler;
     title?: string;
-    active?: boolean;
-    light?: boolean;
-    inheritStyles?: boolean;
 }
 
 interface HierarchyButtonProps extends HierarchyButtonBase {
@@ -35,15 +25,7 @@ interface HierarchyChevronButtonProps extends HierarchyButtonBase {
 export function HierarchyChevronButton(props: HierarchyChevronButtonProps) {
     return (
         <button
-            className={clsx(
-                'outline-none',
-                'px-2 py-2',
-                getNodeBackground(
-                    props.active ?? false,
-                    props.light ?? false,
-                    props.inheritStyles ?? false
-                )
-            )}
+            className={clsx('outline-none', 'px-2 py-2', colorHierarchyPart)}
             onClick={props.onClick}
             title={props.title}
         >
@@ -60,15 +42,7 @@ export function HierarchyChevronButton(props: HierarchyChevronButtonProps) {
 export function HierarchyBracketsButton(props: HierarchyButtonBase) {
     return (
         <button
-            className={clsx(
-                'outline-none',
-                'px-2 py-2',
-                getNodeBackground(
-                    props.active ?? false,
-                    props.light ?? false,
-                    props.inheritStyles ?? false
-                )
-            )}
+            className={clsx('outline-none', 'px-2 py-2', colorHierarchyPart)}
             onClick={props.onClick}
             title={props.title}
         >
@@ -80,15 +54,7 @@ export function HierarchyBracketsButton(props: HierarchyButtonBase) {
 export function HierarchyStyleButton(props: HierarchyButtonBase) {
     return (
         <button
-            className={clsx(
-                'outline-none',
-                'px-2 py-2',
-                getNodeBackground(
-                    props.active ?? false,
-                    props.light ?? false,
-                    props.inheritStyles ?? false
-                )
-            )}
+            className={clsx('outline-none', 'px-2 py-2', colorHierarchyPart)}
             onClick={props.onClick}
             title={props.title}
         >
@@ -109,11 +75,7 @@ export function HierarchyMainButton(props: HierarchyMainButtonProps) {
                 props.padded ? 'px-4' : 'px-2',
                 'flex-1 text-left flex flex-row items-center',
                 'text-ellipsis overflow-hidden whitespace-nowrap',
-                getNodeBackground(
-                    props.active ?? false,
-                    props.light ?? false,
-                    props.inheritStyles ?? false
-                )
+                colorHierarchyPart
             )}
             onClick={props.onClick}
         >

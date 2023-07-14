@@ -24,7 +24,7 @@ export function ModelList() {
         <OverflowContainer>
             {models.length === 0 && <Empty>No models</Empty>}
             {models.length >= 0 && (
-                <ColumnContainer className="p-4 space-y-2">
+                <ColumnContainer>
                     {models.map((model, index) => (
                         <Model
                             model={model}

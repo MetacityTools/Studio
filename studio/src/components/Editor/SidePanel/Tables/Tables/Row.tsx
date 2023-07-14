@@ -71,7 +71,6 @@ export function TableRow(props: TableRowProps) {
                 >
                     <option value="key">key</option>
                     <option value="value">value</option>
-                    <option value="value">units</option>
                 </select>
             </Td>
             {row.map((cell, cindex) => (

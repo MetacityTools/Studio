@@ -63,6 +63,7 @@ These features are planned for the future, and scheduled for a specific release.
 -   [ ] Export screenshot action
 -   [ ] Tooltip on hover over model
 -   [ ] Dark mode
+-   [ ] Refactor colors
 
 ### v0.5.0 - Work in progress
 
@@ -94,6 +95,7 @@ These features are planned for the future, and scheduled for a specific release.
 -   [x] Import and export data separated into models (do not join on export)
 -   [x] Rename models
 -   [x] Resolve rejects during loading
+-   [x] Allow colormap codes in styles instead of lists of colors [plasma, viridis, inferno, magma]
 
 ### v0.4.0 - ✅ Released
 

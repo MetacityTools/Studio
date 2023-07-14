@@ -25,7 +25,7 @@ uniform vec3 uCameraTarget;
 
 uniform float uZMin;
 uniform float uZMax;
-
+uniform float uUseShading;
 
 void main() {
     vec3 transformed = (uModelMatrix * vec4(position, 1.0)).xyz;
@@ -36,7 +36,7 @@ void main() {
 
     float factor = max(factorA, factorB);
     oColor = vec3(factor) * 0.2 + vec3(0.7);
-    oColor *= mix(vec3(0.5), vec3(1.0), smoothstep(uZMin, uZMax, transformed.z));
+    oColor *= mix(vec3(1.0), mix(vec3(0.5), vec3(1.0), smoothstep(uZMin, uZMax, transformed.z)), uUseShading);
     oColor *= mix(color, vec3(1.0, 0.705, 0.196), selected);
     
     int b = int(barCoord);
@@ -94,6 +94,7 @@ uniform vec3 uCameraTarget;
 
 uniform float uZMin;
 uniform float uZMax;
+uniform float uUseShading;
 
 
 void main() {
@@ -105,7 +106,7 @@ void main() {
 
     float factor = max(factorA, factorB);
     oColor = vec3(factor) * 0.2 + vec3(0.7);
-    oColor *= mix(vec3(0.5), vec3(1.0), smoothstep(uZMin, uZMax, transformed.z));
+    oColor *= mix(vec3(1.0), mix(vec3(0.5), vec3(1.0), smoothstep(uZMin, uZMax, transformed.z)), uUseShading);
     oColor *= mix(color, vec3(1.0, 0.705, 0.196), selected);
     
     int b = int(barCoord);
@@ -163,7 +164,7 @@ uniform vec3 uCameraTarget;
 
 uniform float uZMin;
 uniform float uZMax;
-
+uniform float uUseShading;
 
 void main() {
     vec3 transformed = (uModelMatrix * vec4(position, 1.0)).xyz;
@@ -175,7 +176,7 @@ void main() {
     float factor = max(factorA, factorB);
     //the weight of the 
     oColor = vec3(factor) * 0.1 + vec3(0.8);
-    oColor *= mix(vec3(0.5), vec3(1.0), smoothstep(uZMin, uZMax, transformed.z));
+    oColor *= mix(vec3(1.0), mix(vec3(0.5), vec3(1.0), smoothstep(uZMin, uZMax, transformed.z)), uUseShading);
     oColor *= mix(color, vec3(1.0, 0.705, 0.196), selected);
 
     gl_Position = uProjectionMatrix * uViewMatrix * vec4(transformed, 1.0);

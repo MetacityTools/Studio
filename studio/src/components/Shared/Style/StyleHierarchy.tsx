@@ -7,7 +7,7 @@ import { ColumnContainer, OverflowAbsoluteContainer, StretchContainer } from '@e
 import { Empty } from '@elements/Empty';
 import { Input } from '@elements/Input';
 
-import { useStyle } from '@shared/Context/hooks';
+import { useGrayscale, useStyle } from '@shared/Context/hooks';
 
 import { StyleNodeComponent } from './StyleNode';
 
@@ -21,6 +21,7 @@ export function StyleHierarchy(props: StyleHierarchyProps) {
     const [style] = useStyle();
     const [fitlered, setFiltered] = React.useState<StyleNode>(style);
     const [search, setSearch] = React.useState<string>('');
+    const [, setGrayscale] = useGrayscale();
     const timerRef = React.useRef<NodeJS.Timeout>();
 
     React.useEffect(() => {
@@ -40,6 +41,13 @@ export function StyleHierarchy(props: StyleHierarchyProps) {
             setSearch(value);
         }, 500);
     };
+
+    React.useEffect(() => {
+        setGrayscale(true);
+        return () => {
+            setGrayscale(false);
+        };
+    }, []);
 
     return (
         <div className="flex-1 w-full">

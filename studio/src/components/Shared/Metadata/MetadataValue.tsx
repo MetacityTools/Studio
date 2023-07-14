@@ -27,11 +27,8 @@ export function MetadataValue(props: MetadataValueProps) {
         <>
             {unique.slice(0, displayCount).map((value, i) => (
                 <HierarchyNode key={value} depth={(depth !== undefined && depth + 1) || undefined}>
-                    <HierarchyBracketsButton
-                        inheritStyles
-                        onClick={(e) => handleUseMetadata(e, value)}
-                    />
-                    <HierarchyMainButton inheritStyles onClick={(e) => handleUseMetadata(e, value)}>
+                    <HierarchyBracketsButton onClick={(e) => handleUseMetadata(e, value)} />
+                    <HierarchyMainButton onClick={(e) => handleUseMetadata(e, value)}>
                         {value}
                     </HierarchyMainButton>
                 </HierarchyNode>

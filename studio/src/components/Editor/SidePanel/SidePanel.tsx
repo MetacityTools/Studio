@@ -5,6 +5,7 @@ import { VscJson, VscMove, VscSymbolColor, VscTable, VscTools } from 'react-icon
 import { ColumnContainer } from '@elements/Containers';
 import { TabButton, TabGroup, TabList, TabPanel, TabPanels } from '@elements/Tabs';
 
+import { useGrayscale } from '@shared/Context/hooks';
 import { IOMenu } from '@shared/IOMenu/IOMenu';
 import { ViewSidePanel } from '@shared/ViewSettings/ViewSidePanel';
 
@@ -14,11 +15,13 @@ import { TableSidePanel } from './Tables/TableSidePanel';
 import { TransformSidePanel } from './Transform/TransformSidePanel';
 
 export function SidePanel() {
+    const [grayscale] = useGrayscale();
+
     return (
         <ColumnContainer>
             <IOMenu export />
             <TabGroup>
-                <TabList>
+                <TabList className={grayscale ? 'grayscale' : ''}>
                     <TabButton title="Transform">
                         <VscMove />
                     </TabButton>

@@ -29,23 +29,7 @@ export function autoUpdateStyle(metadata: MetadataNode, style: StyleNode) {
                 style.style.scalars.max = max;
             } else
                 style.style.scalars = {
-                    colormap: [
-                        '#440154',
-                        '#481b6d',
-                        '#46327e',
-                        '#3f4788',
-                        '#365c8d',
-                        '#2e6e8e',
-                        '#277f8e',
-                        '#21918c',
-                        '#1fa187',
-                        '#2db27d',
-                        '#4ac16d',
-                        '#73d056',
-                        '#a0da39',
-                        '#d0e11c',
-                        '#fde725',
-                    ],
+                    colormap: 'plasma',
                     min,
                     max,
                 };

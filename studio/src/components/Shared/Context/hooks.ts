@@ -244,14 +244,27 @@ export function useStyle(): [StyleNode, React.Dispatch<React.SetStateAction<Styl
     return [ctx.styles, ctx.setStyles];
 }
 
-export function useApplyStyle() {
+export function useApplyStyle(): [
+    string[] | null,
+    (root: StyleNode, style: StyleNode) => void,
+    () => void
+] {
     const ctx = React.useContext(context);
 
     const applyStyle = (root: StyleNode, style: StyleNode) => {
         const keychain = findStyleKeychain(root, style);
         if (!keychain) return;
-        colorize(keychain, style, ctx.models);
+        ctx.setUsedStyle(keychain);
     };
 
-    return applyStyle;
+    const clearStyle = () => {
+        ctx.setUsedStyle(null);
+    };
+
+    return [ctx.usedStyle, applyStyle, clearStyle];
+}
+
+export function useGrayscale(): [boolean, React.Dispatch<React.SetStateAction<boolean>>] {
+    const ctx = React.useContext(context);
+    return [ctx.grayscale, ctx.setGrayscale];
 }

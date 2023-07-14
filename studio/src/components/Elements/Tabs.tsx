@@ -28,8 +28,12 @@ export function TabPanels(props: { children: React.ReactNode }) {
     return <Tab.Panels className="w-full h-full flex-1">{props.children}</Tab.Panels>;
 }
 
-export function TabList(props: { children: React.ReactNode }) {
-    return <Tab.List className="flex flex-col bg-white border-r">{props.children}</Tab.List>;
+export function TabList(props: { children: React.ReactNode; className?: string }) {
+    return (
+        <Tab.List className={clsx('flex flex-col bg-white border-r', props.className)}>
+            {props.children}
+        </Tab.List>
+    );
 }
 
 export function TabGroup(props: { children: React.ReactNode }) {

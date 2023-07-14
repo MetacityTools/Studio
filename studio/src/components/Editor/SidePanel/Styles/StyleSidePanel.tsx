@@ -18,12 +18,13 @@ import { PanelTitle } from '@elements/PanelTitle';
 import { useApplyStyle, useMetadata, useStyle } from '@shared/Context/hooks';
 import { Status } from '@shared/Status';
 import { StyleHierarchy } from '@shared/Style/StyleHierarchy';
+import { StyleInfo } from '@shared/Style/StyleInfo';
 
 import { StyleEditor } from './StyleEditor';
 
 export function StyleSidePanel() {
     const [style, setStyle] = useStyle();
-    const applyStyle = useApplyStyle();
+    const [, applyStyle, clearStyle] = useApplyStyle();
     const [status, setStatus] = useStatus();
     const [metadata] = useMetadata();
 
@@ -42,17 +43,29 @@ export function StyleSidePanel() {
         applyStyle(root, node);
     };
 
+    React.useEffect(() => {
+        return () => {
+            clearStyle();
+        };
+    }, []);
+
     return (
         <ColumnContainer>
             <StretchContainer>
                 <Allotment separator={false} vertical>
-                    <Allotment.Pane preferredSize={400} minSize={200}>
+                    <Allotment.Pane preferredSize={200} minSize={20}>
+                        <ColumnContainer>
+                            <PanelTitle title="Active Style" />
+                            <StyleInfo />
+                        </ColumnContainer>
+                    </Allotment.Pane>
+                    <Allotment.Pane preferredSize={200} minSize={20} className="border-t">
                         <ColumnContainer>
                             <PanelTitle title="Style Outline" />
                             <StyleHierarchy onValuePick={handlePick} />
                         </ColumnContainer>
                     </Allotment.Pane>
-                    <Allotment.Pane preferredSize={800} minSize={200} className="border-t">
+                    <Allotment.Pane preferredSize={200} minSize={20} className="border-t">
                         <ColumnContainer>
                             <PanelTitle title="Style Editor" />
                             <ColumnContainer>

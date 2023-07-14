@@ -125,7 +125,7 @@ export interface StyleNode {
     style?: {
         random?: boolean;
         scalars?: {
-            colormap: string[];
+            colormap: string | string[];
             min: number;
             max: number;
         };

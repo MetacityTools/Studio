@@ -50,17 +50,16 @@ export function StyleNodeComponent(props: StyleNodeComponentProps) {
                             open={open}
                             onClick={handleOpen}
                             title="Show subcategories"
-                            inheritStyles
                         />
 
-                        <HierarchyMainButton inheritStyles onClick={handleOpen}>
+                        <HierarchyMainButton onClick={handleOpen}>
                             <HierarchyTitle categories={categories} />
                         </HierarchyMainButton>
                     </HierarchyNode>
                     {isValue && open && (
                         <HierarchyNode depth={(depth !== undefined && depth + 1) || undefined}>
-                            <HierarchyStyleButton inheritStyles onClick={handleUseStyle} />
-                            <HierarchyMainButton inheritStyles onClick={handleUseStyle}>
+                            <HierarchyStyleButton onClick={handleUseStyle} />
+                            <HierarchyMainButton onClick={handleUseStyle}>
                                 Apply Style
                             </HierarchyMainButton>
                         </HierarchyNode>
@@ -78,8 +77,8 @@ export function StyleNodeComponent(props: StyleNodeComponentProps) {
             {!isCategory && isValue && (
                 <>
                     <HierarchyNode depth={props.depth}>
-                        <HierarchyStyleButton inheritStyles onClick={handleUseStyle} />
-                        <HierarchyMainButton inheritStyles onClick={handleUseStyle}>
+                        <HierarchyStyleButton onClick={handleUseStyle} />
+                        <HierarchyMainButton onClick={handleUseStyle}>
                             <HierarchyTitle categories={categories} />
                         </HierarchyMainButton>
                     </HierarchyNode>

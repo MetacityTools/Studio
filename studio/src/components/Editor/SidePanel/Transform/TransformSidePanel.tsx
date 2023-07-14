@@ -10,13 +10,13 @@ import { Modifiers } from './Modifiers/Modifiers';
 export function TransformSidePanel() {
     return (
         <Allotment separator={false} vertical>
-            <Allotment.Pane minSize={200} preferredSize={300}>
+            <Allotment.Pane minSize={20} preferredSize={400}>
                 <ColumnContainer>
                     <PanelTitle title="Models" />
                     <ModelList />
                 </ColumnContainer>
             </Allotment.Pane>
-            <Allotment.Pane minSize={200} className="border-t">
+            <Allotment.Pane minSize={20} preferredSize={400} className="border-t">
                 <ColumnContainer>
                     <PanelTitle title="Modifiers" />
                     <OverflowContainer>

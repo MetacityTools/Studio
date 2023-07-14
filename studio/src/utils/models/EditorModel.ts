@@ -70,7 +70,7 @@ export class EditorModel extends GL.Pickable implements GL.Selectable {
         if (!color) return;
 
         let c;
-        const whiteness = 0.5;
+        const whiteness = 0.1;
         const colorf = 1 - whiteness;
         for (let i = 0; i < submodelBuffer.length; i++) {
             c = colormap.get(submodelBuffer[i])!;
@@ -132,4 +132,5 @@ export class EditorModel extends GL.Pickable implements GL.Selectable {
 export const DEFAULT_UNIFORMS = {
     uZMin: 0,
     uZMax: 10,
+    uUseShading: 1,
 };

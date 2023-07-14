@@ -7,6 +7,7 @@ import * as GL from '@bananagl/bananagl';
 
 import { extractMetadata } from './metadata';
 import { SelectionType } from './selection';
+import { colorize, whiten } from './style';
 
 export type SelectFunction = (selection: SelectionType, toggle?: boolean, extend?: boolean) => void;
 
@@ -31,6 +32,10 @@ interface ViewContextProps {
     setMetadata: React.Dispatch<React.SetStateAction<MetadataNode>>;
     styles: StyleNode;
     setStyles: React.Dispatch<React.SetStateAction<StyleNode>>;
+    usedStyle: string[] | null;
+    setUsedStyle: React.Dispatch<React.SetStateAction<string[] | null>>;
+    grayscale: boolean;
+    setGrayscale: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const context = React.createContext<ViewContextProps>({} as ViewContextProps);
@@ -47,6 +52,9 @@ export function ViewContext(props: { children: React.ReactNode }) {
     const [globalShift, setGlobalShift] = React.useState<vec3 | null>(null);
     const [metadata, setMetadata] = React.useState<MetadataNode>({});
     const [styles, setStyles] = React.useState<StyleNode>({});
+    const [usedStyle, setUsedStyle] = React.useState<string[] | null>(null);
+    const [grayscale, setGrayscale] = React.useState<boolean>(false);
+
     const activeView = 0;
 
     React.useEffect(() => {
@@ -125,6 +133,20 @@ export function ViewContext(props: { children: React.ReactNode }) {
         view.camera.z = camTargetZ;
     }, [activeView, renderer, camTargetZ]);
 
+    React.useEffect(() => {
+        if (usedStyle === null) {
+            whiten(models);
+            models.forEach((object) => {
+                object.uniforms['uUseShading'] = 1;
+            });
+        } else {
+            colorize(usedStyle, styles, models);
+            models.forEach((object) => {
+                object.uniforms['uUseShading'] = 0.1;
+            });
+        }
+    }, [usedStyle, styles, models]);
+
     return (
         <context.Provider
             value={{
@@ -148,6 +170,10 @@ export function ViewContext(props: { children: React.ReactNode }) {
                 setMetadata,
                 styles,
                 setStyles,
+                usedStyle,
+                setUsedStyle,
+                grayscale,
+                setGrayscale,
             }}
         >
             {props.children}
