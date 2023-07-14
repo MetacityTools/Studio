@@ -1,7 +1,7 @@
 interface Job<JobType, ResultType> {
     data: JobType;
     worker: new () => Worker;
-    callback: (output: ResultType) => void;
+    callback: (output: ResultType | undefined) => void;
 }
 
 interface QueueItem<JobType, ResultType> {
@@ -46,7 +46,11 @@ export class WorkerPool<InputType, ResultType> {
         this.queue = new Queue<InputType, ResultType>();
     }
 
-    process(data: InputType, callback: (output: ResultType) => void, worker: new () => Worker) {
+    process(
+        data: InputType,
+        callback: (output: ResultType | undefined) => void,
+        worker: new () => Worker
+    ) {
         this.queue.enqueue({
             data: data,
             worker: worker,
@@ -62,6 +66,12 @@ export class WorkerPool<InputType, ResultType> {
             job.callback(message.data);
             worker.terminate();
             this.running--;
+            this.submit();
+        };
+        worker.onerror = (error) => {
+            worker.terminate();
+            this.running--;
+            job.callback(undefined);
             this.submit();
         };
         worker.postMessage(job.data);

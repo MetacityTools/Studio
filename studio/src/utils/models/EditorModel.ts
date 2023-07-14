@@ -70,13 +70,15 @@ export class EditorModel extends GL.Pickable implements GL.Selectable {
         if (!color) return;
 
         let c;
+        const whiteness = 0.5;
+        const colorf = 1 - whiteness;
         for (let i = 0; i < submodelBuffer.length; i++) {
             c = colormap.get(submodelBuffer[i])!;
             if (c !== undefined) {
                 const scidx = i * 3;
-                color.buffer.data[scidx] = c[0] * 205 + 50;
-                color.buffer.data[scidx + 1] = c[1] * 205 + 50;
-                color.buffer.data[scidx + 2] = c[2] * 205 + 50;
+                color.buffer.data[scidx] = c[0] * 255 * colorf + 255 * whiteness;
+                color.buffer.data[scidx + 1] = c[1] * 255 * colorf + 255 * whiteness;
+                color.buffer.data[scidx + 2] = c[2] * 255 * colorf + 255 * whiteness;
             } else {
                 const scidx = i * 3;
                 color.buffer.data[scidx] = 255;

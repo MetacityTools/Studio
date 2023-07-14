@@ -1,6 +1,5 @@
 import { DirectionControls } from './Controls/ControlsDirection';
 import { ProjectionControls } from './Controls/ControlsProjection';
-import { RendererControls } from './Controls/ControlsRenderer';
 import { SelectionControls } from './Controls/ControlsSelect';
 import { ShaderControls } from './Controls/ControlsShader';
 
@@ -11,7 +10,6 @@ export function Controls() {
             <DirectionControls />
             <ShaderControls />
             <SelectionControls />
-            <RendererControls />
         </div>
     );
 }

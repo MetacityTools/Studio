@@ -8,7 +8,7 @@ export function Input(props: React.InputHTMLAttributes<HTMLInputElement>) {
         <input
             {...props}
             className={clsx(className, 'outline-none')}
-            onKeyDown={(e) => e.stopPropagation()}
+            onKeyDown={props.onKeyDown ? props.onKeyDown : (e) => e.stopPropagation()}
             onKeyUp={(e) => e.stopPropagation()}
             onClick={(e) => e.stopPropagation()}
         />

@@ -4,18 +4,14 @@ import { TypedArray } from '@bananagl/bananagl';
 
 import { WriteOnlyMemoryStream } from './streams';
 
-export function exportModel(model: EditorModelData, styles: StyleNode, title: string) {
+export function exportModel(models: EditorModelData[], styles: StyleNode, title: string) {
     const stream = new WriteOnlyMemoryStream();
+    //write version
+    writeString('mtctv2', stream);
 
-    writeTypedArray(model.geometry.position, stream);
-    console.log('expected length', model.geometry.position.length);
-    writeTypedArray(model.geometry.submodel, stream);
-    console.log('expected length', model.geometry.submodel.length);
-
-    const metadata = JSON.stringify(model.metadata.data);
-    writeString(metadata, stream);
-    writeString(model.metadata.name, stream);
-    stream.writeInt32(model.metadata.primitive);
+    //write models
+    console.log(models);
+    for (const model of models) writeModel(model, stream);
     stream.close();
 
     const file = new File(stream.buffers, 'project.metacity', { type: 'application/octet-stream' });
@@ -37,6 +33,18 @@ export function exportModel(model: EditorModelData, styles: StyleNode, title: st
         styleA.click();
         URL.revokeObjectURL(styleUrl);
     }, 1000);
+}
+
+function writeModel(model: EditorModelData, stream: WriteOnlyMemoryStream) {
+    writeTypedArray(model.geometry.position, stream);
+    console.log('expected length', model.geometry.position.length);
+    writeTypedArray(model.geometry.submodel, stream);
+    console.log('expected length', model.geometry.submodel.length);
+
+    const metadata = JSON.stringify(model.metadata.data);
+    writeString(metadata, stream);
+    writeString(model.metadata.name, stream);
+    stream.writeInt32(model.metadata.primitive);
 }
 
 export interface ConstructableTypedArray {

@@ -1,9 +1,10 @@
-import { VscJson, VscSymbolColor } from 'react-icons/vsc';
+import { VscJson, VscSymbolColor, VscTools } from 'react-icons/vsc';
 
 import { ColumnContainer } from '@elements/Containers';
 import { TabButton, TabGroup, TabList, TabPanel, TabPanels } from '@elements/Tabs';
 
 import { IOMenu } from '@shared/IOMenu/IOMenu';
+import { ViewSidePanel } from '@shared/ViewSettings/ViewSidePanel';
 
 import { MetadataSidePanel } from './Metadata/MetadataSidePanel';
 import { StyleSidePanel } from './Style/Styles';
@@ -20,6 +21,9 @@ export function SidePanel() {
                     <TabButton title="Styles">
                         <VscSymbolColor />
                     </TabButton>
+                    <TabButton title="Settings">
+                        <VscTools />
+                    </TabButton>
                 </TabList>
                 <TabPanels>
                     <TabPanel>
@@ -27,6 +31,9 @@ export function SidePanel() {
                     </TabPanel>
                     <TabPanel>
                         <StyleSidePanel />
+                    </TabPanel>
+                    <TabPanel>
+                        <ViewSidePanel />
                     </TabPanel>
                 </TabPanels>
             </TabGroup>

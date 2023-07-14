@@ -51,7 +51,6 @@ export function IOMenu(props: { export?: boolean }) {
 
     const handleExport = (title: string | null) => {
         setExportOpen(false);
-        window.focus();
         if (title === null) return;
         setProcessing(true);
         exportProject(title);

@@ -1,11 +1,12 @@
 import { Tab } from '@headlessui/react';
 import 'allotment/dist/style.css';
-import { VscJson, VscMove, VscSymbolColor, VscTable } from 'react-icons/vsc';
+import { VscJson, VscMove, VscSymbolColor, VscTable, VscTools } from 'react-icons/vsc';
 
 import { ColumnContainer } from '@elements/Containers';
 import { TabButton, TabGroup, TabList, TabPanel, TabPanels } from '@elements/Tabs';
 
 import { IOMenu } from '@shared/IOMenu/IOMenu';
+import { ViewSidePanel } from '@shared/ViewSettings/ViewSidePanel';
 
 import { MetadataSidePanel } from './Metadata/MetadataSidePanel';
 import { StyleSidePanel } from './Styles/StyleSidePanel';
@@ -21,14 +22,17 @@ export function SidePanel() {
                     <TabButton title="Transform">
                         <VscMove />
                     </TabButton>
-                    <TabButton title="Metadata">
-                        <VscJson />
-                    </TabButton>
                     <TabButton title="Tables">
                         <VscTable />
                     </TabButton>
+                    <TabButton title="Metadata">
+                        <VscJson />
+                    </TabButton>
                     <TabButton title="Styles">
                         <VscSymbolColor />
+                    </TabButton>
+                    <TabButton title="Settings">
+                        <VscTools />
                     </TabButton>
                 </TabList>
                 <TabPanels>
@@ -36,13 +40,16 @@ export function SidePanel() {
                         <TransformSidePanel />
                     </TabPanel>
                     <TabPanel>
-                        <MetadataSidePanel />
-                    </TabPanel>
-                    <TabPanel>
                         <TableSidePanel />
                     </TabPanel>
                     <TabPanel>
+                        <MetadataSidePanel />
+                    </TabPanel>
+                    <TabPanel>
                         <StyleSidePanel />
+                    </TabPanel>
+                    <TabPanel>
+                        <ViewSidePanel />
                     </TabPanel>
                 </TabPanels>
             </TabGroup>

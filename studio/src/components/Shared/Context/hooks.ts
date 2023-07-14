@@ -5,6 +5,7 @@ import { exportModel } from '@utils/formats/metacity/write';
 import { EditorModel } from '@utils/models/EditorModel';
 import { EditorModelData, addTriangleModel } from '@utils/models/TriangleModel';
 import { CoordinateMode, alignModels } from '@utils/modifiers/alignVertices';
+import { extractModels } from '@utils/modifiers/extractModels';
 import { joinModels } from '@utils/modifiers/joinModels';
 import { joinSubmodels } from '@utils/modifiers/joinSubmodels';
 import { removeSubmodels } from '@utils/modifiers/removeSubmodels';
@@ -186,9 +187,9 @@ export function useExport() {
     const ctx = React.useContext(context);
 
     const exportProject = async (title: string) => {
-        const model = await joinModels(ctx.models);
-        if (!model) return;
-        exportModel(model, ctx.styles, title);
+        const models = await extractModels(ctx.models);
+        if (!models) return;
+        exportModel(models, ctx.styles, title);
     };
 
     return exportProject;

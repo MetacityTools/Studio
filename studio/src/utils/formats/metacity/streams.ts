@@ -104,4 +104,8 @@ export class ReadOnlyMemoryStream {
         this.position += length * 4;
         return array;
     }
+
+    empty() {
+        return this.position >= this.buffer.length;
+    }
 }

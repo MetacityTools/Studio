@@ -61,12 +61,13 @@ These features are planned for the future, and scheduled for a specific release.
 -   [ ] Projecting models onto models (2D onto 3D) - ✨WIP https://github.com/vojtatom/geometry
 -   [ ] Loading points and lines from SHP
 -   [ ] Export screenshot action
--   [ ] Import and export data separated into models (do not join on export)
 -   [ ] Tooltip on hover over model
+-   [ ] Dark mode
 
 ### v0.5.0 - Work in progress
 
 ⚠️ Breaking changes, old `.metacity` files will not be compatible.
+🧠 Call for consultation (TB planned, end of July 2023)
 
 -   [x] Remove groups and hierarchy - all models will be in a flat list
 -   [x] Metadata editor replacing Hierarchy editor
@@ -81,6 +82,7 @@ These features are planned for the future, and scheduled for a specific release.
     -   [x] Style outline
     -   [x] Apply styles to the geometry
     -   [ ] Styling UI - show data infographics
+    -   [ ] Clean syling button
 -   [x] Updated metadata format - binary buffers + attributes + styling
     -   [x] Metadata export/import
     -   [x] Styles
@@ -89,10 +91,13 @@ These features are planned for the future, and scheduled for a specific release.
 -   [x] Click off model - deselect all
 -   [x] Group selection in hierarchy tree optimization (shift to select, deselect previous on selectiong previous)
 -   [x] When in Table view, click to select model and extend the selection based on groups on key/button/action
-
-🧠 Call for consultation (TB planned, beginning of July 2023)
+-   [x] Import and export data separated into models (do not join on export)
+-   [x] Rename models
+-   [x] Resolve rejects during loading
 
 ### v0.4.0 - ✅ Released
+
+🧠 Call for consultation (TB planned, beginning of July 2023)
 
 -   [x] Browsing metadata hierarchy in viewer
 -   [x] Restructure menu in Editor (unify UI with viewer)
