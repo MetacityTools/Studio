@@ -34,21 +34,26 @@ These features are planned for the future, but not yet scheduled.
 
 ### Priority Backlog
 
--   [ ] Shortcuts for tab switching in editor
+-   [ ] Reverse coloring of models in table view - add a button to each row to select models that have the data from the row
+-   [ ] Alternative table editor to metadata editor
+-   [ ] Links in metadata - recognise
+-   [ ] Do not allow keys to be empty in table view during conversion
+-   [ ] Insert textured plane (location blueprints for reference, will not be included in export)
 
 ### Backlog
 
+-   [ ] Update import menu to allow importing multiple files at once, only separate models, tables, or reference planes
+-   [ ] Buggy alt/ctrl for rotation
+-   [ ] Shortcuts for tab switching in editor
 -   [ ] Loading GeoJSON
--   [ ] Loading IFC metadata loading (memory-efficiency???)
+-   [ ] Loading IFC metadata (memory-efficiency???)
 -   [ ] Frustum culling
 -   [ ] Connect to on-line storage and model admin
 -   [ ] Extract Utils to separate SDK form metacity editors
 -   [ ] Optional interactivity - build BVH only if user opts-in to make the loaded models clickable
 -   [ ] Optimize deleting models - partition model BVH nodes based on submodels's ids
--   [ ] Insert textured plane (location blueprints for reference)
 -   [ ] Refactor General context - setting status messages, etc.
 -   [ ] Add a button to open/hide the side panel
--   [ ] Do not allow keys to be empty in table view during conversion
 
 ---
 
@@ -58,11 +63,13 @@ These features are planned for the future, and scheduled for a specific release.
 
 ### v0.5.1
 
+-   [ ] Color in table view according to metadata amount
 -   [ ] Projecting models onto models (2D onto 3D) - ✨WIP https://github.com/vojtatom/geometry
 -   [ ] Loading points and lines from SHP
 -   [ ] Export screenshot action
--   [ ] Tooltip on hover over model
+-   [ ] Tooltip on hover over model and labels in 3D
 -   [ ] Dark mode
+-   [ ] Lock camera position (two buttons - pan and rotation)
 
 ### v0.5.0 - Work in progress
 
