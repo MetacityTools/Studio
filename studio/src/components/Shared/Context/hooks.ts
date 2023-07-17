@@ -5,6 +5,7 @@ import { exportModel } from '@utils/formats/metacity/write';
 import { EditorModel } from '@utils/models/EditorModel';
 import { EditorModelData, addTriangleModel } from '@utils/models/TriangleModel';
 import { CoordinateMode, alignModels } from '@utils/modifiers/alignVertices';
+import { sampleColor } from '@utils/modifiers/color';
 import { extractModels } from '@utils/modifiers/extractModels';
 import { joinModels } from '@utils/modifiers/joinModels';
 import { joinSubmodels } from '@utils/modifiers/joinSubmodels';
@@ -17,7 +18,7 @@ import * as GL from '@bananagl/bananagl';
 import { SelectFunction, context } from './Context';
 import { extractMetadata, filterSubmodels, findKeychain, getHistogram } from './metadata';
 import { SelectionType, changeSelection } from './selection';
-import { colorize, findStyleKeychain, getStyle, getValue } from './style';
+import { colorize, findStyleKeychain, getStyle, getValue, whiten } from './style';
 
 export function useActiveView(): number {
     const ctx = React.useContext(context);
@@ -260,6 +261,7 @@ export function useApplyStyle(): [
 
     const clearStyle = () => {
         ctx.setUsedStyle(null);
+        whiten(ctx.models);
     };
 
     return [ctx.usedStyle, applyStyle, clearStyle];
@@ -291,6 +293,38 @@ export function useStyleInfo(): [Histogram | undefined, StyleNode | undefined] {
     return [histogram, style];
 }
 
-export function useShowMetadataAssigned() {
+export function useMetadatHeatmap(): [() => void, () => void] {
     const ctx = React.useContext(context);
+
+    const MAX_META = 10;
+    const colormap: vec3[] = [
+        [1.0, 1.0, 1.0],
+        [0.196, 0.705, 1.0],
+    ];
+
+    const colorize = () => {
+        for (const model of ctx.models) {
+            const meta = model.metadata;
+            const submodels = model.submodelIDs;
+
+            const cmap = new Map<number, vec3>();
+            for (const id of submodels) {
+                const data = meta[id];
+                if (!data) {
+                    cmap.set(id, [1.0, 1.0, 1.0]);
+                    continue;
+                }
+                const keys = Math.min(Object.keys(data).length, MAX_META);
+                cmap.set(id, sampleColor(colormap, keys / MAX_META));
+            }
+
+            model.setColorMap(cmap);
+        }
+    };
+
+    const reset = () => {
+        whiten(ctx.models);
+    };
+
+    return [colorize, reset];
 }

@@ -44,6 +44,7 @@ These features are planned for the future, but not yet scheduled.
 
 -   [ ] Update import menu to allow importing multiple files at once, only separate models, tables, or reference planes
 -   [ ] Buggy alt/ctrl for rotation
+-   [ ] Buggy move functionality - on click triggers selection and move
 -   [ ] Shortcuts for tab switching in editor
 -   [ ] Loading GeoJSON
 -   [ ] Loading IFC metadata (memory-efficiency???)
@@ -64,6 +65,9 @@ These features are planned for the future, and scheduled for a specific release.
 ### v0.5.1
 
 -   [ ] Color in table view according to metadata amount
+    -   [x] Colorize model
+    -   [ ] Adjustable limit of metadata for coloring
+-   [ ] Feedback - show notifications on the bottom of the screen
 -   [ ] Projecting models onto models (2D onto 3D) - ✨WIP https://github.com/vojtatom/geometry
 -   [ ] Loading points and lines from SHP
 -   [ ] Export screenshot action
