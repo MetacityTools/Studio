@@ -15,7 +15,7 @@ import {
 } from '@elements/Containers';
 import { PanelTitle } from '@elements/PanelTitle';
 
-import { useApplyStyle, useMetadata, useStyle } from '@shared/Context/hooks';
+import { useApplyStyle, useLastStyle, useMetadata, useStyle } from '@shared/Context/hooks';
 import { Status } from '@shared/Status';
 import { StyleHierarchy } from '@shared/Style/StyleHierarchy';
 import { StyleInfo } from '@shared/Style/StyleInfo';
@@ -25,6 +25,7 @@ import { StyleEditor } from './StyleEditor';
 export function StyleSidePanel() {
     const [style, setStyle] = useStyle();
     const [, applyStyle, clearStyle] = useApplyStyle();
+    const [, applyLastStyle] = useLastStyle();
     const [status, setStatus] = useStatus();
     const [metadata] = useMetadata();
 
@@ -33,19 +34,15 @@ export function StyleSidePanel() {
         setStyle(updated);
     };
 
-    React.useEffect(() => {
-        return () => {
-            setStatus(undefined);
-        };
-    }, []);
-
     const handlePick = (root: StyleNode, node: StyleNode) => {
         applyStyle(root, node);
     };
 
     React.useEffect(() => {
+        applyLastStyle();
         return () => {
             clearStyle();
+            setStatus(undefined);
         };
     }, []);
 

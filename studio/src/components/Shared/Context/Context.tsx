@@ -34,6 +34,8 @@ interface ViewContextProps {
     setStyles: React.Dispatch<React.SetStateAction<StyleNode>>;
     usedStyle: string[] | null;
     setUsedStyle: React.Dispatch<React.SetStateAction<string[] | null>>;
+    lastUsedStyle: string[] | null;
+    setLastUsedStyle: React.Dispatch<React.SetStateAction<string[] | null>>;
     grayscale: boolean;
     setGrayscale: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -52,6 +54,7 @@ export function ViewContext(props: { children: React.ReactNode }) {
     const [globalShift, setGlobalShift] = React.useState<vec3 | null>(null);
     const [metadata, setMetadata] = React.useState<MetadataNode>({});
     const [styles, setStyles] = React.useState<StyleNode>({});
+    const [lastUsedStyle, setLastUsedStyle] = React.useState<string[] | null>(null);
     const [usedStyle, setUsedStyle] = React.useState<string[] | null>(null);
     const [grayscale, setGrayscale] = React.useState<boolean>(false);
 
@@ -172,6 +175,8 @@ export function ViewContext(props: { children: React.ReactNode }) {
                 setStyles,
                 usedStyle,
                 setUsedStyle,
+                lastUsedStyle,
+                setLastUsedStyle,
                 grayscale,
                 setGrayscale,
             }}

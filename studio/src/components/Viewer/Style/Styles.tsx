@@ -7,18 +7,21 @@ import { StyleNode } from '@utils/utils';
 import { ColumnContainer, OverflowAbsoluteContainer, StretchContainer } from '@elements/Containers';
 import { PanelTitle } from '@elements/PanelTitle';
 
-import { useApplyStyle } from '@shared/Context/hooks';
+import { useApplyStyle, useLastStyle } from '@shared/Context/hooks';
 import { StyleHierarchy } from '@shared/Style/StyleHierarchy';
 import { StyleInfo } from '@shared/Style/StyleInfo';
 
 export function StyleSidePanel() {
     const [, applyStyle, clearStyle] = useApplyStyle();
+    const [, applyLastStyle] = useLastStyle();
 
     const handlePick = (root: StyleNode, node: StyleNode) => {
         applyStyle(root, node);
     };
 
     React.useEffect(() => {
+        applyLastStyle();
+
         return () => {
             clearStyle();
         };

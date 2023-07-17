@@ -255,6 +255,7 @@ export function useApplyStyle(): [
         const keychain = findStyleKeychain(root, style);
         if (!keychain) return;
         ctx.setUsedStyle(keychain);
+        ctx.setLastUsedStyle(keychain);
     };
 
     const clearStyle = () => {
@@ -262,6 +263,16 @@ export function useApplyStyle(): [
     };
 
     return [ctx.usedStyle, applyStyle, clearStyle];
+}
+
+export function useLastStyle(): [string[] | null, () => void] {
+    const ctx = React.useContext(context);
+
+    const applyLastStyle = () => {
+        ctx.setUsedStyle(ctx.lastUsedStyle);
+    };
+
+    return [ctx.lastUsedStyle, applyLastStyle];
 }
 
 export function useGrayscale(): [boolean, React.Dispatch<React.SetStateAction<boolean>>] {
