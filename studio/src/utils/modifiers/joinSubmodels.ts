@@ -20,10 +20,10 @@ export async function joinSubmodels(model: EditorModel, idsToJoin: Set<number>) 
 
     const meta = [];
     for (const id of idsToJoin) {
-        meta.push(model.data[id]);
-        delete model.data[id];
+        meta.push(model.metadata[id]);
+        delete model.metadata[id];
     }
 
-    model.data[minId] = meta;
+    model.metadata[minId] = meta;
     return minId;
 }

@@ -12,7 +12,6 @@ import {
 } from 'shpts';
 import { BaseRecord } from 'shpts/dist/geometry/base';
 
-import { createFlatHierarchy } from '@utils/modifiers/createFlatHierarchy';
 import { ModelData, PrimitiveType, ShapefileData, UserInputModel } from '@utils/types';
 
 export async function parse(model: UserInputModel): Promise<ModelData> {
@@ -33,8 +32,8 @@ export async function parse(model: UserInputModel): Promise<ModelData> {
         metadata: {
             name: model.name,
             primitive: type,
+            data: metadata,
         },
-        hierarchy: createFlatHierarchy(metadata),
     };
 }
 

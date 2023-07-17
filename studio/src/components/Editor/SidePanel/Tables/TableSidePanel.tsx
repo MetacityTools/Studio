@@ -1,13 +1,13 @@
 import { ColumnContainer, OverflowAbsoluteContainer, StretchContainer } from '@elements/Containers';
+import { PanelTitle } from '@elements/PanelTitle';
 
-import { TableMenu } from './TableMenu';
 import { TablesSheetList } from './Tables/SheetList';
 import { Tables } from './Tables/Tables';
 
 export function TableSidePanel() {
     return (
         <ColumnContainer>
-            <TableMenu />
+            <PanelTitle title="Imported Tables" />
             <StretchContainer>
                 <OverflowAbsoluteContainer>
                     <Tables />

@@ -5,6 +5,8 @@ import { TbHelp, TbHelpOff } from 'react-icons/tb';
 import { colorBase } from '@elements/Colors';
 import { MouseLeft, MouseRight, MouseWheel } from '@elements/Icons';
 
+import { useGrayscale } from '@shared/Context/hooks';
+
 function HelpItem(props: { children: React.ReactNode; last?: boolean }) {
     return (
         <div className={clsx('flex flex-col  pr-2', !props.last && ' border-r')}>
@@ -15,13 +17,15 @@ function HelpItem(props: { children: React.ReactNode; last?: boolean }) {
 
 export function Help() {
     const [show, setShow] = React.useState(false);
+    const [grayscale] = useGrayscale();
 
     if (!show)
         return (
             <div
                 className={clsx(
                     'absolute bottom-4 left-4 bg-white text-md py-2 px-4 rounded-md flex flex-row space-x-4 text-xl cursor-pointer border',
-                    colorBase
+                    colorBase,
+                    grayscale && 'filter grayscale'
                 )}
                 onClick={() => setShow(true)}
             >

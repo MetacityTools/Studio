@@ -1,11 +1,11 @@
 import React from 'react';
 
 import { EditorModel } from '@utils/models/EditorModel';
-import { SelectionType } from '@utils/utils';
 
 import * as GL from '@bananagl/bananagl';
 
 import { useRenderer, useSelection } from './Context/hooks';
+import { SelectionType } from './Context/selection';
 
 type SelectionArrayType = {
     object: GL.Pickable;
@@ -60,7 +60,12 @@ export function Canvas(props: { canvasRef: React.RefObject<HTMLCanvasElement> })
               ];
         const selectionObj = primitiveIndicesToSubmodelIndices(arrayedSelection);
         let { toggle, extend } = selectionFlags(multiselect, shiftKey);
+        console.log(selectionObj, toggle, extend);
         select(selectionObj, toggle, extend);
+    }
+
+    function deselecteAll() {
+        select(new Map(), false, false);
     }
 
     const handleWheel = (event: WheelEvent) => {
@@ -92,6 +97,7 @@ export function Canvas(props: { canvasRef: React.RefObject<HTMLCanvasElement> })
                 let selection = renderer.controls?.pointerUp(e.nativeEvent);
                 const shift = renderer.controls?.keyboard.keyMap.shift ?? false;
                 if (selection) handlePick(selection, shift);
+                //else deselecteAll(); //TODO handle only if clicked, no drag and move
             }}
             onWheel={(e) => {
                 renderer.controls?.wheel(e.nativeEvent);

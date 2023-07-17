@@ -2,9 +2,13 @@ import React from 'react';
 
 import { useActiveSheet, useTables } from '@editor/EditorContext';
 
-import { TableRow } from './Row';
+import { AssignToGeometryCallback, TableRow } from './Row';
 
-export function Sheet() {
+interface SheetProps {
+    assignToGeometry: AssignToGeometryCallback;
+}
+
+export function Sheet(props: SheetProps) {
     const [tables] = useTables();
     const [activeSheet] = useActiveSheet();
     const sheet = tables.getSheet(activeSheet);
@@ -30,6 +34,7 @@ export function Sheet() {
                         index={index}
                         row={row}
                         rowType={rowTypes[index]}
+                        assignToGeometry={props.assignToGeometry}
                     />
                 ))}
             </tbody>

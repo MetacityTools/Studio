@@ -1,29 +1,14 @@
 import { vec3 } from 'gl-matrix';
 import React from 'react';
 
-import {
-    EditorModel,
-    MetadataNode,
-    ModelGraph,
-    SelectionType,
-    Style,
-    colorize,
-    extractMetadataTree,
-    whiten,
-} from '@utils/utils';
+import { EditorModel, MetadataNode, StyleNode } from '@utils/utils';
 
 import * as GL from '@bananagl/bananagl';
 
-import { getStyleFromKeychain } from './styles';
+import { extractMetadata } from './metadata';
+import { SelectionType } from './selection';
+import { colorize, whiten } from './style';
 
-/**
- * A function that updates the selection of models and submodels.
- * @param model The model to select.
- * @param submodelIDs An array of submodel IDs to select.
- * @param toggle A boolean indicating whether to toggle the selection or not.
- * @param extend A boolean indicating whether to extend the selection or not.
- * @returns void
- */
 export type SelectFunction = (selection: SelectionType, toggle?: boolean, extend?: boolean) => void;
 
 interface ViewContextProps {
@@ -33,8 +18,6 @@ interface ViewContextProps {
     models: EditorModel[];
     selection: SelectionType;
     setSelection: React.Dispatch<React.SetStateAction<SelectionType>>;
-    graph: ModelGraph;
-    setGraph: React.Dispatch<React.SetStateAction<ModelGraph>>;
     camTargetZ: number;
     setCamTargetZ: React.Dispatch<React.SetStateAction<number>>;
     minShade: number;
@@ -46,12 +29,15 @@ interface ViewContextProps {
     globalShift: vec3 | null;
     setGlobalShift: React.Dispatch<React.SetStateAction<vec3 | null>>;
     metadata: MetadataNode;
-    styleKeychain: string[];
-    setStyleKeychain: React.Dispatch<React.SetStateAction<string[]>>;
-    styles: Style[];
-    setStyles: React.Dispatch<React.SetStateAction<Style[]>>;
-    level: number;
-    setLevel: React.Dispatch<React.SetStateAction<number>>;
+    setMetadata: React.Dispatch<React.SetStateAction<MetadataNode>>;
+    styles: StyleNode;
+    setStyles: React.Dispatch<React.SetStateAction<StyleNode>>;
+    usedStyle: string[] | null;
+    setUsedStyle: React.Dispatch<React.SetStateAction<string[] | null>>;
+    lastUsedStyle: string[] | null;
+    setLastUsedStyle: React.Dispatch<React.SetStateAction<string[] | null>>;
+    grayscale: boolean;
+    setGrayscale: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const context = React.createContext<ViewContextProps>({} as ViewContextProps);
@@ -61,16 +47,17 @@ export function ViewContext(props: { children: React.ReactNode }) {
     const [scene] = React.useState(new GL.Scene());
     const [models, setModels] = React.useState<EditorModel[]>([]);
     const [selection, setSelection] = React.useState<SelectionType>(new Map());
-    const [graph, setGraph] = React.useState<ModelGraph>(new ModelGraph());
     const [camTargetZ, setCamTargetZ] = React.useState<number>(0);
     const [minShade, setMinShade] = React.useState<number>(0);
     const [maxShade, setMaxShade] = React.useState<number>(10);
-    const [gridVisible, setGridVisible] = React.useState<boolean>(true);
+    const [gridVisible, setGridVisible] = React.useState<boolean>(false);
     const [globalShift, setGlobalShift] = React.useState<vec3 | null>(null);
     const [metadata, setMetadata] = React.useState<MetadataNode>({});
-    const [styleKeychain, setStyleKeychain] = React.useState<string[]>([]);
-    const [styles, setStyles] = React.useState<Style[]>([]);
-    const [level, setLevel] = React.useState<number>(1);
+    const [styles, setStyles] = React.useState<StyleNode>({});
+    const [lastUsedStyle, setLastUsedStyle] = React.useState<string[] | null>(null);
+    const [usedStyle, setUsedStyle] = React.useState<string[] | null>(null);
+    const [grayscale, setGrayscale] = React.useState<boolean>(false);
+
     const activeView = 0;
 
     React.useEffect(() => {
@@ -90,6 +77,9 @@ export function ViewContext(props: { children: React.ReactNode }) {
             setMinShade(minZ);
             setMaxShade(maxZ);
             if (isFinite(minZ)) setCamTargetZ(minZ);
+
+            const data = extractMetadata(copy);
+            setMetadata(data);
         };
 
         scene.addChangeListener(onChange);
@@ -122,16 +112,6 @@ export function ViewContext(props: { children: React.ReactNode }) {
     }, [scene, selection]);
 
     React.useEffect(() => {
-        graph.addChangeListener(() => {
-            const updated = new ModelGraph();
-            updated.copy(graph);
-            setGraph(updated);
-            const metadata = extractMetadataTree(updated);
-            setMetadata(metadata);
-        });
-    }, [graph]);
-
-    React.useEffect(() => {
         models.forEach((object) => {
             if (object instanceof EditorModel) {
                 object.uniforms = {
@@ -157,15 +137,18 @@ export function ViewContext(props: { children: React.ReactNode }) {
     }, [activeView, renderer, camTargetZ]);
 
     React.useEffect(() => {
-        const style = getStyleFromKeychain(metadata, styles, styleKeychain);
-        if (!style) {
-            models.forEach((object) => whiten(object));
-        } else {
+        if (usedStyle === null) {
+            whiten(models);
             models.forEach((object) => {
-                colorize(object, graph, styleKeychain, style, level);
+                object.uniforms['uUseShading'] = 1;
+            });
+        } else {
+            colorize(usedStyle, styles, models);
+            models.forEach((object) => {
+                object.uniforms['uUseShading'] = 0.1;
             });
         }
-    }, [styleKeychain, styles, metadata, models, graph, level]);
+    }, [usedStyle, styles, models]);
 
     return (
         <context.Provider
@@ -176,8 +159,6 @@ export function ViewContext(props: { children: React.ReactNode }) {
                 models,
                 selection,
                 setSelection,
-                graph,
-                setGraph,
                 camTargetZ,
                 setCamTargetZ,
                 minShade,
@@ -189,12 +170,15 @@ export function ViewContext(props: { children: React.ReactNode }) {
                 globalShift,
                 setGlobalShift,
                 metadata,
-                styleKeychain,
-                setStyleKeychain,
+                setMetadata,
                 styles,
                 setStyles,
-                level,
-                setLevel,
+                usedStyle,
+                setUsedStyle,
+                lastUsedStyle,
+                setLastUsedStyle,
+                grayscale,
+                setGrayscale,
             }}
         >
             {props.children}

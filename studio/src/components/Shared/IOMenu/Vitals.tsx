@@ -47,14 +47,9 @@ export function Vitals(props: VitalsProps) {
     }, []);
 
     return (
-        <div className="flex flex-row place-content-end space-x-4 p-2 flex-1 text-xs">
-            <div className="flex flex-row items-center w-[5rem] place-content-end">
-                <AiFillVideoCamera className="text-lg text-neutral-500 mr-2" />
-                {fps.toFixed(0)} FPS
-            </div>
-            <div className="flex flex-row items-center w-[10rem] place-content-end">
-                <BsGpuCard className="text-lg text-neutral-500 mr-2" />
-                {formatByteSize(mem)} on GPU
+        <div className="flex flex-row place-content-end space-x-4 p-2 flex-1 text-sm text-neutral-400">
+            <div className="flex flex-row items-center place-content-end">
+                {fps.toFixed(0)} FPS &#x2022; {formatByteSize(mem)}
             </div>
         </div>
     );

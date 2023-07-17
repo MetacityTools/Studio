@@ -2,7 +2,7 @@ import GLTFWorker from '@utils/formats/gltf.worker?worker';
 import IFCWorker from '@utils/formats/ifc.worker?worker';
 import MetacityWorker from '@utils/formats/metacity.worker?worker';
 import ShapefileWorker from '@utils/formats/shapefile.worker?worker';
-import { ModelData, UserInputModel } from '@utils/types';
+import { ModelData, StyleNode, UserInputModel } from '@utils/types';
 
 import { WorkerPool } from './pool';
 
@@ -10,16 +10,32 @@ export async function load(
     event: React.ChangeEvent<HTMLInputElement>,
     updateStatus?: (status: string) => void
 ) {
-    const files = await loadFiles(event);
+    const files = await loadModelFiles(event);
+    const tables = await loadTables(event);
+    const styles = await loadStyles(event);
     const models = await loadModels(files, updateStatus);
-    return models;
+    return { models, tables, styles };
 }
 
-export async function loadFiles(event: React.ChangeEvent<HTMLInputElement>) {
+export async function loadStyles(event: React.ChangeEvent<HTMLInputElement>) {
     const files = event.target.files;
-    if (!files) {
-        return [];
-    }
+    if (!files) return [];
+
+    const styles = await prepareStyleJSON(files);
+    return styles;
+}
+
+export async function loadTables(event: React.ChangeEvent<HTMLInputElement>) {
+    const files = event.target.files;
+    if (!files) return [];
+
+    const csv = await prepareCSV(files);
+    return csv;
+}
+
+export async function loadModelFiles(event: React.ChangeEvent<HTMLInputElement>) {
+    const files = event.target.files;
+    if (!files) return [];
 
     const gltf = await prepareGLTF(files);
     const ifc = await prepareIFC(files);
@@ -33,7 +49,7 @@ async function prepareMetacity(files: FileList): Promise<UserInputModel[]> {
     const data = [];
     for (let i = 0; i < files.length; i++) {
         const file = files[i];
-        if (file.name.endsWith('metacity')) {
+        if (file.name.endsWith('metacity') && !file.name.endsWith('json.metacity')) {
             const buffer = await file.arrayBuffer();
             data.push({
                 name: file.name,
@@ -80,6 +96,34 @@ async function prepareIFC(files: FileList): Promise<UserInputModel[]> {
     return data;
 }
 
+async function prepareCSV(files: FileList): Promise<string[]> {
+    const data = [];
+    for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        if (file.name.endsWith('csv')) {
+            const content = await file.text();
+            data.push(content);
+        }
+    }
+    return data;
+}
+
+async function prepareStyleJSON(files: FileList): Promise<StyleNode[]> {
+    const data = [];
+    for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        if (file.name.endsWith('.json.metacity')) {
+            const content = await file.text();
+            try {
+                data.push(JSON.parse(content));
+            } catch (e) {
+                console.error(e);
+            }
+        }
+    }
+    return data;
+}
+
 async function prepareShapefile(files: FileList): Promise<UserInputModel[]> {
     const data = [];
     for (let i = 0; i < files.length; i++) {
@@ -115,13 +159,13 @@ async function getFile(files: FileList, name: string) {
     return undefined;
 }
 
-const pool = new WorkerPool<UserInputModel, ModelData>(10);
+const pool = new WorkerPool<UserInputModel, ModelData | ModelData[]>(10);
 
 export async function loadModels(
     models: UserInputModel[],
     updateStatus?: (status: string) => void
 ) {
-    const jobs: Promise<ModelData>[] = [];
+    const jobs: Promise<ModelData | ModelData[]>[] = [];
     for (const model of models) {
         if (model.name.endsWith('gltf') || model.name.endsWith('glb')) {
             jobs.push(loadWorker(model, GLTFWorker, updateStatus));
@@ -134,20 +178,27 @@ export async function loadModels(
         }
     }
 
-    const results = await Promise.all(jobs);
-    return results;
+    try {
+        const results = await Promise.all(jobs);
+        const flat = results.flat();
+        return flat;
+    } catch (e) {
+        console.error(e);
+        return [];
+    }
 }
 
 function loadWorker(
     model: UserInputModel,
     worker: new () => Worker,
     updateStatus?: (status: string) => void
-): Promise<ModelData> {
+): Promise<ModelData | ModelData[]> {
     return new Promise((resolve, reject) => {
         pool.process(
             model,
             (data) => {
-                resolve(data);
+                if (data) resolve(data);
+                else reject(`Could not parse model ${model.name}`);
                 updateStatus && updateStatus(`Loaded ${model.name}`);
             },
             worker

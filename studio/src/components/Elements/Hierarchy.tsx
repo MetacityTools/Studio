@@ -1,57 +1,21 @@
 import clsx from 'clsx';
+import React from 'react';
+import { BsChevronRight } from 'react-icons/bs';
 import { FiChevronRight } from 'react-icons/fi';
-import { VscJson } from 'react-icons/vsc';
+import { VscJson, VscSymbolColor } from 'react-icons/vsc';
 
-import {
-    colorLightActive,
-    colorVividActive,
-    colorVividActiveBorder,
-    colorVividBase,
-    colorVividBaseBorder,
-} from './Colors';
-
-function getNodeBackground(active: boolean, light?: boolean, inherit?: boolean) {
-    if (inherit) return 'bg-transparent border-inherit text-inherit bg-inherit';
-    if (active) return colorVividActive;
-    if (light) return colorLightActive;
-    return colorVividBase;
-}
+import { colorHierarchyPart } from './Colors';
 
 export type ButtonHandler = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 
 interface HierarchyButtonBase {
     onClick?: ButtonHandler;
     title?: string;
-    active?: boolean;
-    light?: boolean;
-    inheritStyles?: boolean;
 }
 
 interface HierarchyButtonProps extends HierarchyButtonBase {
     children: React.ReactNode;
     disabled?: boolean;
-}
-
-export function HierarchyButton(props: HierarchyButtonProps) {
-    const disabled = props.disabled ?? false;
-    return (
-        <button
-            className={clsx(
-                'outline-none',
-                'px-4 py-2 border-y last:border-r last:rounded-r',
-                getNodeBackground(
-                    props.active ?? false,
-                    props.light ?? false,
-                    props.inheritStyles ?? false
-                )
-            )}
-            onClick={props.onClick}
-            title={props.title}
-            disabled={disabled}
-        >
-            {props.children}
-        </button>
-    );
 }
 
 interface HierarchyChevronButtonProps extends HierarchyButtonBase {
@@ -61,15 +25,7 @@ interface HierarchyChevronButtonProps extends HierarchyButtonBase {
 export function HierarchyChevronButton(props: HierarchyChevronButtonProps) {
     return (
         <button
-            className={clsx(
-                'outline-none',
-                'px-2 py-2 rounded-l border-y border-l',
-                getNodeBackground(
-                    props.active ?? false,
-                    props.light ?? false,
-                    props.inheritStyles ?? false
-                )
-            )}
+            className={clsx('outline-none', 'px-2 py-2', colorHierarchyPart)}
             onClick={props.onClick}
             title={props.title}
         >
@@ -86,19 +42,23 @@ export function HierarchyChevronButton(props: HierarchyChevronButtonProps) {
 export function HierarchyBracketsButton(props: HierarchyButtonBase) {
     return (
         <button
-            className={clsx(
-                'outline-none',
-                'px-2 py-2 rounded-l border-y border-l',
-                getNodeBackground(
-                    props.active ?? false,
-                    props.light ?? false,
-                    props.inheritStyles ?? false
-                )
-            )}
+            className={clsx('outline-none', 'px-2 py-2', colorHierarchyPart)}
             onClick={props.onClick}
             title={props.title}
         >
             <VscJson className={clsx('w-4 h-4')} />
+        </button>
+    );
+}
+
+export function HierarchyStyleButton(props: HierarchyButtonBase) {
+    return (
+        <button
+            className={clsx('outline-none', 'px-2 py-2', colorHierarchyPart)}
+            onClick={props.onClick}
+            title={props.title}
+        >
+            <VscSymbolColor className={clsx('w-4 h-4')} />
         </button>
     );
 }
@@ -113,13 +73,9 @@ export function HierarchyMainButton(props: HierarchyMainButtonProps) {
             className={clsx(
                 'outline-none',
                 props.padded ? 'px-4' : 'px-2',
-                'flex-1 text-left first:rounded-l last:rounded-r border-y first:border-l last:border-r last:rounded-r flex flex-row items-center',
+                'flex-1 text-left flex flex-row items-center',
                 'text-ellipsis overflow-hidden whitespace-nowrap',
-                getNodeBackground(
-                    props.active ?? false,
-                    props.light ?? false,
-                    props.inheritStyles ?? false
-                )
+                colorHierarchyPart
             )}
             onClick={props.onClick}
         >
@@ -132,21 +88,19 @@ interface HierarchyNodeProps {
     hoverable?: boolean;
     children: React.ReactNode;
     active?: boolean;
+    depth?: number;
 }
 
 export function HierarchyNode(props: HierarchyNodeProps) {
     return (
         <div
             className={clsx(
-                'flex flex-row justify-between items-center',
+                'flex flex-row justify-between items-center hover:bg-neutral-100',
                 props.hoverable
-                    ? props.active
-                        ? colorVividActive
-                        : colorVividBase
-                    : props.active
-                    ? colorVividActiveBorder
-                    : colorVividBaseBorder
             )}
+            style={{
+                paddingLeft: `${props.depth ?? 0}rem`,
+            }}
         >
             {props.children}
         </div>
@@ -158,9 +112,32 @@ interface HierarchyNodeGroupProps {
 }
 
 export function HierarchyNodeGroup(props: HierarchyNodeGroupProps) {
-    return <div className="flex flex-col rounded-md">{props.children}</div>;
+    return <div className="flex flex-col">{props.children}</div>;
 }
 
 export function HierarchyNodeGroupChildren(props: HierarchyNodeGroupProps) {
-    return <div className="mt-1 pl-8 space-y-1">{props.children}</div>;
+    return <div>{props.children}</div>;
+}
+
+export function HierarchyTitle(props: { categories: string[] }) {
+    let { categories } = props;
+    return (
+        <>
+            {categories.map((category, index) => {
+                return (
+                    <React.Fragment key={index}>
+                        <span
+                            className="overflow-ellipsis overflow-hidden whitespace-nowrap"
+                            title={category}
+                        >
+                            {category}
+                        </span>
+                        {index < categories.length - 1 && (
+                            <BsChevronRight className="mx-2 text-xs" />
+                        )}
+                    </React.Fragment>
+                );
+            })}
+        </>
+    );
 }

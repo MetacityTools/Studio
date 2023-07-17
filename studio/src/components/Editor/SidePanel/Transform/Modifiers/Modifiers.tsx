@@ -21,7 +21,6 @@ export function Modifiers() {
             <SplitModelWidget model={model} />
             <JoinSubmodelWidget model={model} />
             <DeleteSubmodelsWidget model={model} />
-            <DeleteModelWidget model={model} />
         </div>
     );
 }

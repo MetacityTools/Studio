@@ -1,3 +1,4 @@
+import { FiDelete } from 'react-icons/fi';
 import { TbLayersSubtract } from 'react-icons/tb';
 
 import { useProcessing } from '@elements/Context';
@@ -24,8 +25,8 @@ export function DeleteSubmodelsWidget(props: WidgetProps) {
         <Widget onClick={apply}>
             <WidgetLine>
                 <WidgetTitle>
-                    <TbLayersSubtract className="mr-2" />
-                    Delete Submodels
+                    <FiDelete className="mr-2" />
+                    Delete Selected
                 </WidgetTitle>
             </WidgetLine>
             <WidgetLine>

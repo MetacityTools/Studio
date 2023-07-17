@@ -1,39 +1,74 @@
+import React from 'react';
+
 import { MetadataNode } from '@utils/types';
 
-import { MetadataCategory } from './MetadataCategory';
-import { MetadataValue } from './MetadataValue';
+import {
+    HierarchyChevronButton,
+    HierarchyMainButton,
+    HierarchyNode,
+    HierarchyNodeGroup,
+    HierarchyTitle,
+} from '@elements/Hierarchy';
+
+import { MetadataCategoryChildren } from './MetadataCategory';
+import { MetadataMenuPickFunciton, MetadataValue } from './MetadataValue';
 
 interface MetadataNodeComponentProps {
-    onValuePick: (value: MetadataNode) => void;
+    onValuePick: MetadataMenuPickFunciton;
     category: string;
     node: MetadataNode;
+    depth?: number;
+    initialOpen?: boolean;
 }
 
 export function MetadataNodeComponent(props: MetadataNodeComponentProps) {
-    let { category, onValuePick } = props;
+    let { category, onValuePick, depth } = props;
     const { categories, node } = aggregateLabel(category, props.node);
+    const [open, setOpen] = React.useState(props.initialOpen || false);
 
-    const isCategory = node.children && Object.keys(node.children).length > 0;
+    const handleOpen = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        setOpen(!open);
+        e.stopPropagation();
+    };
+
+    const isCategory = node.children && node.children.size > 0;
     const isValue = node.values !== undefined;
 
     return (
-        <>
-            {isCategory && (
-                <MetadataCategory categories={categories} node={node} onValuePick={onValuePick} />
+        <HierarchyNodeGroup>
+            {(isCategory || isValue) && (
+                <HierarchyNode depth={props.depth}>
+                    <HierarchyChevronButton
+                        open={open}
+                        onClick={handleOpen}
+                        title="Show subcategories"
+                    />
+                    <HierarchyMainButton onClick={handleOpen}>
+                        <HierarchyTitle categories={categories} />
+                    </HierarchyMainButton>
+                </HierarchyNode>
             )}
-            {isValue && (
-                <MetadataValue categories={categories} node={node} onValuePick={onValuePick} />
+            {isCategory && open && (
+                <MetadataCategoryChildren
+                    node={node}
+                    onValuePick={onValuePick}
+                    categories={categories}
+                    depth={depth}
+                />
             )}
-        </>
+            {isValue && open && (
+                <MetadataValue node={node} onValuePick={onValuePick} depth={depth} />
+            )}
+        </HierarchyNodeGroup>
     );
 }
 
 function aggregateLabel(category: string, node: MetadataNode) {
     const categories: string[] = [category];
-    while (node.children && Object.keys(node.children).length === 1) {
-        const key = Object.keys(node.children)[0];
+    while (node.children && node.children.size === 1 && !node.values) {
+        const key = node.children.keys().next().value;
         categories.push(key);
-        node = node.children[key];
+        node = node.children.get(key)!;
     }
     return { categories, node };
 }

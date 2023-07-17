@@ -22,6 +22,7 @@ export function unindexGeometry(gltf: GLTFParsedData) {
         metadata[submodelCounter] = {
             name: node.name,
             id: node.id,
+            format: 'gltf',
             ...node.extras,
         };
 

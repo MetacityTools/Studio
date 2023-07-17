@@ -1,8 +1,9 @@
 //worker to parse models
+import { errorHandler } from './errors';
 import { parse } from './gltf/parse';
 
 self.onmessage = (e) => {
-    process(e.data);
+    errorHandler(process(e.data));
 };
 
 async function process(data: any) {

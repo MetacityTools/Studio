@@ -1,14 +1,8 @@
 import React from 'react';
 
-import { GroupNode, Node, Tables } from '@utils/utils';
-
-import { useGraph } from '@shared/Context/hooks';
+import { Tables } from '@utils/utils';
 
 interface EditorContextProps {
-    nodeToMove: Node | undefined;
-    setNodeToMove: React.Dispatch<React.SetStateAction<Node | undefined>>;
-    nodeToEdit: Node | undefined;
-    setNodeToEdit: React.Dispatch<React.SetStateAction<Node | undefined>>;
     tables: Tables;
     setTables: React.Dispatch<React.SetStateAction<Tables>>;
     activeSheet: number;
@@ -20,8 +14,6 @@ interface EditorContextProps {
 const context = React.createContext<EditorContextProps>({} as EditorContextProps);
 
 export function EditorContext(props: { children: React.ReactNode }) {
-    const [nodeToMove, setNodeToMove] = React.useState<Node | undefined>();
-    const [nodeToEdit, setNodeToEdit] = React.useState<Node | undefined>();
     const [tables, setTables] = React.useState<Tables>(new Tables([]));
     const [activeSheet, setActiveSheet] = React.useState<number>(0);
     const [status, setStatus] = React.useState<'editing' | 'saved' | 'failed' | undefined>();
@@ -29,10 +21,6 @@ export function EditorContext(props: { children: React.ReactNode }) {
     return (
         <context.Provider
             value={{
-                nodeToMove,
-                setNodeToMove,
-                nodeToEdit,
-                setNodeToEdit,
                 tables,
                 setTables,
                 activeSheet,
@@ -48,47 +36,6 @@ export function EditorContext(props: { children: React.ReactNode }) {
 
 export function useTablesContext(): EditorContextProps {
     return React.useContext(context);
-}
-
-export function useMovingNode(): [Node | undefined, (node: Node | undefined) => void] {
-    const ctx = React.useContext(context);
-    const [graph] = useGraph();
-
-    const updateNodeToMove = (node: Node | undefined) => {
-        ctx.setNodeToMove((prev) => {
-            if (prev === node) return undefined;
-            if (prev === undefined) return node;
-            if (node === undefined) return undefined;
-            else {
-                if (node instanceof GroupNode) {
-                    if (node.isDescendantOf(prev)) return undefined;
-                    graph.moveNode(prev, node);
-                    return undefined;
-                } else {
-                    //fallback
-                    return node;
-                }
-            }
-        });
-    };
-
-    return [ctx.nodeToMove, updateNodeToMove];
-}
-
-export function useEditingNode(): [Node | undefined, (node: Node | undefined) => void] {
-    const ctx = React.useContext(context);
-
-    const updateNodeToLink = (node: Node | undefined) => {
-        ctx.setNodeToEdit((prev) => {
-            if (prev === node || node === undefined) {
-                return undefined;
-            } else {
-                return node;
-            }
-        });
-    };
-
-    return [ctx.nodeToEdit, updateNodeToLink];
 }
 
 export function useTables(): [Tables, React.Dispatch<React.SetStateAction<Tables>>] {

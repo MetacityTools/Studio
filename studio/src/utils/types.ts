@@ -84,7 +84,6 @@ export interface ShapefileData {
 export interface ModelData {
     geometry: ModelGeometry;
     metadata: ModelMetadata;
-    hierarchy?: Hierarchy;
 }
 
 export interface ModelGeometry {
@@ -102,6 +101,11 @@ export enum PrimitiveType {
 export interface ModelMetadata {
     name: string;
     primitive: PrimitiveType;
+    data: Metadata;
+}
+
+export interface Metadata {
+    [submodel: number]: any;
 }
 
 export enum GeometryMode {
@@ -111,72 +115,35 @@ export enum GeometryMode {
 }
 
 //------------------------------------------------------------
-
-export interface Hierarchy {
-    root: HierarchyGroupNode;
-}
-
-export interface HierarchyNode {
-    data: { [data: string]: any };
-}
-
-export interface HierarchyGroupNode extends HierarchyNode {
-    children: HierarchyNode[];
-}
-
-export interface HierarchyModelNode extends HierarchyNode {
-    id: number;
-}
-
-export interface ExtHierarchyModelNode extends HierarchyModelNode {
-    model?: any;
+export interface MetadataNode {
+    values?: any[];
+    children?: Map<string, MetadataNode>;
 }
 
 //------------------------------------------------------------
-export interface MetadataNode {
-    values?: MetadataValue;
+export interface StyleNode {
+    style?: {
+        random?: boolean;
+        scalars?: Scalars;
+        categories?: Categories;
+    };
     children?: {
-        [key: string]: MetadataNode;
+        [key: string]: StyleNode;
     };
 }
 
-export enum MetadataType {
-    NONE,
-    STRING,
-    NUMBER,
-    BOOLEAN,
-    MIXED,
+export interface Scalars {
+    colormap: string | string[];
+    min: number;
+    max: number;
 }
 
-export interface MetadataValue {
-    type: MetadataType;
-    values: (string | number | boolean)[];
+export interface Categories {
+    [key: string]: string;
 }
 
-export interface MetadataStringValue extends MetadataValue {
-    type: MetadataType.STRING;
-    values: string[];
+export interface Histogram {
+    min: number;
+    max: number;
+    histogram: number[];
 }
-
-export interface MetadataNumberValue extends MetadataValue {
-    type: MetadataType.NUMBER;
-    values: number[];
-}
-
-export interface MetadataBooleanValue extends MetadataValue {
-    type: MetadataType.BOOLEAN;
-    values: boolean[];
-}
-
-export interface MetadataMixedValue extends MetadataValue {
-    type: MetadataType.MIXED;
-    values: (string | number | boolean)[];
-}
-
-//------------------------------------------------------------
-export interface Style {
-    keychain: string[];
-    map: ColorKeyMap;
-}
-
-export type ColorKeyMap = { [key: string | number]: vec3 };

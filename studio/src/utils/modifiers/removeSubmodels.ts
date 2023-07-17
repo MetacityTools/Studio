@@ -1,5 +1,6 @@
 import { EditorModel } from '@utils/models/EditorModel';
 import { EditorModelData } from '@utils/models/TriangleModel';
+import { Metadata } from '@utils/types';
 
 export function removeSubmodels(model: EditorModel, idsToRemove: Set<number>) {
     if (idsToRemove.size === 0) return;
@@ -15,12 +16,14 @@ export function removeSubmodels(model: EditorModel, idsToRemove: Set<number>) {
         }
     }
 
+    const metadata: Metadata = {};
     const modelData: EditorModelData = {
         geometry: {
             position: new Float32Array(originalModelVertexCount * 3),
             submodel: new Uint32Array(originalModelVertexCount),
         },
         metadata: {
+            data: metadata,
             name: model.name,
             primitive: model.primitive,
         },
@@ -45,6 +48,14 @@ export function removeSubmodels(model: EditorModel, idsToRemove: Set<number>) {
             originalPositionBuffer[originalIndex * 3 + 2] = positionBuffer[i * 3 + 2];
             originalSubmodelBuffer[originalIndex] = submodelBuffer[i];
             originalIndex++;
+        }
+    }
+
+    const keys = Object.keys(model.metadata);
+    for (const key of keys) {
+        const id = parseInt(key);
+        if (!idsToRemove.has(id)) {
+            metadata[id] = model.metadata[id];
         }
     }
 

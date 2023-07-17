@@ -2,21 +2,22 @@ import { vec3 } from 'gl-matrix';
 import React from 'react';
 
 import { exportModel } from '@utils/formats/metacity/write';
-import { ModelGraph } from '@utils/hierarchy/graph';
 import { EditorModel } from '@utils/models/EditorModel';
 import { EditorModelData, addTriangleModel } from '@utils/models/TriangleModel';
 import { CoordinateMode, alignModels } from '@utils/modifiers/alignVertices';
+import { extractModels } from '@utils/modifiers/extractModels';
 import { joinModels } from '@utils/modifiers/joinModels';
 import { joinSubmodels } from '@utils/modifiers/joinSubmodels';
 import { removeSubmodels } from '@utils/modifiers/removeSubmodels';
 import { splitModel } from '@utils/modifiers/splitModels';
-import { MetadataNode, PrimitiveType } from '@utils/types';
-import { SelectionType } from '@utils/utils';
+import { Histogram, MetadataNode, PrimitiveType, StyleNode } from '@utils/types';
 
 import * as GL from '@bananagl/bananagl';
 
 import { SelectFunction, context } from './Context';
-import { changeSelection } from './selection';
+import { extractMetadata, filterSubmodels, findKeychain, getHistogram } from './metadata';
+import { SelectionType, changeSelection } from './selection';
+import { colorize, findStyleKeychain, getStyle, getValue } from './style';
 
 export function useActiveView(): number {
     const ctx = React.useContext(context);
@@ -52,11 +53,6 @@ export function useSelection(): [SelectFunction, SelectionType] {
 export function useSelectedModels(): SelectionType {
     const ctx = React.useContext(context);
     return ctx.selection;
-}
-
-export function useGraph(): [ModelGraph, React.Dispatch<React.SetStateAction<ModelGraph>>] {
-    const ctx = React.useContext(context);
-    return [ctx.graph, ctx.setGraph];
 }
 
 export function useCameraZ(): [number, React.Dispatch<React.SetStateAction<number>>] {
@@ -111,11 +107,9 @@ export function useCreateModels() {
             if (!glmodel) continue;
             ctx.scene.add(glmodel);
             createdModels.push(glmodel);
-            if (model.hierarchy) ctx.graph.addModel(glmodel, model.hierarchy.root);
         }
 
         ctx.setGlobalShift(shift);
-        ctx.graph.needsUpdate = true;
         return createdModels;
     };
 
@@ -128,8 +122,6 @@ export function useRemoveModels() {
 
     const remove = (models: EditorModel) => {
         ctx.scene.remove(models);
-        ctx.graph.removeModel(models);
-        ctx.graph.needsUpdate = true;
         select(new Map());
     };
 
@@ -143,15 +135,12 @@ export function useRemoveSubmodels() {
     const remove = async (model: EditorModel, submodels: Set<number>) => {
         const data = removeSubmodels(model, submodels);
         if (!data) return;
-        ctx.graph.removeSubmodels(model, submodels);
-
-        const glmodel = await importModel(data);
-        if (!glmodel) return;
-        ctx.scene.add(glmodel);
-        ctx.graph.updateModel(model, glmodel);
-
+        if (data.geometry.position.length > 0) {
+            const glmodel = await importModel(data);
+            if (!glmodel) return;
+            ctx.scene.add(glmodel);
+        }
         ctx.scene.remove(model);
-        ctx.graph.needsUpdate = true;
         select(new Map());
     };
 
@@ -165,22 +154,17 @@ export function useSplitModel() {
     const split = async (oldModel: EditorModel, submodels: Set<number>) => {
         const data = splitModel(oldModel, submodels);
         if (!data) return;
-        const { models, submodelIDs } = data;
-        const [modelA, modelB] = models;
-        const [submodelIDsA, submodelIDsB] = submodelIDs;
+        const [modelA, modelB] = data;
 
         let glmodel = await importModel(modelA);
         if (!glmodel) return;
         ctx.scene.add(glmodel);
-        ctx.graph.updateModel(oldModel, glmodel, submodelIDsA);
 
         glmodel = await importModel(modelB);
         if (!glmodel) return;
         ctx.scene.add(glmodel);
-        ctx.graph.updateModel(oldModel, glmodel, submodelIDsB);
 
         ctx.scene.remove(oldModel);
-        ctx.graph.needsUpdate = true;
         select(new Map());
     };
 
@@ -188,19 +172,11 @@ export function useSplitModel() {
 }
 
 export function useJoinSubmodels() {
-    const ctx = React.useContext(context);
     const [select] = useSelection();
 
     const join = async (model: EditorModel, submodels: Set<number>) => {
         const newSubmodelId = await joinSubmodels(model, submodels);
         if (!newSubmodelId) return;
-        const data = ctx.graph.getMetadata(model, submodels);
-        submodels.delete(newSubmodelId);
-        const node = ctx.graph.getModel(model, newSubmodelId);
-        if (!node) return;
-        node.data = data;
-        ctx.graph.removeSubmodels(model, submodels);
-        ctx.graph.needsUpdate = true;
         select(new Map([[model, new Set([newSubmodelId])]]));
     };
 
@@ -210,21 +186,111 @@ export function useJoinSubmodels() {
 export function useExport() {
     const ctx = React.useContext(context);
 
-    const exportProject = async () => {
-        const model = await joinModels(ctx.models, ctx.graph);
-        if (!model) return;
-        exportModel(model);
+    const exportProject = async (title: string) => {
+        const models = await extractModels(ctx.models);
+        if (!models) return;
+        exportModel(models, ctx.styles, title);
     };
 
     return exportProject;
 }
 
-export function useMetadata(): MetadataNode {
-    const { metadata } = React.useContext(context);
-    return metadata;
+export function useMetadata(): [MetadataNode, () => void] {
+    const { metadata, setMetadata, models } = React.useContext(context);
+
+    const update = () => {
+        const data = extractMetadata(models);
+        setMetadata(data);
+    };
+
+    return [metadata, update];
 }
 
-export function useLevel(): [number, React.Dispatch<React.SetStateAction<number>>] {
+export function useSelectionByMetadata(): (
+    root: MetadataNode,
+    metadata: MetadataNode,
+    value: any,
+    extend?: boolean
+) => void {
+    const { models } = React.useContext(context);
+    const [select] = useSelection();
+
+    const selectByMetadata = (
+        root: MetadataNode,
+        metadata: MetadataNode,
+        value: any,
+        extend: boolean = false
+    ) => {
+        const path = findKeychain(root, metadata);
+        if (!path) return;
+        const newSelection = new Map();
+        for (const model of models) {
+            const submodels = filterSubmodels(model, path, value);
+            if (submodels.size) newSelection.set(model, submodels);
+        }
+        select(newSelection, false, extend);
+    };
+
+    return selectByMetadata;
+}
+
+export function useKeymap() {
     const ctx = React.useContext(context);
-    return [ctx.level, ctx.setLevel];
+    return ctx.renderer.controls?.keyboard.keyMap;
+}
+
+export function useStyle(): [StyleNode, React.Dispatch<React.SetStateAction<StyleNode>>] {
+    const ctx = React.useContext(context);
+    return [ctx.styles, ctx.setStyles];
+}
+
+export function useApplyStyle(): [
+    string[] | null,
+    (root: StyleNode, style: StyleNode) => void,
+    () => void
+] {
+    const ctx = React.useContext(context);
+
+    const applyStyle = (root: StyleNode, style: StyleNode) => {
+        const keychain = findStyleKeychain(root, style);
+        if (!keychain) return;
+        ctx.setUsedStyle(keychain);
+        ctx.setLastUsedStyle(keychain);
+    };
+
+    const clearStyle = () => {
+        ctx.setUsedStyle(null);
+    };
+
+    return [ctx.usedStyle, applyStyle, clearStyle];
+}
+
+export function useLastStyle(): [string[] | null, () => void] {
+    const ctx = React.useContext(context);
+
+    const applyLastStyle = () => {
+        ctx.setUsedStyle(ctx.lastUsedStyle);
+    };
+
+    return [ctx.lastUsedStyle, applyLastStyle];
+}
+
+export function useGrayscale(): [boolean, React.Dispatch<React.SetStateAction<boolean>>] {
+    const ctx = React.useContext(context);
+    return [ctx.grayscale, ctx.setGrayscale];
+}
+
+export function useStyleInfo(): [Histogram | undefined, StyleNode | undefined] {
+    const ctx = React.useContext(context);
+
+    if (!ctx.usedStyle) return [undefined, undefined];
+
+    const histogram = getHistogram(ctx.metadata, ctx.usedStyle);
+    const style = getStyle(ctx.styles, ctx.usedStyle);
+
+    return [histogram, style];
+}
+
+export function useShowMetadataAssigned() {
+    const ctx = React.useContext(context);
 }

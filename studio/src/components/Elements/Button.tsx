@@ -53,7 +53,10 @@ export function Button(props: {
 }) {
     return (
         <button
-            className="px-4 py-2 rounded-md border border-blue-200 enabled:hover:border-blue-400 transition-colors bg-blue-100 text-blue-900 enabled:hover:bg-blue-200 overflow-hidden whitespace-nowrap overflow-ellipsis text-sm outline-none flex flex-row items-center disabled:opacity-50 disabled:cursor-default"
+            className={clsx(
+                'px-4 py-2 transition-colors overflow-hidden whitespace-nowrap overflow-ellipsis outline-none flex flex-row items-center disabled:opacity-50 disabled:cursor-default',
+                'hover:bg-gray-200 focus:bg-gray-200 active:bg-gray-300'
+            )}
             onClick={props.onClick}
             disabled={props.disabled}
         >
@@ -68,6 +71,7 @@ export function ButtonFileInput(props: {
     multiple?: boolean;
     id: string;
     className?: string;
+    accept?: string;
 }) {
     return (
         <>
@@ -77,7 +81,10 @@ export function ButtonFileInput(props: {
                     'cursor-pointer',
                     props.className
                         ? props.className
-                        : 'px-4 py-2 rounded-md border border-blue-200 hover:border-blue-400 transition-colors bg-blue-100 text-blue-900 hover:bg-blue-200 flex items-center overflow-hidden whitespace-nowrap overflow-ellipsis text-sm flex flex-row items-center'
+                        : clsx(
+                              'px-4 py-2 transition-colors overflow-hidden whitespace-nowrap overflow-ellipsis outline-none flex flex-row items-center disabled:opacity-50 disabled:cursor-default',
+                              'hover:bg-gray-200 focus:bg-gray-200 active:bg-gray-300'
+                          )
                 )}
             >
                 {props.children}
@@ -88,6 +95,7 @@ export function ButtonFileInput(props: {
                 onChange={props.onChange}
                 id={props.id}
                 multiple={props.multiple}
+                accept={props.accept}
             />
         </>
     );

@@ -1,32 +1,93 @@
+import { Allotment } from 'allotment';
 import 'allotment/dist/style.css';
 import React from 'react';
+import { FaBrush } from 'react-icons/fa';
 
-import { MetadataNode } from '@utils/types';
+import { StyleNode, autoUpdateStyle } from '@utils/utils';
 
-import { ColumnContainer, OverflowAbsoluteContainer, StretchContainer } from '@elements/Containers';
+import { useStatus } from '@editor/EditorContext';
 
-import { useStyleKeychain } from '@shared/Context/styles';
-import { MetadataHierarchy } from '@shared/Metadata/MetadataHierarchy';
+import {
+    BottomRowContainer,
+    ColumnContainer,
+    OverflowAbsoluteContainer,
+    StretchContainer,
+} from '@elements/Containers';
+import { PanelTitle } from '@elements/PanelTitle';
+
+import { useApplyStyle, useLastStyle, useMetadata, useStyle } from '@shared/Context/hooks';
+import { Status } from '@shared/Status';
+import { StyleHierarchy } from '@shared/Style/StyleHierarchy';
+import { StyleInfo } from '@shared/Style/StyleInfo';
+
+import { StyleEditor } from './StyleEditor';
 
 export function StyleSidePanel() {
-    const [styleKeychain, setStyleKeychain] = useStyleKeychain();
+    const [style, setStyle] = useStyle();
+    const [, applyStyle, clearStyle] = useApplyStyle();
+    const [, applyLastStyle] = useLastStyle();
+    const [status, setStatus] = useStatus();
+    const [metadata] = useMetadata();
+
+    const handleAutoStyle = () => {
+        const updated = autoUpdateStyle(metadata, style);
+        setStyle(updated);
+    };
+
+    const handlePick = (root: StyleNode, node: StyleNode) => {
+        applyStyle(root, node);
+    };
 
     React.useEffect(() => {
+        applyLastStyle();
         return () => {
-            setStyleKeychain([]);
+            clearStyle();
+            setStatus(undefined);
         };
     }, []);
-
-    const onValuePick = (value: MetadataNode) => {
-        setStyleKeychain(value);
-    };
 
     return (
         <ColumnContainer>
             <StretchContainer>
-                <OverflowAbsoluteContainer className="p-4">
-                    <MetadataHierarchy onValuePick={onValuePick} />
-                </OverflowAbsoluteContainer>
+                <Allotment separator={false} vertical>
+                    <Allotment.Pane preferredSize={200} minSize={20}>
+                        <ColumnContainer>
+                            <PanelTitle title="Active Style" />
+                            <StretchContainer>
+                                <OverflowAbsoluteContainer>
+                                    <StyleInfo />
+                                </OverflowAbsoluteContainer>
+                            </StretchContainer>
+                        </ColumnContainer>
+                    </Allotment.Pane>
+                    <Allotment.Pane preferredSize={200} minSize={20} className="border-t">
+                        <ColumnContainer>
+                            <PanelTitle title="Style Outline" />
+                            <StyleHierarchy onValuePick={handlePick} />
+                        </ColumnContainer>
+                    </Allotment.Pane>
+                    <Allotment.Pane preferredSize={200} minSize={20} className="border-t">
+                        <ColumnContainer>
+                            <PanelTitle title="Style Editor" />
+                            <ColumnContainer>
+                                <StretchContainer>
+                                    <OverflowAbsoluteContainer>
+                                        <StyleEditor />
+                                    </OverflowAbsoluteContainer>
+                                </StretchContainer>
+                                <BottomRowContainer>
+                                    <Status status={status} />
+                                    <button
+                                        onClick={handleAutoStyle}
+                                        className="text-neutral-400 hover:text-neutral-800"
+                                    >
+                                        Apply auto style
+                                    </button>
+                                </BottomRowContainer>
+                            </ColumnContainer>
+                        </ColumnContainer>
+                    </Allotment.Pane>
+                </Allotment>
             </StretchContainer>
         </ColumnContainer>
     );

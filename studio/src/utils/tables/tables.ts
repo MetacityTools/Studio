@@ -1,6 +1,6 @@
 import { parse } from '@vojtatom/csvts';
 
-type rowType = 'key' | 'value' | 'units';
+type rowType = 'key' | 'value';
 
 export class Tables {
     public rowTypes: rowType[][] = [];

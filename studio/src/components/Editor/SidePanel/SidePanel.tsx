@@ -1,13 +1,15 @@
 import { Tab } from '@headlessui/react';
 import 'allotment/dist/style.css';
-import { VscJson, VscMove, VscSymbolColor, VscTable } from 'react-icons/vsc';
+import { VscJson, VscMove, VscSymbolColor, VscTable, VscTools } from 'react-icons/vsc';
 
 import { ColumnContainer } from '@elements/Containers';
-import { TabButton, TabList, TabPanel } from '@elements/Tabs';
+import { TabButton, TabGroup, TabList, TabPanel, TabPanels } from '@elements/Tabs';
 
+import { useGrayscale } from '@shared/Context/hooks';
 import { IOMenu } from '@shared/IOMenu/IOMenu';
+import { ViewSidePanel } from '@shared/ViewSettings/ViewSidePanel';
 
-import { GroupSidePanel } from './Groups/GroupSidePanel';
+import { MetadataSidePanel } from './Metadata/MetadataSidePanel';
 import { StyleSidePanel } from './Styles/StyleSidePanel';
 import { TableSidePanel } from './Tables/TableSidePanel';
 import { TransformSidePanel } from './Transform/TransformSidePanel';
@@ -16,36 +18,42 @@ export function SidePanel() {
     return (
         <ColumnContainer>
             <IOMenu export />
-            <Tab.Group>
+            <TabGroup>
                 <TabList>
-                    <TabButton>
-                        <VscMove className="mr-2" /> Transform
+                    <TabButton title="Transform">
+                        <VscMove />
                     </TabButton>
-                    <TabButton>
-                        <VscJson className="mr-2" /> Groups &amp; Meta
+                    <TabButton title="Tables">
+                        <VscTable />
                     </TabButton>
-                    <TabButton>
-                        <VscTable className="mr-2" /> Tables
+                    <TabButton title="Metadata">
+                        <VscJson />
                     </TabButton>
-                    <TabButton>
-                        <VscSymbolColor className="mr-2" /> Styles
+                    <TabButton title="Styles">
+                        <VscSymbolColor />
+                    </TabButton>
+                    <TabButton title="Settings">
+                        <VscTools />
                     </TabButton>
                 </TabList>
-                <Tab.Panels className="w-full h-full">
+                <TabPanels>
                     <TabPanel>
                         <TransformSidePanel />
-                    </TabPanel>
-                    <TabPanel>
-                        <GroupSidePanel />
                     </TabPanel>
                     <TabPanel>
                         <TableSidePanel />
                     </TabPanel>
                     <TabPanel>
+                        <MetadataSidePanel />
+                    </TabPanel>
+                    <TabPanel>
                         <StyleSidePanel />
                     </TabPanel>
-                </Tab.Panels>
-            </Tab.Group>
+                    <TabPanel>
+                        <ViewSidePanel />
+                    </TabPanel>
+                </TabPanels>
+            </TabGroup>
         </ColumnContainer>
     );
 }

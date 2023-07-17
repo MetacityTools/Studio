@@ -12,7 +12,6 @@ export class WriteOnlyMemoryStream {
         const buffer = new ArrayBuffer(4);
         const view = new DataView(buffer);
         view.setInt32(0, int, true);
-        console.log('int', new Uint8Array(buffer), view);
         this.unfinishedBuffer.push(...new Uint8Array(buffer));
         this.add();
     }
@@ -104,5 +103,9 @@ export class ReadOnlyMemoryStream {
         array.set(view);
         this.position += length * 4;
         return array;
+    }
+
+    empty() {
+        return this.position >= this.buffer.length;
     }
 }

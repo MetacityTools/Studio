@@ -1,34 +1,43 @@
-import React from 'react';
+import { VscJson, VscSymbolColor, VscTools } from 'react-icons/vsc';
 
-import { MetadataNode } from '@utils/types';
+import { ColumnContainer } from '@elements/Containers';
+import { TabButton, TabGroup, TabList, TabPanel, TabPanels } from '@elements/Tabs';
 
-import { ColumnContainer, OverflowAbsoluteContainer, StretchContainer } from '@elements/Containers';
-
-import { useStyleKeychain } from '@shared/Context/styles';
+import { useGrayscale } from '@shared/Context/hooks';
 import { IOMenu } from '@shared/IOMenu/IOMenu';
-import { MetadataHierarchy } from '@shared/Metadata/MetadataHierarchy';
+import { ViewSidePanel } from '@shared/ViewSettings/ViewSidePanel';
+
+import { MetadataSidePanel } from './Metadata/MetadataSidePanel';
+import { StyleSidePanel } from './Style/Styles';
 
 export function SidePanel() {
-    const [styleKeychain, setStyleKeychain] = useStyleKeychain();
-
-    React.useEffect(() => {
-        return () => {
-            setStyleKeychain([]);
-        };
-    }, []);
-
-    const onValuePick = (value: MetadataNode) => {
-        setStyleKeychain(value);
-    };
-
     return (
         <ColumnContainer>
             <IOMenu />
-            <StretchContainer className="border-t">
-                <OverflowAbsoluteContainer className="p-4">
-                    <MetadataHierarchy onValuePick={onValuePick} />
-                </OverflowAbsoluteContainer>
-            </StretchContainer>
+            <TabGroup>
+                <TabList>
+                    <TabButton title="Metadata">
+                        <VscJson />
+                    </TabButton>
+                    <TabButton title="Styles">
+                        <VscSymbolColor />
+                    </TabButton>
+                    <TabButton title="Settings">
+                        <VscTools />
+                    </TabButton>
+                </TabList>
+                <TabPanels>
+                    <TabPanel>
+                        <MetadataSidePanel />
+                    </TabPanel>
+                    <TabPanel>
+                        <StyleSidePanel />
+                    </TabPanel>
+                    <TabPanel>
+                        <ViewSidePanel />
+                    </TabPanel>
+                </TabPanels>
+            </TabGroup>
         </ColumnContainer>
     );
 }

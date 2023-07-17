@@ -1,11 +1,10 @@
 import { vec3 } from 'gl-matrix';
 
 import { EditorModel } from '@utils/models/EditorModel';
-import { EditorModelData } from '@utils/utils';
+import { EditorModelData, Metadata } from '@utils/utils';
 
 export function splitModel(model: EditorModel, submodelIDs: Set<number>) {
     if (submodelIDs.size === 0) return;
-    const otherSubmodelIDs = new Set<number>();
 
     let originalModelVertexCount = 0;
     let newModelVertexCount = 0;
@@ -17,18 +16,19 @@ export function splitModel(model: EditorModel, submodelIDs: Set<number>) {
     for (let i = 0; i < submodelBuffer.length; i++) {
         if (!submodelIDs.has(submodelBuffer[i])) {
             originalModelVertexCount++;
-            otherSubmodelIDs.add(submodelBuffer[i]);
         } else {
             newModelVertexCount++;
         }
     }
 
+    const originalMetadata: Metadata = {};
     const originalModelData: EditorModelData = {
         geometry: {
             position: new Float32Array(originalModelVertexCount * 3),
             submodel: new Uint32Array(originalModelVertexCount),
         },
         metadata: {
+            data: originalMetadata,
             name: 'partA_' + model.name,
             primitive: model.primitive,
         },
@@ -38,12 +38,14 @@ export function splitModel(model: EditorModel, submodelIDs: Set<number>) {
         uniforms: model.uniforms,
     };
 
+    const newMetadata: Metadata = {};
     const newModelData: EditorModelData = {
         geometry: {
             position: new Float32Array(newModelVertexCount * 3),
             submodel: new Uint32Array(newModelVertexCount),
         },
         metadata: {
+            data: newMetadata,
             name: 'partB_' + model.name,
             primitive: model.primitive,
         },
@@ -80,8 +82,16 @@ export function splitModel(model: EditorModel, submodelIDs: Set<number>) {
         }
     }
 
-    return {
-        models: [originalModelData, newModelData],
-        submodelIDs: [otherSubmodelIDs, submodelIDs],
-    };
+    const keys = Object.keys(model.metadata);
+    for (const key of keys) {
+        const id = parseInt(key);
+        const value = model.metadata[id];
+        if (!submodelIDs.has(id)) {
+            originalMetadata[id] = value;
+        } else {
+            newMetadata[id] = value;
+        }
+    }
+
+    return [originalModelData, newModelData];
 }

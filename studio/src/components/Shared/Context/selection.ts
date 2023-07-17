@@ -1,5 +1,6 @@
 import { EditorModel } from '@utils/models/EditorModel';
-import { SelectionType } from '@utils/utils';
+
+export type SelectionType = Map<EditorModel, Set<number>>;
 
 export function changeSelection(
     oldSelection: SelectionType,

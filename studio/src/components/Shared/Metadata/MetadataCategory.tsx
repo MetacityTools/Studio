@@ -1,56 +1,22 @@
-import React from 'react';
-
 import { MetadataNode } from '@utils/types';
 
-import {
-    HierarchyChevronButton,
-    HierarchyMainButton,
-    HierarchyNode,
-    HierarchyNodeGroup,
-    HierarchyNodeGroupChildren,
-} from '@elements/Hierarchy';
+import { HierarchyNodeGroupChildren } from '@elements/Hierarchy';
 
 import { MetadataNodeComponent } from './MetadataNode';
-import { MetadataTitle } from './MetadataTitle';
+import { MetadataMenuPickFunciton } from './MetadataValue';
 
 interface MetadataCategoryProps {
     categories: string[];
     node: MetadataNode;
-    onValuePick: (value: MetadataNode) => void;
-}
-
-export function MetadataCategory(props: MetadataCategoryProps) {
-    const { categories } = props;
-    const [open, setOpen] = React.useState(true);
-
-    const handleOpen = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-        setOpen(!open);
-        e.stopPropagation();
-    };
-
-    return (
-        <HierarchyNodeGroup>
-            <HierarchyNode hoverable>
-                <HierarchyChevronButton
-                    open={open}
-                    onClick={handleOpen}
-                    title="Show subcategories"
-                    inheritStyles
-                />
-                <HierarchyMainButton inheritStyles onClick={handleOpen}>
-                    <MetadataTitle categories={categories} />
-                </HierarchyMainButton>
-            </HierarchyNode>
-            {open && <MetadataCategoryChildren {...props} />}
-        </HierarchyNodeGroup>
-    );
+    onValuePick: MetadataMenuPickFunciton;
+    depth?: number;
 }
 
 export function MetadataCategoryChildren(props: MetadataCategoryProps) {
-    const { node, onValuePick } = props;
+    const { node, onValuePick, depth } = props;
 
     if (node.children) {
-        const sortedEntires = Object.entries(node.children).sort(([a], [b]) => a.localeCompare(b));
+        const sortedEntires = [...node.children].sort(([keyA], [keyB]) => keyA.localeCompare(keyB));
         return (
             <HierarchyNodeGroupChildren>
                 {sortedEntires.map(([key, value]) => {
@@ -60,6 +26,7 @@ export function MetadataCategoryChildren(props: MetadataCategoryProps) {
                             category={key}
                             node={value}
                             key={key}
+                            depth={(depth !== undefined && depth + 1) || undefined}
                         />
                     );
                 })}
