@@ -10,14 +10,14 @@ import { joinModels } from '@utils/modifiers/joinModels';
 import { joinSubmodels } from '@utils/modifiers/joinSubmodels';
 import { removeSubmodels } from '@utils/modifiers/removeSubmodels';
 import { splitModel } from '@utils/modifiers/splitModels';
-import { MetadataNode, PrimitiveType, StyleNode } from '@utils/types';
+import { Histogram, MetadataNode, PrimitiveType, StyleNode } from '@utils/types';
 
 import * as GL from '@bananagl/bananagl';
 
 import { SelectFunction, context } from './Context';
-import { extractMetadata, filterSubmodels, findKeychain } from './metadata';
+import { extractMetadata, filterSubmodels, findKeychain, getHistogram } from './metadata';
 import { SelectionType, changeSelection } from './selection';
-import { colorize, findStyleKeychain } from './style';
+import { colorize, findStyleKeychain, getStyle, getValue } from './style';
 
 export function useActiveView(): number {
     const ctx = React.useContext(context);
@@ -267,4 +267,15 @@ export function useApplyStyle(): [
 export function useGrayscale(): [boolean, React.Dispatch<React.SetStateAction<boolean>>] {
     const ctx = React.useContext(context);
     return [ctx.grayscale, ctx.setGrayscale];
+}
+
+export function useStyleInfo(): [Histogram | undefined, StyleNode | undefined] {
+    const ctx = React.useContext(context);
+
+    if (!ctx.usedStyle) return [undefined, undefined];
+
+    const histogram = getHistogram(ctx.metadata, ctx.usedStyle);
+    const style = getStyle(ctx.styles, ctx.usedStyle);
+
+    return [histogram, style];
 }

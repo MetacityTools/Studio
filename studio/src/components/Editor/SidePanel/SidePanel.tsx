@@ -15,13 +15,11 @@ import { TableSidePanel } from './Tables/TableSidePanel';
 import { TransformSidePanel } from './Transform/TransformSidePanel';
 
 export function SidePanel() {
-    const [grayscale] = useGrayscale();
-
     return (
         <ColumnContainer>
             <IOMenu export />
             <TabGroup>
-                <TabList className={grayscale ? 'grayscale' : ''}>
+                <TabList>
                     <TabButton title="Transform">
                         <VscMove />
                     </TabButton>

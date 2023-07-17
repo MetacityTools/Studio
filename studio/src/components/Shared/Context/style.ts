@@ -1,6 +1,6 @@
 import { vec3 } from 'gl-matrix';
 
-import { parseColor, sampleColor } from '@utils/modifiers/color';
+import { getColorMap, parseColor, sampleColor } from '@utils/modifiers/color';
 import { StyleNode } from '@utils/types';
 import { EditorModel } from '@utils/utils';
 
@@ -26,7 +26,7 @@ export function findStyleKeychain(
     return null;
 }
 
-function getStyle(node: StyleNode, keychain: string[]) {
+export function getStyle(node: StyleNode, keychain: string[]) {
     let value: StyleNode | undefined = node;
     for (const key of keychain) {
         if (value === undefined) return undefined;
@@ -36,7 +36,7 @@ function getStyle(node: StyleNode, keychain: string[]) {
     return value;
 }
 
-function getValue(data: any, keychain: string[]) {
+export function getValue(data: any, keychain: string[]) {
     let value = data;
     for (const key of keychain) {
         if (value === undefined) return undefined;
@@ -45,83 +45,6 @@ function getValue(data: any, keychain: string[]) {
 
     if (typeof value === 'object') return undefined;
     return value;
-}
-
-function getMap(map: string) {
-    switch (map) {
-        case 'plasma':
-            return [
-                '#0d0887',
-                '#350498',
-                '#5302a3',
-                '#6f00a8',
-                '#8b0aa5',
-                '#a31e9a',
-                '#b83289',
-                '#cc4778',
-                '#db5c68',
-                '#e97158',
-                '#f48849',
-                '#fba238',
-                '#febd2a',
-                '#fada24',
-                '#f0f921',
-            ];
-        case 'viridis':
-            return [
-                '#440154',
-                '#481b6d',
-                '#46327e',
-                '#3f4788',
-                '#365c8d',
-                '#2e6e8e',
-                '#277f8e',
-                '#21918c',
-                '#1fa187',
-                '#2db27d',
-                '#4ac16d',
-                '#73d056',
-                '#a0da39',
-                '#d0e11c',
-                '#fde725',
-            ];
-        case 'inferno':
-            return [
-                '#000004',
-                '#0d0829',
-                '#280b53',
-                '#470b6a',
-                '#65156e',
-                '#82206c',
-                '#9f2a63',
-                '#bc3754',
-                '#d44842',
-                '#e8602d',
-                '#f57d15',
-                '#fc9f07',
-                '#fac228',
-                '#f3e55d',
-                '#fcffa4',
-            ];
-        case 'magma':
-            return [
-                '#000004',
-                '#0c0926',
-                '#221150',
-                '#400f74',
-                '#5f187f',
-                '#7b2382',
-                '#982d80',
-                '#b73779',
-                '#d3436e',
-                '#eb5760',
-                '#f8765c',
-                '#fd9a6a',
-                '#febb81',
-                '#fddc9e',
-                '#fcfdbf',
-            ];
-    }
 }
 
 function parseMap(map: string[] | undefined) {
@@ -146,7 +69,7 @@ export function colorize(keychain: string[], styles: StyleNode, models: EditorMo
 
         let scalarMap: vec3[] | undefined = undefined;
         if (typeof scalars?.colormap === 'string') {
-            scalarMap = parseMap(getMap(scalars.colormap));
+            scalarMap = parseMap(getColorMap(scalars.colormap));
         } else if (Array.isArray(scalars?.colormap)) {
             scalarMap = parseMap(scalars?.colormap);
         }

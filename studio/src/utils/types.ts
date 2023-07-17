@@ -124,16 +124,26 @@ export interface MetadataNode {
 export interface StyleNode {
     style?: {
         random?: boolean;
-        scalars?: {
-            colormap: string | string[];
-            min: number;
-            max: number;
-        };
-        categories?: {
-            [key: string]: string;
-        };
+        scalars?: Scalars;
+        categories?: Categories;
     };
     children?: {
         [key: string]: StyleNode;
     };
+}
+
+export interface Scalars {
+    colormap: string | string[];
+    min: number;
+    max: number;
+}
+
+export interface Categories {
+    [key: string]: string;
+}
+
+export interface Histogram {
+    min: number;
+    max: number;
+    histogram: number[];
 }

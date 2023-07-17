@@ -1,4 +1,4 @@
-import { MetadataNode } from '@utils/types';
+import { Histogram, MetadataNode } from '@utils/types';
 import { EditorModel } from '@utils/utils';
 
 import { SelectionType } from './selection';
@@ -218,4 +218,45 @@ export function filterSubmodels(model: EditorModel, keychain: string[], value: a
             submodels.add(parsedId);
     }
     return submodels;
+}
+
+function findNode(node: MetadataNode, keychain: string[]) {
+    let value: MetadataNode | undefined = node;
+    for (const key of keychain) {
+        if (value === undefined) return undefined;
+        value = value.children?.get(key);
+    }
+    return value;
+}
+
+export function getHistogram(metadata: MetadataNode, keychain: string[]): Histogram | undefined {
+    const HIST_SIZE = 256;
+    const histogram: number[] = new Array(HIST_SIZE).fill(0);
+
+    const node = findNode(metadata, keychain);
+    if (!node) return;
+
+    if (node.values) {
+        let min = Infinity;
+        let max = -Infinity;
+        for (const value of node.values) {
+            if (typeof value === 'number') {
+                if (value < min) min = value;
+                if (value > max) max = value;
+            }
+        }
+
+        if (min === Infinity || max === -Infinity) return;
+
+        let range = max - min;
+        if (range === 0) range = 1;
+
+        for (const value of node.values) {
+            if (typeof value === 'number') {
+                const index = Math.floor(((value - min) / range) * (HIST_SIZE - 1));
+                histogram[index]++;
+            }
+        }
+        return { min, max, histogram };
+    }
 }

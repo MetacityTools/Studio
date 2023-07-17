@@ -11,13 +11,11 @@ import { MetadataSidePanel } from './Metadata/MetadataSidePanel';
 import { StyleSidePanel } from './Style/Styles';
 
 export function SidePanel() {
-    const [grayscale] = useGrayscale();
-
     return (
         <ColumnContainer>
             <IOMenu />
             <TabGroup>
-                <TabList className={grayscale ? 'grayscale' : ''}>
+                <TabList>
                     <TabButton title="Metadata">
                         <VscJson />
                     </TabButton>

@@ -56,7 +56,11 @@ export function StyleSidePanel() {
                     <Allotment.Pane preferredSize={200} minSize={20}>
                         <ColumnContainer>
                             <PanelTitle title="Active Style" />
-                            <StyleInfo />
+                            <StretchContainer>
+                                <OverflowAbsoluteContainer>
+                                    <StyleInfo />
+                                </OverflowAbsoluteContainer>
+                            </StretchContainer>
                         </ColumnContainer>
                     </Allotment.Pane>
                     <Allotment.Pane preferredSize={200} minSize={20} className="border-t">
