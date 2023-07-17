@@ -4,7 +4,7 @@ import React from 'react';
 
 import { StyleNode } from '@utils/utils';
 
-import { ColumnContainer, StretchContainer } from '@elements/Containers';
+import { ColumnContainer, OverflowAbsoluteContainer, StretchContainer } from '@elements/Containers';
 import { PanelTitle } from '@elements/PanelTitle';
 
 import { useApplyStyle } from '@shared/Context/hooks';
@@ -31,7 +31,11 @@ export function StyleSidePanel() {
                     <Allotment.Pane preferredSize={400} minSize={20}>
                         <ColumnContainer>
                             <PanelTitle title="Active Style" />
-                            <StyleInfo />
+                            <StretchContainer>
+                                <OverflowAbsoluteContainer>
+                                    <StyleInfo />
+                                </OverflowAbsoluteContainer>
+                            </StretchContainer>
                         </ColumnContainer>
                     </Allotment.Pane>
                     <Allotment.Pane preferredSize={400} minSize={20} className="border-t">
