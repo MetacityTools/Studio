@@ -6,7 +6,6 @@ import { SizeGuard } from '@elements/SizeGuard';
 
 import { CanvasComponent } from '@shared/CanvasComponent';
 import { Controls } from '@shared/Controls';
-import { StyleDetailPanel } from '@shared/StyleDetail';
 
 import { Help } from './Canvas/Help';
 import { EditorSpash } from './EditorSplash';
@@ -23,7 +22,6 @@ export function ModelEditor() {
                     <Allotment.Pane minSize={200} className="bg-neutral-100">
                         <CanvasComponent />
                         <Help />
-                        <StyleDetailPanel className="absolute right-0 bottom-0 m-4" />
                         <Controls />
                     </Allotment.Pane>
                 </Allotment>
