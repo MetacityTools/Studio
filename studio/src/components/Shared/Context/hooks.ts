@@ -279,3 +279,7 @@ export function useStyleInfo(): [Histogram | undefined, StyleNode | undefined] {
 
     return [histogram, style];
 }
+
+export function useShowMetadataAssigned() {
+    const ctx = React.useContext(context);
+}

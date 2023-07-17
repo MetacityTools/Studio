@@ -81,8 +81,8 @@ These features are planned for the future, and scheduled for a specific release.
     -   [x] Auto generate/update styles
     -   [x] Style outline
     -   [x] Apply styles to the geometry
-    -   [ ] Styling UI - show data infographics
-    -   [ ] Clean syling button
+    -   [x] Styling UI - show data infographics
+    -   [x] Clean syling button - switches on tab close
 -   [x] Updated metadata format - binary buffers + attributes + styling
     -   [x] Metadata export/import
     -   [x] Styles

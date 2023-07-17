@@ -1,7 +1,7 @@
-import GLTFWorker from '@utils/formats/gltf.worker?worker&inline';
-import IFCWorker from '@utils/formats/ifc.worker?worker&inline';
-import MetacityWorker from '@utils/formats/metacity.worker?worker&inline';
-import ShapefileWorker from '@utils/formats/shapefile.worker?worker&inline';
+import GLTFWorker from '@utils/formats/gltf.worker?worker';
+import IFCWorker from '@utils/formats/ifc.worker?worker';
+import MetacityWorker from '@utils/formats/metacity.worker?worker';
+import ShapefileWorker from '@utils/formats/shapefile.worker?worker';
 import { ModelData, StyleNode, UserInputModel } from '@utils/types';
 
 import { WorkerPool } from './pool';
