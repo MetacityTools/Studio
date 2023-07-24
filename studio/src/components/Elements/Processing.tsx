@@ -37,7 +37,7 @@ export function ProcessingScreen() {
     return (
         <Transition
             show={processing}
-            className="absolute top-0 left-0 w-full h-full bg-white dark:bg-neutral-900 z-50 flex items-center justify-center"
+            className="absolute top-0 left-0 w-full h-full bg-white dark:bg-neutral-800 z-50 flex items-center justify-center"
             enter="transition-opacity duration-200"
             enterFrom="opacity-0"
             enterTo="opacity-100"
