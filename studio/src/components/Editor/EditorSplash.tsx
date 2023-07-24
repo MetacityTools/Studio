@@ -8,20 +8,17 @@ import {
 
 import { DialogOption, OverlayDialog } from '@elements/Dialog';
 
-import { useDarkmode } from '@shared/Context/hooks';
-
 import splash from '@assets/bubny.png';
 
 export function EditorSpash() {
     const [isOpen, setIsOpen] = React.useState(true);
-    const [darkmode] = useDarkmode();
 
     function closeModal() {
         setIsOpen(false);
     }
 
     return (
-        <OverlayDialog isOpen={isOpen} onClose={closeModal} darkmode={darkmode}>
+        <OverlayDialog isOpen={isOpen} onClose={closeModal}>
             <div
                 className="w-full h-64 bg-cover bg-center"
                 style={{

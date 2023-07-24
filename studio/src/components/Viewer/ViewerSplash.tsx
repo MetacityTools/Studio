@@ -20,10 +20,7 @@ export function ViewerSplash() {
                     backgroundImage: `url(${splash})`,
                 }}
             ></div>
-            <Dialog.Title
-                as="h1"
-                className="text-2xl font-medium leading-6 text-gray-900 mx-6 mt-6"
-            >
+            <Dialog.Title as="h1" className="text-2xl font-medium leading-6 mc-text mx-6 mt-6">
                 Metacity Studio Viewer
             </Dialog.Title>
             <div className="mx-6 mb-4">

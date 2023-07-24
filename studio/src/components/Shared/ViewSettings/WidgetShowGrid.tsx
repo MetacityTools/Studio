@@ -34,7 +34,7 @@ export function ShowGridWidget() {
             <WidgetLine className="px-4 mb-4">
                 <Input
                     type="checkbox"
-                    className="accent-neutral-500 transition-color mr-4"
+                    className="accent-neutral-500 mr-4"
                     checked={gridVisible}
                     onChange={() => toggle()}
                 />{' '}

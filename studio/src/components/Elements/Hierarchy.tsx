@@ -35,12 +35,7 @@ interface HierarchyChevronButtonProps extends HierarchyButtonBase {
 export function HierarchyChevronButton(props: HierarchyChevronButtonProps) {
     return (
         <HierarchyButton {...props}>
-            <FiChevronRight
-                className={clsx(
-                    'w-4 h-4 transition-transform',
-                    props.open && 'transform rotate-90'
-                )}
-            />
+            <FiChevronRight className={clsx('w-4 h-4', props.open && 'transform rotate-90')} />
         </HierarchyButton>
     );
 }

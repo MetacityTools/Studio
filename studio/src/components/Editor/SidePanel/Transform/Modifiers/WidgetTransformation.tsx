@@ -18,7 +18,7 @@ function CustomInput(props: React.InputHTMLAttributes<HTMLInputElement>) {
         <Input
             {...props}
             className={clsx(
-                'bg-opacity-50 bg-white focus:bg-amber-100 dark:bg-neutral-800 dark:focus:bg-amber-800 transition-colors',
+                'bg-opacity-50 bg-white focus:bg-amber-100 dark:bg-neutral-800 dark:focus:bg-amber-800',
                 className
             )}
         />

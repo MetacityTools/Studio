@@ -14,7 +14,7 @@ function dialogClassNames(props: {
         !props.secondary
             ? 'bg-blue-100 text-blue-900 hover:bg-blue-200 focus-visible:ring-blue-500 dark:bg-blue-900 dark:text-blue-100 dark:hover:bg-blue-800 dark:focus-visible:ring-blue-500'
             : 'bg-neutral-100 text-neutral-900 hover:bg-neutral-200 focus-visible:ring-neutral-500 dark:bg-neutral-700 dark:text-neutral-100 dark:hover:bg-neutral-600 dark:focus-visible:ring-neutral-500',
-        'w-full text-left rounded-md px-4 py-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 transition-colors',
+        'w-full text-left rounded-md px-4 py-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2',
         props.className
     );
 }
@@ -78,7 +78,6 @@ export function DialogButton(props: {
 export function OverlayDialog(props: {
     isOpen: boolean;
     onClose: () => void;
-    darkmode?: boolean;
     children: React.ReactNode;
 }) {
     const { isOpen, onClose } = props;
@@ -98,7 +97,7 @@ export function OverlayDialog(props: {
                     <div className="fixed inset-0 bg-black bg-opacity-25" />
                 </Transition.Child>
 
-                <div className={clsx('fixed inset-0 overflow-y-auto', props.darkmode && 'dark')}>
+                <div className="fixed inset-0 overflow-y-auto">
                     <div className="flex min-h-full items-center justify-center p-4 text-center">
                         <Transition.Child
                             as={React.Fragment}
@@ -109,7 +108,7 @@ export function OverlayDialog(props: {
                             leaveFrom="opacity-100 scale-100"
                             leaveTo="opacity-0 scale-95"
                         >
-                            <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl mc-background text-left align-middle shadow-xl transition-all">
+                            <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl mc-background text-left align-middle shadow-xl">
                                 {props.children}
                             </Dialog.Panel>
                         </Transition.Child>

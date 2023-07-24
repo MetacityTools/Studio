@@ -41,7 +41,7 @@ export function StyleSidePanel() {
                             </StretchContainer>
                         </ColumnContainer>
                     </Allotment.Pane>
-                    <Allotment.Pane preferredSize={400} minSize={20} className="border-t">
+                    <Allotment.Pane preferredSize={400} minSize={20} className="border-t mc-border">
                         <ColumnContainer>
                             <PanelTitle title="Style Outline" />
                             <StyleHierarchy onValuePick={handlePick} />

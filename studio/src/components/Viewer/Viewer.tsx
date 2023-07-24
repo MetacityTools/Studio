@@ -14,7 +14,7 @@ export function ModelViewer() {
     return (
         <SizeGuard minWidth={600} minHeight={400}>
             <Allotment separator={false}>
-                <Allotment.Pane className="border-r" preferredSize={400}>
+                <Allotment.Pane className="border-r mc-border mc-background" preferredSize={400}>
                     <SidePanel />
                 </Allotment.Pane>
                 <Allotment.Pane className="relative">

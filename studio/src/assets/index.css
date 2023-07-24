@@ -25,7 +25,7 @@ body,
     -webkit-text-size-adjust: 100%;
 }
 
-@layer base {
+@layer components {
     input[type='number']::-webkit-outer-spin-button,
     input[type='number']::-webkit-inner-spin-button,
     input[type='number'] {
@@ -34,24 +34,16 @@ body,
         -moz-appearance: textfield !important;
     }
 
+    .slider-thumb::-webkit-slider-thumb {
+        @apply h-3 w-3 cursor-pointer appearance-none rounded-full bg-neutral-500;
+    }
+
+    .slider-thumb::-moz-range-thumb {
+        @apply h-3 w-3 cursor-pointer appearance-none rounded-full border-0 bg-neutral-500;
+    }
+
     input[type='range'] {
-        @apply cursor-pointer appearance-none bg-transparent outline-none;
-    }
-
-    input[type='range']::-webkit-slider-runnable-track {
-        @apply rounded-full bg-neutral-300 dark:bg-neutral-700;
-    }
-
-    input[type='range']::-webkit-slider-thumb {
-        @apply h-4 w-4 appearance-none rounded-full bg-neutral-500 dark:bg-neutral-400;
-    }
-
-    input[type='range']::-moz-range-track {
-        @apply rounded-full bg-neutral-300 dark:bg-neutral-700;
-    }
-
-    input[type='range']::-ms-track {
-        @apply rounded-full bg-neutral-300 dark:bg-neutral-700;
+        @apply slider-thumb my-3 h-1.5 w-full cursor-pointer appearance-none rounded-lg bg-neutral-200 accent-neutral-500 dark:bg-neutral-700 dark:accent-neutral-400;
     }
 
     select {
@@ -96,12 +88,8 @@ body,
 }
 
 @layer components {
-    .transition {
-        @apply transition-colors;
-    }
-
     .active-border {
-        @apply border-amber-300 transition hover:border-amber-400 dark:border-amber-500 hover:dark:border-amber-400;
+        @apply border-amber-300 hover:border-amber-400 dark:border-amber-500 hover:dark:border-amber-400;
     }
 
     .active-text {
@@ -125,7 +113,7 @@ body,
     }
 
     .base-border-hover {
-        @apply transition hover:border-amber-400 dark:hover:border-amber-400;
+        @apply hover:border-amber-400 dark:hover:border-amber-400;
     }
 
     .base-text {
@@ -157,7 +145,7 @@ body,
     }
 
     .tab-button {
-        @apply flex flex-col items-center overflow-hidden overflow-ellipsis whitespace-nowrap border-l-4  p-4 text-center text-2xl outline-none transition-colors;
+        @apply flex flex-col items-center overflow-hidden overflow-ellipsis whitespace-nowrap border-l-4  p-4 text-center text-2xl outline-none;
     }
 
     .tab-list {

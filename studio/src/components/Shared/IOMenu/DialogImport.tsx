@@ -4,14 +4,11 @@ import { CoordinateMode } from '@utils/utils';
 
 import { DialogOption, OverlayDialog } from '@elements/Dialog';
 
-import { useDarkmode } from '@shared/Context/hooks';
-
 export function ImportDialog(props: { isOpen: boolean; onClose: (mode: CoordinateMode) => void }) {
     const { isOpen, onClose } = props;
-    const [darkmode] = useDarkmode();
 
     return (
-        <OverlayDialog isOpen={isOpen} onClose={() => {}} darkmode={darkmode}>
+        <OverlayDialog isOpen={isOpen} onClose={() => {}}>
             <Dialog.Title as="h1" className="text-2xl font-medium leading-6 mc-text mx-6 mt-6">
                 Transforming Coordinates
             </Dialog.Title>

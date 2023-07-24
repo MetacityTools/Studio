@@ -6,27 +6,13 @@ import { MouseLeft, MouseRight, MouseWheel } from '@elements/Icons';
 
 import { useGrayscale } from '@shared/Context/hooks';
 
-function HelpItem(props: {
-    children: React.ReactNode;
-    last?: boolean;
-    label: string;
-    action: string;
-}) {
-    return (
-        <div className={clsx('flex flex-col  pr-2', !props.last && ' border-r')}>
-            <div className="text-xs text-t">{props.label}</div>
-            <div className="text-xs">{props.action}</div>
-        </div>
-    );
-}
-
 export function Help() {
     const [show, setShow] = React.useState(false);
     const [grayscale] = useGrayscale();
 
     function HelpItem(props: { label: string; action: string; last?: boolean }) {
         return (
-            <div className={clsx('flex flex-col  pr-2', !props.last && 'border-r')}>
+            <div className={clsx('flex flex-col  pr-2', !props.last && 'border-inherit border-r')}>
                 <div className="text-xs opacity-75">{props.label}</div>
                 <div className="text-xs">{props.action}</div>
             </div>
@@ -49,7 +35,7 @@ export function Help() {
                 </div>
             )}
             {show && (
-                <div className="flex space-x-2 items-center">
+                <div className="flex space-x-2 items-center border-inherit">
                     <MouseLeft />
                     <HelpItem label="Drag" action="Pan" />
                     <MouseLeft />
