@@ -275,7 +275,7 @@ export class Camera {
         }
     }
 
-    private zoomOrthographic(factor: number, cursorPxX: number, cursorPxY: number) {
+    private zoomOrthographic(factor: number, cursorPerctX: number, cursorPerctY: number) {
         this.left = this.left * factor;
         this.right = this.right * factor;
         this.top = this.top * factor;
@@ -283,7 +283,7 @@ export class Camera {
         this.updateProjectionViewMatrix();
     }
 
-    private zoomPerspective(factor: number, cursorPxX: number, cursorPxY: number) {
+    private zoomPerspective(factor: number, cursorPerctX: number, cursorPerctY: number) {
         const offset = this.direction;
         vec3.sub(offset, this.position, this.target);
         vec3.scale(offset, offset, factor);

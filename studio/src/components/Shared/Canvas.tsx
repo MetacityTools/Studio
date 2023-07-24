@@ -64,13 +64,13 @@ export function Canvas(props: { canvasRef: React.RefObject<HTMLCanvasElement> })
         select(selectionObj, toggle, extend);
     }
 
-    function deselecteAll() {
-        select(new Map(), false, false);
-    }
-
     const handleWheel = (event: WheelEvent) => {
         event.preventDefault();
     };
+
+    const handlePointerMove = (event: PointerEvent) => {};
+
+    const handlePointerLeave = (event: PointerEvent) => {};
 
     React.useEffect(() => {
         const canvas = props.canvasRef.current;
@@ -92,12 +92,17 @@ export function Canvas(props: { canvasRef: React.RefObject<HTMLCanvasElement> })
             }}
             onPointerMove={(e) => {
                 renderer.controls?.pointerMove(e.nativeEvent);
+                handlePointerMove(e.nativeEvent);
             }}
             onPointerUp={(e) => {
                 let selection = renderer.controls?.pointerUp(e.nativeEvent);
                 const shift = renderer.controls?.keyboard.keyMap.shift ?? false;
                 if (selection) handlePick(selection, shift);
                 //else deselecteAll(); //TODO handle only if clicked, no drag and move
+            }}
+            onPointerLeave={(e) => {
+                renderer.controls?.pointerOut(e.nativeEvent);
+                handlePointerLeave(e.nativeEvent);
             }}
             onWheel={(e) => {
                 renderer.controls?.wheel(e.nativeEvent);

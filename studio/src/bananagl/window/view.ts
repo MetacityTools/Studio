@@ -39,6 +39,13 @@ export class View {
         return [x - this.x, y - this.y];
     }
 
+    toLocalPerct(x: number, y: number): vec2 {
+        return [
+            ((x - this.x) / this.width_) * window.devicePixelRatio,
+            ((y - this.y) / this.height_) * window.devicePixelRatio,
+        ];
+    }
+
     get width() {
         return this.width_;
     }

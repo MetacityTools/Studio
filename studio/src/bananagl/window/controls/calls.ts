@@ -15,7 +15,8 @@ export function pan(view: View, dx: number, dy: number) {
 }
 
 export function zoom(view: View, delta: number, x: number, y: number) {
-    view.camera.zoom(delta, x, y);
+    const [px, py] = view.toLocalPerct(x, y);
+    view.camera.zoom(delta, px, py);
 }
 
 export function trace(view: View, x: number, y: number) {

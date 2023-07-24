@@ -79,7 +79,7 @@ export function colorize(keychain: string[], styles: StyleNode, models: EditorMo
             const value = getValue(submodelData, keychain);
             if (value === undefined) continue;
             if (randomize) colormap.set(submodel, [Math.random(), Math.random(), Math.random()]);
-            else if (typeof value === 'number') {
+            else if (typeof value === 'number' && isFinite(value)) {
                 if (scalars && scalarMap && range) {
                     const indicator = (value - scalars.min) / range;
                     const color = sampleColor(scalarMap, indicator);

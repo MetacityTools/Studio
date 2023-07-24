@@ -64,6 +64,7 @@ These features are planned for the future, and scheduled for a specific release.
 
 ### v0.5.1
 
+-   [x] Dark mode
 -   [ ] Color in table view according to metadata amount
     -   [x] Colorize model
     -   [ ] Adjustable limit of metadata for coloring
@@ -73,7 +74,6 @@ These features are planned for the future, and scheduled for a specific release.
 -   [ ] Loading points and lines from SHP
 -   [ ] Export screenshot action
 -   [ ] Tooltip on hover over model and labels in 3D
--   [ ] Dark mode
 -   [ ] Lock camera position (two buttons - pan and rotation)
 
 ### v0.5.0 - Work in progress

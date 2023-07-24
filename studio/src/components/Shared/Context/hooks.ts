@@ -257,6 +257,7 @@ export function useApplyStyle(): [
         if (!keychain) return;
         ctx.setUsedStyle(keychain);
         ctx.setLastUsedStyle(keychain);
+        colorize(keychain, root, ctx.models);
     };
 
     const clearStyle = () => {
@@ -272,6 +273,8 @@ export function useLastStyle(): [string[] | null, () => void] {
 
     const applyLastStyle = () => {
         ctx.setUsedStyle(ctx.lastUsedStyle);
+        if (!ctx.lastUsedStyle) return;
+        colorize(ctx.lastUsedStyle, ctx.styles, ctx.models);
     };
 
     return [ctx.lastUsedStyle, applyLastStyle];

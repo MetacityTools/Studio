@@ -141,12 +141,12 @@ export function ViewContext(props: { children: React.ReactNode }) {
 
     React.useEffect(() => {
         if (usedStyle === null) {
-            //whiten(models); - todo you have to manually cleanup in the components
+            //whiten(models); - won't be implemented here, you have to manually style in the hooks
             models.forEach((object) => {
                 object.uniforms['uUseShading'] = 1;
             });
         } else {
-            colorize(usedStyle, styles, models);
+            //colorize(usedStyle, styles, models); - won't be implemented here, you have to manually style in the hooks
             models.forEach((object) => {
                 object.uniforms['uUseShading'] = 0.1;
             });

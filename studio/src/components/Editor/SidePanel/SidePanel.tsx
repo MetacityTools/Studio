@@ -1,11 +1,9 @@
-import { Tab } from '@headlessui/react';
 import 'allotment/dist/style.css';
 import { VscJson, VscMove, VscSymbolColor, VscTable, VscTools } from 'react-icons/vsc';
 
 import { ColumnContainer } from '@elements/Containers';
 import { TabButton, TabGroup, TabList, TabPanel, TabPanels } from '@elements/Tabs';
 
-import { useGrayscale } from '@shared/Context/hooks';
 import { IOMenu } from '@shared/IOMenu/IOMenu';
 import { ViewSidePanel } from '@shared/ViewSettings/ViewSidePanel';
 
