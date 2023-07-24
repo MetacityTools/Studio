@@ -3,7 +3,6 @@ import { IoClose } from 'react-icons/io5';
 
 import { useActiveSheet, useSheets, useTables } from '@editor/EditorContext';
 
-import { colorActive, colorBase } from '@elements/Colors';
 import { RowContainer } from '@elements/Containers';
 
 export function TablesSheetList() {
@@ -21,18 +20,15 @@ export function TablesSheetList() {
     if (tables.empty) return null;
 
     return (
-        <RowContainer className="overflow-y-auto border-t">
+        <RowContainer className="overflow-y-auto border-t mc-border">
             {tables.sheets.map((_, index) => (
                 <RowContainer
-                    className={clsx('border-r', activeSheet === index ? colorActive : colorBase)}
+                    className={clsx('border-r', activeSheet === index ? 'active' : 'base')}
                     key={index}
                 >
                     <button
                         key={index}
-                        className={clsx(
-                            'px-2 py-1',
-                            activeSheet === index ? colorActive : colorBase
-                        )}
+                        className={clsx('px-2 py-1', activeSheet === index ? 'active' : 'base')}
                         onClick={() => updateActiveSheet(index)}
                     >
                         Sheet {index}

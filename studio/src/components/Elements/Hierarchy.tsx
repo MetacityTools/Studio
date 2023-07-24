@@ -4,8 +4,6 @@ import { BsChevronRight } from 'react-icons/bs';
 import { FiChevronRight } from 'react-icons/fi';
 import { VscJson, VscSymbolColor } from 'react-icons/vsc';
 
-import { colorHierarchyPart } from './Colors';
-
 export type ButtonHandler = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 
 interface HierarchyButtonBase {
@@ -18,48 +16,48 @@ interface HierarchyButtonProps extends HierarchyButtonBase {
     disabled?: boolean;
 }
 
+export function HierarchyButton(props: HierarchyButtonProps & { children: React.ReactNode }) {
+    return (
+        <button
+            className="outline-none px-2 py-2 hierarchy-part"
+            onClick={props.onClick}
+            title={props.title}
+        >
+            {props.children}
+        </button>
+    );
+}
+
 interface HierarchyChevronButtonProps extends HierarchyButtonBase {
     open: boolean;
 }
 
 export function HierarchyChevronButton(props: HierarchyChevronButtonProps) {
     return (
-        <button
-            className={clsx('outline-none', 'px-2 py-2', colorHierarchyPart)}
-            onClick={props.onClick}
-            title={props.title}
-        >
+        <HierarchyButton {...props}>
             <FiChevronRight
                 className={clsx(
                     'w-4 h-4 transition-transform',
                     props.open && 'transform rotate-90'
                 )}
             />
-        </button>
+        </HierarchyButton>
     );
 }
 
 export function HierarchyBracketsButton(props: HierarchyButtonBase) {
     return (
-        <button
-            className={clsx('outline-none', 'px-2 py-2', colorHierarchyPart)}
-            onClick={props.onClick}
-            title={props.title}
-        >
+        <HierarchyButton {...props}>
             <VscJson className={clsx('w-4 h-4')} />
-        </button>
+        </HierarchyButton>
     );
 }
 
 export function HierarchyStyleButton(props: HierarchyButtonBase) {
     return (
-        <button
-            className={clsx('outline-none', 'px-2 py-2', colorHierarchyPart)}
-            onClick={props.onClick}
-            title={props.title}
-        >
+        <HierarchyButton {...props}>
             <VscSymbolColor className={clsx('w-4 h-4')} />
-        </button>
+        </HierarchyButton>
     );
 }
 
@@ -75,7 +73,7 @@ export function HierarchyMainButton(props: HierarchyMainButtonProps) {
                 props.padded ? 'px-4' : 'px-2',
                 'flex-1 text-left flex flex-row items-center',
                 'text-ellipsis overflow-hidden whitespace-nowrap',
-                colorHierarchyPart
+                'hierarchy-part'
             )}
             onClick={props.onClick}
         >
@@ -95,7 +93,7 @@ export function HierarchyNode(props: HierarchyNodeProps) {
     return (
         <div
             className={clsx(
-                'flex flex-row justify-between items-center hover:bg-neutral-100',
+                'flex flex-row justify-between items-center hover:bg-neutral-100 dark:hover:bg-neutral-700',
                 props.hoverable
             )}
             style={{

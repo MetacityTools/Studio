@@ -63,7 +63,7 @@ export function IOMenu(props: { export?: boolean }) {
     };
 
     return (
-        <div className="flex flex-row w-full space-x-2 border-b">
+        <div className="flex flex-row w-full space-x-2 border-b mc-border min-w-[25rem]">
             <ButtonFileInput
                 id="models"
                 onChange={onModelsSelected}

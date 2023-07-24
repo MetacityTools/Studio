@@ -1,7 +1,6 @@
 import clsx from 'clsx';
 import React from 'react';
 
-import { colorActive, colorActiveNoHover, colorBase, colorBaseNoHover } from './Colors';
 import { Input } from './Input';
 
 interface MenuButtonProps {
@@ -16,13 +15,7 @@ export function getMenuButtonStyle(active?: boolean, disabled?: boolean) {
     return clsx(
         'text-xs transition-colors outline-none focus:outline-none',
         'first:border-l last:border-r border-y last:rounded-r-md first:rounded-l-md',
-        active
-            ? disabled
-                ? colorActiveNoHover
-                : colorActive
-            : disabled
-            ? colorBaseNoHover
-            : colorBase
+        active ? (disabled ? 'active-no-hover' : 'active') : disabled ? 'base-no-hover' : 'base'
     );
 }
 
@@ -55,7 +48,9 @@ export function Button(props: {
         <button
             className={clsx(
                 'px-4 py-2 transition-colors overflow-hidden whitespace-nowrap overflow-ellipsis outline-none flex flex-row items-center disabled:opacity-50 disabled:cursor-default',
-                'hover:bg-gray-200 focus:bg-gray-200 active:bg-gray-300'
+                'mc-text',
+                'hover:bg-neutral-200 focus:bg-neutral-200 active:bg-neutral-300',
+                'dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 dark:active:bg-neutral-600'
             )}
             onClick={props.onClick}
             disabled={props.disabled}
@@ -83,7 +78,9 @@ export function ButtonFileInput(props: {
                         ? props.className
                         : clsx(
                               'px-4 py-2 transition-colors overflow-hidden whitespace-nowrap overflow-ellipsis outline-none flex flex-row items-center disabled:opacity-50 disabled:cursor-default',
-                              'hover:bg-gray-200 focus:bg-gray-200 active:bg-gray-300'
+                              'mc-text',
+                              'hover:bg-gray-200 focus:bg-gray-200 active:bg-gray-300',
+                              'dark:hover:bg-neutral-700 dark:focus:bg-neutral-700 dark:active:bg-neutral-600'
                           )
                 )}
             >

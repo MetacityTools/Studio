@@ -16,7 +16,7 @@ export function TransformSidePanel() {
                     <ModelList />
                 </ColumnContainer>
             </Allotment.Pane>
-            <Allotment.Pane minSize={20} preferredSize={400} className="border-t">
+            <Allotment.Pane minSize={20} preferredSize={400} className="border-t mc-border">
                 <ColumnContainer>
                     <PanelTitle title="Modifiers" />
                     <OverflowContainer>

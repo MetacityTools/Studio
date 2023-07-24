@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 
 import { useGrayscale } from './Context/hooks';
+import { DarkmodeControls } from './Controls/ControlsDarmode';
 import { DirectionControls } from './Controls/ControlsDirection';
 import { ProjectionControls } from './Controls/ControlsProjection';
 import { SelectionControls } from './Controls/ControlsSelect';
@@ -15,6 +16,7 @@ export function Controls() {
                 grayscale ? 'filter grayscale' : 'filter-none'
             )}
         >
+            <DarkmodeControls />
             <ProjectionControls />
             <DirectionControls />
             <ShaderControls />

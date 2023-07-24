@@ -5,12 +5,13 @@ import { addGridModel } from '@utils/utils';
 import * as GL from '@bananagl/bananagl';
 
 import { Canvas } from './Canvas';
-import { useRenderer, useScene } from './Context/hooks';
+import { useDarkmode, useRenderer, useScene } from './Context/hooks';
 
 export function CanvasComponent() {
     const canvasRef = React.useRef<HTMLCanvasElement>(null);
     const scene = useScene();
     const renderer = useRenderer();
+    const darkmode = useDarkmode();
 
     React.useEffect(() => {
         if (canvasRef.current && renderer) {
@@ -31,7 +32,8 @@ export function CanvasComponent() {
             ]);
 
             addGridModel(scene);
-            renderer.clearColor = [1, 1, 1, 1];
+            if (darkmode) renderer.clearColor = [0.1, 0.1, 0.1, 1];
+            else renderer.clearColor = [1, 1, 1, 1];
 
             const down = (e: KeyboardEvent) => {
                 renderer.window.controls.keydown(e);

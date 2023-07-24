@@ -17,7 +17,10 @@ function CustomInput(props: React.InputHTMLAttributes<HTMLInputElement>) {
     return (
         <Input
             {...props}
-            className={clsx('bg-white bg-opacity-50 focus:bg-amber-100', className)}
+            className={clsx(
+                'bg-opacity-50 bg-white focus:bg-amber-100 dark:bg-neutral-800 dark:focus:bg-amber-800 transition-colors',
+                className
+            )}
         />
     );
 }
@@ -30,7 +33,7 @@ function VectorComponentInput(props: {
     const { label, value, onChange } = props;
 
     return (
-        <td className="bg-white">
+        <td className="bg-white p-0">
             <CustomInput
                 type="number"
                 className="p-2 bg-transparent border-0 text-right focus:outline-none w-full"

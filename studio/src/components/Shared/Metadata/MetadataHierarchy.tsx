@@ -46,7 +46,7 @@ export function MetadataHierarchy(props: MetadataHierarchyProps) {
             <ColumnContainer>
                 <Input
                     placeholder="Search..."
-                    className="px-2 bg-neutral-100 w-full"
+                    className="px-2 bg-neutral-100 dark:bg-neutral-700 w-full"
                     onChange={handleSearchChange}
                 />
                 <StretchContainer>

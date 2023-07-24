@@ -282,6 +282,11 @@ export function useGrayscale(): [boolean, React.Dispatch<React.SetStateAction<bo
     return [ctx.grayscale, ctx.setGrayscale];
 }
 
+export function useDarkmode(): [boolean, React.Dispatch<React.SetStateAction<boolean>>] {
+    const ctx = React.useContext(context);
+    return [ctx.darkmode, ctx.setDarkmode];
+}
+
 export function useStyleInfo(): [Histogram | undefined, StyleNode | undefined] {
     const ctx = React.useContext(context);
 

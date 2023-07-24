@@ -67,6 +67,7 @@ These features are planned for the future, and scheduled for a specific release.
 -   [ ] Color in table view according to metadata amount
     -   [x] Colorize model
     -   [ ] Adjustable limit of metadata for coloring
+    -   [x] Heatmap legend
 -   [ ] Feedback - show notifications on the bottom of the screen
 -   [ ] Projecting models onto models (2D onto 3D) - ✨WIP https://github.com/vojtatom/geometry
 -   [ ] Loading points and lines from SHP

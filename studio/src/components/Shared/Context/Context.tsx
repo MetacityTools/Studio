@@ -38,6 +38,8 @@ interface ViewContextProps {
     setLastUsedStyle: React.Dispatch<React.SetStateAction<string[] | null>>;
     grayscale: boolean;
     setGrayscale: React.Dispatch<React.SetStateAction<boolean>>;
+    darkmode: boolean;
+    setDarkmode: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const context = React.createContext<ViewContextProps>({} as ViewContextProps);
@@ -57,6 +59,7 @@ export function ViewContext(props: { children: React.ReactNode }) {
     const [lastUsedStyle, setLastUsedStyle] = React.useState<string[] | null>(null);
     const [usedStyle, setUsedStyle] = React.useState<string[] | null>(null);
     const [grayscale, setGrayscale] = React.useState<boolean>(false);
+    const [darkmode, setDarkmode] = React.useState<boolean>(true);
 
     const activeView = 0;
 
@@ -150,6 +153,16 @@ export function ViewContext(props: { children: React.ReactNode }) {
         }
     }, [usedStyle, styles, models]);
 
+    React.useEffect(() => {
+        if (darkmode) {
+            renderer.clearColor = [0.1, 0.1, 0.1, 1];
+            document.documentElement.style.setProperty('color-scheme', 'dark');
+        } else {
+            renderer.clearColor = [1, 1, 1, 1];
+            document.documentElement.style.setProperty('color-scheme', 'light');
+        }
+    }, [darkmode, renderer]);
+
     return (
         <context.Provider
             value={{
@@ -179,6 +192,8 @@ export function ViewContext(props: { children: React.ReactNode }) {
                 setLastUsedStyle,
                 grayscale,
                 setGrayscale,
+                darkmode,
+                setDarkmode,
             }}
         >
             {props.children}
