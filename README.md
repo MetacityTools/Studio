@@ -62,21 +62,22 @@ These features are planned for the future, but not yet scheduled.
 
 These features are planned for the future, and scheduled for a specific release.
 
-### v0.5.1
+### v0.5.1 - Work in progress
 
 -   [x] Dark mode
 -   [ ] Color in table view according to metadata amount
     -   [x] Colorize model
     -   [ ] Adjustable limit of metadata for coloring
     -   [x] Heatmap legend
+-   [x] Updated file extension (replacing .metacity with .mcmodel and .json.metactiy with .mcstyle), still supports the old extensions tho
+-   [ ] Tooltip on hover over model and labels in 3D
 -   [ ] Feedback - show notifications on the bottom of the screen
 -   [ ] Projecting models onto models (2D onto 3D) - ✨WIP https://github.com/vojtatom/geometry
 -   [ ] Loading points and lines from SHP
 -   [ ] Export screenshot action
--   [ ] Tooltip on hover over model and labels in 3D
 -   [ ] Lock camera position (two buttons - pan and rotation)
 
-### v0.5.0 - Work in progress
+### v0.5.0 - ✅ Released
 
 ⚠️ Breaking changes, old `.metacity` files will not be compatible.
 🧠 Call for consultation (TB planned, end of July 2023)

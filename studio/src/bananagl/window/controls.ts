@@ -48,6 +48,11 @@ export class WindowControls {
         event.preventDefault();
     }
 
+    lostFocus() {
+        this.mouse.lostFocus();
+        this.keyboard.lostFocus();
+    }
+
     wheel(event: WheelEvent) {
         const localView = this.window.getViewAndPosition(event);
         if (!localView) return;

@@ -115,4 +115,11 @@ export class MouseControls {
         this.keyMap = undefined;
         this.view = undefined;
     }
+
+    lostFocus() {
+        if (this.view) this.range?.dispose(this.view);
+        this.pressed.fill(false);
+        this.keyMap = undefined;
+        this.view = undefined;
+    }
 }
