@@ -15,7 +15,7 @@ import { Histogram, MetadataNode, PrimitiveType, StyleNode } from '@utils/types'
 
 import * as GL from '@bananagl/bananagl';
 
-import { SelectFunction, context } from './Context';
+import { SelectFunction, Tooltip, context } from './Context';
 import { extractMetadata, filterSubmodels, findKeychain, getHistogram } from './metadata';
 import { SelectionType, changeSelection } from './selection';
 import { colorize, findStyleKeychain, getStyle, getValue, whiten } from './style';
@@ -54,6 +54,14 @@ export function useSelection(): [SelectFunction, SelectionType] {
 export function useSelectedModels(): SelectionType {
     const ctx = React.useContext(context);
     return ctx.selection;
+}
+
+export function useTooltip(): [
+    Tooltip | null,
+    React.Dispatch<React.SetStateAction<Tooltip | null>>
+] {
+    const ctx = React.useContext(context);
+    return [ctx.tooltip, ctx.setTooltip];
 }
 
 export function useCameraZ(): [number, React.Dispatch<React.SetStateAction<number>>] {
@@ -240,9 +248,17 @@ export function useKeymap() {
     return ctx.renderer.controls?.keyboard.keyMap;
 }
 
-export function useStyle(): [StyleNode, React.Dispatch<React.SetStateAction<StyleNode>>] {
+export function useStyle(): [StyleNode, (style: StyleNode) => void] {
     const ctx = React.useContext(context);
-    return [ctx.styles, ctx.setStyles];
+
+    const setStyle = (style: StyleNode) => {
+        ctx.setStyles(style);
+        const usedStyle = ctx.usedStyle;
+        if (!usedStyle) return;
+        colorize(usedStyle, style, ctx.models);
+    };
+
+    return [ctx.styles, setStyle];
 }
 
 export function useApplyStyle(): [

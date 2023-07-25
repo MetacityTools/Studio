@@ -104,6 +104,15 @@ export class MouseControls {
         return hit;
     }
 
+    hover(event: IMouseEvent, disableTrace: boolean) {
+        const { x, y, view } = event;
+        let hit = null;
+        if (!disableTrace) {
+            hit = trace(view, x, y);
+        }
+        return hit;
+    }
+
     wheel(event: IWheelEvent) {
         zoom(event.view, event.delta, event.x, event.y);
     }

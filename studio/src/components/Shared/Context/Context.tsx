@@ -10,6 +10,7 @@ import { SelectionType } from './selection';
 import { colorize, whiten } from './style';
 
 export type SelectFunction = (selection: SelectionType, toggle?: boolean, extend?: boolean) => void;
+export type Tooltip = { data: any; x: number; y: number } | null;
 
 interface ViewContextProps {
     scene: GL.Scene;
@@ -18,6 +19,8 @@ interface ViewContextProps {
     models: EditorModel[];
     selection: SelectionType;
     setSelection: React.Dispatch<React.SetStateAction<SelectionType>>;
+    tooltip: Tooltip | null;
+    setTooltip: React.Dispatch<React.SetStateAction<Tooltip | null>>;
     camTargetZ: number;
     setCamTargetZ: React.Dispatch<React.SetStateAction<number>>;
     minShade: number;
@@ -49,6 +52,7 @@ export function ViewContext(props: { children: React.ReactNode }) {
     const [scene] = React.useState(new GL.Scene());
     const [models, setModels] = React.useState<EditorModel[]>([]);
     const [selection, setSelection] = React.useState<SelectionType>(new Map());
+    const [tooltip, setTooltip] = React.useState<Tooltip | null>(null);
     const [camTargetZ, setCamTargetZ] = React.useState<number>(0);
     const [minShade, setMinShade] = React.useState<number>(0);
     const [maxShade, setMaxShade] = React.useState<number>(10);
@@ -174,6 +178,8 @@ export function ViewContext(props: { children: React.ReactNode }) {
                 models,
                 selection,
                 setSelection,
+                tooltip,
+                setTooltip,
                 camTargetZ,
                 setCamTargetZ,
                 minShade,

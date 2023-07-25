@@ -2,6 +2,8 @@ import { mat4, quat, vec3 } from 'gl-matrix';
 
 import { GLTFMesh, GLTFNode, GLTFParsedData } from '@utils/types';
 
+import { swapFromYupToZup } from './transform';
+
 export function unindexGeometry(gltf: GLTFParsedData) {
     const vertexCount = countVertices(gltf);
 
@@ -41,6 +43,7 @@ export function unindexGeometry(gltf: GLTFParsedData) {
         submodelCounter++;
     }
 
+    swapFromYupToZup(position);
     return { position, submodel, metadata };
 }
 
@@ -79,6 +82,7 @@ function processPrimitives(
             }
         }
     }
+
     return { positionIdx, submodelIdx };
 }
 
@@ -112,6 +116,8 @@ function getTransformation(node: GLTFNode, mat: mat4, nodes: GLTFNode[]) {
     }
 }
 
+//As per documentaiton, each child has to have only one parent (see https://registry.khronos.org/glTF/specs/2.0/glTF-2.0.html#nodes-and-hierarchy)
+//Docs: "The node hierarchy MUST be a set of disjoint strict trees. That is node hierarchy MUST NOT contain cycles and each node MUST have zero or one parent node."
 function applyParentTransform(mat: mat4, nodes: GLTFNode[], node: GLTFNode) {
     for (let i = 0; i < nodes.length; i++) {
         const parent = nodes[i];

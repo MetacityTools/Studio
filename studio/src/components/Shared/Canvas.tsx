@@ -19,10 +19,19 @@ type SelectionSingleType = {
 
 type SelectionOutput = SelectionArrayType | SelectionSingleType;
 
-function primitiveIndicesToSubmodelIndices(selection: SelectionArrayType) {
+function primitiveIndicesToSubmodelIndices(selection: SelectionOutput) {
     const selectedMap: SelectionType = new Map();
 
-    for (const { object, primitiveIndices } of selection) {
+    const arrayedSelection = Array.isArray(selection)
+        ? selection
+        : [
+              {
+                  object: selection.object,
+                  primitiveIndices: [selection.primitiveIndices],
+              },
+          ];
+
+    for (const { object, primitiveIndices } of arrayedSelection) {
         const submodel = object.attributes.getAttribute('submodel') as GL.Attribute;
         const submodelIds = submodel.buffer.getView(Uint32Array);
         const submodelIDs = new Set<number>();
@@ -44,23 +53,21 @@ function selectionFlags(multiselect: boolean, shiftKey: boolean) {
     return { toggle, extend };
 }
 
-export function Canvas(props: { canvasRef: React.RefObject<HTMLCanvasElement> }) {
+interface CanvasProps {
+    canvasRef: React.RefObject<HTMLCanvasElement>;
+    onTooltip?: (meta: any, x: number, y: number) => void;
+    onHideTooltip?: () => void;
+}
+
+export function Canvas(props: CanvasProps) {
     const renderer = useRenderer();
     const [select] = useSelection();
+    const timerRef = React.useRef<NodeJS.Timeout>();
 
     function handlePick(selection: SelectionOutput, shiftKey: boolean) {
         const multiselect = Array.isArray(selection);
-        const arrayedSelection = Array.isArray(selection)
-            ? selection
-            : [
-                  {
-                      object: selection.object,
-                      primitiveIndices: [selection.primitiveIndices],
-                  },
-              ];
-        const selectionObj = primitiveIndicesToSubmodelIndices(arrayedSelection);
+        const selectionObj = primitiveIndicesToSubmodelIndices(selection);
         let { toggle, extend } = selectionFlags(multiselect, shiftKey);
-        console.log(selectionObj, toggle, extend);
         select(selectionObj, toggle, extend);
     }
 
@@ -68,9 +75,27 @@ export function Canvas(props: { canvasRef: React.RefObject<HTMLCanvasElement> })
         event.preventDefault();
     };
 
-    const handlePointerMove = (event: PointerEvent) => {};
+    const handlePointerMove = (event: PointerEvent) => {
+        if (!props.onTooltip || !props.onHideTooltip) return;
+        if (timerRef.current) clearTimeout(timerRef.current);
+        props.onHideTooltip!();
 
-    const handlePointerLeave = (event: PointerEvent) => {};
+        timerRef.current = setTimeout(() => {
+            const selection = renderer.controls?.pointerHover(event);
+            if (!selection) return;
+            const selectionObj = primitiveIndicesToSubmodelIndices(selection);
+            const model = selectionObj.keys().next().value;
+            const submodel = selectionObj.get(model)?.values().next().value;
+            const metadata = model.metadata[submodel];
+
+            if (!metadata) return;
+            props.onTooltip!(metadata, event.offsetX, event.offsetY);
+        }, 100);
+    };
+
+    const handlePointerLeave = (event: PointerEvent) => {
+        if (timerRef.current) clearTimeout(timerRef.current);
+    };
 
     React.useEffect(() => {
         const canvas = props.canvasRef.current;

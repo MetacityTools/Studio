@@ -6,6 +6,7 @@ import { SizeGuard } from '@elements/SizeGuard';
 
 import { CanvasComponent } from '@shared/CanvasComponent';
 import { Controls } from '@shared/Controls';
+import { TooltipOverlay } from '@shared/Tooltip';
 
 import { Help } from './Canvas/Help';
 import { EditorSpash } from './EditorSplash';
@@ -27,6 +28,7 @@ export function ModelEditor() {
                         <CanvasComponent />
                         <Help />
                         <Controls />
+                        <TooltipOverlay />
                     </Allotment.Pane>
                 </Allotment>
                 <ProcessingScreen />

@@ -11,6 +11,7 @@ export class WindowControls {
     public view?: View;
     readonly mouse = new MouseControls();
     readonly keyboard = new KeyboardControls();
+    //deactivate shortcuts
     private deactSh: boolean = false;
 
     constructor(private window: Window) {}
@@ -41,6 +42,16 @@ export class WindowControls {
 
         this.deactSh = false;
         return this.mouse.up(this.getEvent(localView, event), this.deactSh);
+    }
+
+    pointerHover(event: PointerEvent) {
+        const localView = this.window.getViewAndPosition(event);
+        if (!localView) return;
+        if (!this.view) return;
+        event.preventDefault();
+
+        this.deactSh = false;
+        return this.mouse.hover(this.getEvent(localView, event), this.deactSh);
     }
 
     pointerOut(event: MouseEvent) {

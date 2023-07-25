@@ -63,8 +63,12 @@ These features are planned for the future, and scheduled for a specific release.
 
 ### v0.5.1 - Work in progress
 
+GLTF loader now assumes Y+ as up axis (as in Blender) and converts the models to Z+ up axis. This is not a breaking change, but it is necessary to make the models compatible with the rest of the world.
+
 -   [x] Dark mode
 -   [x] Update import menu to allow importing multiple files at once, only separate models, tables, or reference planes
+-   [x] FIX: glTF glitch composing transforms with parents insice scene graph
+-   [x] FIX: coloring models when style changes - display live changes on save
 -   [ ] Color in table view according to metadata amount
     -   [x] Colorize model
     -   [ ] Adjustable limit of metadata for coloring
