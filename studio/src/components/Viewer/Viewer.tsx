@@ -6,6 +6,7 @@ import { SizeGuard } from '@elements/SizeGuard';
 
 import { CanvasComponent } from '@shared/CanvasComponent';
 import { Controls } from '@shared/Controls';
+import { TooltipOverlay } from '@shared/Tooltip';
 
 import { SidePanel } from './SidePanel';
 import { ViewerSplash } from './ViewerSplash';
@@ -20,6 +21,7 @@ export function ModelViewer() {
                 <Allotment.Pane className="relative">
                     <CanvasComponent />
                     <Controls />
+                    <TooltipOverlay />
                 </Allotment.Pane>
             </Allotment>
             <ProcessingScreen />
