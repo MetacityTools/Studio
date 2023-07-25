@@ -49,7 +49,10 @@ async function prepareMetacity(files: FileList): Promise<UserInputModel[]> {
     const data = [];
     for (let i = 0; i < files.length; i++) {
         const file = files[i];
-        if (file.name.endsWith('metacity') && !file.name.endsWith('json.metacity')) {
+        if (
+            (file.name.endsWith('metacity') && !file.name.endsWith('json.metacity')) ||
+            file.name.endsWith('mcmodel')
+        ) {
             const buffer = await file.arrayBuffer();
             data.push({
                 name: file.name,
@@ -112,7 +115,7 @@ async function prepareStyleJSON(files: FileList): Promise<StyleNode[]> {
     const data = [];
     for (let i = 0; i < files.length; i++) {
         const file = files[i];
-        if (file.name.endsWith('.json.metacity')) {
+        if (file.name.endsWith('.json.metacity') || file.name.endsWith('mcstyle')) {
             const content = await file.text();
             try {
                 data.push(JSON.parse(content));
@@ -173,7 +176,7 @@ export async function loadModels(
             jobs.push(loadWorker(model, IFCWorker, updateStatus));
         } else if (model.name.endsWith('shp')) {
             jobs.push(loadWorker(model, ShapefileWorker, updateStatus));
-        } else if (model.name.endsWith('metacity')) {
+        } else if (model.name.endsWith('metacity') || model.name.endsWith('mcmodel')) {
             jobs.push(loadWorker(model, MetacityWorker, updateStatus));
         }
     }
