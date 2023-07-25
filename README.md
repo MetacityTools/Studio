@@ -22,6 +22,8 @@ Currently:
 -   GLTF (triangles only)
 -   Metacity File Format (binary Studio export)
 
+---
+
 ## Roadmap
 
 The project is in active development. The roadmap is as follows:
@@ -35,28 +37,25 @@ These features are planned for the future, but not yet scheduled.
 ### Priority Backlog
 
 -   [ ] Reverse coloring of models in table view - add a button to each row to select models that have the data from the row
+-   [ ] Connect to on-line storage and model admin (open models from the web at a given URL)
 -   [ ] Alternative table editor to metadata editor
--   [ ] Links in metadata - recognise
+-   [ ] Links in metadata - recogniseRE
 -   [ ] Do not allow keys to be empty in table view during conversion
--   [ ] Insert textured plane (location blueprints for reference, will not be included in export)
 
 ### Backlog
 
--   [ ] Update import menu to allow importing multiple files at once, only separate models, tables, or reference planes
+-   [ ] Insert textured plane (location blueprints for reference, will not be included in export)
 -   [ ] Buggy alt/ctrl for rotation
 -   [ ] Buggy move functionality - on click triggers selection and move
 -   [ ] Shortcuts for tab switching in editor
 -   [ ] Loading GeoJSON
 -   [ ] Loading IFC metadata (memory-efficiency???)
 -   [ ] Frustum culling
--   [ ] Connect to on-line storage and model admin
 -   [ ] Extract Utils to separate SDK form metacity editors
 -   [ ] Optional interactivity - build BVH only if user opts-in to make the loaded models clickable
 -   [ ] Optimize deleting models - partition model BVH nodes based on submodels's ids
 -   [ ] Refactor General context - setting status messages, etc.
 -   [ ] Add a button to open/hide the side panel
-
----
 
 ## Planned Releases
 
@@ -65,6 +64,7 @@ These features are planned for the future, and scheduled for a specific release.
 ### v0.5.1 - Work in progress
 
 -   [x] Dark mode
+-   [x] Update import menu to allow importing multiple files at once, only separate models, tables, or reference planes
 -   [ ] Color in table view according to metadata amount
     -   [x] Colorize model
     -   [ ] Adjustable limit of metadata for coloring

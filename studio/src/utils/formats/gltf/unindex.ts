@@ -17,7 +17,8 @@ export function unindexGeometry(gltf: GLTFParsedData) {
         const node = gltf.nodes[i];
         const mesh = node.mesh;
 
-        getTransformation(node, mat);
+        mat4.identity(mat);
+        getTransformation(node, mat, gltf.nodes);
 
         metadata[submodelCounter] = {
             name: node.name,
@@ -100,13 +101,23 @@ function countVertices(gltf: GLTFParsedData) {
         .reduce((a, b) => a + b, 0);
 }
 
-function getTransformation(node: GLTFNode, mat: mat4) {
-    if (node.matrix) return mat4.copy(mat, node.matrix as mat4);
+function getTransformation(node: GLTFNode, mat: mat4, nodes: GLTFNode[]) {
+    applyParentTransform(mat, nodes, node);
+
+    if (node.matrix) mat4.multiply(mat, mat, node.matrix as mat4);
     else {
-        mat4.identity(mat);
         if (node.translation) mat4.translate(mat, mat, node.translation);
         if (node.rotation) mat4.multiply(mat, mat, mat4.fromQuat(mat4.create(), node.rotation));
         if (node.scale) mat4.scale(mat, mat, node.scale);
-        return mat;
+    }
+}
+
+function applyParentTransform(mat: mat4, nodes: GLTFNode[], node: GLTFNode) {
+    for (let i = 0; i < nodes.length; i++) {
+        const parent = nodes[i];
+        if (parent.children && parent.children.includes(node)) {
+            getTransformation(parent, mat, nodes);
+            break;
+        }
     }
 }

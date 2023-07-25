@@ -281,6 +281,9 @@ export class Camera {
     }
 
     displacement = vec3.create();
+    aPosTMP = vec3.create();
+    bPosTMP = vec3.create();
+
     private zoomOrthographic(factor: number, cursorPerctX: number, cursorPerctY: number) {
         const dir = this.direction;
         const right = this.rightV;
@@ -295,7 +298,8 @@ export class Camera {
         const cursorWorldOffsetX = width * cursorPerctX - width * 0.5; // Offset from center of view.
         const cursorWorldOffsetY = height * cursorPerctY - height * 0.5; // Offset from center of view.
 
-        const nearPos = vec3.fromValues(
+        const nearPos = vec3.set(
+            this.aPosTMP,
             pos[0] + cursorWorldOffsetX * right[0] + cursorWorldOffsetY * up[0],
             pos[1] + cursorWorldOffsetX * right[1] + cursorWorldOffsetY * up[1],
             pos[2] + cursorWorldOffsetX * right[2] + cursorWorldOffsetY * up[2]
@@ -316,7 +320,8 @@ export class Camera {
         const newCursorWorldOffsetX = newWidth * cursorPerctX - newWidth * 0.5;
         const newCursorWorldOffsetY = newHeight * cursorPerctY - newHeight * 0.5;
 
-        const newNearPos = vec3.fromValues(
+        const newNearPos = vec3.set(
+            this.bPosTMP,
             pos[0] + newCursorWorldOffsetX * right[0] + newCursorWorldOffsetY * up[0],
             pos[1] + newCursorWorldOffsetX * right[1] + newCursorWorldOffsetY * up[1],
             pos[2] + newCursorWorldOffsetX * right[2] + newCursorWorldOffsetY * up[2]
@@ -346,7 +351,8 @@ export class Camera {
         let cursorTargetPlaneOffsetX = targetPlaneW * cursorPerctX - targetPlaneW * 0.5;
         let cursorTargetPlaneOffsetY = targetPlaneH * cursorPerctY - targetPlaneH * 0.5;
 
-        const tarPos = vec3.fromValues(
+        const tarPos = vec3.set(
+            this.aPosTMP,
             tar[0] + cursorTargetPlaneOffsetX * right[0] + cursorTargetPlaneOffsetY * up[0],
             tar[1] + cursorTargetPlaneOffsetX * right[1] + cursorTargetPlaneOffsetY * up[1],
             tar[2] + cursorTargetPlaneOffsetX * right[2] + cursorTargetPlaneOffsetY * up[2]
@@ -363,7 +369,8 @@ export class Camera {
         cursorTargetPlaneOffsetX = targetPlaneW * cursorPerctX - targetPlaneW * 0.5;
         cursorTargetPlaneOffsetY = targetPlaneH * cursorPerctY - targetPlaneH * 0.5;
 
-        const newTarPos = vec3.fromValues(
+        const newTarPos = vec3.set(
+            this.bPosTMP,
             tar[0] + cursorTargetPlaneOffsetX * right[0] + cursorTargetPlaneOffsetY * up[0],
             tar[1] + cursorTargetPlaneOffsetX * right[1] + cursorTargetPlaneOffsetY * up[1],
             tar[2] + cursorTargetPlaneOffsetX * right[2] + cursorTargetPlaneOffsetY * up[2]
