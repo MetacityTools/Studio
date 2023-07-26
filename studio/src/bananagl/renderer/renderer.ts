@@ -89,6 +89,9 @@ export class Renderer {
         this.running = true;
         this.render();
 
+        this.afterRenderCallbacks.forEach((callback) => callback());
+        this.afterRenderCallbacks = [];
+
         const now = performance.now();
         const frameTime = now - this.lastFrameTime;
         this.lastFrameTime = now;
@@ -96,5 +99,11 @@ export class Renderer {
         this.frameTimeIndex = (this.frameTimeIndex + 1) % this.frameTimeLog.length;
 
         requestAnimationFrame(() => this.animationLoop());
+    }
+
+    private afterRenderCallbacks: (() => void)[] = [];
+
+    set afterRenderOnce(callback: () => void) {
+        this.afterRenderCallbacks.push(callback);
     }
 }

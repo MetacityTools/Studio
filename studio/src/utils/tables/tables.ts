@@ -1,4 +1,4 @@
-import { parse } from '@vojtatom/csvts';
+import { parse } from 'tablests';
 
 type rowType = 'key' | 'value';
 

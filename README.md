@@ -28,7 +28,16 @@ Currently:
 
 These features are planned for the future, and scheduled for a specific release.
 
-### v0.5.1 - Work in progress
+### v0.5.2 - Work in progress
+
+-   [x] Export screenshot action
+-   [x] Refactored Global context and processing status - https://github.com/MetacityTools/Studio/issues/33
+-   [ ] Projecting models onto models (2D onto 3D) - ✨WIP https://github.com/MetacityTools/geometry
+-   [ ] Feedback - show notifications on the bottom of the screen
+-   [ ] Loading points and lines from SHP
+-   [ ] Lock camera position (two buttons - pan and rotation)
+
+### v0.5.1 - ✅ Released
 
 GLTF loader now assumes Y+ as up axis (as in Blender) and converts the models to Z+ up axis. This is not a breaking change, but it is necessary to make the models compatible with the rest of the world.
 
@@ -45,11 +54,6 @@ GLTF loader now assumes Y+ as up axis (as in Blender) and converts the models to
 -   [x] FIX: Firefox handling mouse events for hover
 -   [x] Refactor processing status - https://github.com/MetacityTools/Studio/issues/33
 -   [x] Loading models based on param - base for https://github.com/MetacityTools/Studio/issues/22
--   [ ] Feedback - show notifications on the bottom of the screen
--   [ ] Projecting models onto models (2D onto 3D) - ✨WIP https://github.com/vojtatom/geometry
--   [ ] Loading points and lines from SHP
--   [ ] Export screenshot action
--   [ ] Lock camera position (two buttons - pan and rotation)
 
 ### v0.5.0 - ✅ Released
 

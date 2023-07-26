@@ -13,7 +13,6 @@
         "@loaders.gl/core": "^3.3.3",
         "@loaders.gl/gltf": "^3.3.3",
         "@monaco-editor/react": "^4.5.1",
-        "@vojtatom/csvts": "^0.1.0",
         "allotment": "^1.18.1",
         "clsx": "^1.2.1",
         "colormap": "^2.3.2",
@@ -26,6 +25,7 @@
         "react-router-dom": "^6.9.0",
         "react18-json-view": "^0.0.8",
         "shpts": "^1.0.4",
+        "tablests": "^1.0.1",
         "uuid": "^9.0.0",
         "web-ifc": "0.0.39",
         "web-ifc-three": "0.0.123"

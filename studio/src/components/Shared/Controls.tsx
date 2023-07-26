@@ -1,9 +1,10 @@
 import clsx from 'clsx';
 
 import { useGrayscale } from './Context/hooks';
-import { DarkmodeControls } from './Controls/ControlsDarmode';
+import { DarkmodeControls } from './Controls/ControlsDarkmode';
 import { DirectionControls } from './Controls/ControlsDirection';
 import { ProjectionControls } from './Controls/ControlsProjection';
+import { ScreenshotControls } from './Controls/ControlsScreenshot';
 import { SelectionControls } from './Controls/ControlsSelect';
 import { ShaderControls } from './Controls/ControlsShader';
 
@@ -21,6 +22,7 @@ export function Controls() {
                 <DirectionControls />
                 <ShaderControls />
                 <SelectionControls />
+                <ScreenshotControls />
             </div>
             <div
                 className={clsx(

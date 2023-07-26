@@ -133,4 +133,8 @@ export class Window {
         }
         return undefined;
     }
+
+    get rawCanvas() {
+        return this.canvas;
+    }
 }
