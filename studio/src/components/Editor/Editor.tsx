@@ -6,6 +6,7 @@ import { SizeGuard } from '@elements/SizeGuard';
 
 import { CanvasComponent } from '@shared/CanvasComponent';
 import { Controls } from '@shared/Controls';
+import { ModelAutoLoader } from '@shared/ModelAutoLoader';
 import { TooltipOverlay } from '@shared/Tooltip';
 
 import { Help } from './Canvas/Help';
@@ -32,8 +33,10 @@ export function ModelEditor() {
                     </Allotment.Pane>
                 </Allotment>
                 <ProcessingScreen />
-                <EditorSpash />
+                <ModelAutoLoader />
             </div>
         </SizeGuard>
     );
 }
+
+//<EditorSpash />

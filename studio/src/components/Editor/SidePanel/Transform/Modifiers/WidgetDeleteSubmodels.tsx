@@ -1,5 +1,4 @@
 import { FiDelete } from 'react-icons/fi';
-import { TbLayersSubtract } from 'react-icons/tb';
 
 import { useProcessing } from '@elements/Context';
 import { Widget, WidgetDescription, WidgetLine, WidgetTitle } from '@elements/Widgets';
@@ -16,7 +15,7 @@ export function DeleteSubmodelsWidget(props: WidgetProps) {
     const apply = async () => {
         const selectedSubmodels = selection.get(props.model);
         if (!selectedSubmodels) return; //TODO handle with a popup
-        setProcessing(true);
+        setProcessing(true, 'Deleting submodels...');
         await removeSubmodels(props.model, selectedSubmodels);
         setProcessing(false);
     };

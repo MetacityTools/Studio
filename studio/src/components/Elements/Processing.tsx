@@ -16,7 +16,7 @@ const messages = [
 const chickens = [chicken1, chicken3];
 
 export function ProcessingScreen() {
-    const [loadingStatus] = useLoadingStatus();
+    const loadingStatus = useLoadingStatus();
     const [processing] = useProcessing();
     const [message, setMessage] = React.useState(messages[0]);
     const [chicken, setChicken] = React.useState(chickens[0]);

@@ -17,6 +17,18 @@ export async function load(
     return { models, tables, styles };
 }
 
+export async function loadProjectFiles(name: string, buffer: ArrayBuffer, styles: any) {
+    const data = [];
+    data.push({
+        name: name,
+        data: {
+            buffer,
+        },
+    });
+    const models = await loadModels(data);
+    return { models, styles };
+}
+
 export async function loadStyles(event: React.ChangeEvent<HTMLInputElement>) {
     const files = event.target.files;
     if (!files) return [];

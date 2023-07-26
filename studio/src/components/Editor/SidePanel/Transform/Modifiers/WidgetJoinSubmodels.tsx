@@ -15,7 +15,7 @@ export function JoinSubmodelWidget(props: WidgetProps) {
     const apply = async () => {
         const submodelIDs = selection.get(props.model);
         if (!submodelIDs) return; //TODO handle with a popup
-        setProcessing(true);
+        setProcessing(true, 'Joining submodels...');
         await join(props.model, submodelIDs);
         setProcessing(false);
     };

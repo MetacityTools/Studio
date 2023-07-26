@@ -38,7 +38,7 @@ GLTF loader now assumes Y+ as up axis (as in Blender) and converts the models to
 -   [x] FIX: coloring models when style changes - display live changes on save
 -   [ ] Color in table view according to metadata amount
     -   [x] Colorize model
-    -   [ ] Adjustable limit of metadata for coloring
+    -   [ ] Adjustable limit of metadata for coloring.git
     -   [x] Heatmap legend
 -   [x] Updated file extension (replacing .metacity with .mcmodel and .json.metactiy with .mcstyle), still supports the old extensions tho
 -   [x] Tooltip on hover over model and labels in 3D
@@ -49,6 +49,10 @@ GLTF loader now assumes Y+ as up axis (as in Blender) and converts the models to
 -   [ ] Loading points and lines from SHP
 -   [ ] Export screenshot action
 -   [ ] Lock camera position (two buttons - pan and rotation)
+
+Testing projects:
+
+-   /editor/?model=raw.githubusercontent.com/MetacityTools/Studio-Examples/main/IKEA-Room/room_ikea.mcmodel&style=raw.githubusercontent.com/MetacityTools/Studio-Examples/main/IKEA-Room/room_ikea.mcstyle
 
 ### v0.5.0 - ✅ Released
 
