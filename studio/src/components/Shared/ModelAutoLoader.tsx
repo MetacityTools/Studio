@@ -18,7 +18,6 @@ export function ModelAutoLoader() {
         const urlParams = new URLSearchParams(window.location.search);
         const modelParam = urlParams.get('model');
         const styleParam = urlParams.get('style');
-        let loadingFlag = true;
 
         //fetch model from url
         const load = async () => {
@@ -37,27 +36,19 @@ export function ModelAutoLoader() {
                     stylesData = await data.json();
                 }
 
-                if (!loadingFlag) return;
-
                 setProcessing(true, 'Parsing files...');
                 const { models, styles } = await loadProjectFiles(name, buffer, stylesData);
 
-                if (!loadingFlag) return;
                 setProcessing(true, 'Building BVH...');
                 await create(models, {
                     coordMode: CoordinateMode.Keep,
                 });
-                styles.length > 0 && setStyle(styles[0]);
+                if (styles) setStyle(styles);
                 setProcessing(false);
             }
         };
 
         load();
-
-        return () => {
-            //this is pretty dirty, but it works
-            loadingFlag = false;
-        };
     }, []);
 
     return null;

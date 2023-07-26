@@ -52,7 +52,7 @@ GLTF loader now assumes Y+ as up axis (as in Blender) and converts the models to
 
 Testing projects:
 
--   /editor/?model=raw.githubusercontent.com/MetacityTools/Studio-Examples/main/IKEA-Room/room_ikea.mcmodel&style=raw.githubusercontent.com/MetacityTools/Studio-Examples/main/IKEA-Room/room_ikea.mcstyle
+-   [IKEA room](https://dev.metacity.cc/editor/?model=raw.githubusercontent.com/MetacityTools/Studio-Examples/main/IKEA-Room/room_ikea.mcmodel&style=raw.githubusercontent.com/MetacityTools/Studio-Examples/main/IKEA-Room/room_ikea.mcstyle)
 
 ### v0.5.0 - ✅ Released
 

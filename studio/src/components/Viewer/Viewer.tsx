@@ -6,6 +6,7 @@ import { SizeGuard } from '@elements/SizeGuard';
 
 import { CanvasComponent } from '@shared/CanvasComponent';
 import { Controls } from '@shared/Controls';
+import { ModelAutoLoader } from '@shared/ModelAutoLoader';
 import { TooltipOverlay } from '@shared/Tooltip';
 
 import { SidePanel } from './SidePanel';
@@ -26,6 +27,7 @@ export function ModelViewer() {
             </Allotment>
             <ProcessingScreen />
             <ViewerSplash />
+            <ModelAutoLoader />
         </SizeGuard>
     );
 }

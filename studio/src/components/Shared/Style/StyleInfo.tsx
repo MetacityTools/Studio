@@ -39,7 +39,6 @@ function CategoryValues(props: { categories: Categories }) {
         <>
             <div className="flex flex-col">
                 {Object.entries(props.categories).map(([category, color], i) => {
-                    console.log(category, color);
                     return (
                         <div key={i} className="flex flex-row items-center">
                             <div
