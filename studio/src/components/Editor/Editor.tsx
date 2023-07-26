@@ -32,11 +32,10 @@ export function ModelEditor() {
                         <TooltipOverlay />
                     </Allotment.Pane>
                 </Allotment>
+                <EditorSpash />
                 <ProcessingScreen />
                 <ModelAutoLoader />
             </div>
         </SizeGuard>
     );
 }
-
-//<EditorSpash />
