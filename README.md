@@ -44,7 +44,7 @@ GLTF loader now assumes Y+ as up axis (as in Blender) and converts the models to
 -   [x] Tooltip on hover over model and labels in 3D
 -   [x] FIX: Firefox handling mouse events for hover
 -   [x] Refactor processing status - https://github.com/MetacityTools/Studio/issues/33
--   [ ] Loading models based on param - base for https://github.com/MetacityTools/Studio/issues/22
+-   [x] Loading models based on param - base for https://github.com/MetacityTools/Studio/issues/22
 -   [ ] Feedback - show notifications on the bottom of the screen
 -   [ ] Projecting models onto models (2D onto 3D) - ✨WIP https://github.com/vojtatom/geometry
 -   [ ] Loading points and lines from SHP
@@ -53,7 +53,8 @@ GLTF loader now assumes Y+ as up axis (as in Blender) and converts the models to
 
 Testing projects:
 
--   [IKEA room](https://dev.metacity.cc/editor/?model=raw.githubusercontent.com/MetacityTools/Studio-Examples/main/IKEA-Room/room_ikea.mcmodel&style=raw.githubusercontent.com/MetacityTools/Studio-Examples/main/IKEA-Room/room_ikea.mcstyle)
+-   [IKEA room](https://dev.metacity.cc/?model=raw.githubusercontent.com/MetacityTools/Studio-Examples/main/IKEA-Room/room_ikea.mcmodel&style=raw.githubusercontent.com/MetacityTools/Studio-Examples/main/IKEA-Room/room_ikea.mcstyle)
+-   [Warehouse](https://dev.metacity.cc/editor/?model=raw.githubusercontent.com/MetacityTools/Studio-Examples/main/Warehouse-Materials/warehouse.mcmodel&style=raw.githubusercontent.com/MetacityTools/Studio-Examples/main/Warehouse-Materials/warehouse.mcstyle)
 
 ### v0.5.0 - ✅ Released
 
