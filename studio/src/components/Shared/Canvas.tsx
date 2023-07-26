@@ -53,6 +53,12 @@ function selectionFlags(multiselect: boolean, shiftKey: boolean) {
     return { toggle, extend };
 }
 
+function getOffset(event: any) {
+    const xpos: number = (!event.offsetX ? event.layerX! : event.offsetX) ?? 0;
+    const ypos: number = (!event.offsetY ? event.layerY! : event.offsetY) ?? 0;
+    return { xpos, ypos };
+}
+
 interface CanvasProps {
     canvasRef: React.RefObject<HTMLCanvasElement>;
     onTooltip?: (meta: any, x: number, y: number) => void;
@@ -79,11 +85,8 @@ export function Canvas(props: CanvasProps) {
         if (!props.onTooltip || !props.onHideTooltip) return;
         if (timerRef.current) clearTimeout(timerRef.current);
         props.onHideTooltip!();
-        console.log('pointer move');
-
         timerRef.current = setTimeout(() => {
             const selection = renderer.controls?.pointerHover(event);
-            console.log('pointer hover', selection);
             if (!selection) return;
             const selectionObj = primitiveIndicesToSubmodelIndices(selection);
             const model = selectionObj.keys().next().value;
@@ -91,7 +94,9 @@ export function Canvas(props: CanvasProps) {
             const metadata = model.metadata[submodel];
 
             if (!metadata) return;
-            props.onTooltip!(metadata, event.offsetX, event.offsetY);
+
+            const { xpos, ypos } = getOffset(event);
+            props.onTooltip!(metadata, xpos, ypos);
         }, 100);
     };
 

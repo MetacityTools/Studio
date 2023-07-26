@@ -8,6 +8,7 @@ import { Shortcut } from './shortcuts';
 type LocalViewCoords = { view: View; x: number; y: number; lx: number; ly: number };
 
 export class WindowControls {
+    //last focused view
     public view?: View;
     readonly mouse = new MouseControls();
     readonly keyboard = new KeyboardControls();
@@ -46,15 +47,14 @@ export class WindowControls {
 
     pointerHover(event: PointerEvent) {
         const localView = this.window.getViewAndPosition(event);
-        console.log('hover', localView, event);
         if (!localView) return;
+        if (!this.view) return;
         event.preventDefault();
-
         this.deactSh = false;
         return this.mouse.hover(this.getEvent(localView, event), this.deactSh);
     }
 
-    pointerOut(event: MouseEvent) {
+    pointerOut(event: PointerEvent) {
         this.mouse.out();
         event.preventDefault();
     }
@@ -102,11 +102,15 @@ export class WindowControls {
         this.keyboard.removeShortcut(shortcut);
     }
 
-    private getEvent(localView: LocalViewCoords, event: PointerEvent) {
+    private getEvent(
+        localView: LocalViewCoords,
+        event: PointerEvent,
+        useLocalView: boolean = false
+    ) {
         if (!this.view)
             throw new Error('No view, check before calling getEvent() in WindowControls');
         return {
-            view: this.view,
+            view: useLocalView ? localView.view : this.view, //assign the original view because when dragging out of its boundries, we want to keep transforming the original view
             x: localView.x,
             y: localView.y,
             button: event.button,
