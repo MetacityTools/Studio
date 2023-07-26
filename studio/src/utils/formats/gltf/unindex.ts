@@ -2,6 +2,8 @@ import { mat4, quat, vec3 } from 'gl-matrix';
 
 import { GLTFMesh, GLTFNode, GLTFParsedData } from '@utils/types';
 
+import { swapFromYupToZup } from './transform';
+
 export function unindexGeometry(gltf: GLTFParsedData) {
     const vertexCount = countVertices(gltf);
 
@@ -17,7 +19,8 @@ export function unindexGeometry(gltf: GLTFParsedData) {
         const node = gltf.nodes[i];
         const mesh = node.mesh;
 
-        getTransformation(node, mat);
+        mat4.identity(mat);
+        getTransformation(node, mat, gltf.nodes);
 
         metadata[submodelCounter] = {
             name: node.name,
@@ -40,6 +43,7 @@ export function unindexGeometry(gltf: GLTFParsedData) {
         submodelCounter++;
     }
 
+    swapFromYupToZup(position);
     return { position, submodel, metadata };
 }
 
@@ -78,6 +82,7 @@ function processPrimitives(
             }
         }
     }
+
     return { positionIdx, submodelIdx };
 }
 
@@ -100,13 +105,25 @@ function countVertices(gltf: GLTFParsedData) {
         .reduce((a, b) => a + b, 0);
 }
 
-function getTransformation(node: GLTFNode, mat: mat4) {
-    if (node.matrix) return mat4.copy(mat, node.matrix as mat4);
+function getTransformation(node: GLTFNode, mat: mat4, nodes: GLTFNode[]) {
+    applyParentTransform(mat, nodes, node);
+
+    if (node.matrix) mat4.multiply(mat, mat, node.matrix as mat4);
     else {
-        mat4.identity(mat);
         if (node.translation) mat4.translate(mat, mat, node.translation);
         if (node.rotation) mat4.multiply(mat, mat, mat4.fromQuat(mat4.create(), node.rotation));
         if (node.scale) mat4.scale(mat, mat, node.scale);
-        return mat;
+    }
+}
+
+//As per documentaiton, each child has to have only one parent (see https://registry.khronos.org/glTF/specs/2.0/glTF-2.0.html#nodes-and-hierarchy)
+//Docs: "The node hierarchy MUST be a set of disjoint strict trees. That is node hierarchy MUST NOT contain cycles and each node MUST have zero or one parent node."
+function applyParentTransform(mat: mat4, nodes: GLTFNode[], node: GLTFNode) {
+    for (let i = 0; i < nodes.length; i++) {
+        const parent = nodes[i];
+        if (parent.children && parent.children.includes(node)) {
+            getTransformation(parent, mat, nodes);
+            break;
+        }
     }
 }

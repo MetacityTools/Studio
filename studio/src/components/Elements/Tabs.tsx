@@ -2,15 +2,11 @@ import { Tab } from '@headlessui/react';
 import clsx from 'clsx';
 import React from 'react';
 
-import { colorActive, colorActiveNoBackground, colorBase, colorBaseNoBackground } from './Colors';
-
 export function TabButton(props: { children: React.ReactNode; title: string }) {
-    const base =
-        'outline-none p-4 text-center transition-colors flex flex-col items-center  overflow-hidden whitespace-nowrap overflow-ellipsis text-2xl border-l-4';
     return (
         <Tab
             className={({ selected }) =>
-                selected ? clsx(colorActiveNoBackground, base) : clsx(colorBaseNoBackground, base)
+                selected ? 'active-no-background tab-button' : 'base-no-background tab-button'
             }
             title={props.title}
         >
@@ -30,7 +26,12 @@ export function TabPanels(props: { children: React.ReactNode }) {
 
 export function TabList(props: { children: React.ReactNode; className?: string }) {
     return (
-        <Tab.List className={clsx('flex flex-col bg-white border-r', props.className)}>
+        <Tab.List
+            className={clsx(
+                'flex flex-col border-r tab-list mc-background mc-border',
+                props.className
+            )}
+        >
             {props.children}
         </Tab.List>
     );

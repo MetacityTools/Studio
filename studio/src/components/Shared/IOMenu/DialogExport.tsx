@@ -11,17 +11,14 @@ export function ExportDialog(props: { isOpen: boolean; onClose: (title: string |
 
     return (
         <OverlayDialog isOpen={isOpen} onClose={() => onClose(null)}>
-            <Dialog.Title
-                as="h1"
-                className="text-2xl font-medium leading-6 text-gray-900 mx-6 mt-6"
-            >
+            <Dialog.Title as="h1" className="text-2xl font-medium mc-text leading-6  mx-6 mt-6">
                 Export
             </Dialog.Title>
             <div className="mx-6 mt-6">Enter project title</div>
             <div className="mx-6 my-2">
                 <Input
                     placeholder="Title"
-                    className="mb-2 px-4 bg-blue-100 rounded w-full text-lg p-2"
+                    className="mb-2 px-4 bg-blue-100 dark:bg-blue-900 rounded w-full text-lg p-2"
                     onChange={(e) => setTitle(e.target.value)}
                     defaultValue={title}
                 />

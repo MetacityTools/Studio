@@ -4,7 +4,7 @@ import cat from '@assets/cat.gif';
 
 function UnsuitableSize() {
     return (
-        <div className="absolute inset-0 flex flex-col place-content-center place-items-center z-50 bg-white">
+        <div className="absolute inset-0 flex flex-col place-content-center place-items-center z-50 bg-white dark:bg-neutral-800">
             <img src={cat} alt="cat" className="w-32 h-32 disable-blur" />
             <p className="max-w-xs text-center leading-normal">
                 Sorry, Metacity Studio <span className="font-bold">requires larger screen</span> to

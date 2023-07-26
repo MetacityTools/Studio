@@ -16,7 +16,7 @@ const messages = [
 const chickens = [chicken1, chicken3];
 
 export function ProcessingScreen() {
-    const [loadingStatus] = useLoadingStatus();
+    const loadingStatus = useLoadingStatus();
     const [processing] = useProcessing();
     const [message, setMessage] = React.useState(messages[0]);
     const [chicken, setChicken] = React.useState(chickens[0]);
@@ -37,7 +37,7 @@ export function ProcessingScreen() {
     return (
         <Transition
             show={processing}
-            className="absolute top-0 left-0 w-full h-full bg-white z-50 flex items-center justify-center"
+            className="absolute top-0 left-0 w-full h-full bg-white dark:bg-neutral-800 z-50 flex items-center justify-center"
             enter="transition-opacity duration-200"
             enterFrom="opacity-0"
             enterTo="opacity-100"

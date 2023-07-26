@@ -47,8 +47,8 @@ export function TableRow(props: TableRowProps) {
     };
 
     return (
-        <tr className="odd:bg-neutral-50">
-            <td className="text-neutral-400 bg-neutral-100 border-r border-b sticky left-0">
+        <tr className="table-tr-color">
+            <td className="table-td-action-color border-r border-b  mc-border sticky left-0">
                 <div className="w-full h-full flex flex-row text-xl space-x-2 px-1">
                     <ActionButton title="Copy to clipboard" onClick={handleCopyClipboard}>
                         <BiCopy className="inline-block ml-1" />
@@ -61,7 +61,7 @@ export function TableRow(props: TableRowProps) {
                     </ActionButton>
                 </div>
             </td>
-            <Td className="text-neutral-500 bg-neutral-100">
+            <Td className="table-td-action-color">
                 <select
                     name="rowType"
                     id="rowType"
@@ -82,7 +82,12 @@ export function TableRow(props: TableRowProps) {
 
 export function Td(props: { children: React.ReactNode; className?: string }) {
     return (
-        <td className={clsx('border-r border-b whitespace-pre px-2 h-full', props.className)}>
+        <td
+            className={clsx(
+                'border-r border-b mc-border whitespace-pre px-2 h-full',
+                props.className
+            )}
+        >
             {props.children}
         </td>
     );

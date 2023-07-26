@@ -53,7 +53,7 @@ export function MetadataSidePanel() {
                             <MetadataHierarchy onValuePick={handlePick} />
                         </ColumnContainer>
                     </Allotment.Pane>
-                    <Allotment.Pane preferredSize={400} minSize={20} className="border-t">
+                    <Allotment.Pane preferredSize={400} minSize={20} className="border-t mc-border">
                         <ColumnContainer>
                             <PanelTitle title="Metadata Editor" />
                             <ColumnContainer>

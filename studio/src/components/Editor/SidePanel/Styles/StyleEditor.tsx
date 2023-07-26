@@ -5,7 +5,7 @@ import React from 'react';
 
 import { useStatus } from '@editor/EditorContext';
 
-import { useStyle } from '@shared/Context/hooks';
+import { useDarkmode, useStyle } from '@shared/Context/hooks';
 
 export function StyleEditor() {
     const timeRef = React.useRef<NodeJS.Timeout>();
@@ -14,6 +14,7 @@ export function StyleEditor() {
     //keep the content sepearate so you can diferenciate between internal and external updates of style
     const [content, setContent] = React.useState<string>(JSON.stringify(style, null, 4));
     const [_, setStatus] = useStatus();
+    const [darkmode] = useDarkmode();
 
     const handleKey = (e: React.KeyboardEvent<HTMLDivElement>) => {
         e.stopPropagation();
@@ -71,6 +72,7 @@ export function StyleEditor() {
                 defaultLanguage="json"
                 defaultValue={content}
                 onChange={handleChange}
+                theme={darkmode ? 'vs-dark' : 'vs-light'}
             />
         </div>
     );

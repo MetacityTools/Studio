@@ -5,7 +5,7 @@ import { CoordinateMode, ModelData, load } from '@utils/utils';
 import { useSheets } from '@editor/EditorContext';
 
 import { Button, ButtonFileInput } from '@elements/Button';
-import { useLoadingStatus, useProcessing } from '@elements/Context';
+import { useProcessing } from '@elements/Context';
 
 import { useCreateModels, useExport, useRenderer, useScene, useStyle } from '@shared/Context/hooks';
 import { Vitals } from '@shared/IOMenu/Vitals';
@@ -16,11 +16,10 @@ import { ImportDialog } from './DialogImport';
 export function IOMenu(props: { export?: boolean }) {
     const renderer = useRenderer();
     const scene = useScene();
-    const [style, setStyle] = useStyle();
+    const [, setStyle] = useStyle();
     const create = useCreateModels();
     const exportProject = useExport();
     const [, setProcessing] = useProcessing();
-    const [, setLoadingStatus] = useLoadingStatus();
     const [addSheet] = useSheets();
 
     const [importOpen, setImportOpen] = React.useState(false);
@@ -28,8 +27,10 @@ export function IOMenu(props: { export?: boolean }) {
     const [exportOpen, setExportOpen] = React.useState(false);
 
     const onModelsSelected = async (event: React.ChangeEvent<HTMLInputElement>) => {
-        setProcessing(true);
-        const { models, tables, styles } = await load(event, setLoadingStatus);
+        setProcessing(true, 'Loading models...');
+        const { models, tables, styles } = await load(event, (status: string) =>
+            setProcessing(true, status)
+        );
         setImportedModels(models);
         tables.forEach((table) => addSheet(table));
         styles.length > 0 && setStyle(styles[0]); //use only the first style imported
@@ -40,7 +41,7 @@ export function IOMenu(props: { export?: boolean }) {
     };
 
     const handleModelsAdded = async (mode: CoordinateMode) => {
-        setProcessing(true);
+        setProcessing(true, 'Building BVH...');
         setImportOpen(false);
         await create(importedModels, {
             coordMode: mode,
@@ -52,7 +53,7 @@ export function IOMenu(props: { export?: boolean }) {
     const handleExport = (title: string | null) => {
         setExportOpen(false);
         if (title === null) return;
-        setProcessing(true);
+        setProcessing(true, 'Exporting project...');
         exportProject(title);
         setProcessing(false);
     };
@@ -63,12 +64,12 @@ export function IOMenu(props: { export?: boolean }) {
     };
 
     return (
-        <div className="flex flex-row w-full space-x-2 border-b">
+        <div className="flex flex-row w-full space-x-2 border-b mc-border min-w-[25rem]">
             <ButtonFileInput
                 id="models"
                 onChange={onModelsSelected}
                 multiple
-                accept=".gltf, .glb, .shp, .shx, .prj, .dbf, .cpg, .metacity, .csv, .ifc"
+                accept=".gltf, .glb, .shp, .shx, .prj, .dbf, .cpg, .metacity, .mcmodel, .mcstyle, .csv, .ifc"
             >
                 Import
             </ButtonFileInput>

@@ -44,11 +44,7 @@ export function Sheet(props: SheetProps) {
 
 export function Th(props: { children: React.ReactNode }) {
     return (
-        <th
-            className={
-                'border-r border-b p-1 w-16 text-xs font-normal text-neutral-500 bg-neutral-100'
-            }
-        >
+        <th className={'border-r border-b mc-border p-1 w-16 text-xs font-normal table-th-color'}>
             {props.children}
         </th>
     );

@@ -1,15 +1,12 @@
 import clsx from 'clsx';
 import React from 'react';
 
-import { colorBase, colorBaseNoHover } from './Colors';
-
 export function Widget(props: { children?: React.ReactNode; onClick?: () => void }) {
     return (
         <div
             className={clsx(
                 'flex flex-col rounded-md border',
-                props.onClick ? colorBase : colorBaseNoHover,
-                props.onClick && 'cursor-pointer'
+                props.onClick ? 'base cursor-pointer' : 'base-no-hover'
             )}
             onClick={props.onClick}
         >

@@ -104,6 +104,15 @@ export class MouseControls {
         return hit;
     }
 
+    hover(event: IMouseEvent, disableTrace: boolean) {
+        const { x, y, view } = event;
+        let hit = null;
+        if (!disableTrace) {
+            hit = trace(view, x, y);
+        }
+        return hit;
+    }
+
     wheel(event: IWheelEvent) {
         zoom(event.view, event.delta, event.x, event.y);
     }
@@ -111,6 +120,13 @@ export class MouseControls {
     out() {
         if (!this.view) return null;
         this.range?.dispose(this.view);
+        this.pressed.fill(false);
+        this.keyMap = undefined;
+        this.view = undefined;
+    }
+
+    lostFocus() {
+        if (this.view) this.range?.dispose(this.view);
         this.pressed.fill(false);
         this.keyMap = undefined;
         this.view = undefined;

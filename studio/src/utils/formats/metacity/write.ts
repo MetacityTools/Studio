@@ -18,7 +18,7 @@ export function exportModel(models: EditorModelData[], styles: StyleNode, title:
     const url = URL.createObjectURL(file);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `${title}.metacity`;
+    a.download = `${title}.mcmodel`;
     a.click();
     URL.revokeObjectURL(url);
 
@@ -29,7 +29,7 @@ export function exportModel(models: EditorModelData[], styles: StyleNode, title:
         const styleUrl = URL.createObjectURL(styleFile);
         const styleA = document.createElement('a');
         styleA.href = styleUrl;
-        styleA.download = `${title}.json.metacity`;
+        styleA.download = `${title}.mcstyle`;
         styleA.click();
         URL.revokeObjectURL(styleUrl);
     }, 1000);

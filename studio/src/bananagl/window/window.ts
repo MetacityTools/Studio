@@ -112,15 +112,23 @@ export class Window {
         this.views_.forEach(({ view }) => view.render(renderer));
     }
 
-    getViewAndPosition(event: MouseEvent) {
-        const { offsetX, offsetY } = event;
+    private getOffset(event: any) {
+        const xpos: number = (!event.offsetX ? event.layerX! : event.offsetX) ?? 0;
+        const ypos: number = (!event.offsetY ? event.layerY! : event.offsetY) ?? 0;
+        return { xpos, ypos };
+    }
+
+    getViewAndPosition(e: MouseEvent) {
+        //NOTE this is a fix for firefox that does not support offsetX and offsetY
+        const { xpos, ypos } = this.getOffset(e);
+
         //recompute offestY from bottom
         const { height } = this.canvas;
-        const offsetYbottom = height - offsetY;
+        const offsetYbottom = height - ypos;
         for (const { view } of this.views_) {
-            const [x, y] = view.toLocal(offsetX, offsetYbottom);
+            const [x, y] = view.toLocal(xpos, offsetYbottom);
             if (x >= 0 && x < view.width && y >= 0 && y < view.height) {
-                return { view, x: offsetX, y: offsetY, lx: x, ly: y };
+                return { view, x: xpos, y: ypos, lx: x, ly: y };
             }
         }
         return undefined;

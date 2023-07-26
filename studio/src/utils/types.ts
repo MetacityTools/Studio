@@ -17,6 +17,7 @@ export interface GLTFNode {
     translation?: [number, number, number];
     camera?: any;
     extras?: any;
+    children?: any[];
 }
 
 export interface GLTFMesh {

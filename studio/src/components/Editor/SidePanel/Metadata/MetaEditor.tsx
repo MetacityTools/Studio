@@ -5,7 +5,7 @@ import { useStatus } from '@editor/EditorContext';
 
 import { Empty } from '@elements/Empty';
 
-import { useMetadata, useSelectedModels } from '@shared/Context/hooks';
+import { useDarkmode, useMetadata, useSelectedModels } from '@shared/Context/hooks';
 import { applyEdits, combineData } from '@shared/Context/metadata';
 
 function joinNums(nums: Set<number>) {
@@ -19,6 +19,7 @@ export function MetaEditor() {
     const [key, setKey] = React.useState('');
     const [_, updateGlobalMetadata] = useMetadata();
     const [__, setStatus] = useStatus();
+    const [darkmode] = useDarkmode();
 
     const handleKey = (e: React.KeyboardEvent<HTMLDivElement>) => {
         e.stopPropagation();
@@ -65,6 +66,7 @@ export function MetaEditor() {
                 defaultLanguage="json"
                 defaultValue={JSON.stringify(content, null, 4)}
                 onChange={handleChange}
+                theme={darkmode ? 'vs-dark' : 'vs-light'}
             />
         </div>
     );

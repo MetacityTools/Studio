@@ -22,49 +22,36 @@ Currently:
 -   GLTF (triangles only)
 -   Metacity File Format (binary Studio export)
 
-## Roadmap
-
-The project is in active development. The roadmap is as follows:
-
----
-
-## Backlog
-
-These features are planned for the future, but not yet scheduled.
-
-### Priority Backlog
-
--   [ ] Shortcuts for tab switching in editor
-
-### Backlog
-
--   [ ] Loading GeoJSON
--   [ ] Loading IFC metadata loading (memory-efficiency???)
--   [ ] Frustum culling
--   [ ] Connect to on-line storage and model admin
--   [ ] Extract Utils to separate SDK form metacity editors
--   [ ] Optional interactivity - build BVH only if user opts-in to make the loaded models clickable
--   [ ] Optimize deleting models - partition model BVH nodes based on submodels's ids
--   [ ] Insert textured plane (location blueprints for reference)
--   [ ] Refactor General context - setting status messages, etc.
--   [ ] Add a button to open/hide the side panel
--   [ ] Do not allow keys to be empty in table view during conversion
-
 ---
 
 ## Planned Releases
 
 These features are planned for the future, and scheduled for a specific release.
 
-### v0.5.1
+### v0.5.1 - Work in progress
 
+GLTF loader now assumes Y+ as up axis (as in Blender) and converts the models to Z+ up axis. This is not a breaking change, but it is necessary to make the models compatible with the rest of the world.
+
+-   [x] Dark mode
+-   [x] Update import menu to allow importing multiple files at once, only separate models, tables, or reference planes
+-   [x] FIX: glTF glitch composing transforms with parents insice scene graph
+-   [x] FIX: coloring models when style changes - display live changes on save
+-   [ ] Color in table view according to metadata amount
+    -   [x] Colorize model
+    -   [ ] Adjustable limit of metadata for coloring.git
+    -   [x] Heatmap legend
+-   [x] Updated file extension (replacing .metacity with .mcmodel and .json.metactiy with .mcstyle), still supports the old extensions tho
+-   [x] Tooltip on hover over model and labels in 3D
+-   [x] FIX: Firefox handling mouse events for hover
+-   [x] Refactor processing status - https://github.com/MetacityTools/Studio/issues/33
+-   [x] Loading models based on param - base for https://github.com/MetacityTools/Studio/issues/22
+-   [ ] Feedback - show notifications on the bottom of the screen
 -   [ ] Projecting models onto models (2D onto 3D) - ✨WIP https://github.com/vojtatom/geometry
 -   [ ] Loading points and lines from SHP
 -   [ ] Export screenshot action
--   [ ] Tooltip on hover over model
--   [ ] Dark mode
+-   [ ] Lock camera position (two buttons - pan and rotation)
 
-### v0.5.0 - Work in progress
+### v0.5.0 - ✅ Released
 
 ⚠️ Breaking changes, old `.metacity` files will not be compatible.
 🧠 Call for consultation (TB planned, end of July 2023)

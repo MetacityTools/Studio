@@ -92,7 +92,7 @@ export class Camera {
     private getFrustrumWidthAtTarget(): number {
         if (this.projectionType === ProjectionType.ORTHOGRAPHIC) return this.right - this.left;
         const distance = vec3.dist(this.position, this.target);
-        return 2 * distance * Math.tan(this.fovYRadian / 2);
+        return 2 * distance * Math.tan(this.fovYRadian * 0.5);
     }
 
     private getFrustumHeightAtTarget(): number {
@@ -106,7 +106,7 @@ export class Camera {
 
         if (newProjection === ProjectionType.PERSPECTIVE) {
             const width = this.getFrustrumWidthAtTarget();
-            const distance = width / (2 * Math.tan(this.fovYRadian / 2));
+            const distance = width / (2 * Math.tan(this.fovYRadian * 0.5));
             vec3.scale(this.directionTMP, this.directionTMP, distance);
             vec3.sub(this.position, this.target, this.directionTMP);
         } else {
@@ -123,18 +123,25 @@ export class Camera {
         }
     }
 
+    //Returns normalized direction vector
     private get direction() {
         vec3.sub(this.directionTMP, this.target, this.position);
         vec3.normalize(this.directionTMP, this.directionTMP);
         return this.directionTMP;
     }
 
+    //Returns normalized *approximate* up vector - the vector is either z-axis up or the cross product of the right and direction vector
     private get up() {
         const direction = this.direction;
         if (Math.abs(vec3.dot(direction, this.upV)) === 1) {
             return vec3.cross(this.upTMP, this.rightV, direction);
         }
         return this.upV;
+    }
+
+    //Returns *true* normalized up vector - the vector is the cross product of the right and direction vector
+    private get trueUp() {
+        return vec3.cross(this.upTMP, this.rightV, this.direction);
     }
 
     private updateViewMatrix() {
@@ -211,25 +218,23 @@ export class Camera {
 
     pan(x: number, y: number) {
         const right = this.rightTMP;
-        const front = this.frontTMP;
         vec3.copy(right, this.rightV);
+        const up = this.trueUp;
 
-        //This is a bit riscy, since the right does not always have to be in the horizontal plane
-        vec3.cross(front, this.upV, right);
-
+        //This is a bit risky, since the right does not always have to be in the horizontal plane
         const heightUnit = this.getFrustumHeightAtTarget() / this.height;
         const widthUnit = this.getFrustrumWidthAtTarget() / this.width;
 
         vec3.normalize(right, right);
-        vec3.normalize(front, front);
+        vec3.normalize(up, up);
 
         vec3.scale(right, right, -widthUnit * x);
-        vec3.scale(front, front, heightUnit * y);
+        vec3.scale(up, up, heightUnit * y);
 
         vec3.add(this.position, this.position, right);
-        vec3.add(this.position, this.position, front);
+        vec3.add(this.position, this.position, up);
         vec3.add(this.target, this.target, right);
-        vec3.add(this.target, this.target, front);
+        vec3.add(this.target, this.target, up);
 
         this.updateRightVector();
         this.updateProjectionViewMatrix();
@@ -275,19 +280,107 @@ export class Camera {
         }
     }
 
-    private zoomOrthographic(factor: number, cursorPxX: number, cursorPxY: number) {
+    displacement = vec3.create();
+    aPosTMP = vec3.create();
+    bPosTMP = vec3.create();
+
+    private zoomOrthographic(factor: number, cursorPerctX: number, cursorPerctY: number) {
+        const dir = this.direction;
+        const right = this.rightV;
+        const pos = this.position;
+        const up = this.trueUp;
+        cursorPerctY = 1 - cursorPerctY; //Flip y axis since webgl has origin in bottom left corner
+
+        //Convert cursor position from screen space to world space at the near plane
+        const width = this.right - this.left;
+        const height = this.top - this.bottom;
+
+        const cursorWorldOffsetX = width * cursorPerctX - width * 0.5; // Offset from center of view.
+        const cursorWorldOffsetY = height * cursorPerctY - height * 0.5; // Offset from center of view.
+
+        const nearPos = vec3.set(
+            this.aPosTMP,
+            pos[0] + cursorWorldOffsetX * right[0] + cursorWorldOffsetY * up[0],
+            pos[1] + cursorWorldOffsetX * right[1] + cursorWorldOffsetY * up[1],
+            pos[2] + cursorWorldOffsetX * right[2] + cursorWorldOffsetY * up[2]
+        );
+
+        vec3.scaleAndAdd(nearPos, nearPos, dir, this.near);
+
+        //Zoom the camera
         this.left = this.left * factor;
         this.right = this.right * factor;
         this.top = this.top * factor;
         this.bottom = this.bottom * factor;
+
+        //Find the world space position of the cursor after zoom at the near plane
+        const newWidth = this.right - this.left;
+        const newHeight = this.top - this.bottom;
+
+        const newCursorWorldOffsetX = newWidth * cursorPerctX - newWidth * 0.5;
+        const newCursorWorldOffsetY = newHeight * cursorPerctY - newHeight * 0.5;
+
+        const newNearPos = vec3.set(
+            this.bPosTMP,
+            pos[0] + newCursorWorldOffsetX * right[0] + newCursorWorldOffsetY * up[0],
+            pos[1] + newCursorWorldOffsetX * right[1] + newCursorWorldOffsetY * up[1],
+            pos[2] + newCursorWorldOffsetX * right[2] + newCursorWorldOffsetY * up[2]
+        );
+
+        vec3.scaleAndAdd(newNearPos, newNearPos, dir, this.near);
+
+        //Calculate the displacement and adjust the camera's position
+        const displacement = vec3.sub(this.displacement, newNearPos, nearPos);
+        vec3.sub(this.position, this.position, displacement);
+        vec3.sub(this.target, this.target, displacement);
+
         this.updateProjectionViewMatrix();
     }
 
-    private zoomPerspective(factor: number, cursorPxX: number, cursorPxY: number) {
+    private zoomPerspective(factor: number, cursorPerctX: number, cursorPerctY: number) {
         const offset = this.direction;
-        vec3.sub(offset, this.position, this.target);
+        const right = this.rightV;
+        const pos = this.position;
+        const tar = this.target;
+        const up = this.trueUp;
+        cursorPerctY = 1 - cursorPerctY; //Flip y axis since webgl has origin in bottom left corner
+
+        //Get the world space position of the cursor on the target plane
+        let targetPlaneW = this.getFrustrumWidthAtTarget();
+        let targetPlaneH = targetPlaneW / this.aspectRatio;
+        let cursorTargetPlaneOffsetX = targetPlaneW * cursorPerctX - targetPlaneW * 0.5;
+        let cursorTargetPlaneOffsetY = targetPlaneH * cursorPerctY - targetPlaneH * 0.5;
+
+        const tarPos = vec3.set(
+            this.aPosTMP,
+            tar[0] + cursorTargetPlaneOffsetX * right[0] + cursorTargetPlaneOffsetY * up[0],
+            tar[1] + cursorTargetPlaneOffsetX * right[1] + cursorTargetPlaneOffsetY * up[1],
+            tar[2] + cursorTargetPlaneOffsetX * right[2] + cursorTargetPlaneOffsetY * up[2]
+        );
+
+        //Zoom
+        vec3.sub(offset, pos, this.target);
         vec3.scale(offset, offset, factor);
-        vec3.add(this.position, this.target, offset);
+        vec3.add(pos, this.target, offset);
+
+        //Get the world space position of the cursor on the near plane after the zoom
+        targetPlaneW = this.getFrustrumWidthAtTarget();
+        targetPlaneH = targetPlaneW / this.aspectRatio;
+        cursorTargetPlaneOffsetX = targetPlaneW * cursorPerctX - targetPlaneW * 0.5;
+        cursorTargetPlaneOffsetY = targetPlaneH * cursorPerctY - targetPlaneH * 0.5;
+
+        const newTarPos = vec3.set(
+            this.bPosTMP,
+            tar[0] + cursorTargetPlaneOffsetX * right[0] + cursorTargetPlaneOffsetY * up[0],
+            tar[1] + cursorTargetPlaneOffsetX * right[1] + cursorTargetPlaneOffsetY * up[1],
+            tar[2] + cursorTargetPlaneOffsetX * right[2] + cursorTargetPlaneOffsetY * up[2]
+        );
+
+        //Calculate the displacement and adjust the camera's position
+        const displacement = vec3.sub(this.displacement, newTarPos, tarPos);
+        console.log(displacement);
+        vec3.sub(this.position, this.position, displacement);
+        vec3.sub(this.target, this.target, displacement);
         this.updateProjectionViewMatrix();
     }
 

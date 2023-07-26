@@ -5,7 +5,6 @@ import { VscEdit } from 'react-icons/vsc';
 
 import { EditorModel } from '@utils/utils';
 
-import { colorHierarchy, colorHierarchyActive } from '@elements/Colors';
 import { Input } from '@elements/Input';
 
 interface ModelProps {
@@ -45,7 +44,7 @@ export function Model(props: ModelProps): JSX.Element {
         <div
             className={clsx(
                 'text-lg cursor-pointer flex flex-row items-stretch',
-                selected ? colorHierarchyActive : colorHierarchy,
+                selected ? 'hierarchy-active' : 'hierarchy mc-text',
                 visible ? 'opacity-100' : 'opacity-60'
             )}
             onClick={onSelect}
@@ -53,7 +52,7 @@ export function Model(props: ModelProps): JSX.Element {
             <div className="px-4 flex flex-row items-center flex-1 truncate ">
                 {editing ? (
                     <Input
-                        className="flex-1 py-1 border bg-transparent px-2"
+                        className="flex-1 py-1 border mc-border bg-transparent px-2"
                         defaultValue={model.name}
                         onChange={renameModel}
                         onKeyDown={handleEnter}

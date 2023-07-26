@@ -34,6 +34,10 @@ export class KeyMap {
     get escape() {
         return this.keys['Escape'];
     }
+
+    reset() {
+        this.keys = {};
+    }
 }
 
 interface IKeyboardEvent {
@@ -91,6 +95,14 @@ export class KeyboardControls {
                 this.active.onCancel();
                 this.active = undefined;
             }
+        }
+    }
+
+    lostFocus() {
+        this.keyMap.reset();
+        if (this.active && this.active.onCancel) {
+            this.active.onCancel();
+            this.active = undefined;
         }
     }
 }

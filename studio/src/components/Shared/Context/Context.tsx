@@ -10,6 +10,7 @@ import { SelectionType } from './selection';
 import { colorize, whiten } from './style';
 
 export type SelectFunction = (selection: SelectionType, toggle?: boolean, extend?: boolean) => void;
+export type Tooltip = { data: any; x: number; y: number } | null;
 
 interface ViewContextProps {
     scene: GL.Scene;
@@ -18,6 +19,8 @@ interface ViewContextProps {
     models: EditorModel[];
     selection: SelectionType;
     setSelection: React.Dispatch<React.SetStateAction<SelectionType>>;
+    tooltip: Tooltip | null;
+    setTooltip: React.Dispatch<React.SetStateAction<Tooltip | null>>;
     camTargetZ: number;
     setCamTargetZ: React.Dispatch<React.SetStateAction<number>>;
     minShade: number;
@@ -38,6 +41,8 @@ interface ViewContextProps {
     setLastUsedStyle: React.Dispatch<React.SetStateAction<string[] | null>>;
     grayscale: boolean;
     setGrayscale: React.Dispatch<React.SetStateAction<boolean>>;
+    darkmode: boolean;
+    setDarkmode: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const context = React.createContext<ViewContextProps>({} as ViewContextProps);
@@ -47,6 +52,7 @@ export function ViewContext(props: { children: React.ReactNode }) {
     const [scene] = React.useState(new GL.Scene());
     const [models, setModels] = React.useState<EditorModel[]>([]);
     const [selection, setSelection] = React.useState<SelectionType>(new Map());
+    const [tooltip, setTooltip] = React.useState<Tooltip | null>(null);
     const [camTargetZ, setCamTargetZ] = React.useState<number>(0);
     const [minShade, setMinShade] = React.useState<number>(0);
     const [maxShade, setMaxShade] = React.useState<number>(10);
@@ -57,6 +63,7 @@ export function ViewContext(props: { children: React.ReactNode }) {
     const [lastUsedStyle, setLastUsedStyle] = React.useState<string[] | null>(null);
     const [usedStyle, setUsedStyle] = React.useState<string[] | null>(null);
     const [grayscale, setGrayscale] = React.useState<boolean>(false);
+    const [darkmode, setDarkmode] = React.useState<boolean>(false);
 
     const activeView = 0;
 
@@ -138,17 +145,29 @@ export function ViewContext(props: { children: React.ReactNode }) {
 
     React.useEffect(() => {
         if (usedStyle === null) {
-            whiten(models);
+            //whiten(models); - won't be implemented here, you have to manually style in the hooks
             models.forEach((object) => {
                 object.uniforms['uUseShading'] = 1;
             });
         } else {
-            colorize(usedStyle, styles, models);
+            //colorize(usedStyle, styles, models); - won't be implemented here, you have to manually style in the hooks
             models.forEach((object) => {
                 object.uniforms['uUseShading'] = 0.1;
             });
         }
     }, [usedStyle, styles, models]);
+
+    React.useEffect(() => {
+        if (darkmode) {
+            renderer.clearColor = [0.1, 0.1, 0.1, 1];
+            document.documentElement.style.setProperty('color-scheme', 'dark');
+            document.documentElement.classList.add('dark');
+        } else {
+            renderer.clearColor = [1, 1, 1, 1];
+            document.documentElement.style.setProperty('color-scheme', 'light');
+            document.documentElement.classList.remove('dark');
+        }
+    }, [darkmode, renderer]);
 
     return (
         <context.Provider
@@ -159,6 +178,8 @@ export function ViewContext(props: { children: React.ReactNode }) {
                 models,
                 selection,
                 setSelection,
+                tooltip,
+                setTooltip,
                 camTargetZ,
                 setCamTargetZ,
                 minShade,
@@ -179,6 +200,8 @@ export function ViewContext(props: { children: React.ReactNode }) {
                 setLastUsedStyle,
                 grayscale,
                 setGrayscale,
+                darkmode,
+                setDarkmode,
             }}
         >
             {props.children}

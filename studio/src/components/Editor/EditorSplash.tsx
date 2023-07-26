@@ -11,7 +11,7 @@ import { DialogOption, OverlayDialog } from '@elements/Dialog';
 import splash from '@assets/bubny.png';
 
 export function EditorSpash() {
-    let [isOpen, setIsOpen] = React.useState(true);
+    const [isOpen, setIsOpen] = React.useState(true);
 
     function closeModal() {
         setIsOpen(false);
@@ -27,37 +27,37 @@ export function EditorSpash() {
             ></div>
             <Dialog.Title
                 as="h1"
-                className="text-2xl font-medium leading-6 text-gray-900 mx-6 mt-6"
+                className="text-2xl font-medium leading-6 text-900 dark mx-6 mt-6"
             >
                 Metacity Studio Editor
             </Dialog.Title>
             <div className="mx-6 mb-4">
-                <p className="text-neutral-500">v{APP_VERSION}</p>
+                <p className="text-500">v{APP_VERSION}</p>
                 <p>
-                    <a href="/privacy" className="underline text-neutral-500 text-xs outline-none">
+                    <a href="/privacy" className="underline text-500 text-xs outline-none">
                         Privacy Policy
                     </a>
                 </p>
             </div>
             <div className="mx-6 mb-8">
-                <div className="flex flex-row items-center">
+                <div className="flex flex-row items-center mc-text">
                     <TbSquareRoundedNumber1Filled className="mr-2 text-xl text-blue-500" />
                     import, transform, and align models
                 </div>
-                <div className="border-l ml-2 pl-5 border-neutral-500 border-dashed">
-                    <ul className="list-disc list-inside text-sm py-2">
+                <div className="border-l ml-2 pl-5 border-500 border-blue-500 border-dashed">
+                    <ul className="list-disc list-inside text-sm py-2 mc-text">
                         <li>SHP (only Polygons and MultiPatch)</li>
                         <li>IFC</li>
                         <li>GLTF/GLB (only triangular mesh)</li>
                         <li>Metacity File Format</li>
                     </ul>
                 </div>
-                <div className="flex flex-row items-center">
+                <div className="flex flex-row items-center mc-text">
                     <TbSquareRoundedNumber2Filled className="mr-2 text-xl text-blue-500" />
                     connect metadata
                 </div>
                 <div className="border-l h-4 ml-2 border-blue-500 border-dashed"></div>
-                <div className="flex flex-row items-center">
+                <div className="flex flex-row items-center mc-text">
                     <TbSquareRoundedNumber3Filled className="mr-2 text-xl text-blue-500" />
                     export
                 </div>
