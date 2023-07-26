@@ -51,11 +51,6 @@ GLTF loader now assumes Y+ as up axis (as in Blender) and converts the models to
 -   [ ] Export screenshot action
 -   [ ] Lock camera position (two buttons - pan and rotation)
 
-Testing projects:
-
--   [IKEA room](https://dev.metacity.cc/?model=raw.githubusercontent.com/MetacityTools/Studio-Examples/main/IKEA-Room/room_ikea.mcmodel&style=raw.githubusercontent.com/MetacityTools/Studio-Examples/main/IKEA-Room/room_ikea.mcstyle)
--   [Warehouse](https://dev.metacity.cc/editor/?model=raw.githubusercontent.com/MetacityTools/Studio-Examples/main/Warehouse-Materials/warehouse.mcmodel&style=raw.githubusercontent.com/MetacityTools/Studio-Examples/main/Warehouse-Materials/warehouse.mcstyle)
-
 ### v0.5.0 - ✅ Released
 
 ⚠️ Breaking changes, old `.metacity` files will not be compatible.
