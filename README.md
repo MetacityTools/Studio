@@ -24,39 +24,6 @@ Currently:
 
 ---
 
-## Roadmap
-
-The project is in active development. The roadmap is as follows:
-
----
-
-## Backlog
-
-These features are planned for the future, but not yet scheduled.
-
-### Priority Backlog
-
--   [ ] Reverse coloring of models in table view - add a button to each row to select models that have the data from the row
--   [ ] Connect to on-line storage and model admin (open models from the web at a given URL)
--   [ ] Alternative table editor to metadata editor
--   [ ] Links in metadata - recogniseRE
--   [ ] Do not allow keys to be empty in table view during conversion
-
-### Backlog
-
--   [ ] Insert textured plane (location blueprints for reference, will not be included in export)
--   [ ] Buggy alt/ctrl for rotation
--   [ ] Buggy move functionality - on click triggers selection and move
--   [ ] Shortcuts for tab switching in editor
--   [ ] Loading GeoJSON
--   [ ] Loading IFC metadata (memory-efficiency???)
--   [ ] Frustum culling
--   [ ] Extract Utils to separate SDK form metacity editors
--   [ ] Optional interactivity - build BVH only if user opts-in to make the loaded models clickable
--   [ ] Optimize deleting models - partition model BVH nodes based on submodels's ids
--   [ ] Refactor General context - setting status messages, etc.
--   [ ] Add a button to open/hide the side panel
-
 ## Planned Releases
 
 These features are planned for the future, and scheduled for a specific release.

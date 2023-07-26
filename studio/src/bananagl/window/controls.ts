@@ -46,8 +46,8 @@ export class WindowControls {
 
     pointerHover(event: PointerEvent) {
         const localView = this.window.getViewAndPosition(event);
+        console.log('hover', localView, event);
         if (!localView) return;
-        if (!this.view) return;
         event.preventDefault();
 
         this.deactSh = false;

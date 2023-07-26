@@ -79,9 +79,11 @@ export function Canvas(props: CanvasProps) {
         if (!props.onTooltip || !props.onHideTooltip) return;
         if (timerRef.current) clearTimeout(timerRef.current);
         props.onHideTooltip!();
+        console.log('pointer move');
 
         timerRef.current = setTimeout(() => {
             const selection = renderer.controls?.pointerHover(event);
+            console.log('pointer hover', selection);
             if (!selection) return;
             const selectionObj = primitiveIndicesToSubmodelIndices(selection);
             const model = selectionObj.keys().next().value;
