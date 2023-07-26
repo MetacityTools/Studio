@@ -42,6 +42,7 @@ GLTF loader now assumes Y+ as up axis (as in Blender) and converts the models to
     -   [x] Heatmap legend
 -   [x] Updated file extension (replacing .metacity with .mcmodel and .json.metactiy with .mcstyle), still supports the old extensions tho
 -   [x] Tooltip on hover over model and labels in 3D
+-   [ ] Loading models based on param - base for https://github.com/MetacityTools/Studio/issues/22
 -   [ ] Feedback - show notifications on the bottom of the screen
 -   [ ] Projecting models onto models (2D onto 3D) - ✨WIP https://github.com/vojtatom/geometry
 -   [ ] Loading points and lines from SHP
