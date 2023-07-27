@@ -35,7 +35,7 @@ These features are planned for the future, and scheduled for a specific release.
 -   [ ] Projecting models onto models (2D onto 3D) - ✨WIP https://github.com/MetacityTools/geometry
 -   [ ] Feedback - show notifications on the bottom of the screen
 -   [ ] Loading points and lines from SHP
--   [ ] Lock camera position (two buttons - pan and rotation)
+-   [ ] Lock camera position (two buttons - pan and rotation) + locking height during panning as in map
 
 ### v0.5.1 - ✅ Released
 
@@ -45,9 +45,8 @@ GLTF loader now assumes Y+ as up axis (as in Blender) and converts the models to
 -   [x] Update import menu to allow importing multiple files at once, only separate models, tables, or reference planes
 -   [x] FIX: glTF glitch composing transforms with parents insice scene graph
 -   [x] FIX: coloring models when style changes - display live changes on save
--   [ ] Color in table view according to metadata amount
+-   [x] Color in table view according to metadata amount
     -   [x] Colorize model
-    -   [ ] Adjustable limit of metadata for coloring.git
     -   [x] Heatmap legend
 -   [x] Updated file extension (replacing .metacity with .mcmodel and .json.metactiy with .mcstyle), still supports the old extensions tho
 -   [x] Tooltip on hover over model and labels in 3D

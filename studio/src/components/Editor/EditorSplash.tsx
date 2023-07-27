@@ -8,7 +8,7 @@ import {
 
 import { DialogOption, OverlayDialog } from '@elements/Dialog';
 
-import splash from '@assets/bubny.png';
+import splash from '@assets/ikea3.png';
 
 export function EditorSpash() {
     const [isOpen, setIsOpen] = React.useState(true);
