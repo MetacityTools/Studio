@@ -27,8 +27,8 @@ export function ExportDialog(props: { isOpen: boolean; onClose: (title: string |
                 <div>Exports the project as 2 files:</div>
                 <div className="ml-2">
                     <ul className="list-disc list-inside py-2">
-                        <li>METACITY containing geometry</li>
-                        <li>JSON.METACITY containing styles</li>
+                        <li>.mcmodel containing geometry</li>
+                        <li>.mcstyle containing styles</li>
                     </ul>
                 </div>
                 <div>The files can be loaded into Studio and Viewer.</div>
