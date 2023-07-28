@@ -1,24 +1,25 @@
 import { vec3 } from 'gl-matrix';
 import React from 'react';
 
+//TODO refactor the exports from utils
 import { exportModel } from '@utils/formats/metacity/write';
 import { EditorModel } from '@utils/models/EditorModel';
 import { EditorModelData, addTriangleModel } from '@utils/models/TriangleModel';
 import { CoordinateMode, alignModels } from '@utils/modifiers/alignVertices';
 import { sampleColor } from '@utils/modifiers/color';
 import { extractModels } from '@utils/modifiers/extractModels';
-import { joinModels } from '@utils/modifiers/joinModels';
 import { joinSubmodels } from '@utils/modifiers/joinSubmodels';
 import { removeSubmodels } from '@utils/modifiers/removeSubmodels';
 import { splitModel } from '@utils/modifiers/splitModels';
 import { Histogram, MetadataNode, PrimitiveType, StyleNode } from '@utils/types';
+import { projectModels } from '@utils/utils';
 
 import * as GL from '@bananagl/bananagl';
 
 import { SelectFunction, Tooltip, context } from './Context';
 import { extractMetadata, filterSubmodels, findKeychain, getHistogram } from './metadata';
 import { SelectionType, changeSelection } from './selection';
-import { colorize, findStyleKeychain, getStyle, getValue, whiten } from './style';
+import { colorize, findStyleKeychain, getStyle, whiten } from './style';
 
 export function useActiveView(): number {
     const ctx = React.useContext(context);
@@ -190,6 +191,23 @@ export function useJoinSubmodels() {
     };
 
     return join;
+}
+
+export function useProjectModels() {
+    const ctx = React.useContext(context);
+
+    const mapping = async (source: EditorModel, target: EditorModel) => {
+        console.log(source, target);
+        //projeciton map
+        const mappedModel = await projectModels(source, target);
+
+        //add the new model
+        let glmodel = await importModel(mappedModel);
+        if (!glmodel) return;
+        ctx.scene.add(glmodel);
+    };
+
+    return mapping;
 }
 
 export function useExport() {

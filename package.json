@@ -12,6 +12,7 @@
         "@headlessui/react": "^1.7.14",
         "@loaders.gl/core": "^3.3.3",
         "@loaders.gl/gltf": "^3.3.3",
+        "@metacity/geometry": "^1.0.0",
         "@monaco-editor/react": "^4.5.1",
         "allotment": "^1.18.1",
         "clsx": "^1.2.1",

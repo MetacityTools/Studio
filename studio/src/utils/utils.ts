@@ -7,6 +7,7 @@ import { autoUpdateStyle } from './modifiers/autoUpdateStyle';
 import { computeDots, computeNormals } from './modifiers/computeNormals';
 import { filterMetadata } from './modifiers/filterMetadata';
 import { joinSubmodels } from './modifiers/joinSubmodels';
+import { projectModels } from './modifiers/projectModels';
 import { splitModel } from './modifiers/splitModels';
 import { Tables } from './tables/tables';
 
@@ -22,6 +23,7 @@ export {
     splitModel,
     autoUpdateStyle,
     filterMetadata,
+    projectModels,
     CoordinateMode,
 };
 

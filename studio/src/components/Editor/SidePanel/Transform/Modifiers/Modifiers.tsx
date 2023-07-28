@@ -4,6 +4,7 @@ import { useSelectedModels } from '@shared/Context/hooks';
 
 import { DeleteSubmodelsWidget } from './WidgetDeleteSubmodels';
 import { JoinSubmodelWidget } from './WidgetJoinSubmodels';
+import { MappingWidget } from './WidgetMapping';
 import { SplitModelWidget } from './WidgetSplitModel';
 import { ModelTransformationWidget } from './WidgetTransformation';
 
@@ -20,6 +21,7 @@ export function Modifiers() {
             <SplitModelWidget model={model} />
             <JoinSubmodelWidget model={model} />
             <DeleteSubmodelsWidget model={model} />
+            <MappingWidget model={model} />
         </div>
     );
 }

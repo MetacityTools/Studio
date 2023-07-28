@@ -63,7 +63,9 @@ export function ViewContext(props: { children: React.ReactNode }) {
     const [lastUsedStyle, setLastUsedStyle] = React.useState<string[] | null>(null);
     const [usedStyle, setUsedStyle] = React.useState<string[] | null>(null);
     const [grayscale, setGrayscale] = React.useState<boolean>(false);
-    const [darkmode, setDarkmode] = React.useState<boolean>(false);
+
+    const sd = localStorage.getItem('darkmode');
+    const [darkmode, setDarkmode] = React.useState<boolean>(sd === 'true' ? true : false);
 
     const activeView = 0;
 
@@ -162,10 +164,13 @@ export function ViewContext(props: { children: React.ReactNode }) {
             renderer.clearColor = [0.1, 0.1, 0.1, 1];
             document.documentElement.style.setProperty('color-scheme', 'dark');
             document.documentElement.classList.add('dark');
+            localStorage.setItem('darkmode', 'true');
+            console.log('darkmode');
         } else {
             renderer.clearColor = [1, 1, 1, 1];
             document.documentElement.style.setProperty('color-scheme', 'light');
             document.documentElement.classList.remove('dark');
+            localStorage.setItem('darkmode', 'false');
         }
     }, [darkmode, renderer]);
 

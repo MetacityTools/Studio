@@ -1,4 +1,4 @@
-import { vec2, vec3 } from 'gl-matrix';
+import { mat4, vec2, vec3 } from 'gl-matrix';
 
 import { Attribute } from '@bananagl/models/attribute';
 import { Renderable } from '@bananagl/models/renderable';
@@ -35,6 +35,11 @@ export class TriangleBVH implements BVH {
     async build() {
         const data = await buildBVHInWorker(this.position, this.attr);
         this.root = data;
+    }
+
+    async rebuild() {
+        this.root = undefined;
+        await this.build();
     }
 
     //--------------------------------------------------------------------------------
@@ -187,7 +192,7 @@ export class TriangleBVH implements BVH {
                 if (node.right) stack.push(node.right);
 
                 if (node.from !== undefined) {
-                    this.traverseLeafTriangleArea(node, indices);
+                    this.traverseLeafTriangleArea(node, from, to, indices);
                 }
             }
         }
@@ -195,9 +200,19 @@ export class TriangleBVH implements BVH {
         return indices;
     }
 
-    private traverseLeafTriangleArea(node: BVHNode, indices: number[]) {
+    private traverseLeafTriangleArea(node: BVHNode, from: vec2, to: vec2, indices: number[]) {
+        const data = this.position.buffer.data;
+        let minx: number, miny: number;
+        let maxx: number, maxy: number;
+        let index;
         for (let i = node.from!; i < node.to!; i++) {
-            //TODO optimize, not all triangles are inside the area
+            //indices.push(i);
+            index = i * 9;
+            minx = Math.min(data[index], data[index + 3], data[index + 6]);
+            miny = Math.min(data[index + 1], data[index + 4], data[index + 7]);
+            maxx = Math.max(data[index], data[index + 3], data[index + 6]);
+            maxy = Math.max(data[index + 1], data[index + 4], data[index + 7]);
+            if (minx > to[0] || miny > to[1] || maxx < from[0] || maxy < from[1]) continue;
             indices.push(i);
         }
     }

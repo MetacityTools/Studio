@@ -9,6 +9,15 @@ export class Attribute {
     public type?: number;
     private swapArr: TypedArray;
 
+    /**
+     *
+     * @param name Name of the attribute
+     * @param buffer Buffer containing the data
+     * @param size Size of the attribute (1, 2, 3 or 4)
+     * @param normalized Whether the data should be normalized
+     * @param stride Stride between each attribute
+     * @param offset Offset of the first attribute
+     */
     constructor(
         public name: string,
         public buffer: Buffer,
