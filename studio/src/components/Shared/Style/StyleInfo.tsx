@@ -55,7 +55,7 @@ function CategoryValues(props: { categories: Categories }) {
                         className="px-2 flex flex-row items-center hover:bg-neutral-100 dark:hover:bg-neutral-700"
                     >
                         <div
-                            className="w-4 h-4 mr-2 rounded border border-neutral-500 "
+                            className="w-4 h-4 mr-2 rounded "
                             style={{
                                 background: color,
                             }}
