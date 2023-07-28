@@ -33,6 +33,7 @@ These features are planned for the future, and scheduled for a specific release.
 -   [x] Export screenshot action
 -   [x] Refactored Global context and processing status - https://github.com/MetacityTools/Studio/issues/33
 -   [x] Projecting models onto models (2D onto 3D) - https://github.com/MetacityTools/geometry.ts
+-   [ ] Replace json style editor with something more user friendly - WIP
 -   [ ] Feedback - show notifications on the bottom of the screen
 -   [ ] Loading points and lines from SHP
 -   [ ] Lock camera position (two buttons - pan and rotation) + locking height during panning as in map

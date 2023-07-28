@@ -43,7 +43,7 @@ export function HierarchyChevronButton(props: HierarchyChevronButtonProps) {
 export function HierarchyBracketsButton(props: HierarchyButtonBase) {
     return (
         <HierarchyButton {...props}>
-            <VscJson className={clsx('w-4 h-4')} />
+            <VscJson className="w-4 h-4" />
         </HierarchyButton>
     );
 }
@@ -51,7 +51,7 @@ export function HierarchyBracketsButton(props: HierarchyButtonBase) {
 export function HierarchyStyleButton(props: HierarchyButtonBase) {
     return (
         <HierarchyButton {...props}>
-            <VscSymbolColor className={clsx('w-4 h-4')} />
+            <VscSymbolColor className="w-4 h-4" />
         </HierarchyButton>
     );
 }
