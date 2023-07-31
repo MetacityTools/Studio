@@ -18,7 +18,7 @@ export function ExportDialog(props: { isOpen: boolean; onClose: (title: string |
             <div className="mx-6 my-2">
                 <Input
                     placeholder="Title"
-                    className="mb-2 px-4 bg-blue-100 dark:bg-blue-900 rounded w-full text-lg p-2"
+                    className="mb-2 px-4 bg-neutral-200 dark:bg-neutral-900 rounded w-full text-lg p-2"
                     onChange={(e) => setTitle(e.target.value)}
                     defaultValue={title}
                 />

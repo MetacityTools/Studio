@@ -58,6 +58,7 @@ export function HierarchyStyleButton(props: HierarchyButtonBase) {
 
 interface HierarchyMainButtonProps extends HierarchyButtonProps {
     padded?: boolean;
+    className?: string;
 }
 
 export function HierarchyMainButton(props: HierarchyMainButtonProps) {
@@ -68,7 +69,8 @@ export function HierarchyMainButton(props: HierarchyMainButtonProps) {
                 props.padded ? 'px-4' : 'px-2',
                 'flex-1 text-left flex flex-row items-center',
                 'text-ellipsis overflow-hidden whitespace-nowrap',
-                'hierarchy-part'
+                'hierarchy-part',
+                props.className
             )}
             onClick={props.onClick}
         >

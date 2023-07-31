@@ -21,7 +21,6 @@ export function StyleHierarchy(props: StyleHierarchyProps) {
     const [style] = useStyle();
     const [fitlered, setFiltered] = React.useState<StyleNode>(style);
     const [search, setSearch] = React.useState<string>('');
-    const [, setGrayscale] = useGrayscale();
     const timerRef = React.useRef<NodeJS.Timeout>();
 
     React.useEffect(() => {
@@ -42,15 +41,8 @@ export function StyleHierarchy(props: StyleHierarchyProps) {
         }, 500);
     };
 
-    React.useEffect(() => {
-        setGrayscale(true);
-        return () => {
-            setGrayscale(false);
-        };
-    }, []);
-
     return (
-        <div className="flex-1 w-full">
+        <div className="h-full w-full">
             <ColumnContainer>
                 <Input
                     placeholder="Search..."

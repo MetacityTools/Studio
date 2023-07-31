@@ -1,3 +1,5 @@
+import clsx from 'clsx';
+
 import { HierarchyTitle } from '@elements/Hierarchy';
 
 import { useApplyStyle, useStyle, useTooltip } from './Context/hooks';
@@ -24,7 +26,9 @@ export function TooltipOverlay() {
                 <div className="leading-none max-w-[20rem] flex flex-row items-center text-xs text-neutral-500">
                     {style[style.length - 1]}
                 </div>
-                <div className="leading-none pt-1">{value}</div>
+                <div className={clsx('leading-none pt-1', !value && 'text-neutral-500')}>
+                    {value ? value : 'No Data'}
+                </div>
             </div>
         </div>
     );

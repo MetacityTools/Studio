@@ -48,7 +48,7 @@ export function Vitals(props: VitalsProps) {
 
     return (
         <div className="flex flex-row place-content-end space-x-4 p-2 flex-1 text-sm text-neutral-400">
-            <div className="flex flex-row items-center place-content-end">
+            <div className="flex flex-row items-center place-content-end whitespace-nowrap">
                 {fps.toFixed(0)} FPS &#x2022; {formatByteSize(mem)}
             </div>
         </div>

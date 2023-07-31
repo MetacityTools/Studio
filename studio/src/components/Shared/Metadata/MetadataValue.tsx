@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import React from 'react';
 
 import { MetadataNode } from '@utils/types';
@@ -28,8 +29,11 @@ export function MetadataValue(props: MetadataValueProps) {
             {unique.slice(0, displayCount).map((value, i) => (
                 <HierarchyNode key={value} depth={(depth !== undefined && depth + 1) || undefined}>
                     <HierarchyBracketsButton onClick={(e) => handleUseMetadata(e, value)} />
-                    <HierarchyMainButton onClick={(e) => handleUseMetadata(e, value)}>
-                        {value}
+                    <HierarchyMainButton
+                        onClick={(e) => handleUseMetadata(e, value)}
+                        className={clsx(!value && 'text-neutral-500')}
+                    >
+                        {value ? value : 'No title'}
                     </HierarchyMainButton>
                 </HierarchyNode>
             ))}

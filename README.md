@@ -37,6 +37,7 @@ These features are planned for the future, and scheduled for a specific release.
 -   [ ] Feedback - show notifications on the bottom of the screen
 -   [ ] Loading points and lines from SHP
 -   [ ] Lock camera position (two buttons - pan and rotation) + locking height during panning as in map
+-   [ ] Switching shaders for individual models
 
 ### v0.5.1 - ✅ Released
 

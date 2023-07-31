@@ -43,7 +43,7 @@ export function Model(props: ModelProps): JSX.Element {
     return (
         <div
             className={clsx(
-                'text-lg cursor-pointer flex flex-row items-stretch',
+                'text-md cursor-pointer flex flex-row items-stretch',
                 selected ? 'hierarchy-active' : 'hierarchy mc-text',
                 visible ? 'opacity-100' : 'opacity-60'
             )}

@@ -1,14 +1,15 @@
-import { VscSymbolColor } from 'react-icons/vsc';
+import clsx from 'clsx';
+import React from 'react';
 
 import { Categories, Histogram, Scalars } from '@utils/types';
 
 import { OverflowAbsoluteContainer, StretchContainer } from '@elements/Containers';
 import { Empty } from '@elements/Empty';
-import { HierarchyTitle } from '@elements/Hierarchy';
 
 import { useApplyStyle, useStyleInfo } from '@shared/Context/hooks';
 
 import { HistogramGradientStrip } from './Histogram';
+import { CategoryStyleEditor } from './StyleEditor';
 
 export function StyleInfo() {
     const [histogram, style] = useStyleInfo();
@@ -18,9 +19,6 @@ export function StyleInfo() {
 
     return (
         <>
-            <div className="px-2 flex flex-row items-center ellipsis overflow-hidden whitespace-nowrap border-b border-dotted mc-border">
-                <HierarchyTitle categories={keychain} />
-            </div>
             <StretchContainer>
                 <OverflowAbsoluteContainer>
                     <div className="py-2">
@@ -49,25 +47,46 @@ function CategoryValues(props: { categories: Categories }) {
     return (
         <div className="flex flex-col">
             {Object.entries(props.categories).map(([category, color], i) => {
-                return (
-                    <div
-                        key={i}
-                        className="px-2 flex flex-row items-center hover:bg-neutral-100 dark:hover:bg-neutral-700"
-                    >
-                        <div
-                            className="w-4 h-4 mr-2 rounded "
-                            style={{
-                                background: color,
-                            }}
-                        />
-                        {category ? (
-                            <div>{category}</div>
-                        ) : (
-                            <div className="text-neutral-400 dark:text-neutral-500">Empty name</div>
-                        )}
-                    </div>
-                );
+                return <CategoryValue key={category + i} category={category} color={color} />;
             })}
         </div>
+    );
+}
+
+function CategoryValue(props: { category: string; color: string }) {
+    const { category, color } = props;
+    const [editing, setEditing] = React.useState(false);
+
+    return (
+        <>
+            <button
+                className={clsx(
+                    'px-2 flex flex-row items-center text-left',
+                    'overflow-hidden whitespace-nowrap',
+                    editing ? 'button-list' : 'hover:bg-neutral-100 dark:hover:bg-neutral-700'
+                )}
+                onClick={() => {
+                    setEditing((e) => !e);
+                }}
+            >
+                <span className="block shrink-0">
+                    <span
+                        className="block w-4 h-4 mr-2 rounded dark:ring-1 dark:ring-inset dark:ring-white/10"
+                        style={{
+                            background: color,
+                        }}
+                    />
+                </span>
+                <span
+                    className={clsx(
+                        'block whitespace-nowrap overflow-hidden overflow-ellipsis',
+                        !category && 'text-neutral-500'
+                    )}
+                >
+                    {category ? category : 'No title'}
+                </span>
+            </button>
+            {editing && <CategoryStyleEditor {...props} />}
+        </>
     );
 }
