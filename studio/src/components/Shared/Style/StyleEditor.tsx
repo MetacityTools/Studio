@@ -2,53 +2,39 @@ import React from 'react';
 
 import { StyleNode } from '@utils/types';
 
-import { useApplyStyle, useStyle } from '@shared/Context/hooks';
+import { HierarchyTitle } from '@elements/Hierarchy';
 
-import { ColorPicker } from './ColorPicker';
+import { useApplyStyle } from '@shared/Context/hooks';
+import { StyleHierarchy } from '@shared/Style/StyleHierarchy';
+import { StyleInfo } from '@shared/Style/StyleInfo';
 
-function updateColor(style: StyleNode, keychain: string[], category: string, color: string) {
-    let current = style;
-    for (const key of keychain) {
-        if (!current.children) return;
-        current = current.children[key];
-    }
-    if (!current.style?.categories) return;
-    current.style.categories[category] = color;
-}
-
-function removeColor(style: StyleNode, keychain: string[], category: string) {
-    let current = style;
-    for (const key of keychain) {
-        if (!current.children) return;
-        current = current.children[key];
-    }
-    if (!current.style?.categories) return;
-    delete current.style.categories[category];
-}
-
-export function CategoryStyleEditor(props: { category: string; color: string }) {
-    const { category, color } = props;
+export function StyleEditor(props: { readonly?: boolean }) {
+    const [openList, setOpenList] = React.useState<boolean>(false);
+    const [, applyStyle] = useApplyStyle();
     const [keychain] = useApplyStyle();
-    const [style, setStyle] = useStyle();
 
-    const handleChange = (color: string) => {
-        if (!style || !keychain) return;
-        updateColor(style, keychain, category, color);
-        setStyle({ ...style });
-    };
-
-    const handleRemove = () => {
-        if (!style || !keychain) return;
-        removeColor(style, keychain, category);
-        setStyle({ ...style });
+    const handlePick = (root: StyleNode, node: StyleNode) => {
+        applyStyle(root, node);
+        setOpenList(false);
     };
 
     return (
-        <div className="dark:bg-neutral-900 pt-4">
-            <ColorPicker color={color} onChange={handleChange} />
-            <button className="button-list w-full" onClick={handleRemove}>
-                Remove style
-            </button>
-        </div>
+        <>
+            <div className="w-full relative h-8">
+                <button
+                    className="absolute w-full px-2 flex flex-row items-center ellipsis overflow-hidden whitespace-nowrap hover:bg-neutral-100 dark:hover:bg-neutral-700"
+                    onClick={() => setOpenList((e) => !e)}
+                >
+                    <span className="mr-2 text-neutral-500">Selected:</span>
+                    <HierarchyTitle categories={keychain ?? ['Select a style ']} />
+                </button>
+            </div>
+            {openList && (
+                <div className="w-full h-full">
+                    <StyleHierarchy onValuePick={handlePick} />
+                </div>
+            )}
+            {!openList && <StyleInfo readonly={props.readonly} />}
+        </>
     );
 }

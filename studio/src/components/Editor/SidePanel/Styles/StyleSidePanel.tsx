@@ -14,7 +14,7 @@ import {
     useStyle,
 } from '@shared/Context/hooks';
 
-import { StyleEditor } from './StyleEditor';
+import { StyleEditor } from '../../../Shared/Style/StyleEditor';
 
 export function StyleSidePanel() {
     const [style, setStyle] = useStyle();
