@@ -338,7 +338,7 @@ export function useStyleInfo(): [Histogram | undefined, StyleNode | undefined] {
 export function useMetadatHeatmap(): [() => void, () => void] {
     const ctx = React.useContext(context);
 
-    const MAX_META = 10;
+    const MAX_META = 20;
     const colormap: vec3[] = [
         [1.0, 1.0, 1.0],
         [0.196, 0.705, 1.0],

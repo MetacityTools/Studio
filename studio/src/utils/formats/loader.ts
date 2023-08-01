@@ -10,11 +10,12 @@ export async function load(
     event: React.ChangeEvent<HTMLInputElement>,
     updateStatus?: (status: string) => void
 ) {
-    const files = await loadModelFiles(event);
-    const tables = await loadTables(event);
-    const styles = await loadStyles(event);
-    const models = await loadModels(files, updateStatus);
-    return { models, tables, styles };
+    const models = await filterModelFiles(event);
+    const tables = await filterTables(event);
+    const styles = await filterStyles(event);
+
+    const modelData = await loadModels(models, updateStatus);
+    return { models: modelData, tables, styles };
 }
 
 export async function loadProjectFiles(name: string, buffer: ArrayBuffer, styles: any) {
@@ -29,35 +30,52 @@ export async function loadProjectFiles(name: string, buffer: ArrayBuffer, styles
     return { models, styles };
 }
 
-export async function loadStyles(event: React.ChangeEvent<HTMLInputElement>) {
+export async function filterStyles(event: React.ChangeEvent<HTMLInputElement>) {
     const files = event.target.files;
     if (!files) return [];
 
-    const styles = await prepareStyleJSON(files);
-    return styles;
+    const data = [];
+    for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        if (file.name.endsWith('.json.metacity') || file.name.endsWith('mcstyle')) {
+            const content = await file.text();
+            try {
+                data.push(JSON.parse(content));
+            } catch (e) {
+                console.error(e);
+            }
+        }
+    }
+    return data;
 }
 
-export async function loadTables(event: React.ChangeEvent<HTMLInputElement>) {
+export async function filterTables(event: React.ChangeEvent<HTMLInputElement>) {
     const files = event.target.files;
     if (!files) return [];
-
-    const csv = await prepareCSV(files);
-    return csv;
+    const data = [];
+    for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        if (file.name.endsWith('csv')) {
+            const content = await file.text();
+            data.push(content);
+        }
+    }
+    return data;
 }
 
-export async function loadModelFiles(event: React.ChangeEvent<HTMLInputElement>) {
+export async function filterModelFiles(event: React.ChangeEvent<HTMLInputElement>) {
     const files = event.target.files;
     if (!files) return [];
 
-    const gltf = await prepareGLTF(files);
-    const ifc = await prepareIFC(files);
-    const shapefile = await prepareShapefile(files);
-    const metacity = await prepareMetacity(files);
+    const gltf = await filterGLTF(files);
+    const ifc = await filterIFC(files);
+    const shapefile = await filterShapefile(files);
+    const metacity = await filterMetacity(files);
 
     return [...gltf, ...ifc, ...shapefile, ...metacity];
 }
 
-async function prepareMetacity(files: FileList): Promise<UserInputModel[]> {
+async function filterMetacity(files: FileList): Promise<UserInputModel[]> {
     const data = [];
     for (let i = 0; i < files.length; i++) {
         const file = files[i];
@@ -77,7 +95,7 @@ async function prepareMetacity(files: FileList): Promise<UserInputModel[]> {
     return data;
 }
 
-async function prepareGLTF(files: FileList): Promise<UserInputModel[]> {
+async function filterGLTF(files: FileList): Promise<UserInputModel[]> {
     const data = [];
     for (let i = 0; i < files.length; i++) {
         const file = files[i];
@@ -94,7 +112,7 @@ async function prepareGLTF(files: FileList): Promise<UserInputModel[]> {
     return data;
 }
 
-async function prepareIFC(files: FileList): Promise<UserInputModel[]> {
+async function filterIFC(files: FileList): Promise<UserInputModel[]> {
     const data = [];
     for (let i = 0; i < files.length; i++) {
         const file = files[i];
@@ -111,35 +129,7 @@ async function prepareIFC(files: FileList): Promise<UserInputModel[]> {
     return data;
 }
 
-async function prepareCSV(files: FileList): Promise<string[]> {
-    const data = [];
-    for (let i = 0; i < files.length; i++) {
-        const file = files[i];
-        if (file.name.endsWith('csv')) {
-            const content = await file.text();
-            data.push(content);
-        }
-    }
-    return data;
-}
-
-async function prepareStyleJSON(files: FileList): Promise<StyleNode[]> {
-    const data = [];
-    for (let i = 0; i < files.length; i++) {
-        const file = files[i];
-        if (file.name.endsWith('.json.metacity') || file.name.endsWith('mcstyle')) {
-            const content = await file.text();
-            try {
-                data.push(JSON.parse(content));
-            } catch (e) {
-                console.error(e);
-            }
-        }
-    }
-    return data;
-}
-
-async function prepareShapefile(files: FileList): Promise<UserInputModel[]> {
+async function filterShapefile(files: FileList): Promise<UserInputModel[]> {
     const data = [];
     for (let i = 0; i < files.length; i++) {
         const file = files[i];
@@ -212,9 +202,14 @@ function loadWorker(
         pool.process(
             model,
             (data) => {
-                if (data) resolve(data);
-                else reject(`Could not parse model ${model.name}`);
-                updateStatus && updateStatus(`Loaded ${model.name}`);
+                if (data) {
+                    resolve(data);
+                    updateStatus && updateStatus(`Loading models: Loaded ${model.name}`);
+                } else {
+                    reject(`Could not parse model ${model.name}`);
+                    updateStatus &&
+                        updateStatus(`Loading models: Could not parse model ${model.name}`);
+                }
             },
             worker
         );

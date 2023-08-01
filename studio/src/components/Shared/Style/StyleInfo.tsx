@@ -11,7 +11,7 @@ import { useApplyStyle, useStyleInfo } from '@shared/Context/hooks';
 import { HistogramGradientStrip } from './Histogram';
 import { CategoryStyleEditor } from './StyleCategoryEditor';
 
-export function StyleInfo(props: { readonly?: boolean }) {
+export function StyleInfo() {
     const [histogram, style] = useStyleInfo();
     const [keychain] = useApplyStyle();
 
@@ -26,10 +26,7 @@ export function StyleInfo(props: { readonly?: boolean }) {
                             <ScalarValues scalars={style.style.scalars} histogram={histogram} />
                         )}
                         {style.style?.categories && (
-                            <CategoryValues
-                                categories={style.style.categories}
-                                readonly={props.readonly}
-                            />
+                            <CategoryValues categories={style.style.categories} />
                         )}
                     </div>
                 </OverflowAbsoluteContainer>
@@ -46,26 +43,19 @@ function ScalarValues(props: { scalars: Scalars; histogram: Histogram }) {
     );
 }
 
-function CategoryValues(props: { categories: Categories; readonly?: boolean }) {
+function CategoryValues(props: { categories: Categories }) {
     const e = Object.entries(props.categories);
     e.sort((a, b) => a[0].localeCompare(b[0]));
     return (
         <div className="flex flex-col">
             {e.map(([category, color], i) => {
-                return (
-                    <CategoryValue
-                        key={category + i}
-                        category={category}
-                        color={color}
-                        readonly={props.readonly}
-                    />
-                );
+                return <CategoryValue key={category + i} category={category} color={color} />;
             })}
         </div>
     );
 }
 
-function CategoryValue(props: { category: string; color: string; readonly?: boolean }) {
+function CategoryValue(props: { category: string; color: string }) {
     const { category, color } = props;
     const [editing, setEditing] = React.useState(false);
 
@@ -75,12 +65,11 @@ function CategoryValue(props: { category: string; color: string; readonly?: bool
                 className={clsx(
                     'px-2 flex flex-row items-center text-left',
                     'overflow-hidden whitespace-nowrap',
-                    editing && (props.readonly ? 'button-list-readonly' : 'button-list'),
-                    !editing && !props.readonly && 'hover:bg-neutral-100 dark:hover:bg-neutral-700',
-                    props.readonly && 'cursor-default'
+                    editing && 'button-list',
+                    !editing && 'hover:bg-neutral-100 dark:hover:bg-neutral-700'
                 )}
                 onClick={() => {
-                    setEditing((e) => !e && !props.readonly);
+                    setEditing((e) => !e);
                 }}
             >
                 <span className="block shrink-0">
@@ -100,7 +89,7 @@ function CategoryValue(props: { category: string; color: string; readonly?: bool
                     {category ? category : 'No title'}
                 </span>
             </button>
-            {editing && !props.readonly && <CategoryStyleEditor {...props} />}
+            {editing && <CategoryStyleEditor {...props} />}
         </>
     );
 }

@@ -43,14 +43,6 @@ export function StyleSidePanel() {
                 <ColumnContainer>
                     <PanelTitle title="Style" />
                     <StyleEditor />
-                    <BottomRowContainer>
-                        <button
-                            onClick={handleAutoStyle}
-                            className="text-neutral-400 hover:text-neutral-800 dark:hover:text-neutral-200"
-                        >
-                            Add missing styles
-                        </button>
-                    </BottomRowContainer>
                 </ColumnContainer>
             </StretchContainer>
         </ColumnContainer>

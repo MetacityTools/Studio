@@ -28,7 +28,7 @@ export function TablesSheetList() {
                 >
                     <button
                         key={index}
-                        className={clsx('px-2 py-1', activeSheet === index ? 'active' : 'base')}
+                        className={clsx('px-2', activeSheet === index ? 'active' : 'base')}
                         onClick={() => updateActiveSheet(index)}
                     >
                         Sheet {index}

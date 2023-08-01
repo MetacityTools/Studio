@@ -4,44 +4,34 @@ import React from 'react';
 
 import { MetadataNode } from '@utils/types';
 
-import { useStatus } from '@editor/EditorContext';
-
-import {
-    BottomRowContainer,
-    ColumnContainer,
-    OverflowAbsoluteContainer,
-    StretchContainer,
-} from '@elements/Containers';
+import { ColumnContainer, OverflowAbsoluteContainer, StretchContainer } from '@elements/Containers';
+import { useLogger } from '@elements/GlobalContext';
 import { PanelTitle } from '@elements/PanelTitle';
 
 import { useKeymap, useSelectedModels, useSelectionByMetadata } from '@shared/Context/hooks';
 import { MetadataHierarchy } from '@shared/Metadata/MetadataHierarchy';
-import { Status } from '@shared/Status';
 
 import { MetaEditor } from './MetaEditor';
 
 export function MetadataSidePanel() {
     const select = useSelectionByMetadata();
+    const logger = useLogger();
     const keymap = useKeymap();
     const selection = useSelectedModels();
-    const [status, setStatus] = useStatus();
 
     const handlePick = (root: MetadataNode, node: MetadataNode, value: any) => {
         const extend = keymap?.shift ?? false;
         select(root, node, value, extend);
     };
 
-    let countSelectedSubmodels = 0;
-    selection.forEach((submodels) => {
-        countSelectedSubmodels += submodels.size;
-    });
-    let countSelectedModels = selection.size;
-
     React.useEffect(() => {
-        return () => {
-            setStatus(undefined);
-        };
-    }, []);
+        let countSelectedSubmodels = 0;
+        selection.forEach((submodels) => {
+            countSelectedSubmodels += submodels.size;
+        });
+        let countSelectedModels = selection.size;
+        logger(`Selected ${countSelectedSubmodels} submodels in ${countSelectedModels} models`);
+    }, [selection]);
 
     return (
         <ColumnContainer>
@@ -62,15 +52,6 @@ export function MetadataSidePanel() {
                                         <MetaEditor />
                                     </OverflowAbsoluteContainer>
                                 </StretchContainer>
-                                <BottomRowContainer>
-                                    <Status status={status} />
-                                    <div>
-                                        Common data for {countSelectedSubmodels} submodel
-                                        {countSelectedSubmodels != 1 ? 's' : ''} in{' '}
-                                        {countSelectedModels} model
-                                        {countSelectedModels != 1 ? 's' : ''}
-                                    </div>
-                                </BottomRowContainer>
                             </ColumnContainer>
                         </ColumnContainer>
                     </Allotment.Pane>

@@ -33,8 +33,9 @@ These features are planned for the future, and scheduled for a specific release.
 -   [x] Export screenshot action
 -   [x] Refactored Global context and processing status - https://github.com/MetacityTools/Studio/issues/33
 -   [x] Projecting models onto models (2D onto 3D) - https://github.com/MetacityTools/geometry.ts
--   [ ] Replace json style editor with something more user friendly - WIP
--   [ ] Feedback - show notifications on the bottom of the screen
+-   [x] Replace json style editor with something more user friendly - WIP
+-   [x] Feedback - show notifications on the bottom of the screen
+-   [ ] Tables - add notification on data assignment
 -   [ ] Loading points and lines from SHP
 -   [ ] Lock camera position (two buttons - pan and rotation) + locking height during panning as in map
 -   [ ] Switching shaders for individual models
@@ -49,7 +50,7 @@ GLTF loader now assumes Y+ as up axis (as in Blender) and converts the models to
 -   [x] FIX: coloring models when style changes - display live changes on save
 -   [x] Color in table view according to metadata amount
     -   [x] Colorize model
-    -   [x] Heatmap legend
+    -   [x] Heatmap legendg
 -   [x] Updated file extension (replacing .metacity with .mcmodel and .json.metactiy with .mcstyle), still supports the old extensions tho
 -   [x] Tooltip on hover over model and labels in 3D
 -   [x] FIX: Firefox handling mouse events for hover

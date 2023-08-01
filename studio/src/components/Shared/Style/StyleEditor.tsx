@@ -8,7 +8,7 @@ import { useApplyStyle } from '@shared/Context/hooks';
 import { StyleHierarchy } from '@shared/Style/StyleHierarchy';
 import { StyleInfo } from '@shared/Style/StyleInfo';
 
-export function StyleEditor(props: { readonly?: boolean }) {
+export function StyleEditor() {
     const [openList, setOpenList] = React.useState<boolean>(false);
     const [, applyStyle] = useApplyStyle();
     const [keychain] = useApplyStyle();
@@ -22,7 +22,7 @@ export function StyleEditor(props: { readonly?: boolean }) {
         <>
             <div className="w-full relative h-8">
                 <button
-                    className="absolute w-full px-2 flex flex-row items-center ellipsis overflow-hidden whitespace-nowrap hover:bg-neutral-100 dark:hover:bg-neutral-700"
+                    className="absolute w-full px-2 flex flex-row items-center ellipsis overflow-hidden whitespace-nowrap button-list"
                     onClick={() => setOpenList((e) => !e)}
                 >
                     <span className="mr-2 text-neutral-500">Selected:</span>
@@ -34,7 +34,7 @@ export function StyleEditor(props: { readonly?: boolean }) {
                     <StyleHierarchy onValuePick={handlePick} />
                 </div>
             )}
-            {!openList && <StyleInfo readonly={props.readonly} />}
+            {!openList && <StyleInfo />}
         </>
     );
 }

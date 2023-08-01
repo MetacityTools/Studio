@@ -44,7 +44,7 @@ export function CategoryStyleEditor(props: { category: string; color: string }) 
     };
 
     return (
-        <div className="dark:bg-neutral-900 pt-4">
+        <div className="bg-neutral-50 dark:bg-neutral-900 pt-4">
             <ColorPicker color={color} onChange={handleChange} />
             <button className="button-list w-full" onClick={handleRemove}>
                 Remove style

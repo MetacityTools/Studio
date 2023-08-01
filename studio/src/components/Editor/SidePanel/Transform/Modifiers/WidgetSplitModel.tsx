@@ -1,6 +1,6 @@
 import { TbLayersIntersect } from 'react-icons/tb';
 
-import { useProcessing } from '@elements/Context';
+import { useProcessing } from '@elements/GlobalContext';
 import { Widget, WidgetDescription, WidgetLine, WidgetTitle } from '@elements/Widgets';
 
 import { useSelectedModels, useSplitModel } from '@shared/Context/hooks';
@@ -17,7 +17,7 @@ export function SplitModelWidget(props: WidgetProps) {
         if (!submodelIDs) return; //TODO handle with a popup
         setProcessing(true, 'Splitting model...');
         await split(props.model, submodelIDs);
-        setProcessing(false);
+        setProcessing(false, 'Model splitting finised');
     };
 
     return (

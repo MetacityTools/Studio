@@ -1,14 +1,11 @@
 import { Allotment } from 'allotment';
 import 'allotment/dist/style.css';
+import React from 'react';
 
 import { MetadataNode } from '@utils/types';
 
-import {
-    BottomRowContainer,
-    ColumnContainer,
-    OverflowAbsoluteContainer,
-    StretchContainer,
-} from '@elements/Containers';
+import { ColumnContainer, OverflowAbsoluteContainer, StretchContainer } from '@elements/Containers';
+import { useLogger } from '@elements/GlobalContext';
 import { PanelTitle } from '@elements/PanelTitle';
 
 import { useKeymap, useSelectedModels, useSelectionByMetadata } from '@shared/Context/hooks';
@@ -19,6 +16,7 @@ import { MetaView } from './MetadataView';
 export function MetadataSidePanel() {
     const select = useSelectionByMetadata();
     const keymap = useKeymap();
+    const logger = useLogger();
     const selection = useSelectedModels();
 
     const handlePick = (root: MetadataNode, node: MetadataNode, value: any) => {
@@ -26,11 +24,14 @@ export function MetadataSidePanel() {
         select(root, node, value, extend);
     };
 
-    let countSelectedSubmodels = 0;
-    selection.forEach((submodels) => {
-        countSelectedSubmodels += submodels.size;
-    });
-    let countSelectedModels = selection.size;
+    React.useEffect(() => {
+        let countSelectedSubmodels = 0;
+        selection.forEach((submodels) => {
+            countSelectedSubmodels += submodels.size;
+        });
+        let countSelectedModels = selection.size;
+        logger(`Selected ${countSelectedSubmodels} submodels in ${countSelectedModels} models`);
+    }, [selection]);
 
     return (
         <ColumnContainer>
@@ -51,14 +52,6 @@ export function MetadataSidePanel() {
                                         <MetaView />
                                     </OverflowAbsoluteContainer>
                                 </StretchContainer>
-                                <BottomRowContainer>
-                                    <div>
-                                        Common data for {countSelectedSubmodels} submodel
-                                        {countSelectedSubmodels != 1 ? 's' : ''} in{' '}
-                                        {countSelectedModels} model
-                                        {countSelectedModels != 1 ? 's' : ''}
-                                    </div>
-                                </BottomRowContainer>
                             </ColumnContainer>
                         </ColumnContainer>
                     </Allotment.Pane>

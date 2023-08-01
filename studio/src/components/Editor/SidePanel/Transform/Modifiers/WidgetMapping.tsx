@@ -2,7 +2,7 @@ import { BsLayersFill, BsLayersHalf } from 'react-icons/bs';
 
 import { EditorModel } from '@utils/utils';
 
-import { useProcessing } from '@elements/Context';
+import { useProcessing } from '@elements/GlobalContext';
 import {
     Widget,
     WidgetButton,
@@ -24,7 +24,7 @@ export function MappingWidget(props: WidgetProps) {
     const apply = async (target: EditorModel) => {
         setProcessing(true, 'Projecting models...');
         await project(props.model, target);
-        setProcessing(false);
+        setProcessing(false, 'Finished projecting');
     };
 
     return (

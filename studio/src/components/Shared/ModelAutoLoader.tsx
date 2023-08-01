@@ -4,7 +4,7 @@ import React from 'react';
 import { loadProjectFiles } from '@utils/formats/loader';
 import { CoordinateMode } from '@utils/utils';
 
-import { useProcessing } from '@elements/Context';
+import { useProcessing } from '@elements/GlobalContext';
 
 import { useCreateModels, useStyle } from './Context/hooks';
 
@@ -44,7 +44,7 @@ export function ModelAutoLoader() {
                     coordMode: CoordinateMode.Keep,
                 });
                 if (styles) setStyle(styles);
-                setProcessing(false);
+                setProcessing(false, 'Finished auto-loading models');
             }
         };
 

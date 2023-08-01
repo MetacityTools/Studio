@@ -185,10 +185,10 @@ body,
     }
 
     .button-list-readonly {
-        @apply bg-neutral-100 dark:bg-neutral-700;
+        @apply bg-neutral-200 dark:bg-neutral-700;
     }
 
     .button-list {
-        @apply button-list-readonly hover:bg-neutral-200 dark:hover:bg-neutral-600;
+        @apply button-list-readonly hover:bg-neutral-300 dark:hover:bg-neutral-600;
     }
 }

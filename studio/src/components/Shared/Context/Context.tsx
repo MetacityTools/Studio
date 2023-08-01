@@ -7,7 +7,6 @@ import * as GL from '@bananagl/bananagl';
 
 import { extractMetadata } from './metadata';
 import { SelectionType } from './selection';
-import { colorize, whiten } from './style';
 
 export type SelectFunction = (selection: SelectionType, toggle?: boolean, extend?: boolean) => void;
 export type Tooltip = { data: any; x: number; y: number } | null;

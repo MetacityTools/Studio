@@ -5,7 +5,7 @@ import { CoordinateMode, ModelData, load } from '@utils/utils';
 import { useSheets } from '@editor/EditorContext';
 
 import { Button, ButtonFileInput } from '@elements/Button';
-import { useProcessing } from '@elements/Context';
+import { useProcessing } from '@elements/GlobalContext';
 
 import { useCreateModels, useExport, useRenderer, useScene, useStyle } from '@shared/Context/hooks';
 import { Vitals } from '@shared/IOMenu/Vitals';
@@ -27,7 +27,7 @@ export function IOMenu(props: { export?: boolean }) {
     const [exportOpen, setExportOpen] = React.useState(false);
 
     const onModelsSelected = async (event: React.ChangeEvent<HTMLInputElement>) => {
-        setProcessing(true, 'Loading models...');
+        setProcessing(true, 'Reading files...');
         const { models, tables, styles } = await load(event, (status: string) =>
             setProcessing(true, status)
         );
@@ -35,7 +35,7 @@ export function IOMenu(props: { export?: boolean }) {
         tables.forEach((table) => addSheet(table));
         styles.length > 0 && setStyle(styles[0]); //use only the first style imported
         if (models.length > 0) setImportOpen(true);
-        setProcessing(false);
+        setProcessing(false, 'Finished reading files');
         event.target.value = '';
         event.preventDefault();
     };
@@ -46,7 +46,7 @@ export function IOMenu(props: { export?: boolean }) {
         await create(importedModels, {
             coordMode: mode,
         });
-        setProcessing(false);
+        setProcessing(false, 'Finished loading models');
         setImportedModels([]);
     };
 
@@ -55,7 +55,7 @@ export function IOMenu(props: { export?: boolean }) {
         if (title === null) return;
         setProcessing(true, 'Exporting project...');
         exportProject(title);
-        setProcessing(false);
+        setProcessing(false, 'Finished exporting project');
     };
 
     const handleOpenExport = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {

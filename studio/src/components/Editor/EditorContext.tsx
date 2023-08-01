@@ -7,8 +7,6 @@ interface EditorContextProps {
     setTables: React.Dispatch<React.SetStateAction<Tables>>;
     activeSheet: number;
     setActiveSheet: React.Dispatch<React.SetStateAction<number>>;
-    status: 'editing' | 'saved' | 'failed' | undefined;
-    setStatus: React.Dispatch<React.SetStateAction<'editing' | 'saved' | 'failed' | undefined>>;
 }
 
 const context = React.createContext<EditorContextProps>({} as EditorContextProps);
@@ -16,7 +14,6 @@ const context = React.createContext<EditorContextProps>({} as EditorContextProps
 export function EditorContext(props: { children: React.ReactNode }) {
     const [tables, setTables] = React.useState<Tables>(new Tables([]));
     const [activeSheet, setActiveSheet] = React.useState<number>(0);
-    const [status, setStatus] = React.useState<'editing' | 'saved' | 'failed' | undefined>();
 
     return (
         <context.Provider
@@ -25,8 +22,6 @@ export function EditorContext(props: { children: React.ReactNode }) {
                 setTables,
                 activeSheet,
                 setActiveSheet,
-                status,
-                setStatus,
             }}
         >
             {props.children}
@@ -66,12 +61,4 @@ export function useRowTypes(): (sheet: number, row: number, rowType: string) => 
     return (sheet: number, row: number, rowType: string) => {
         ctx.setTables(ctx.tables.setSheetRowType(sheet, row, rowType as any));
     };
-}
-
-export function useStatus(): [
-    'editing' | 'saved' | 'failed' | undefined,
-    React.Dispatch<React.SetStateAction<'editing' | 'saved' | 'failed' | undefined>>
-] {
-    const ctx = React.useContext(context);
-    return [ctx.status, ctx.setStatus];
 }

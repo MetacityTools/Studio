@@ -26,7 +26,7 @@ export function StyleSidePanel() {
             <StretchContainer>
                 <ColumnContainer>
                     <PanelTitle title="Style" />
-                    <StyleEditor readonly={true} />
+                    <StyleEditor />
                 </ColumnContainer>
             </StretchContainer>
         </ColumnContainer>

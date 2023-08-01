@@ -1,6 +1,6 @@
 import { FiDelete } from 'react-icons/fi';
 
-import { useProcessing } from '@elements/Context';
+import { useProcessing } from '@elements/GlobalContext';
 import { Widget, WidgetDescription, WidgetLine, WidgetTitle } from '@elements/Widgets';
 
 import { useRemoveSubmodels, useSelectedModels } from '@shared/Context/hooks';
@@ -17,7 +17,7 @@ export function DeleteSubmodelsWidget(props: WidgetProps) {
         if (!selectedSubmodels) return; //TODO handle with a popup
         setProcessing(true, 'Deleting submodels...');
         await removeSubmodels(props.model, selectedSubmodels);
-        setProcessing(false);
+        setProcessing(false, 'Finished deleting');
     };
 
     return (

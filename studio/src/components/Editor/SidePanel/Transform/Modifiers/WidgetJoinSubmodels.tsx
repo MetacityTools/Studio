@@ -1,6 +1,6 @@
 import { TbLayersUnion } from 'react-icons/tb';
 
-import { useProcessing } from '@elements/Context';
+import { useProcessing } from '@elements/GlobalContext';
 import { Widget, WidgetDescription, WidgetLine, WidgetTitle } from '@elements/Widgets';
 
 import { useJoinSubmodels, useSelection } from '@shared/Context/hooks';
@@ -17,7 +17,7 @@ export function JoinSubmodelWidget(props: WidgetProps) {
         if (!submodelIDs) return; //TODO handle with a popup
         setProcessing(true, 'Joining submodels...');
         await join(props.model, submodelIDs);
-        setProcessing(false);
+        setProcessing(false, 'Finished joining submodels');
     };
 
     return (

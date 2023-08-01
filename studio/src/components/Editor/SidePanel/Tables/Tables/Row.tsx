@@ -36,11 +36,6 @@ export function TableRow(props: TableRowProps) {
         updateRowType(activeSheet, index, value);
     };
 
-    const handleCopyClipboard = () => {
-        const json = tables.getJSON(activeSheet, index);
-        navigator.clipboard.writeText(JSON.stringify(json, null, 4));
-    };
-
     const handleLinkToSelection = () => {
         const json = tables.getJSON(activeSheet, index);
         props.assignToGeometry(json);
@@ -50,9 +45,6 @@ export function TableRow(props: TableRowProps) {
         <tr className="table-tr-color">
             <td className="table-td-action-color border-r border-b  mc-border sticky left-0">
                 <div className="w-full h-full flex flex-row text-xl space-x-2 px-1">
-                    <ActionButton title="Copy to clipboard" onClick={handleCopyClipboard}>
-                        <BiCopy className="inline-block ml-1" />
-                    </ActionButton>
                     <ActionButton
                         title="Assign to selected geometry"
                         onClick={handleLinkToSelection}

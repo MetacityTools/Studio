@@ -1,9 +1,8 @@
 import Editor from '@monaco-editor/react';
 import React from 'react';
 
-import { useStatus } from '@editor/EditorContext';
-
 import { Empty } from '@elements/Empty';
+import { useLogger } from '@elements/GlobalContext';
 
 import { useDarkmode, useMetadata, useSelectedModels } from '@shared/Context/hooks';
 import { applyEdits, combineData } from '@shared/Context/metadata';
@@ -18,7 +17,7 @@ export function MetaEditor() {
     const [content, setContent] = React.useState({});
     const [key, setKey] = React.useState('');
     const [_, updateGlobalMetadata] = useMetadata();
-    const [__, setStatus] = useStatus();
+    const log = useLogger();
     const [darkmode] = useDarkmode();
 
     const handleKey = (e: React.KeyboardEvent<HTMLDivElement>) => {
@@ -27,7 +26,7 @@ export function MetaEditor() {
 
     const handleChange = (value: string | undefined, event: any) => {
         if (timeRef.current) clearTimeout(timeRef.current);
-        setStatus('editing');
+        log('Saving metadata');
         timeRef.current = setTimeout(() => {
             try {
                 try {
@@ -35,10 +34,10 @@ export function MetaEditor() {
                     applyEdits(selected, content, edited);
                     setContent(edited);
                     updateGlobalMetadata();
-                    setStatus('saved');
+                    log('Metadata saved');
                 } catch (e) {
                     console.warn(e);
-                    setStatus('failed');
+                    log('Failed to save metadata');
                 }
             } catch (e) {}
         }, 1000);

@@ -2,8 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
-import { GeneralContext } from '@elements/Context';
 import { ErrorPage } from '@elements/Error';
+import { GeneralContext } from '@elements/GlobalContext';
 
 import { ViewContext } from '@shared/Context/Context';
 
