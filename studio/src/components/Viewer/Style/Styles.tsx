@@ -4,11 +4,12 @@ import React from 'react';
 import { ColumnContainer, StretchContainer } from '@elements/Containers';
 import { PanelTitle } from '@elements/PanelTitle';
 
-import { useApplyStyle, useGrayscale, useLastStyle } from '@shared/Context/hooks';
+import { useApplyStyle, useClearStyle, useGrayscale, useLastStyle } from '@shared/Context/hooks';
 import { StyleEditor } from '@shared/Style/StyleEditor';
 
 export function StyleSidePanel() {
-    const [, applyStyle, clearStyle] = useApplyStyle();
+    const applyStyle = useApplyStyle();
+    const clearStyle = useClearStyle();
     const [, applyLastStyle] = useLastStyle();
     const [, setGrayscale] = useGrayscale();
 

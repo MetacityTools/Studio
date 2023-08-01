@@ -4,14 +4,14 @@ import { StyleNode } from '@utils/types';
 
 import { HierarchyTitle } from '@elements/Hierarchy';
 
-import { useApplyStyle } from '@shared/Context/hooks';
+import { useApplyStyle, useStyleKeychain } from '@shared/Context/hooks';
 import { StyleHierarchy } from '@shared/Style/StyleHierarchy';
 import { StyleInfo } from '@shared/Style/StyleInfo';
 
 export function StyleEditor() {
     const [openList, setOpenList] = React.useState<boolean>(false);
-    const [, applyStyle] = useApplyStyle();
-    const [keychain] = useApplyStyle();
+    const applyStyle = useApplyStyle();
+    const keychain = useStyleKeychain();
 
     const handlePick = (root: StyleNode, node: StyleNode) => {
         applyStyle(root, node);

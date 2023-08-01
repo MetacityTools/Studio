@@ -1,8 +1,6 @@
-import React from 'react';
-
 import { StyleNode } from '@utils/types';
 
-import { useApplyStyle, useStyle } from '@shared/Context/hooks';
+import { useStyle, useStyleKeychain } from '@shared/Context/hooks';
 
 import { ColorPicker } from './ColorPicker';
 
@@ -28,7 +26,7 @@ function removeColor(style: StyleNode, keychain: string[], category: string) {
 
 export function CategoryStyleEditor(props: { category: string; color: string }) {
     const { category, color } = props;
-    const [keychain] = useApplyStyle();
+    const keychain = useStyleKeychain();
     const [style, setStyle] = useStyle();
 
     const handleChange = (color: string) => {

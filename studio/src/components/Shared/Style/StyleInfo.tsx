@@ -2,36 +2,39 @@ import clsx from 'clsx';
 import React from 'react';
 
 import { Categories, Histogram, Scalars } from '@utils/types';
+import { autoUpdateStyle } from '@utils/utils';
 
 import { OverflowAbsoluteContainer, StretchContainer } from '@elements/Containers';
 import { Empty } from '@elements/Empty';
 
-import { useApplyStyle, useStyleInfo } from '@shared/Context/hooks';
+import { useAddMissingStyles, useStyleInfo, useStyleKeychain } from '@shared/Context/hooks';
 
 import { HistogramGradientStrip } from './Histogram';
 import { CategoryStyleEditor } from './StyleCategoryEditor';
 
 export function StyleInfo() {
     const [histogram, style] = useStyleInfo();
-    const [keychain] = useApplyStyle();
+    const keychain = useStyleKeychain();
+    const update = useAddMissingStyles();
 
     if (!style || !keychain) return <Empty>No Style Info</Empty>;
 
     return (
-        <>
-            <StretchContainer>
-                <OverflowAbsoluteContainer>
-                    <div className="py-2">
-                        {style.style?.scalars && histogram && (
-                            <ScalarValues scalars={style.style.scalars} histogram={histogram} />
-                        )}
-                        {style.style?.categories && (
-                            <CategoryValues categories={style.style.categories} />
-                        )}
-                    </div>
-                </OverflowAbsoluteContainer>
-            </StretchContainer>
-        </>
+        <StretchContainer>
+            <OverflowAbsoluteContainer>
+                <div className="py-2">
+                    {style.style?.scalars && histogram && (
+                        <ScalarValues scalars={style.style.scalars} histogram={histogram} />
+                    )}
+                    {style.style?.categories && (
+                        <CategoryValues categories={style.style.categories} />
+                    )}
+                </div>
+                <button onClick={update} className="w-full button-list">
+                    Add missing styles
+                </button>
+            </OverflowAbsoluteContainer>
+        </StretchContainer>
     );
 }
 

@@ -145,20 +145,6 @@ export function ViewContext(props: { children: React.ReactNode }) {
     }, [activeView, renderer, camTargetZ]);
 
     React.useEffect(() => {
-        if (usedStyle === null) {
-            //whiten(models); - won't be implemented here, you have to manually style in the hooks
-            models.forEach((object) => {
-                object.uniforms['uUseShading'] = 1;
-            });
-        } else {
-            //colorize(usedStyle, styles, models); - won't be implemented here, you have to manually style in the hooks
-            models.forEach((object) => {
-                object.uniforms['uUseShading'] = 0.1;
-            });
-        }
-    }, [usedStyle, styles, models]);
-
-    React.useEffect(() => {
         if (darkmode) {
             renderer.clearColor = [0.1, 0.1, 0.1, 1];
             document.documentElement.style.setProperty('color-scheme', 'dark');

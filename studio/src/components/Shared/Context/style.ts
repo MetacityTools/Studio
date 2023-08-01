@@ -95,11 +95,13 @@ export function colorize(keychain: string[], styles: StyleNode, models: EditorMo
 
         //apply colormap
         model.setColorMap(colormap);
+        model.uniforms['uUseShading'] = 0.1;
     });
 }
 
 export function whiten(models: EditorModel[]) {
     models.forEach((model) => {
         model.whiten();
+        model.uniforms['uUseShading'] = 1;
     });
 }

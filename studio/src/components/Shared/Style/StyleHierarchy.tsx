@@ -7,7 +7,7 @@ import { ColumnContainer, OverflowAbsoluteContainer, StretchContainer } from '@e
 import { Empty } from '@elements/Empty';
 import { Input } from '@elements/Input';
 
-import { useGrayscale, useStyle } from '@shared/Context/hooks';
+import { useStyle } from '@shared/Context/hooks';
 
 import { StyleNodeComponent } from './StyleNode';
 

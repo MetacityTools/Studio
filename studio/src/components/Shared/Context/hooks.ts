@@ -12,7 +12,7 @@ import { joinSubmodels } from '@utils/modifiers/joinSubmodels';
 import { removeSubmodels } from '@utils/modifiers/removeSubmodels';
 import { splitModel } from '@utils/modifiers/splitModels';
 import { Histogram, MetadataNode, PrimitiveType, StyleNode } from '@utils/types';
-import { projectModels } from '@utils/utils';
+import { autoUpdateStyle, projectModels } from '@utils/utils';
 
 import * as GL from '@bananagl/bananagl';
 
@@ -233,12 +233,7 @@ export function useMetadata(): [MetadataNode, () => void] {
     return [metadata, update];
 }
 
-export function useSelectionByMetadata(): (
-    root: MetadataNode,
-    metadata: MetadataNode,
-    value: any,
-    extend?: boolean
-) => void {
+export function useSelectionByMetadata() {
     const { models } = React.useContext(context);
     const [select] = useSelection();
 
@@ -279,11 +274,7 @@ export function useStyle(): [StyleNode, (style: StyleNode) => void] {
     return [ctx.styles, setStyle];
 }
 
-export function useApplyStyle(): [
-    string[] | null,
-    (root: StyleNode, style: StyleNode) => void,
-    () => void
-] {
+export function useApplyStyle() {
     const ctx = React.useContext(context);
 
     const applyStyle = (root: StyleNode, style: StyleNode) => {
@@ -294,12 +285,23 @@ export function useApplyStyle(): [
         colorize(keychain, root, ctx.models);
     };
 
+    return applyStyle;
+}
+
+export function useStyleKeychain() {
+    const ctx = React.useContext(context);
+    return ctx.usedStyle;
+}
+
+export function useClearStyle() {
+    const ctx = React.useContext(context);
+
     const clearStyle = () => {
         ctx.setUsedStyle(null);
         whiten(ctx.models);
     };
 
-    return [ctx.usedStyle, applyStyle, clearStyle];
+    return clearStyle;
 }
 
 export function useLastStyle(): [string[] | null, () => void] {
@@ -312,6 +314,18 @@ export function useLastStyle(): [string[] | null, () => void] {
     };
 
     return [ctx.lastUsedStyle, applyLastStyle];
+}
+
+export function useAddMissingStyles() {
+    const ctx = React.useContext(context);
+    const [, setStyle] = useStyle();
+
+    const update = () => {
+        const updated = autoUpdateStyle(ctx.metadata, ctx.styles);
+        setStyle(updated);
+    };
+
+    return update;
 }
 
 export function useGrayscale(): [boolean, React.Dispatch<React.SetStateAction<boolean>>] {
