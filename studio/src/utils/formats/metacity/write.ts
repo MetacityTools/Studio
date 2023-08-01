@@ -10,7 +10,6 @@ export function exportModel(models: EditorModelData[], styles: StyleNode, title:
     writeString('mtctv2', stream);
 
     //write models
-    console.log(models);
     for (const model of models) writeModel(model, stream);
     stream.close();
 
@@ -37,9 +36,7 @@ export function exportModel(models: EditorModelData[], styles: StyleNode, title:
 
 function writeModel(model: EditorModelData, stream: WriteOnlyMemoryStream) {
     writeTypedArray(model.geometry.position, stream);
-    console.log('expected length', model.geometry.position.length);
     writeTypedArray(model.geometry.submodel, stream);
-    console.log('expected length', model.geometry.submodel.length);
 
     const metadata = JSON.stringify(model.metadata.data);
     writeString(metadata, stream);

@@ -6,10 +6,10 @@ import { CoordinateMode } from '@utils/utils';
 
 import { useProcessing } from '@elements/GlobalContext';
 
-import { useCreateModels, useStyle } from './Context/hooks';
+import { useImportModels, useStyle } from './Context/hooks';
 
 export function ModelAutoLoader() {
-    const create = useCreateModels();
+    const create = useImportModels();
     const [_, setStyle] = useStyle();
     const [, setProcessing] = useProcessing();
 

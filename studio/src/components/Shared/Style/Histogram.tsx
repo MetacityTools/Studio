@@ -23,7 +23,6 @@ export function HistogramGradientStrip(props: HistogramGradientStripProps) {
         const value = histogram.min + (i / (TICKS_SIZE - 1)) * (histogram.max - histogram.min);
         return value.toFixed(2);
     });
-    console.log(xTicks);
 
     return (
         <div className="flex flex-col">

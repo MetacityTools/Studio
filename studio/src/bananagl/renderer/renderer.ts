@@ -11,7 +11,6 @@ export class Renderer {
 
     init(canvas: HTMLCanvasElement, options?: WebGLContextAttributes) {
         if (this.context || this.window_) return;
-        console.log('Renderer initialized');
 
         //init with highest performance settings
         const gl = canvas.getContext('webgl2', {

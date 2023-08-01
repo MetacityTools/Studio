@@ -100,7 +100,7 @@ async function importModel(model: EditorModelData) {
     }
 }
 
-export function useCreateModels() {
+export function useImportModels() {
     const ctx = React.useContext(context);
 
     const create = async (data: EditorModelData[], options?: EditorImportOptions) => {
@@ -197,7 +197,6 @@ export function useProjectModels() {
     const ctx = React.useContext(context);
 
     const mapping = async (source: EditorModel, target: EditorModel) => {
-        console.log(source, target);
         //projeciton map
         const mappedModel = await projectModels(source, target);
 
@@ -228,8 +227,6 @@ export function useMetadata(): [MetadataNode, () => void] {
     const update = () => {
         const data = extractMetadata(ctx.models);
         ctx.setMetadata(data);
-        const updated = autoUpdateStyle(data, ctx.styles);
-        ctx.setStyles(updated);
     };
 
     return [ctx.metadata, update];
@@ -263,12 +260,12 @@ export function useKeymap() {
     return ctx.renderer.controls?.keyboard.keyMap;
 }
 
-export function useStyle(): [StyleNode, (style: StyleNode, clean?: boolean) => void] {
+export function useStyle(): [StyleNode, (style: StyleNode) => void] {
     const ctx = React.useContext(context);
 
-    const setStyle = (style: StyleNode, clean: boolean = false) => {
-        if (clean) style = autoUpdateStyle(ctx.metadata, style);
-        ctx.setStyles(style);
+    const setStyle = (style: StyleNode) => {
+        autoUpdateStyle(ctx.metadata, style);
+        ctx.setStyles({ ...style });
         const usedStyle = ctx.usedStyle;
         if (!usedStyle) return;
         colorize(usedStyle, style, ctx.models);
@@ -349,7 +346,7 @@ export function useMetadatHeatmap(): [() => void, () => void] {
         [0.196, 0.705, 1.0],
     ];
 
-    const colorize = () => {
+    const apply = () => {
         for (const model of ctx.models) {
             const meta = model.metadata;
             const submodels = model.submodelIDs;
@@ -373,5 +370,5 @@ export function useMetadatHeatmap(): [() => void, () => void] {
         whiten(ctx.models);
     };
 
-    return [colorize, reset];
+    return [apply, reset];
 }

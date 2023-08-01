@@ -7,7 +7,7 @@ import { useSheets } from '@editor/EditorContext';
 import { Button, ButtonFileInput } from '@elements/Button';
 import { useProcessing } from '@elements/GlobalContext';
 
-import { useCreateModels, useExport, useRenderer, useScene, useStyle } from '@shared/Context/hooks';
+import { useExport, useImportModels, useRenderer, useScene, useStyle } from '@shared/Context/hooks';
 import { Vitals } from '@shared/IOMenu/Vitals';
 
 import { ExportDialog } from './DialogExport';
@@ -17,7 +17,7 @@ export function IOMenu(props: { export?: boolean }) {
     const renderer = useRenderer();
     const scene = useScene();
     const [, setStyle] = useStyle();
-    const create = useCreateModels();
+    const importModels = useImportModels();
     const exportProject = useExport();
     const [, setProcessing] = useProcessing();
     const [addSheet] = useSheets();
@@ -26,6 +26,7 @@ export function IOMenu(props: { export?: boolean }) {
     const [importedModels, setImportedModels] = React.useState<ModelData[]>([]);
     const [importedStyles, setImportedStyles] = React.useState<StyleNode[]>([]);
     const [exportOpen, setExportOpen] = React.useState(false);
+    const [loadStyles, setLoadStyles] = React.useState(false);
 
     const onModelsSelected = async (event: React.ChangeEvent<HTMLInputElement>) => {
         setProcessing(true, 'Reading files...');
@@ -37,7 +38,7 @@ export function IOMenu(props: { export?: boolean }) {
         if (models.length > 0) {
             setImportOpen(true);
             if (styles.length > 0) setImportedStyles(styles);
-        } else if (styles.length > 0) setStyle(styles[0], true);
+        } else if (styles.length > 0) setStyle(styles[0]);
 
         setProcessing(false, 'Finished reading files');
         event.target.value = '';
@@ -48,15 +49,22 @@ export function IOMenu(props: { export?: boolean }) {
         setProcessing(true, 'Building BVH...');
         setImportOpen(false);
 
-        await create(importedModels, {
+        await importModels(importedModels, {
             coordMode: mode,
         });
-        if (importedStyles.length > 0) setStyle(importedStyles[0], true);
 
+        setLoadStyles(true);
         setProcessing(false, 'Finished loading models');
         setImportedModels([]);
-        setImportedStyles([]);
     };
+
+    React.useEffect(() => {
+        if (loadStyles && importedStyles.length > 0) {
+            setStyle(importedStyles[0]);
+            setImportedStyles([]);
+            setLoadStyles(false);
+        }
+    }, [loadStyles]);
 
     const handleExport = (title: string | null) => {
         setExportOpen(false);

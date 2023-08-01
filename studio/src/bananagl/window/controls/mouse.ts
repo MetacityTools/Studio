@@ -92,7 +92,6 @@ export class MouseControls {
             if (duration < 200) {
                 hit = trace(this.view, x, y);
             } else if (this.keyMap?.shift && this.range) {
-                console.log('there was a range select', this.range);
                 hit = traceRange(this.view, this.range.from, this.range.to);
             }
         }

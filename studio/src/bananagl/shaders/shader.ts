@@ -148,7 +148,6 @@ export class Shader {
             if (equal(value, uniform.value)) continue;
 
             const loc = uniform.loc;
-            console.log(`    Setting uniforms.${name}`);
             this.setValue(value, gl, loc);
             uniform.value = cloneValue(value);
         }

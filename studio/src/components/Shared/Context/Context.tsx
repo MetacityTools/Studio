@@ -85,11 +85,6 @@ export function ViewContext(props: { children: React.ReactNode }) {
             setMinShade(minZ);
             setMaxShade(maxZ);
             if (isFinite(minZ)) setCamTargetZ(minZ);
-
-            const data = extractMetadata(copy);
-            setMetadata(data);
-            const updated = autoUpdateStyle(data, styles);
-            setStyles(updated);
         };
 
         scene.addChangeListener(onChange);
@@ -98,6 +93,16 @@ export function ViewContext(props: { children: React.ReactNode }) {
             scene.removeChangeListener(onChange);
         };
     }, [scene]);
+
+    React.useEffect(() => {
+        const data = extractMetadata(models);
+        setMetadata(data);
+    }, [models]);
+
+    React.useEffect(() => {
+        autoUpdateStyle(metadata, styles);
+        setStyles({ ...styles });
+    }, [metadata]);
 
     React.useEffect(() => {
         const onChange = () => {
@@ -152,7 +157,6 @@ export function ViewContext(props: { children: React.ReactNode }) {
             document.documentElement.style.setProperty('color-scheme', 'dark');
             document.documentElement.classList.add('dark');
             localStorage.setItem('darkmode', 'true');
-            console.log('darkmode');
         } else {
             renderer.clearColor = [1, 1, 1, 1];
             document.documentElement.style.setProperty('color-scheme', 'light');

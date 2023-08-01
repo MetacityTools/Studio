@@ -378,7 +378,6 @@ export class Camera {
 
         //Calculate the displacement and adjust the camera's position
         const displacement = vec3.sub(this.displacement, newTarPos, tarPos);
-        console.log(displacement);
         vec3.sub(this.position, this.position, displacement);
         vec3.sub(this.target, this.target, displacement);
         this.updateProjectionViewMatrix();
