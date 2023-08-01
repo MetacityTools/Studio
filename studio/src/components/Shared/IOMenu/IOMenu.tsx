@@ -64,7 +64,7 @@ export function IOMenu(props: { export?: boolean }) {
             setImportedStyles([]);
             setLoadStyles(false);
         }
-    }, [loadStyles]);
+    }, [loadStyles, importedStyles]);
 
     const handleExport = (title: string | null) => {
         setExportOpen(false);

@@ -71,20 +71,7 @@ export function ViewContext(props: { children: React.ReactNode }) {
     React.useEffect(() => {
         const onChange = () => {
             const copy = scene.objects.filter((obj) => obj instanceof EditorModel) as EditorModel[];
-
-            let minZ = Infinity;
-            let maxZ = -Infinity;
-
-            for (const model of copy) {
-                const bbox = model.boundingBox;
-                minZ = Math.min(minZ, bbox.min[2]);
-                maxZ = Math.max(maxZ, bbox.max[2]);
-            }
-
             setModels(copy);
-            setMinShade(minZ);
-            setMaxShade(maxZ);
-            if (isFinite(minZ)) setCamTargetZ(minZ);
         };
 
         scene.addChangeListener(onChange);
@@ -95,6 +82,18 @@ export function ViewContext(props: { children: React.ReactNode }) {
     }, [scene]);
 
     React.useEffect(() => {
+        let minZ = Infinity;
+        let maxZ = -Infinity;
+
+        for (const model of models) {
+            const bbox = model.boundingBox;
+            minZ = Math.min(minZ, bbox.min[2]);
+            maxZ = Math.max(maxZ, bbox.max[2]);
+        }
+        setMinShade(minZ);
+        setMaxShade(maxZ);
+        if (isFinite(minZ)) setCamTargetZ(minZ);
+
         const data = extractMetadata(models);
         setMetadata(data);
     }, [models]);
