@@ -24,14 +24,11 @@ export function StatusBar() {
 
     React.useEffect(() => {
         setStatus(log[log.length - 1]);
-        if (processing) {
-            if (timerRef.current) clearTimeout(timerRef.current);
-        } else {
+        if (timerRef.current) clearTimeout(timerRef.current);
+        if (!processing)
             timerRef.current = setTimeout(() => {
-                clearTimeout(timerRef.current);
                 setStatus('Ready');
             }, 10000);
-        }
     }, [log, processing]);
 
     React.useEffect(() => {

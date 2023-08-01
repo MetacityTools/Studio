@@ -22,10 +22,10 @@ export function ModelList() {
 
     return (
         <OverflowContainer>
-            {models.length === 0 && <Empty>No models</Empty>}
-            {models.length >= 0 && (
-                <ColumnContainer>
-                    {models.map((model, index) => (
+            <ColumnContainer>
+                {models.length === 0 && <Empty>No models</Empty>}
+                {models.length >= 0 &&
+                    models.map((model, index) => (
                         <Model
                             model={model}
                             key={model.name + index}
@@ -33,8 +33,7 @@ export function ModelList() {
                             onSelect={() => handleSelect(model)}
                         />
                     ))}
-                </ColumnContainer>
-            )}
+            </ColumnContainer>
         </OverflowContainer>
     );
 }

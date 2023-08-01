@@ -1,7 +1,7 @@
 import { vec3 } from 'gl-matrix';
 import React from 'react';
 
-import { EditorModel, MetadataNode, StyleNode } from '@utils/utils';
+import { EditorModel, MetadataNode, StyleNode, autoUpdateStyle } from '@utils/utils';
 
 import * as GL from '@bananagl/bananagl';
 
@@ -88,6 +88,8 @@ export function ViewContext(props: { children: React.ReactNode }) {
 
             const data = extractMetadata(copy);
             setMetadata(data);
+            const updated = autoUpdateStyle(data, styles);
+            setStyles(updated);
         };
 
         scene.addChangeListener(onChange);

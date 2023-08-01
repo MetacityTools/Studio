@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { CoordinateMode, ModelData, load } from '@utils/utils';
+import { CoordinateMode, ModelData, StyleNode, load } from '@utils/utils';
 
 import { useSheets } from '@editor/EditorContext';
 
@@ -24,6 +24,7 @@ export function IOMenu(props: { export?: boolean }) {
 
     const [importOpen, setImportOpen] = React.useState(false);
     const [importedModels, setImportedModels] = React.useState<ModelData[]>([]);
+    const [importedStyles, setImportedStyles] = React.useState<StyleNode[]>([]);
     const [exportOpen, setExportOpen] = React.useState(false);
 
     const onModelsSelected = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -33,8 +34,11 @@ export function IOMenu(props: { export?: boolean }) {
         );
         setImportedModels(models);
         tables.forEach((table) => addSheet(table));
-        styles.length > 0 && setStyle(styles[0]); //use only the first style imported
-        if (models.length > 0) setImportOpen(true);
+        if (models.length > 0) {
+            setImportOpen(true);
+            if (styles.length > 0) setImportedStyles(styles);
+        } else if (styles.length > 0) setStyle(styles[0], true);
+
         setProcessing(false, 'Finished reading files');
         event.target.value = '';
         event.preventDefault();
@@ -43,11 +47,15 @@ export function IOMenu(props: { export?: boolean }) {
     const handleModelsAdded = async (mode: CoordinateMode) => {
         setProcessing(true, 'Building BVH...');
         setImportOpen(false);
+
         await create(importedModels, {
             coordMode: mode,
         });
+        if (importedStyles.length > 0) setStyle(importedStyles[0], true);
+
         setProcessing(false, 'Finished loading models');
         setImportedModels([]);
+        setImportedStyles([]);
     };
 
     const handleExport = (title: string | null) => {

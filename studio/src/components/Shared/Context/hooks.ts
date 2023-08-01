@@ -223,14 +223,16 @@ export function useExport() {
 }
 
 export function useMetadata(): [MetadataNode, () => void] {
-    const { metadata, setMetadata, models } = React.useContext(context);
+    const ctx = React.useContext(context);
 
     const update = () => {
-        const data = extractMetadata(models);
-        setMetadata(data);
+        const data = extractMetadata(ctx.models);
+        ctx.setMetadata(data);
+        const updated = autoUpdateStyle(data, ctx.styles);
+        ctx.setStyles(updated);
     };
 
-    return [metadata, update];
+    return [ctx.metadata, update];
 }
 
 export function useSelectionByMetadata() {
@@ -261,10 +263,11 @@ export function useKeymap() {
     return ctx.renderer.controls?.keyboard.keyMap;
 }
 
-export function useStyle(): [StyleNode, (style: StyleNode) => void] {
+export function useStyle(): [StyleNode, (style: StyleNode, clean?: boolean) => void] {
     const ctx = React.useContext(context);
 
-    const setStyle = (style: StyleNode) => {
+    const setStyle = (style: StyleNode, clean: boolean = false) => {
+        if (clean) style = autoUpdateStyle(ctx.metadata, style);
         ctx.setStyles(style);
         const usedStyle = ctx.usedStyle;
         if (!usedStyle) return;
@@ -314,18 +317,6 @@ export function useLastStyle(): [string[] | null, () => void] {
     };
 
     return [ctx.lastUsedStyle, applyLastStyle];
-}
-
-export function useAddMissingStyles() {
-    const ctx = React.useContext(context);
-    const [, setStyle] = useStyle();
-
-    const update = () => {
-        const updated = autoUpdateStyle(ctx.metadata, ctx.styles);
-        setStyle(updated);
-    };
-
-    return update;
 }
 
 export function useGrayscale(): [boolean, React.Dispatch<React.SetStateAction<boolean>>] {

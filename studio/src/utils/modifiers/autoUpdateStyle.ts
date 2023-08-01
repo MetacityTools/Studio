@@ -1,9 +1,8 @@
 import { MetadataNode, StyleNode } from '@utils/types';
 
-import { randomColor } from './color';
-
 export function autoUpdateStyle(metadata: MetadataNode, style: StyleNode) {
     if (metadata.values) {
+        //add missing values
         const scalars = new Set<number>();
         const categorical = new Set<string>();
 
@@ -38,14 +37,15 @@ export function autoUpdateStyle(metadata: MetadataNode, style: StyleNode) {
         }
 
         if (categorical.size > 0) {
-            if (categorical.size > 500) {
-                style.style.random = true;
-            } else {
-                if (!style.style.categories) style.style.categories = {};
-                categorical.forEach((value) => {
-                    if (!style.style!.categories![value])
-                        style.style!.categories![value] = randomColor();
-                });
+            if (!style.style.categories) style.style.categories = {};
+            categorical.forEach((value) => {
+                if (!style.style!.categories![value]) style.style!.categories![value] = '#eeeeee'; //randomColor();
+            });
+
+            const categories = Object.keys(style.style.categories);
+
+            for (let i = 0; i < categories.length; i++) {
+                if (!categorical.has(categories[i])) delete style.style.categories[categories[i]];
             }
         } else {
             if (style.style.categories) delete style.style.categories;
