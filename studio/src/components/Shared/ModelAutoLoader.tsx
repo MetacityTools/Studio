@@ -9,9 +9,10 @@ import { useProcessing } from '@elements/GlobalContext';
 import { useImportModels, useStyle } from './Context/hooks';
 
 export function ModelAutoLoader() {
-    const create = useImportModels();
+    const importModels = useImportModels();
     const [_, setStyle] = useStyle();
     const [, setProcessing] = useProcessing();
+    const [lstyles, setLStyles] = React.useState<any>();
 
     React.useEffect(() => {
         //get model param from url
@@ -40,16 +41,24 @@ export function ModelAutoLoader() {
                 const { models, styles } = await loadProjectFiles(name, buffer, stylesData);
 
                 setProcessing(true, 'Building BVH...');
-                await create(models, {
+                await importModels(models, {
                     coordMode: CoordinateMode.Keep,
                 });
-                if (styles) setStyle(styles);
+
+                if (styles) setLStyles(styles);
                 setProcessing(false, 'Finished auto-loading models');
             }
         };
 
         load();
     }, []);
+
+    React.useEffect(() => {
+        if (lstyles) {
+            setStyle(lstyles);
+            setLStyles(undefined);
+        }
+    }, [lstyles]);
 
     return null;
 }

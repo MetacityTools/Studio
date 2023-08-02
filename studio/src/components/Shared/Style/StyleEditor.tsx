@@ -2,11 +2,12 @@ import React from 'react';
 
 import { StyleNode } from '@utils/types';
 
+import { OverflowAbsoluteContainer, StretchContainer } from '@elements/Containers';
 import { HierarchyTitle } from '@elements/Hierarchy';
 
 import { useApplyStyle, useStyleKeychain } from '@shared/Context/hooks';
-import { StyleHierarchy } from '@shared/Style/StyleHierarchy';
 import { StyleInfo } from '@shared/Style/StyleInfo';
+import { StyleList } from '@shared/Style/StyleList/StyleList';
 
 export function StyleEditor() {
     const [openList, setOpenList] = React.useState<boolean>(false);
@@ -29,12 +30,14 @@ export function StyleEditor() {
                     <HierarchyTitle categories={keychain ?? ['Select a style ']} />
                 </button>
             </div>
-            {openList && (
-                <div className="w-full h-full">
-                    <StyleHierarchy onValuePick={handlePick} />
-                </div>
+            {openList && <StyleList onValuePick={handlePick} />}
+            {!openList && (
+                <StretchContainer>
+                    <OverflowAbsoluteContainer>
+                        <StyleInfo />
+                    </OverflowAbsoluteContainer>
+                </StretchContainer>
             )}
-            {!openList && <StyleInfo />}
         </>
     );
 }

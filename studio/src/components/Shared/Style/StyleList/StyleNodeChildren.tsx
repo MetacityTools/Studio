@@ -4,14 +4,14 @@ import { HierarchyNodeGroupChildren } from '@elements/Hierarchy';
 
 import { StyleMenuPickFunciton, StyleNodeComponent } from './StyleNode';
 
-interface MetadataCategoryProps {
+interface StyleNodeProps {
     categories: string[];
     node: StyleNode;
     onValuePick: StyleMenuPickFunciton;
     depth?: number;
 }
 
-export function StyleCategoryChildren(props: MetadataCategoryProps) {
+export function StyleNodeChildren(props: StyleNodeProps) {
     const { node, onValuePick, depth } = props;
 
     if (node.children) {

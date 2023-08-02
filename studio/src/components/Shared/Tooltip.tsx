@@ -1,5 +1,8 @@
 import clsx from 'clsx';
 
+import { getValueOrDefault } from '@utils/placeholders';
+import { isEmpty } from '@utils/predicates';
+
 import { useStyleKeychain, useTooltip } from './Context/hooks';
 import { getValue } from './Context/style';
 
@@ -24,8 +27,8 @@ export function TooltipOverlay() {
                 <div className="leading-none max-w-[20rem] flex flex-row items-center text-xs text-neutral-500">
                     {keychain[keychain.length - 1]}
                 </div>
-                <div className={clsx('leading-none pt-1', !value && 'text-neutral-500')}>
-                    {value ? value : 'No Data'}
+                <div className={clsx('leading-none pt-1', isEmpty(value) && 'text-neutral-500')}>
+                    {getValueOrDefault(value)}
                 </div>
             </div>
         </div>

@@ -33,13 +33,16 @@ These features are planned for the future, and scheduled for a specific release.
 -   [x] Export screenshot action
 -   [x] Refactored Global context and processing status - https://github.com/MetacityTools/Studio/issues/33
 -   [x] Projecting models onto models (2D onto 3D) - https://github.com/MetacityTools/geometry.ts
--   [ ] Replace json style editor with something more user friendly
-    -   [ ] Add a way to add custom styles - WIP
+-   [x] Replace json style editor with something more user friendly
+    -   [x] Add a way to add custom styles
+    -   [ ] Switching colormaps for scalars
+    -   [x] Editable input for colors
+    -   [ ] Switching shaders for individual models
+    -   [ ] Randomize colors - default colormap
 -   [x] Feedback - show notifications on the bottom of the screen
 -   [x] Tables - add notification on data assignment
 -   [ ] Loading points and lines from SHP
 -   [ ] Lock camera position (two buttons - pan and rotation) + locking height during panning as in map
--   [ ] Switching shaders for individual models
 
 ### v0.5.1 - ✅ Released
 

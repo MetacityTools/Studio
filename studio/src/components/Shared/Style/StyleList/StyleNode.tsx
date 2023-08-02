@@ -11,7 +11,7 @@ import {
     HierarchyTitle,
 } from '@elements/Hierarchy';
 
-import { StyleCategoryChildren } from './StyleCategory';
+import { StyleNodeChildren } from './StyleNodeChildren';
 
 export type StyleMenuPickFunciton = (node: StyleNode) => void;
 
@@ -65,7 +65,7 @@ export function StyleNodeComponent(props: StyleNodeComponentProps) {
                         </HierarchyNode>
                     )}
                     {isCategory && open && (
-                        <StyleCategoryChildren
+                        <StyleNodeChildren
                             node={node}
                             onValuePick={onValuePick}
                             categories={categories}
@@ -75,14 +75,12 @@ export function StyleNodeComponent(props: StyleNodeComponentProps) {
                 </>
             )}
             {!isCategory && isValue && (
-                <>
-                    <HierarchyNode depth={props.depth}>
-                        <HierarchyStyleButton onClick={handleUseStyle} />
-                        <HierarchyMainButton onClick={handleUseStyle}>
-                            <HierarchyTitle categories={categories} />
-                        </HierarchyMainButton>
-                    </HierarchyNode>
-                </>
+                <HierarchyNode depth={props.depth}>
+                    <HierarchyStyleButton onClick={handleUseStyle} />
+                    <HierarchyMainButton onClick={handleUseStyle}>
+                        <HierarchyTitle categories={categories} />
+                    </HierarchyMainButton>
+                </HierarchyNode>
             )}
         </HierarchyNodeGroup>
     );

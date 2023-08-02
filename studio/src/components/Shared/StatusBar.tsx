@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import React from 'react';
 
 import { useLog, useProcessing } from '@elements/GlobalContext';
@@ -45,7 +46,13 @@ export function StatusBar() {
     }, [processing]);
 
     return (
-        <div className="px-4 border-t mc-border text-neutral-500 dark:bg-neutral-800 flex flex-row items-center justify-between">
+        <div
+            className={clsx(
+                'px-4 border-t flex flex-row items-center justify-between',
+                !processing && ' mc-border text-neutral-500 dark:bg-neutral-800',
+                processing && 'active-no-hover'
+            )}
+        >
             <div className="flex flex-row items-center justify-center">
                 {processing && <div>Working</div>}
                 {processing && <img src={chicken} className="w-6 h-6 mx-2" />}

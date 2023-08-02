@@ -70,11 +70,19 @@ body,
     /* add chevron to select */
 
     select {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        margin: 0;
         background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="20" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 9l4 4 4-4"/></svg>');
         background-repeat: no-repeat;
         background-position: right 0.5rem center;
         background-size: 1rem 1rem;
         padding-right: 1.5rem;
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
     }
 }
 
@@ -190,5 +198,9 @@ body,
 
     .button-list {
         @apply button-list-readonly hover:bg-neutral-300 dark:hover:bg-neutral-600;
+    }
+
+    .button-list-no-highlite {
+        @apply hover:bg-neutral-100 dark:hover:bg-neutral-700;
     }
 }

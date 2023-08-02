@@ -124,7 +124,6 @@ export interface MetadataNode {
 //------------------------------------------------------------
 export interface StyleNode {
     style?: {
-        random?: boolean;
         scalars?: Scalars;
         categories?: Categories;
     };

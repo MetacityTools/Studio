@@ -1,19 +1,17 @@
-import clsx from 'clsx';
 import { vec3 } from 'gl-matrix';
-import React from 'react';
 
 import { colorMapToValues } from '@utils/modifiers/color';
 import { Histogram, Scalars } from '@utils/types';
 
-interface HistogramGradientStripProps {
-    style: Scalars;
+interface StyleHistogramProps {
+    scalars: Scalars;
     histogram: Histogram;
 }
 
-export function HistogramGradientStrip(props: HistogramGradientStripProps) {
-    const { style, histogram } = props;
-    const map = colorMapToValues(style.colormap);
-    const gradient = getGradientStyle(map, style.min, style.max, histogram.min, histogram.max);
+export function StyleHistogram(props: StyleHistogramProps) {
+    const { scalars, histogram } = props;
+    const map = colorMapToValues(scalars.colormap);
+    const gradient = getGradientStyle(map, scalars.min, scalars.max, histogram.min, histogram.max);
 
     const max = Math.max(...histogram.histogram);
     const bins = histogram.histogram.length;

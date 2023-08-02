@@ -13,11 +13,11 @@ import { StyleNodeComponent } from './StyleNode';
 
 export const rootNodeLabel = 'Styles';
 
-interface StyleHierarchyProps {
+interface StyleListProps {
     onValuePick: (root: StyleNode, node: StyleNode) => void;
 }
 
-export function StyleHierarchy(props: StyleHierarchyProps) {
+export function StyleList(props: StyleListProps) {
     const [style] = useStyle();
     const [fitlered, setFiltered] = React.useState<StyleNode>(style);
     const [search, setSearch] = React.useState<string>('');

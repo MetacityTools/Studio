@@ -61,7 +61,6 @@ export function colorize(keychain: string[], styles: StyleNode, models: EditorMo
         const submodels = Object.keys(metadata).map((key) => parseInt(key));
         const colormap = new Map<number, vec3>();
 
-        const randomize = style.style?.random;
         const scalars = style.style?.scalars;
         const strings = style.style?.categories;
         let range = scalars ? scalars.max - scalars.min : undefined;
@@ -78,7 +77,6 @@ export function colorize(keychain: string[], styles: StyleNode, models: EditorMo
             let submodelData = metadata[submodel];
             const value = getValue(submodelData, keychain);
             if (value === undefined) continue;
-            if (randomize) colormap.set(submodel, [Math.random(), Math.random(), Math.random()]);
             else if (typeof value === 'number' && isFinite(value)) {
                 if (scalars && scalarMap && range) {
                     const indicator = (value - scalars.min) / range;

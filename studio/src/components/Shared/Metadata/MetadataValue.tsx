@@ -1,6 +1,8 @@
 import clsx from 'clsx';
 import React from 'react';
 
+import { getValueOrDefault } from '@utils/placeholders';
+import { isEmpty } from '@utils/predicates';
 import { MetadataNode } from '@utils/types';
 
 import { HierarchyBracketsButton, HierarchyMainButton, HierarchyNode } from '@elements/Hierarchy';
@@ -31,9 +33,9 @@ export function MetadataValue(props: MetadataValueProps) {
                     <HierarchyBracketsButton onClick={(e) => handleUseMetadata(e, value)} />
                     <HierarchyMainButton
                         onClick={(e) => handleUseMetadata(e, value)}
-                        className={clsx(!value && 'text-neutral-500')}
+                        className={clsx(isEmpty(value) && 'text-neutral-500')}
                     >
-                        {value ? value : 'No title'}
+                        {getValueOrDefault(value)}
                     </HierarchyMainButton>
                 </HierarchyNode>
             ))}
