@@ -1,6 +1,6 @@
 import { IFCLoader } from 'web-ifc-three';
 
-import { IFCData, ModelData, PrimitiveType, UserInputModel } from '@utils/types';
+import { IFCData, ModelData, PrimitiveType, UserInputModel } from '@data/types';
 
 import { retrieveMetadata } from './metadata';
 import { flattenModelTree } from './transform';

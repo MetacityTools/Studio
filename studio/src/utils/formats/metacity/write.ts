@@ -1,16 +1,16 @@
-import { EditorModelData, StyleNode } from '@utils/utils';
-
 import { TypedArray } from '@bananagl/bananagl';
+
+import { EditorModelData } from '@data/EditorModel';
+import { Style } from '@data/types';
 
 import { WriteOnlyMemoryStream } from './streams';
 
-export function exportModel(models: EditorModelData[], styles: StyleNode, title: string) {
+export function exportModel(models: EditorModelData[], styles: Style, title: string) {
     const stream = new WriteOnlyMemoryStream();
     //write version
     writeString('mtctv2', stream);
 
     //write models
-    console.log(models);
     for (const model of models) writeModel(model, stream);
     stream.close();
 
@@ -37,9 +37,7 @@ export function exportModel(models: EditorModelData[], styles: StyleNode, title:
 
 function writeModel(model: EditorModelData, stream: WriteOnlyMemoryStream) {
     writeTypedArray(model.geometry.position, stream);
-    console.log('expected length', model.geometry.position.length);
     writeTypedArray(model.geometry.submodel, stream);
-    console.log('expected length', model.geometry.submodel.length);
 
     const metadata = JSON.stringify(model.metadata.data);
     writeString(metadata, stream);

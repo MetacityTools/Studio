@@ -2,15 +2,15 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
-import { GeneralContext } from '@elements/Context';
 import { ErrorPage } from '@elements/Error';
 
-import { ViewContext } from '@shared/Context/Context';
+import { ProcessingContext } from '@context/ProcessingContext';
+import { ViewContext } from '@context/ViewContext';
 
 import '@assets/index.css';
 
+import { TablesContext } from '../../context/TablesContext';
 import { ModelEditor } from './Editor';
-import { EditorContext } from './EditorContext';
 
 const router = createBrowserRouter([
     {
@@ -22,12 +22,12 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     <React.StrictMode>
-        <GeneralContext>
+        <ProcessingContext>
             <ViewContext>
-                <EditorContext>
+                <TablesContext>
                     <RouterProvider router={router} />
-                </EditorContext>
+                </TablesContext>
             </ViewContext>
-        </GeneralContext>
+        </ProcessingContext>
     </React.StrictMode>
 );

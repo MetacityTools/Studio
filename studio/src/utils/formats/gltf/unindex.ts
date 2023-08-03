@@ -1,6 +1,6 @@
 import { mat4, quat, vec3 } from 'gl-matrix';
 
-import { GLTFMesh, GLTFNode, GLTFParsedData } from '@utils/types';
+import { GLTFMesh, GLTFNode, GLTFParsedData } from '@data/types';
 
 import { swapFromYupToZup } from './transform';
 

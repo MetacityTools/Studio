@@ -37,6 +37,7 @@ export class Attributes {
             else attribute.bind(gl, location);
         }
 
+        gl.finish();
         this.vao = vao;
     }
 
@@ -46,6 +47,7 @@ export class Attributes {
         this.vao = undefined;
         this.setup(gl, shader, true);
         this.needsRebind_ = false;
+        gl.finish();
     }
 
     get count() {

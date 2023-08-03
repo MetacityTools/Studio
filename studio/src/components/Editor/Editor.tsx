@@ -1,40 +1,40 @@
 import { Allotment } from 'allotment';
 import 'allotment/dist/style.css';
 
-import { ProcessingScreen } from '@elements/Processing';
 import { SizeGuard } from '@elements/SizeGuard';
 
-import { CanvasComponent } from '@shared/CanvasComponent';
+import { AutoLoader } from '@shared/AutoLoader';
+import { CanvasWrapper } from '@shared/CanvasWrapper';
 import { Controls } from '@shared/Controls';
-import { ModelAutoLoader } from '@shared/ModelAutoLoader';
+import { StatusBar } from '@shared/StatusBar';
 import { TooltipOverlay } from '@shared/Tooltip';
 
-import { Help } from './Canvas/Help';
 import { EditorSpash } from './EditorSplash';
-import { SidePanel } from './SidePanel/SidePanel';
+import { SidePanel } from './SidePanel';
 
 export function ModelEditor() {
     return (
         <SizeGuard minWidth={600} minHeight={400}>
-            <div className="w-full h-full">
-                <Allotment separator={false}>
-                    <Allotment.Pane
-                        preferredSize={500}
-                        snap
-                        className="border-r mc-border mc-background"
-                    >
-                        <SidePanel />
-                    </Allotment.Pane>
-                    <Allotment.Pane minSize={200} className="bg-neutral-100">
-                        <CanvasComponent />
-                        <Help />
-                        <Controls />
-                        <TooltipOverlay />
-                    </Allotment.Pane>
-                </Allotment>
+            <div className="flex flex-col w-screen h-screen">
+                <div className="flex-1 w-full h-full">
+                    <Allotment separator={false}>
+                        <Allotment.Pane
+                            preferredSize={500}
+                            snap
+                            className="border-r mc-border mc-background"
+                        >
+                            <SidePanel />
+                        </Allotment.Pane>
+                        <Allotment.Pane minSize={200} className="bg-neutral-100">
+                            <CanvasWrapper />
+                            <Controls />
+                            <TooltipOverlay />
+                        </Allotment.Pane>
+                    </Allotment>
+                </div>
+                <StatusBar />
                 <EditorSpash />
-                <ProcessingScreen />
-                <ModelAutoLoader />
+                <AutoLoader />
             </div>
         </SizeGuard>
     );

@@ -12,13 +12,10 @@ export class View {
     y: number = 0;
     private width_: number = 0;
     private height_: number = 0;
-    private randomColor: vec3;
     readonly camera: Camera = new Camera();
     readonly cameraLock = new CameraLock(this.camera);
 
-    constructor(readonly scene: Scene) {
-        this.randomColor = [Math.random(), Math.random(), Math.random()];
-    }
+    constructor(readonly scene: Scene) {}
 
     resize(x: number, y: number, width: number, height: number) {
         this.x = x;

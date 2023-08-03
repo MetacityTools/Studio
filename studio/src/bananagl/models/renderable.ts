@@ -107,4 +107,11 @@ export abstract class Renderable {
     }
 
     abstract get shader(): Shader;
+
+    resetTransform() {
+        this.rotation_ = [0, 0, 0];
+        this.position_ = [0, 0, 0];
+        this.scale_ = [1, 1, 1];
+        this.updateMatrix();
+    }
 }

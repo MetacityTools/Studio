@@ -3,42 +3,6 @@ import React from 'react';
 
 import { Input } from './Input';
 
-interface MenuButtonProps {
-    children: React.ReactNode;
-    tipTitle?: string;
-    active?: boolean;
-    disabled?: boolean;
-    onClick?: () => void;
-}
-
-export function getMenuButtonStyle(active?: boolean, disabled?: boolean) {
-    return clsx(
-        'text-xs outline-none focus:outline-none',
-        'first:border-l last:border-r border-y last:rounded-r-md first:rounded-l-md',
-        active ? (disabled ? 'active-no-hover' : 'active') : disabled ? 'base-no-hover' : 'base'
-    );
-}
-
-export function MenuButton(props: MenuButtonProps) {
-    return (
-        <button
-            className={clsx(
-                getMenuButtonStyle(props.active || false, props.disabled || false),
-                props.onClick && 'p-2'
-            )}
-            onClick={props.onClick}
-            title={props.tipTitle}
-            disabled={props.disabled || false}
-        >
-            {props.children}
-        </button>
-    );
-}
-
-export function MenuGroup(props: { children: React.ReactNode }) {
-    return <div className="flex flex-row rounded-md">{props.children}</div>;
-}
-
 export function Button(props: {
     children: React.ReactNode;
     disabled?: boolean;

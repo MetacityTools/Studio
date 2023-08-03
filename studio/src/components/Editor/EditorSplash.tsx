@@ -8,7 +8,7 @@ import {
 
 import { DialogOption, OverlayDialog } from '@elements/Dialog';
 
-import splash from '@assets/bubny.png';
+import splash from '@assets/ikea4.png';
 
 export function EditorSpash() {
     const [isOpen, setIsOpen] = React.useState(true);
@@ -41,10 +41,10 @@ export function EditorSpash() {
             </div>
             <div className="mx-6 mb-8">
                 <div className="flex flex-row items-center mc-text">
-                    <TbSquareRoundedNumber1Filled className="mr-2 text-xl text-blue-500" />
+                    <TbSquareRoundedNumber1Filled className="mr-2 text-xl text-neutral-500" />
                     import, transform, and align models
                 </div>
-                <div className="border-l ml-2 pl-5 border-500 border-blue-500 border-dashed">
+                <div className="border-l ml-2 pl-5 border-500 border-neutral-500 border-dashed">
                     <ul className="list-disc list-inside text-sm py-2 mc-text">
                         <li>SHP (only Polygons and MultiPatch)</li>
                         <li>IFC</li>
@@ -53,12 +53,12 @@ export function EditorSpash() {
                     </ul>
                 </div>
                 <div className="flex flex-row items-center mc-text">
-                    <TbSquareRoundedNumber2Filled className="mr-2 text-xl text-blue-500" />
+                    <TbSquareRoundedNumber2Filled className="mr-2 text-xl text-neutral-500" />
                     connect metadata
                 </div>
-                <div className="border-l h-4 ml-2 border-blue-500 border-dashed"></div>
+                <div className="border-l h-4 ml-2 border-neutral-500 border-dashed"></div>
                 <div className="flex flex-row items-center mc-text">
-                    <TbSquareRoundedNumber3Filled className="mr-2 text-xl text-blue-500" />
+                    <TbSquareRoundedNumber3Filled className="mr-2 text-xl text-neutral-500" />
                     export
                 </div>
             </div>

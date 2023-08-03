@@ -3,12 +3,11 @@ import { VscJson, VscSymbolColor, VscTools } from 'react-icons/vsc';
 import { ColumnContainer } from '@elements/Containers';
 import { TabButton, TabGroup, TabList, TabPanel, TabPanels } from '@elements/Tabs';
 
-import { useGrayscale } from '@shared/Context/hooks';
-import { IOMenu } from '@shared/IOMenu/IOMenu';
-import { ViewSidePanel } from '@shared/ViewSettings/ViewSidePanel';
+import { IOMenu } from '@shared/IOMenu';
+import { StyleSidePanel } from '@shared/StyleSidePanel';
+import { ViewPanel } from '@shared/ViewPanel';
 
-import { MetadataSidePanel } from './Metadata/MetadataSidePanel';
-import { StyleSidePanel } from './Style/Styles';
+import { MetadataSidePanel } from './MetadataSidePanel';
 
 export function SidePanel() {
     return (
@@ -34,7 +33,7 @@ export function SidePanel() {
                         <StyleSidePanel />
                     </TabPanel>
                     <TabPanel>
-                        <ViewSidePanel />
+                        <ViewPanel />
                     </TabPanel>
                 </TabPanels>
             </TabGroup>

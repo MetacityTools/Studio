@@ -11,7 +11,6 @@ export class Renderer {
 
     init(canvas: HTMLCanvasElement, options?: WebGLContextAttributes) {
         if (this.context || this.window_) return;
-        console.log('Renderer initialized');
 
         //init with highest performance settings
         const gl = canvas.getContext('webgl2', {
@@ -89,6 +88,9 @@ export class Renderer {
         this.running = true;
         this.render();
 
+        this.afterRenderCallbacks.forEach((callback) => callback());
+        this.afterRenderCallbacks = [];
+
         const now = performance.now();
         const frameTime = now - this.lastFrameTime;
         this.lastFrameTime = now;
@@ -96,5 +98,11 @@ export class Renderer {
         this.frameTimeIndex = (this.frameTimeIndex + 1) % this.frameTimeLog.length;
 
         requestAnimationFrame(() => this.animationLoop());
+    }
+
+    private afterRenderCallbacks: (() => void)[] = [];
+
+    set afterRenderOnce(callback: () => void) {
+        this.afterRenderCallbacks.push(callback);
     }
 }

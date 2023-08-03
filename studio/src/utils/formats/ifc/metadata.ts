@@ -1,7 +1,7 @@
 import { IFCLoader } from 'web-ifc-three';
 import { IFCModel } from 'web-ifc-three/IFC/components/IFCModel';
 
-import { IFCModelData } from '@utils/types';
+import { IFCModelData } from '@data/types';
 
 export function retrieveMetadata(model: IFCModel, loader: IFCLoader, models: IFCModelData[]) {
     const uniqueSubmodels = new Set<number>();

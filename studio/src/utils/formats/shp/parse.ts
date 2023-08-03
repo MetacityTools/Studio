@@ -12,7 +12,7 @@ import {
 } from 'shpts';
 import { BaseRecord } from 'shpts/dist/geometry/base';
 
-import { ModelData, PrimitiveType, ShapefileData, UserInputModel } from '@utils/types';
+import { ModelData, PrimitiveType, ShapefileData, UserInputModel } from '@data/types';
 
 export async function parse(model: UserInputModel): Promise<ModelData> {
     const data = model.data as ShapefileData;
