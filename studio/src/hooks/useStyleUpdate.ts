@@ -8,8 +8,9 @@ export function useUpdateStyles() {
     const ctx = React.useContext(context);
 
     const setStyle = (style?: Style, metadata?: Metadata) => {
-        autoUpdateStyle(metadata ?? ctx.metadata, style ?? ctx.styles);
-        ctx.setStyles({ ...style });
+        const s = style ?? ctx.styles;
+        autoUpdateStyle(metadata ?? ctx.metadata, s);
+        ctx.setStyles({ ...s });
     };
 
     return setStyle;

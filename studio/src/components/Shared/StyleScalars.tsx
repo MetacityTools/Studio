@@ -2,6 +2,8 @@ import { Listbox } from '@headlessui/react';
 
 import { Histogram, Scalars } from '@data/types';
 
+import { useApplyStyle } from '@hooks/useApplyStyle';
+import { useLastStyle } from '@hooks/useLastStyle';
 import { useUpdateStyles } from '@hooks/useStyleUpdate';
 
 import { StyleHistogram } from './StyleHistogram';
@@ -11,10 +13,12 @@ const colormaps = ['plasma', 'magma', 'inferno', 'viridis'];
 export function StyleScalars(props: { scalars: Scalars; histogram: Histogram }) {
     const { scalars, histogram } = props;
     const updateStyles = useUpdateStyles();
+    const [, applyStyle] = useLastStyle();
 
     const handleChange = (value: string) => {
         scalars.colormap = value;
         updateStyles();
+        applyStyle();
     };
 
     return (
