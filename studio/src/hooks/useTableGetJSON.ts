@@ -2,18 +2,18 @@ import React from 'react';
 
 import { context } from '@context/TablesContext';
 
-export function useTableGetJSON(): (sheet: number, row: number) => { [key: string]: any } {
+export function useTableGetJSON(): (row: number) => { [key: string]: any } {
     const ctx = React.useContext(context);
 
-    const getJSON = (sheetIdx: number, rowIdx: number) => {
-        const sheet = ctx.sheets[sheetIdx];
+    const getJSON = (rowIdx: number) => {
+        const sheet = ctx.sheets[ctx.activeSheet];
         const rowData = sheet[rowIdx];
 
         const result: any = {};
         for (let i = 0; i < rowData.length; i++) {
             const value = rowData[i];
             if (value === '') continue;
-            const keys = getKeysForColumn(sheetIdx, i, sheet, ctx.rowTypes);
+            const keys = getKeysForColumn(ctx.activeSheet, i, sheet, ctx.rowTypes);
             if (keys.length === 0) return {};
             recursiveInsert(keys, value, result);
         }

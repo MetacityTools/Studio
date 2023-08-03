@@ -1,7 +1,7 @@
-import { StyleNode } from '@data/types';
+import { Style } from '@data/types';
 
-export function getStyle(node: StyleNode, keychain: string[]) {
-    let value: StyleNode | undefined = node;
+export function getStyle(node: Style, keychain: string[]) {
+    let value: Style | undefined = node;
     for (const key of keychain) {
         if (value === undefined) return undefined;
         value = value.children?.[key];
@@ -10,12 +10,12 @@ export function getStyle(node: StyleNode, keychain: string[]) {
     return value;
 }
 
-export function filterStyles(style: StyleNode, nodeKey: string, query: string) {
+export function filterStyles(style: Style, nodeKey: string, query: string) {
     if (!query) return style;
     if (nodeKey.toLowerCase().includes(query.toLowerCase())) return style;
 
-    const copy: StyleNode = {};
-    const children: { [key: string]: StyleNode } = {};
+    const copy: Style = {};
+    const children: { [key: string]: Style } = {};
 
     if (style.children) {
         Object.entries(style.children).forEach(([key, child]) => {

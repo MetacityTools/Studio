@@ -1,7 +1,8 @@
-import { useDarkmode } from '@hooks/hooks';
 import { MdOutlineDarkMode, MdOutlineLightMode } from 'react-icons/md';
 
-import { MenuButton, MenuGroup } from '@elements/Button';
+import { MenuButton, MenuGroup } from '@elements/ButtonMenu';
+
+import { useDarkmode } from '@hooks/useDarkmode';
 
 export function DarkmodeControls() {
     const [darkmode, setDarkmode] = useDarkmode();

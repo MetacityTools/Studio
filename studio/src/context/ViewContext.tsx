@@ -4,7 +4,7 @@ import React from 'react';
 import * as GL from '@bananagl/bananagl';
 
 import { EditorModel } from '@data/EditorModel';
-import { MetadataNode, StyleNode } from '@data/types';
+import { Metadata, Style } from '@data/types';
 
 export type SelectFunction = (selection: SelectionType, toggle?: boolean, extend?: boolean) => void;
 export type SelectionType = Map<EditorModel, Set<number>>;
@@ -30,10 +30,10 @@ interface ViewContextProps {
     setGridVisible: React.Dispatch<React.SetStateAction<boolean>>;
     globalShift: vec3 | null;
     setGlobalShift: React.Dispatch<React.SetStateAction<vec3 | null>>;
-    metadata: MetadataNode;
-    setMetadata: React.Dispatch<React.SetStateAction<MetadataNode>>;
-    styles: StyleNode;
-    setStyles: React.Dispatch<React.SetStateAction<StyleNode>>;
+    metadata: Metadata;
+    setMetadata: React.Dispatch<React.SetStateAction<Metadata>>;
+    styles: Style;
+    setStyles: React.Dispatch<React.SetStateAction<Style>>;
     usedStyle: string[] | null;
     setUsedStyle: React.Dispatch<React.SetStateAction<string[] | null>>;
     lastUsedStyle: string[] | null;
@@ -57,8 +57,8 @@ export function ViewContext(props: { children: React.ReactNode }) {
     const [maxShade, setMaxShade] = React.useState<number>(10);
     const [gridVisible, setGridVisible] = React.useState<boolean>(false);
     const [globalShift, setGlobalShift] = React.useState<vec3 | null>(null);
-    const [metadata, setMetadata] = React.useState<MetadataNode>({});
-    const [styles, setStyles] = React.useState<StyleNode>({});
+    const [metadata, setMetadata] = React.useState<Metadata>({});
+    const [styles, setStyles] = React.useState<Style>({});
     const [lastUsedStyle, setLastUsedStyle] = React.useState<string[] | null>(null);
     const [usedStyle, setUsedStyle] = React.useState<string[] | null>(null);
     const [greyscale, setGreyscale] = React.useState<boolean>(false);

@@ -1,10 +1,11 @@
 import clsx from 'clsx';
 
+import { getValue } from '@utils/metadata';
 import { getValueOrDefault } from '@utils/placeholders';
 import { isEmpty } from '@utils/predicates';
 
-import { getValue } from '../../context/View/style';
-import { useStyleKeychain, useTooltip } from '../../hooks/hooks';
+import { useStyleKeychain } from '@hooks/useStyleKeychain';
+import { useTooltip } from '@hooks/useTooltip';
 
 export function TooltipOverlay() {
     const [tooltip] = useTooltip();

@@ -1,29 +1,35 @@
-import { useSheets } from '@context/TablesContext';
-import { useExport, useImportModels, useRenderer, useScene, useStyle } from '@hooks/hooks';
 import * as React from 'react';
 
-import { CoordinateMode, ModelData, StyleNode, load } from '@utils/utils';
+import { load } from '@utils/formats/loader';
 
 import { Button, ButtonFileInput } from '@elements/Button';
-import { useProcessing } from '@elements/GlobalContext';
 
-import { Vitals } from '@shared/IOMenu/Vitals';
+import { ModelData, Style } from '@data/types';
+
+import { useExportModels } from '@hooks/useExportModels';
+import { CoordinateMode, useImportModels } from '@hooks/useImportModels';
+import { useProcessing } from '@hooks/useProcessing';
+import { useRenderer } from '@hooks/useRender';
+import { useScene } from '@hooks/useScene';
+import { useUpdateStyles } from '@hooks/useStyleUpdate';
+import { useTableAddSheet } from '@hooks/useTableAddSheet';
 
 import { ExportDialog } from './DialogExport';
 import { ImportDialog } from './DialogImport';
+import { Vitals } from './Vitals';
 
 export function IOMenu(props: { export?: boolean }) {
     const renderer = useRenderer();
     const scene = useScene();
-    const [, setStyle] = useStyle();
+    const updateStyle = useUpdateStyles();
     const importModels = useImportModels();
-    const exportProject = useExport();
+    const exportProject = useExportModels();
     const [, setProcessing] = useProcessing();
-    const [addSheet] = useSheets();
+    const addSheet = useTableAddSheet();
 
     const [importOpen, setImportOpen] = React.useState(false);
     const [importedModels, setImportedModels] = React.useState<ModelData[]>([]);
-    const [importedStyles, setImportedStyles] = React.useState<StyleNode[]>([]);
+    const [importedStyles, setImportedStyles] = React.useState<Style[]>([]);
     const [exportOpen, setExportOpen] = React.useState(false);
     const [loadStyles, setLoadStyles] = React.useState(false);
 
@@ -37,7 +43,7 @@ export function IOMenu(props: { export?: boolean }) {
         if (models.length > 0) {
             setImportOpen(true);
             if (styles.length > 0) setImportedStyles(styles);
-        } else if (styles.length > 0) setStyle(styles[0]);
+        } else if (styles.length > 0) updateStyle(styles[0]);
 
         setProcessing(false, 'Finished reading files');
         event.target.value = '';
@@ -59,7 +65,7 @@ export function IOMenu(props: { export?: boolean }) {
 
     React.useEffect(() => {
         if (loadStyles && importedStyles.length > 0) {
-            setStyle(importedStyles[0]);
+            updateStyle(importedStyles[0]);
             setImportedStyles([]);
             setLoadStyles(false);
         }

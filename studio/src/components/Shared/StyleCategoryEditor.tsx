@@ -2,7 +2,10 @@ import { Categories } from 'data/types';
 
 import { ColorPicker } from '@elements/ColorPicker';
 
-import { useStyle, useStyleKeychain } from '@hooks/hooks';
+import { useApplyStyle } from '@hooks/useApplyStyle';
+import { useStyleKeychain } from '@hooks/useStyleKeychain';
+import { useUpdateStyles } from '@hooks/useStyleUpdate';
+import { useStyles } from '@hooks/useStyles';
 
 interface CategoryStyleEditorProps {
     category: string;
@@ -13,12 +16,15 @@ interface CategoryStyleEditorProps {
 export function CategoryStyleEditor(props: CategoryStyleEditorProps) {
     const { categories, category, color } = props;
     const keychain = useStyleKeychain();
-    const [style, setStyle] = useStyle();
+    const styles = useStyles();
+    const updateStyles = useUpdateStyles();
+    const [, applyStyle] = useApplyStyle();
 
     const handleChange = (color: string) => {
-        if (!style || !keychain) return;
+        if (!styles || !keychain) return;
         categories[category] = color;
-        setStyle({ ...style });
+        updateStyles({ ...styles });
+        applyStyle(keychain);
     };
 
     return (

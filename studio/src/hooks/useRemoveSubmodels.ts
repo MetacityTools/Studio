@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { EditorModel, EditorModelData } from '@data/EditorModel';
-import { Metadata } from '@data/types';
+import { ModelMetadataRecords } from '@data/types';
 
 import { context } from '@context/ViewContext';
 
@@ -11,7 +11,7 @@ import { useSelection } from './useSelection';
 
 export function useRemoveSubmodels() {
     const ctx = React.useContext(context);
-    const [, select] = useSelection();
+    const select = useSelection();
     const importModels = useImportModels();
     const removeModels = useRemoveModels();
 
@@ -39,7 +39,7 @@ function removeSubmodelsFc(model: EditorModel, idsToRemove: Set<number>) {
         }
     }
 
-    const metadata: Metadata = {};
+    const metadata: ModelMetadataRecords = {};
     const modelData: EditorModelData = {
         geometry: {
             position: new Float32Array(originalModelVertexCount * 3),

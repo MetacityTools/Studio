@@ -1,17 +1,15 @@
 import clsx from 'clsx';
-import { MetadataNode } from 'data/types';
+import { Metadata } from 'data/types';
 import React from 'react';
 
 import { getValueOrDefault } from '@utils/placeholders';
 import { isEmpty } from '@utils/predicates';
 
-import { HierarchyBracketsButton, HierarchyMainButton, HierarchyNode } from '@elements/Hierarchy';
-
-export type MetadataMenuPickFunciton = (node: MetadataNode, value: any) => void;
+import { BracketsButton, ListButton, ListItem } from '@elements/List';
 
 interface MetadataValueProps {
-    node: MetadataNode;
-    onValuePick: MetadataMenuPickFunciton;
+    node: Metadata;
+    onValuePick: (node: Metadata, value: any) => void;
     depth?: number;
 }
 
@@ -28,19 +26,19 @@ export function MetadataValue(props: MetadataValueProps) {
 
     return (
         <>
-            {unique.slice(0, displayCount).map((value, i) => (
-                <HierarchyNode key={value} depth={(depth !== undefined && depth + 1) || undefined}>
-                    <HierarchyBracketsButton onClick={(e) => handleUseMetadata(e, value)} />
-                    <HierarchyMainButton
+            {unique.slice(0, displayCount).map((value) => (
+                <ListItem key={value} depth={(depth !== undefined && depth + 1) || undefined}>
+                    <BracketsButton onClick={(e) => handleUseMetadata(e, value)} />
+                    <ListButton
                         onClick={(e) => handleUseMetadata(e, value)}
                         className={clsx(isEmpty(value) && 'text-neutral-500')}
                     >
                         {getValueOrDefault(value)}
-                    </HierarchyMainButton>
-                </HierarchyNode>
+                    </ListButton>
+                </ListItem>
             ))}
             {unique.length > displayCount && (
-                <HierarchyNode depth={(depth !== undefined && depth + 1) || undefined}>
+                <ListItem depth={(depth !== undefined && depth + 1) || undefined}>
                     <button
                         onClick={() =>
                             setDisplayCount((count) => Math.min(count + 10, unique.length))
@@ -49,7 +47,7 @@ export function MetadataValue(props: MetadataValueProps) {
                     >
                         {unique.length - displayCount} more values
                     </button>
-                </HierarchyNode>
+                </ListItem>
             )}
         </>
     );

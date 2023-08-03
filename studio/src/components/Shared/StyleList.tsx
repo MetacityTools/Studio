@@ -1,25 +1,25 @@
-import { StyleNode } from 'data/types';
+import { Style } from 'data/types';
 import React from 'react';
 
-import { filterStyles } from '@utils/modifiers/filterStyles';
+import { filterStyles } from '@utils/style';
 
 import { ColumnContainer, OverflowAbsoluteContainer, StretchContainer } from '@elements/Containers';
 import { Empty } from '@elements/Empty';
 import { Input } from '@elements/Input';
 
-import { useStyle } from '@hooks/hooks';
+import { useStyles } from '@hooks/useStyles';
 
-import { StyleNodeComponent } from './StyleNode';
+import { StyleItem } from './StyleItem';
 
 export const rootNodeLabel = 'Styles';
 
 interface StyleListProps {
-    onValuePick: (root: StyleNode, node: StyleNode) => void;
+    onValuePick: (root: Style, node: Style) => void;
 }
 
 export function StyleList(props: StyleListProps) {
-    const [style] = useStyle();
-    const [fitlered, setFiltered] = React.useState<StyleNode>(style);
+    const style = useStyles();
+    const [fitlered, setFiltered] = React.useState<Style>(style);
     const [search, setSearch] = React.useState<string>('');
     const timerRef = React.useRef<NodeJS.Timeout>();
 
@@ -52,7 +52,7 @@ export function StyleList(props: StyleListProps) {
                 <OverflowAbsoluteContainer>
                     {!fitlered.children && !fitlered.style && <Empty>No Styles</Empty>}
                     {(fitlered.children || fitlered.style) && (
-                        <StyleNodeComponent
+                        <StyleItem
                             category={rootNodeLabel}
                             node={fitlered}
                             onValuePick={(node) => props.onValuePick(fitlered, node)}

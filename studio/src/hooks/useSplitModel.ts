@@ -2,7 +2,7 @@ import { vec3 } from 'gl-matrix';
 import React from 'react';
 
 import { EditorModel, EditorModelData } from '@data/EditorModel';
-import { Metadata } from '@data/types';
+import { ModelMetadataRecords } from '@data/types';
 
 import { context } from '@context/ViewContext';
 
@@ -42,7 +42,7 @@ function splitModel(model: EditorModel, submodelIDs: Set<number>) {
         }
     }
 
-    const originalMetadata: Metadata = {};
+    const originalMetadata: ModelMetadataRecords = {};
     const originalModelData: EditorModelData = {
         geometry: {
             position: new Float32Array(originalModelVertexCount * 3),
@@ -59,7 +59,7 @@ function splitModel(model: EditorModel, submodelIDs: Set<number>) {
         uniforms: model.uniforms,
     };
 
-    const newMetadata: Metadata = {};
+    const newMetadata: ModelMetadataRecords = {};
     const newModelData: EditorModelData = {
         geometry: {
             position: new Float32Array(newModelVertexCount * 3),

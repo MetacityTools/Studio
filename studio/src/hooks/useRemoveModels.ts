@@ -9,7 +9,7 @@ import { useSelection } from './useSelection';
 
 export function useRemoveModels() {
     const ctx = React.useContext(context);
-    const [, select] = useSelection();
+    const select = useSelection();
     const updateMetadata = useUpdateMetadata();
 
     const removeModels = (models: EditorModel[]) => {

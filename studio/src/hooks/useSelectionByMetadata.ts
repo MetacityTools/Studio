@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { EditorModel } from '@data/EditorModel';
-import { MetadataNode } from '@data/types';
+import { Metadata } from '@data/types';
 
 import { context } from '@context/ViewContext';
 
@@ -9,11 +9,11 @@ import { useSelection } from './useSelection';
 
 export function useSelectionByMetadata() {
     const { models } = React.useContext(context);
-    const [, select] = useSelection();
+    const select = useSelection();
 
     const selectByMetadata = (
-        root: MetadataNode,
-        metadata: MetadataNode,
+        root: Metadata,
+        metadata: Metadata,
         value: any,
         extend: boolean = false
     ) => {
@@ -30,11 +30,7 @@ export function useSelectionByMetadata() {
     return selectByMetadata;
 }
 
-function findKeychain(
-    node: MetadataNode,
-    target: MetadataNode,
-    nodeKey?: string
-): undefined | string[] {
+function findKeychain(node: Metadata, target: Metadata, nodeKey?: string): undefined | string[] {
     if (node === target) {
         if (nodeKey) return [nodeKey];
         return [];

@@ -2,11 +2,11 @@ import React from 'react';
 
 import { getStyle } from '@utils/style';
 
-import { Histogram, MetadataNode, StyleNode } from '@data/types';
+import { Histogram, Metadata, Style } from '@data/types';
 
 import { context } from '@context/ViewContext';
 
-export function useStyle(): [Histogram | undefined, StyleNode | undefined] {
+export function useStyle(): [Histogram | undefined, Style | undefined] {
     const ctx = React.useContext(context);
 
     if (!ctx.usedStyle) return [undefined, undefined];
@@ -17,7 +17,7 @@ export function useStyle(): [Histogram | undefined, StyleNode | undefined] {
     return [histogram, style];
 }
 
-function getHistogram(metadata: MetadataNode, keychain: string[]): Histogram | undefined {
+function getHistogram(metadata: Metadata, keychain: string[]): Histogram | undefined {
     const HIST_SIZE = 256;
     const histogram: number[] = new Array(HIST_SIZE).fill(0);
 
@@ -49,8 +49,8 @@ function getHistogram(metadata: MetadataNode, keychain: string[]): Histogram | u
     }
 }
 
-function findNode(node: MetadataNode, keychain: string[]) {
-    let value: MetadataNode | undefined = node;
+function findNode(node: Metadata, keychain: string[]) {
+    let value: Metadata | undefined = node;
     for (const key of keychain) {
         if (value === undefined) return undefined;
         value = value.children?.get(key);

@@ -102,10 +102,10 @@ export enum PrimitiveType {
 export interface ModelMetadata {
     name: string;
     primitive: PrimitiveType;
-    data: Metadata;
+    data: ModelMetadataRecords;
 }
 
-export interface Metadata {
+export interface ModelMetadataRecords {
     [submodel: number]: any;
 }
 
@@ -116,19 +116,19 @@ export enum GeometryMode {
 }
 
 //------------------------------------------------------------
-export interface MetadataNode {
+export interface Metadata {
     values?: any[];
-    children?: Map<string, MetadataNode>;
+    children?: Map<string, Metadata>;
 }
 
 //------------------------------------------------------------
-export interface StyleNode {
+export interface Style {
     style?: {
         scalars?: Scalars;
         categories?: Categories;
     };
     children?: {
-        [key: string]: StyleNode;
+        [key: string]: Style;
     };
 }
 

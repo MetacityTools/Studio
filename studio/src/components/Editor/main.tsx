@@ -1,10 +1,11 @@
-import { ViewContext } from '@context/ViewContext';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
 import { ErrorPage } from '@elements/Error';
-import { GeneralContext } from '@elements/GlobalContext';
+
+import { ProcessingContext } from '@context/ProcessingContext';
+import { ViewContext } from '@context/ViewContext';
 
 import '@assets/index.css';
 
@@ -21,12 +22,12 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     <React.StrictMode>
-        <GeneralContext>
+        <ProcessingContext>
             <ViewContext>
                 <TablesContext>
                     <RouterProvider router={router} />
                 </TablesContext>
             </ViewContext>
-        </GeneralContext>
+        </ProcessingContext>
     </React.StrictMode>
 );

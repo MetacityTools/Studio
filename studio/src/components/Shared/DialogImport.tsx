@@ -1,8 +1,8 @@
 import { Dialog } from '@headlessui/react';
 
-import { CoordinateMode } from '@utils/utils';
-
 import { DialogOption, OverlayDialog } from '@elements/Dialog';
+
+import { CoordinateMode } from '@hooks/useImportModels';
 
 export function ImportDialog(props: { isOpen: boolean; onClose: (mode: CoordinateMode) => void }) {
     const { isOpen, onClose } = props;

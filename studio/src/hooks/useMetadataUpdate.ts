@@ -3,15 +3,15 @@ import React from 'react';
 import { recursiveExtractMetadata } from '@utils/metadata';
 
 import { EditorModel } from '@data/EditorModel';
-import { MetadataNode } from '@data/types';
+import { Metadata } from '@data/types';
 
 import { context } from '@context/ViewContext';
 
-import { useUpdateStyle } from './useStyleUpdate';
+import { useUpdateStyles } from './useStyleUpdate';
 
 export function useUpdateMetadata() {
     const ctx = React.useContext(context);
-    const updateStyle = useUpdateStyle();
+    const updateStyle = useUpdateStyles();
 
     const update = (models?: EditorModel[]) => {
         const data = extractMetadata(models ?? ctx.models);
@@ -24,7 +24,7 @@ export function useUpdateMetadata() {
 }
 
 function extractMetadata(models: EditorModel[]) {
-    const aggregated: MetadataNode = {};
+    const aggregated: Metadata = {};
 
     models.forEach((model) => {
         Object.entries(model.metadata).forEach(([key, data]) => {

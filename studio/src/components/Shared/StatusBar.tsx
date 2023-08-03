@@ -1,7 +1,8 @@
 import clsx from 'clsx';
 import React from 'react';
 
-import { useLog, useProcessing } from '@elements/GlobalContext';
+import { useLog } from '@hooks/useLog';
+import { useProcessing } from '@hooks/useProcessing';
 
 import chicken1 from '@assets/Chicken_Run.gif';
 import chicken3 from '@assets/Chicken_Strut.gif';

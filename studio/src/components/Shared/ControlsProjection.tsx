@@ -1,11 +1,13 @@
-import { useActiveView, useRenderer } from '@hooks/hooks';
 import React from 'react';
 import { BiRectangle } from 'react-icons/bi';
 import { TbPerspective } from 'react-icons/tb';
 
 import * as GL from '@bananagl/bananagl';
 
-import { MenuButton, MenuGroup } from '@elements/Button';
+import { MenuButton, MenuGroup } from '@elements/ButtonMenu';
+
+import { useActiveView } from '@hooks/useActiveView';
+import { useRenderer } from '@hooks/useRender';
 
 export function ProjectionControls() {
     const renderer = useRenderer();

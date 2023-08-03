@@ -1,13 +1,13 @@
 import React from 'react';
 
-import { MetadataNode, StyleNode } from '@data/types';
+import { Metadata, Style } from '@data/types';
 
 import { context } from '@context/ViewContext';
 
-export function useUpdateStyle() {
+export function useUpdateStyles() {
     const ctx = React.useContext(context);
 
-    const setStyle = (style?: StyleNode, metadata?: MetadataNode) => {
+    const setStyle = (style?: Style, metadata?: Metadata) => {
         autoUpdateStyle(metadata ?? ctx.metadata, style ?? ctx.styles);
         ctx.setStyles({ ...style });
     };
@@ -15,7 +15,7 @@ export function useUpdateStyle() {
     return setStyle;
 }
 
-function autoUpdateStyle(metadata: MetadataNode, style: StyleNode) {
+function autoUpdateStyle(metadata: Metadata, style: Style) {
     if (metadata.values) {
         const { scalars, categorical } = aggregateValues(metadata);
 
@@ -44,7 +44,7 @@ function autoUpdateStyle(metadata: MetadataNode, style: StyleNode) {
     }
 }
 
-function aggregateValues(metadata: MetadataNode) {
+function aggregateValues(metadata: Metadata) {
     const scalars = new Set<number>();
     const categorical = new Set<string>();
 
@@ -59,7 +59,7 @@ function aggregateValues(metadata: MetadataNode) {
 }
 
 //handle only case where scalars are present
-function updateScalarStyle(scalars: Set<number>, style: StyleNode) {
+function updateScalarStyle(scalars: Set<number>, style: Style) {
     if (!style.style) style.style = {};
 
     let min = Infinity;
@@ -83,7 +83,7 @@ function updateScalarStyle(scalars: Set<number>, style: StyleNode) {
 }
 
 //handle only case where categories are present
-function updateCategoricalStyle(categorical: Set<string>, style: StyleNode) {
+function updateCategoricalStyle(categorical: Set<string>, style: Style) {
     if (!style.style) style.style = {};
     const catStyle = style.style.categories ?? {};
 
@@ -103,7 +103,7 @@ function updateCategoricalStyle(categorical: Set<string>, style: StyleNode) {
 }
 
 //handle only case where children are present
-function updateChildren(children: Map<string, MetadataNode>, style: StyleNode) {
+function updateChildren(children: Map<string, Metadata>, style: Style) {
     const childStyle = style.children ?? {};
 
     children.forEach((child, key) => {

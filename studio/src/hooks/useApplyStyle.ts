@@ -5,15 +5,18 @@ import { getColorMap, parseColor, sampleColor } from '@utils/color';
 import { getStyle } from '@utils/style';
 
 import { EditorModel } from '@data/EditorModel';
-import { StyleNode } from '@data/types';
+import { Style } from '@data/types';
 
 import { context } from '@context/ViewContext';
 
-export function useApplyStyle(): [(style: StyleNode) => void, (keychain: string[]) => void] {
+export function useApplyStyle(): [
+    (root: Style, style: Style) => void,
+    (keychain: string[]) => void
+] {
     const ctx = React.useContext(context);
 
-    const applyStyle = (style: StyleNode) => {
-        let keychain = findStyleKeychain(ctx.styles, style);
+    const applyStyle = (root: Style, style: Style) => {
+        let keychain = findStyleKeychain(root, style);
         if (!keychain) return;
         ctx.setUsedStyle(keychain);
         ctx.setLastUsedStyle(keychain);
@@ -21,7 +24,7 @@ export function useApplyStyle(): [(style: StyleNode) => void, (keychain: string[
     };
 
     const applyKeychain = (keychain: string[]) => {
-        const style = getStyle(ctx.styles, keychain) as StyleNode;
+        const style = getStyle(ctx.styles, keychain) as Style;
         if (!style) return;
         ctx.setUsedStyle(keychain);
         ctx.setLastUsedStyle(keychain);
@@ -31,11 +34,7 @@ export function useApplyStyle(): [(style: StyleNode) => void, (keychain: string[
     return [applyStyle, applyKeychain];
 }
 
-function findStyleKeychain(
-    node: StyleNode,
-    target: StyleNode,
-    nodeKey?: string
-): undefined | string[] {
+function findStyleKeychain(node: Style, target: Style, nodeKey?: string): undefined | string[] {
     if (node === target) {
         if (nodeKey) return [nodeKey];
         return [];
@@ -53,7 +52,7 @@ function findStyleKeychain(
     return;
 }
 
-function colorize(keychain: string[], style: StyleNode, models: EditorModel[]) {
+function colorize(keychain: string[], style: Style, models: EditorModel[]) {
     models.forEach((model) => {
         const metadata = model.metadata;
         const submodels = Object.keys(metadata).map((key) => parseInt(key));

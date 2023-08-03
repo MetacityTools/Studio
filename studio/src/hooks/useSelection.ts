@@ -4,7 +4,7 @@ import { EditorModel } from '@data/EditorModel';
 
 import { SelectFunction, SelectionType, context } from '@context/ViewContext';
 
-export function useSelection(): [SelectionType, SelectFunction] {
+export function useSelection(): SelectFunction {
     const ctx = React.useContext(context);
 
     const select = (seleciton: SelectionType, toggle: boolean = false, extend: boolean = false) => {
@@ -12,7 +12,7 @@ export function useSelection(): [SelectionType, SelectFunction] {
         ctx.setSelection(newSelection);
     };
 
-    return [ctx.selection, select];
+    return select;
 }
 
 function changeSelection(

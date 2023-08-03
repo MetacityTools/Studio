@@ -3,8 +3,10 @@ import React from 'react';
 
 import * as GL from '@bananagl/bananagl';
 
-import { SelectionType } from '../../context/View/selection';
-import { useRenderer, useSelection } from '../../hooks/hooks';
+import { SelectionType } from '@context/ViewContext';
+
+import { useRenderer } from '@hooks/useRender';
+import { useSelection } from '@hooks/useSelection';
 
 type SelectionArrayType = {
     object: GL.Pickable;
@@ -18,46 +20,6 @@ type SelectionSingleType = {
 
 type SelectionOutput = SelectionArrayType | SelectionSingleType;
 
-function primitiveIndicesToSubmodelIndices(selection: SelectionOutput) {
-    const selectedMap: SelectionType = new Map();
-
-    const arrayedSelection = Array.isArray(selection)
-        ? selection
-        : [
-              {
-                  object: selection.object,
-                  primitiveIndices: [selection.primitiveIndices],
-              },
-          ];
-
-    for (const { object, primitiveIndices } of arrayedSelection) {
-        const submodel = object.attributes.getAttribute('submodel') as GL.Attribute;
-        const submodelIds = submodel.buffer.getView(Uint32Array);
-        const submodelIDs = new Set<number>();
-        for (const idx of primitiveIndices) submodelIDs.add(submodelIds[idx * 3]);
-        selectedMap.set(object as EditorModel, submodelIDs);
-    }
-
-    return selectedMap;
-}
-
-function selectionFlags(multiselect: boolean, shiftKey: boolean) {
-    let toggle = false;
-    let extend = false;
-
-    if (multiselect) {
-        if (shiftKey) extend = true;
-        else toggle = true;
-    } else if (shiftKey) toggle = true;
-    return { toggle, extend };
-}
-
-function getOffset(event: any) {
-    const xpos: number = (!event.offsetX ? event.layerX! : event.offsetX) ?? 0;
-    const ypos: number = (!event.offsetY ? event.layerY! : event.offsetY) ?? 0;
-    return { xpos, ypos };
-}
-
 interface CanvasProps {
     canvasRef: React.RefObject<HTMLCanvasElement>;
     onTooltip?: (meta: any, x: number, y: number) => void;
@@ -66,7 +28,7 @@ interface CanvasProps {
 
 export function Canvas(props: CanvasProps) {
     const renderer = useRenderer();
-    const [select] = useSelection();
+    const select = useSelection();
     const timerRef = React.useRef<NodeJS.Timeout>();
 
     function handlePick(selection: SelectionOutput, shiftKey: boolean) {
@@ -146,4 +108,44 @@ export function Canvas(props: CanvasProps) {
             }}
         />
     );
+}
+
+function primitiveIndicesToSubmodelIndices(selection: SelectionOutput) {
+    const selectedMap: SelectionType = new Map();
+
+    const arrayedSelection = Array.isArray(selection)
+        ? selection
+        : [
+              {
+                  object: selection.object,
+                  primitiveIndices: [selection.primitiveIndices],
+              },
+          ];
+
+    for (const { object, primitiveIndices } of arrayedSelection) {
+        const submodel = object.attributes.getAttribute('submodel') as GL.Attribute;
+        const submodelIds = submodel.buffer.getView(Uint32Array);
+        const submodelIDs = new Set<number>();
+        for (const idx of primitiveIndices) submodelIDs.add(submodelIds[idx * 3]);
+        selectedMap.set(object as EditorModel, submodelIDs);
+    }
+
+    return selectedMap;
+}
+
+function selectionFlags(multiselect: boolean, shiftKey: boolean) {
+    let toggle = false;
+    let extend = false;
+
+    if (multiselect) {
+        if (shiftKey) extend = true;
+        else toggle = true;
+    } else if (shiftKey) toggle = true;
+    return { toggle, extend };
+}
+
+function getOffset(event: any) {
+    const xpos: number = (!event.offsetX ? event.layerX! : event.offsetX) ?? 0;
+    const ypos: number = (!event.offsetY ? event.layerY! : event.offsetY) ?? 0;
+    return { xpos, ypos };
 }

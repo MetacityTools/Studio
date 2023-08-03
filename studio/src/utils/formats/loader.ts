@@ -1,4 +1,4 @@
-import { ModelData, StyleNode, UserInputModel } from 'data/types';
+import { ModelData, UserInputModel } from 'data/types';
 
 import GLTFWorker from '@utils/formats/gltf.worker?worker';
 import IFCWorker from '@utils/formats/ifc.worker?worker';
@@ -31,7 +31,7 @@ export async function loadProjectFiles(name: string, buffer: ArrayBuffer, styles
     return { models, styles };
 }
 
-export async function filterStyles(event: React.ChangeEvent<HTMLInputElement>) {
+async function filterStyles(event: React.ChangeEvent<HTMLInputElement>) {
     const files = event.target.files;
     if (!files) return [];
 
@@ -50,7 +50,7 @@ export async function filterStyles(event: React.ChangeEvent<HTMLInputElement>) {
     return data;
 }
 
-export async function filterTables(event: React.ChangeEvent<HTMLInputElement>) {
+async function filterTables(event: React.ChangeEvent<HTMLInputElement>) {
     const files = event.target.files;
     if (!files) return [];
     const data = [];
@@ -64,7 +64,7 @@ export async function filterTables(event: React.ChangeEvent<HTMLInputElement>) {
     return data;
 }
 
-export async function filterModelFiles(event: React.ChangeEvent<HTMLInputElement>) {
+async function filterModelFiles(event: React.ChangeEvent<HTMLInputElement>) {
     const files = event.target.files;
     if (!files) return [];
 

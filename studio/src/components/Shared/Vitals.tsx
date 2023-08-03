@@ -1,6 +1,4 @@
 import React from 'react';
-import { AiFillVideoCamera } from 'react-icons/ai';
-import { BsGpuCard } from 'react-icons/bs';
 
 import { Profiler, Renderer, Scene } from '@bananagl/bananagl';
 

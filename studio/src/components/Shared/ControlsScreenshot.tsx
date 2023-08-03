@@ -1,7 +1,8 @@
-import { useRenderer } from '@hooks/hooks';
 import { AiFillCamera } from 'react-icons/ai';
 
-import { MenuButton, MenuGroup } from '@elements/Button';
+import { MenuButton, MenuGroup } from '@elements/ButtonMenu';
+
+import { useRenderer } from '@hooks/useRender';
 
 export function ScreenshotControls() {
     const renderer = useRenderer();

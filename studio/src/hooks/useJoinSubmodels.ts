@@ -3,7 +3,7 @@ import { EditorModel } from '@data/EditorModel';
 import { useSelection } from './useSelection';
 
 export function useJoinSubmodels() {
-    const [, select] = useSelection();
+    const select = useSelection();
 
     const join = async (model: EditorModel, submodels: Set<number>) => {
         const newSubmodelId = await joinSubmodels(model, submodels);

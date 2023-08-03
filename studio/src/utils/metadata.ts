@@ -1,4 +1,4 @@
-import { MetadataNode } from '@data/types';
+import { Metadata } from '@data/types';
 
 import { SelectionType } from '@context/ViewContext';
 
@@ -26,7 +26,7 @@ export function assignDataNoDelete(selection: SelectionType, edits: any) {
     });
 }
 
-export function recursiveExtractMetadata(data: any, tree: MetadataNode) {
+export function recursiveExtractMetadata(data: any, tree: Metadata) {
     if (typeof data === 'object') {
         for (const key in data) {
             checkChildren(tree);
@@ -40,12 +40,12 @@ export function recursiveExtractMetadata(data: any, tree: MetadataNode) {
     }
 }
 
-export function filterMetadata(metadata: MetadataNode, nodeKey: string, query: string) {
+export function filterMetadata(metadata: Metadata, nodeKey: string, query: string) {
     if (!query) return metadata;
     if (nodeKey.toLowerCase().includes(query.toLowerCase())) return metadata;
 
-    const copy: MetadataNode = {};
-    const children = new Map<string, MetadataNode>();
+    const copy: Metadata = {};
+    const children = new Map<string, Metadata>();
     const values: any[] = [];
 
     if (metadata.children) {
@@ -66,11 +66,64 @@ export function filterMetadata(metadata: MetadataNode, nodeKey: string, query: s
     return copy;
 }
 
-function checkChildren(node: MetadataNode): asserts node is MetadataNode & { children: {} } {
+export function getValue(data: any, keychain: string[]) {
+    let value = data;
+    for (const key of keychain) {
+        if (value === undefined) return undefined;
+        value = value[key];
+    }
+
+    if (typeof value === 'object') return undefined;
+    return value;
+}
+
+export function combineData(selection: SelectionType) {
+    let recordCount = 0;
+    const aggregated: Metadata = {};
+
+    selection.forEach((submodels, model) => {
+        submodels.forEach((submodel) => {
+            const data = model.metadata[submodel] ?? {};
+            recursiveExtractMetadata(data, aggregated);
+            recordCount++;
+        });
+    });
+
+    if (recordCount === 0) return { aggregated: {}, common: {} };
+    const common = extractCommonData(aggregated, recordCount);
+    return { common };
+}
+
+function extractCommonData(node: Metadata, expectedRecordCount: number) {
+    if (node.children && node.values) {
+        //node has both children and values - no need to extract
+        return undefined;
+    } else if (node.children) {
+        const extracted: any = {};
+        //node has children but no values - extract all children
+        for (const [key, child] of node.children) {
+            const value = extractCommonData(child, expectedRecordCount);
+            if (value !== undefined) extracted[key] = value;
+        }
+
+        if (Object.keys(extracted).length === 0) return undefined;
+        return extracted;
+    } else if (node.values) {
+        //node has values but no children - extract values
+        const set = new Set(node.values);
+        if (set.size === 1 && node.values.length === expectedRecordCount) {
+            return set.values().next().value;
+        } else {
+            return undefined;
+        }
+    }
+}
+
+function checkChildren(node: Metadata): asserts node is Metadata & { children: {} } {
     if (!node.children) node.children = new Map();
 }
 
-function checkValues(node: MetadataNode): asserts node is MetadataNode & { values: any[] } {
+function checkValues(node: Metadata): asserts node is Metadata & { values: any[] } {
     if (!node.values) node.values = [];
 }
 

@@ -3,14 +3,14 @@ import 'allotment/dist/style.css';
 
 import { SizeGuard } from '@elements/SizeGuard';
 
-import { CanvasComponent } from '@shared/CanvasComponent';
+import { AutoLoader } from '@shared/AutoLoader';
+import { CanvasWrapper } from '@shared/CanvasWrapper';
 import { Controls } from '@shared/Controls';
-import { ModelAutoLoader } from '@shared/ModelAutoLoader';
 import { StatusBar } from '@shared/StatusBar';
 import { TooltipOverlay } from '@shared/Tooltip';
 
-import { EditorSpash } from '../../components-old/Editor/EditorSplash';
-import { SidePanel } from '../../components-old/Editor/SidePanel/SidePanel';
+import { EditorSpash } from './EditorSplash';
+import { SidePanel } from './SidePanel';
 
 export function ModelEditor() {
     return (
@@ -26,7 +26,7 @@ export function ModelEditor() {
                             <SidePanel />
                         </Allotment.Pane>
                         <Allotment.Pane minSize={200} className="bg-neutral-100">
-                            <CanvasComponent />
+                            <CanvasWrapper />
                             <Controls />
                             <TooltipOverlay />
                         </Allotment.Pane>
@@ -34,7 +34,7 @@ export function ModelEditor() {
                 </div>
                 <StatusBar />
                 <EditorSpash />
-                <ModelAutoLoader />
+                <AutoLoader />
             </div>
         </SizeGuard>
     );

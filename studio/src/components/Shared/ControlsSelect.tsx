@@ -1,12 +1,13 @@
-import { useModels, useSelection } from '@hooks/hooks';
-import React from 'react';
 import { MdDeselect, MdSelectAll } from 'react-icons/md';
 
-import { MenuButton, MenuGroup } from '@elements/Button';
+import { MenuButton, MenuGroup } from '@elements/ButtonMenu';
+
+import { useModels } from '@hooks/useModels';
+import { useSelection } from '@hooks/useSelection';
 
 export function SelectionControls() {
     const models = useModels();
-    const [select] = useSelection();
+    const select = useSelection();
 
     const selectAll = () => {
         const selected = new Map();
