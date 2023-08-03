@@ -1,11 +1,15 @@
 import React from 'react';
 
-import { addGridModel } from '@utils/utils';
-
 import * as GL from '@bananagl/bananagl';
 
+import { GridModel } from '@data/GridModel';
+
+import { useDarkmode } from '@hooks/useDarkmode';
+import { useRenderer } from '@hooks/useRender';
+import { useScene } from '@hooks/useScene';
+import { useTooltip } from '@hooks/useTooltip';
+
 import { Canvas } from './Canvas';
-import { useDarkmode, useRenderer, useScene, useTooltip } from './Context/hooks';
 
 export function CanvasComponent() {
     const canvasRef = React.useRef<HTMLCanvasElement>(null);
@@ -32,7 +36,9 @@ export function CanvasComponent() {
                 },
             ]);
 
-            addGridModel(scene);
+            const grid = new GridModel();
+            scene.add(grid);
+
             if (darkmode) renderer.clearColor = [0.1, 0.1, 0.1, 1];
             else renderer.clearColor = [1, 1, 1, 1];
 

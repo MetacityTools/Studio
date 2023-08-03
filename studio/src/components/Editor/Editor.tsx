@@ -9,8 +9,8 @@ import { ModelAutoLoader } from '@shared/ModelAutoLoader';
 import { StatusBar } from '@shared/StatusBar';
 import { TooltipOverlay } from '@shared/Tooltip';
 
-import { EditorSpash } from './EditorSplash';
-import { SidePanel } from './SidePanel/SidePanel';
+import { EditorSpash } from '../../components-old/Editor/EditorSplash';
+import { SidePanel } from '../../components-old/Editor/SidePanel/SidePanel';
 
 export function ModelEditor() {
     return (

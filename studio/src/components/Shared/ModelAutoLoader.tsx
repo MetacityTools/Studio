@@ -1,4 +1,3 @@
-import { Transition } from '@headlessui/react';
 import React from 'react';
 
 import { loadProjectFiles } from '@utils/formats/loader';
@@ -6,7 +5,7 @@ import { CoordinateMode } from '@utils/utils';
 
 import { useProcessing } from '@elements/GlobalContext';
 
-import { useImportModels, useStyle } from './Context/hooks';
+import { useImportModels, useStyle } from '../../hooks/hooks';
 
 export function ModelAutoLoader() {
     const importModels = useImportModels();

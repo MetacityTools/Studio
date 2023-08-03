@@ -11,8 +11,9 @@ function dialogClassNames(props: {
     secondary?: boolean | undefined;
 }) {
     return clsx(
-        'bg-neutral-200 text-neutral-900 hover:bg-neutral-200 focus-visible:ring-neutral-500 dark:bg-neutral-700 dark:text-neutral-100 dark:hover:bg-neutral-600 dark:focus-visible:ring-neutral-500',
         'w-full text-left rounded-md px-4 py-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2',
+        'bg-neutral-200 text-neutral-900 hover:bg-neutral-200 focus-visible:ring-neutral-500',
+        'dark:bg-neutral-700 dark:text-neutral-100 dark:hover:bg-neutral-600 dark:focus-visible:ring-neutral-500',
         props.className
     );
 }
@@ -69,8 +70,6 @@ export function DialogButton(props: {
             {props.body}
         </button>
     );
-
-    return null;
 }
 
 export function OverlayDialog(props: {

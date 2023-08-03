@@ -1,4 +1,5 @@
 //worker to parse models
+import { ModelData, PrimitiveType, ShapefileData, UserInputModel } from 'data/types';
 import {
     Coord,
     CoordType,
@@ -11,8 +12,6 @@ import {
     triangulate,
 } from 'shpts';
 import { BaseRecord } from 'shpts/dist/geometry/base';
-
-import { ModelData, PrimitiveType, ShapefileData, UserInputModel } from '@utils/types';
 
 export async function parse(model: UserInputModel): Promise<ModelData> {
     const data = model.data as ShapefileData;

@@ -1,6 +1,5 @@
+import { IFCModelData } from 'data/types';
 import { vec3 } from 'gl-matrix';
-
-import { IFCModelData } from '@utils/types';
 
 export function unindexModel(model: IFCModelData[]) {
     applyMatricesToPositions(model);

@@ -1,8 +1,9 @@
+import { ModelData, StyleNode, UserInputModel } from 'data/types';
+
 import GLTFWorker from '@utils/formats/gltf.worker?worker';
 import IFCWorker from '@utils/formats/ifc.worker?worker';
 import MetacityWorker from '@utils/formats/metacity.worker?worker';
 import ShapefileWorker from '@utils/formats/shapefile.worker?worker';
-import { ModelData, StyleNode, UserInputModel } from '@utils/types';
 
 import { WorkerPool } from './pool';
 

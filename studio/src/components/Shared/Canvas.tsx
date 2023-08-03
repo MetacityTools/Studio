@@ -1,11 +1,10 @@
+import { EditorModel } from 'data/EditorModel';
 import React from 'react';
-
-import { EditorModel } from '@utils/models/EditorModel';
 
 import * as GL from '@bananagl/bananagl';
 
-import { useRenderer, useSelection } from './Context/hooks';
-import { SelectionType } from './Context/selection';
+import { SelectionType } from '../../context/View/selection';
+import { useRenderer, useSelection } from '../../hooks/hooks';
 
 type SelectionArrayType = {
     object: GL.Pickable;

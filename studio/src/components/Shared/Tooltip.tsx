@@ -3,8 +3,8 @@ import clsx from 'clsx';
 import { getValueOrDefault } from '@utils/placeholders';
 import { isEmpty } from '@utils/predicates';
 
-import { useStyleKeychain, useTooltip } from './Context/hooks';
-import { getValue } from './Context/style';
+import { getValue } from '../../context/View/style';
+import { useStyleKeychain, useTooltip } from '../../hooks/hooks';
 
 export function TooltipOverlay() {
     const [tooltip] = useTooltip();

@@ -1,3 +1,4 @@
+import { ViewContext } from '@context/ViewContext';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
@@ -5,12 +6,10 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import { ErrorPage } from '@elements/Error';
 import { GeneralContext } from '@elements/GlobalContext';
 
-import { ViewContext } from '@shared/Context/Context';
-
 import '@assets/index.css';
 
+import { TablesContext } from '../../context/TablesContext';
 import { ModelEditor } from './Editor';
-import { EditorContext } from './EditorContext';
 
 const router = createBrowserRouter([
     {
@@ -24,9 +23,9 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     <React.StrictMode>
         <GeneralContext>
             <ViewContext>
-                <EditorContext>
+                <TablesContext>
                     <RouterProvider router={router} />
-                </EditorContext>
+                </TablesContext>
             </ViewContext>
         </GeneralContext>
     </React.StrictMode>

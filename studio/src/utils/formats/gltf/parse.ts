@@ -1,7 +1,6 @@
 import { parse as parseGLTF } from '@loaders.gl/core';
 import { GLTFLoader } from '@loaders.gl/gltf';
-
-import { GLTFData, GLTFParsedData, ModelData, PrimitiveType, UserInputModel } from '@utils/types';
+import { GLTFData, GLTFParsedData, ModelData, PrimitiveType, UserInputModel } from 'data/types';
 
 import { unindexGeometry } from './unindex';
 

@@ -1,12 +1,12 @@
 import clsx from 'clsx';
 
-import { useGrayscale } from './Context/hooks';
-import { DarkmodeControls } from './Controls/ControlsDarkmode';
-import { DirectionControls } from './Controls/ControlsDirection';
-import { ProjectionControls } from './Controls/ControlsProjection';
-import { ScreenshotControls } from './Controls/ControlsScreenshot';
-import { SelectionControls } from './Controls/ControlsSelect';
-import { ShaderControls } from './Controls/ControlsShader';
+import { useGrayscale } from '../../hooks/hooks';
+import { DarkmodeControls } from './ControlsDarkmode';
+import { DirectionControls } from './ControlsDirection';
+import { ProjectionControls } from './ControlsProjection';
+import { ScreenshotControls } from './ControlsScreenshot';
+import { SelectionControls } from './ControlsSelect';
+import { ShaderControls } from './ControlsShader';
 
 export function Controls() {
     const [grayscale] = useGrayscale();
