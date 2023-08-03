@@ -12,6 +12,7 @@ export function useTableGetJSON(): (row: number) => { [key: string]: any } {
         const result: any = {};
         for (let i = 0; i < rowData.length; i++) {
             const value = rowData[i];
+
             if (value === '') continue;
             const keys = getKeysForColumn(ctx.activeSheet, i, sheet, ctx.rowTypes);
             if (keys.length === 0) return {};
@@ -23,14 +24,8 @@ export function useTableGetJSON(): (row: number) => { [key: string]: any } {
     return getJSON;
 }
 
-function getKeysForColumn(
-    sheet: number,
-    column: number,
-    contents: string[][],
-    rowTypes: string[][]
-) {
+function getKeysForColumn(sheet: number, column: number, table: string[][], rowTypes: string[][]) {
     const keys: string[] = [];
-    const table = contents[sheet];
 
     let k: string;
     for (let i = 0; i < table.length; i++) {
