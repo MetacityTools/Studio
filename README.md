@@ -28,21 +28,23 @@ Currently:
 
 These features are planned for the future, and scheduled for a specific release.
 
-### v0.5.2 - Work in progress
+### v0.5.3 - Work in progress
+
+-   [ ] Major refactor of the codebase
+-   [ ] Loading points and lines from SHP
+-   [ ] Lock camera position (two buttons - pan and rotation) + locking height during panning as in map
+
+### v0.5.2 - ✅ Released
 
 -   [x] Export screenshot action
 -   [x] Refactored Global context and processing status - https://github.com/MetacityTools/Studio/issues/33
 -   [x] Projecting models onto models (2D onto 3D) - https://github.com/MetacityTools/geometry.ts
 -   [x] Replace json style editor with something more user friendly
     -   [x] Add a way to add custom styles
-    -   [ ] Switching colormaps for scalars
+    -   [x] Switching colormaps for scalars
     -   [x] Editable input for colors
-    -   [ ] Switching shaders for individual models
-    -   [ ] Randomize colors - default colormap
 -   [x] Feedback - show notifications on the bottom of the screen
 -   [x] Tables - add notification on data assignment
--   [ ] Loading points and lines from SHP
--   [ ] Lock camera position (two buttons - pan and rotation) + locking height during panning as in map
 
 ### v0.5.1 - ✅ Released
 
