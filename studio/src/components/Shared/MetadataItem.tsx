@@ -1,8 +1,9 @@
-import { Metadata } from 'data/types';
 import React from 'react';
 
 import { ChevronButton, ListButton, ListGroup, ListGroupChildren, ListItem } from '@elements/List';
 import { TitleChain } from '@elements/TitleChain';
+
+import { Metadata } from '@data/types';
 
 import { MetadataValue } from './MetadataValue';
 

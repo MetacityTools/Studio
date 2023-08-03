@@ -1,5 +1,6 @@
 import { Listbox } from '@headlessui/react';
-import { Histogram, Scalars } from 'data/types';
+
+import { Histogram, Scalars } from '@data/types';
 
 import { useUpdateStyles } from '@hooks/useStyleUpdate';
 

@@ -1,9 +1,10 @@
 import clsx from 'clsx';
-import { Categories } from 'data/types';
 import React from 'react';
 
 import { getValueOrDefault } from '@utils/placeholders';
 import { isEmpty } from '@utils/predicates';
+
+import { Categories } from '@data/types';
 
 import { CategoryStyleEditor } from './StyleCategoryEditor';
 

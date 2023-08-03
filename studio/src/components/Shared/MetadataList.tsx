@@ -1,4 +1,3 @@
-import { Metadata } from 'data/types';
 import React from 'react';
 
 import { filterMetadata } from '@utils/metadata';
@@ -6,6 +5,8 @@ import { filterMetadata } from '@utils/metadata';
 import { ColumnContainer, OverflowAbsoluteContainer, StretchContainer } from '@elements/Containers';
 import { Empty } from '@elements/Empty';
 import { Input } from '@elements/Input';
+
+import { Metadata } from '@data/types';
 
 import { useMetadata } from '@hooks/useMetadata';
 

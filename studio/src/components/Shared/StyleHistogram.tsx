@@ -1,7 +1,8 @@
-import { Histogram, Scalars } from 'data/types';
 import { vec3 } from 'gl-matrix';
 
 import { colorMapToValues } from '@utils/color';
+
+import { Histogram, Scalars } from '@data/types';
 
 interface StyleHistogramProps {
     scalars: Scalars;

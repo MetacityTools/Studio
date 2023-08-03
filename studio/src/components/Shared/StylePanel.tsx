@@ -1,8 +1,9 @@
-import { Style } from 'data/types';
 import React from 'react';
 
 import { OverflowAbsoluteContainer, StretchContainer } from '@elements/Containers';
 import { TitleChain } from '@elements/TitleChain';
+
+import { Style } from '@data/types';
 
 import { useApplyStyle } from '@hooks/useApplyStyle';
 import { useStyleKeychain } from '@hooks/useStyleKeychain';

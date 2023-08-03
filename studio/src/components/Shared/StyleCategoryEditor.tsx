@@ -1,6 +1,6 @@
-import { Categories } from 'data/types';
-
 import { ColorPicker } from '@elements/ColorPicker';
+
+import { Categories } from '@data/types';
 
 import { useApplyStyle } from '@hooks/useApplyStyle';
 import { useStyleKeychain } from '@hooks/useStyleKeychain';

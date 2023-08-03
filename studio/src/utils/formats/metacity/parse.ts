@@ -1,4 +1,4 @@
-import { MetacityData, ModelData, UserInputModel } from 'data/types';
+import { MetacityData, ModelData, UserInputModel } from '@data/types';
 
 import { readModels } from './read';
 

@@ -1,4 +1,4 @@
-import { ModelData } from 'data/types';
+import { ModelData } from '@data/types';
 
 import { ReadOnlyMemoryStream } from './streams';
 import { ConstructableTypedArray } from './write';

@@ -1,11 +1,12 @@
 import clsx from 'clsx';
-import { Metadata } from 'data/types';
 import React from 'react';
 
 import { getValueOrDefault } from '@utils/placeholders';
 import { isEmpty } from '@utils/predicates';
 
 import { BracketsButton, ListButton, ListItem } from '@elements/List';
+
+import { Metadata } from '@data/types';
 
 interface MetadataValueProps {
     node: Metadata;

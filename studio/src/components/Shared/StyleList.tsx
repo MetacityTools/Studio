@@ -1,4 +1,3 @@
-import { Style } from 'data/types';
 import React from 'react';
 
 import { filterStyles } from '@utils/style';
@@ -6,6 +5,8 @@ import { filterStyles } from '@utils/style';
 import { ColumnContainer, OverflowAbsoluteContainer, StretchContainer } from '@elements/Containers';
 import { Empty } from '@elements/Empty';
 import { Input } from '@elements/Input';
+
+import { Style } from '@data/types';
 
 import { useStyles } from '@hooks/useStyles';
 

@@ -1,12 +1,13 @@
 import { Allotment } from 'allotment';
 import 'allotment/dist/style.css';
-import { Metadata } from 'data/types';
 import React from 'react';
 
 import { ColumnContainer, OverflowAbsoluteContainer, StretchContainer } from '@elements/Containers';
 import { PanelTitle } from '@elements/PanelTitle';
 
 import { MetadataList } from '@shared/MetadataList';
+
+import { Metadata } from '@data/types';
 
 import { useKeymap } from '@hooks/useKeymap';
 import { useLogger } from '@hooks/useLogger';

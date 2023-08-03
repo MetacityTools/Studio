@@ -1,10 +1,11 @@
-import { EditorModelData, StyleNode } from '@utils/utils';
-
 import { TypedArray } from '@bananagl/bananagl';
+
+import { EditorModelData } from '@data/EditorModel';
+import { Style } from '@data/types';
 
 import { WriteOnlyMemoryStream } from './streams';
 
-export function exportModel(models: EditorModelData[], styles: StyleNode, title: string) {
+export function exportModel(models: EditorModelData[], styles: Style, title: string) {
     const stream = new WriteOnlyMemoryStream();
     //write version
     writeString('mtctv2', stream);

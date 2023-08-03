@@ -1,4 +1,3 @@
-import { Style } from 'data/types';
 import React from 'react';
 
 import {
@@ -10,6 +9,8 @@ import {
     StyleButton,
 } from '@elements/List';
 import { TitleChain } from '@elements/TitleChain';
+
+import { Style } from '@data/types';
 
 export type StyleMenuPickFunciton = (node: Style) => void;
 
