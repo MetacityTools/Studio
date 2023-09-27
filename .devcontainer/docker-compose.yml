@@ -1,5 +1,3 @@
-version: '3'
-
 services:
     devcontainer:
         container_name: ${COMPOSE_PROJECT_NAME:-metacity-dev}-devcontainer
@@ -15,5 +13,3 @@ services:
         command: start --log trace --user root --pass root file:/data/database.db
         volumes:
             - ./data:/data
-        ports:
-            - 8000:8000
