@@ -1,7 +1,7 @@
 // See https://containers.dev/implementors/json_reference/ for configuration reference
 {
     "workspaceFolder": "/workspace",
-    "name": "Metacty Server",
+    "name": "Metacity Server",
     "dockerComposeFile": "docker-compose.yml",
     "service": "devcontainer",
     "forwardPorts": [
