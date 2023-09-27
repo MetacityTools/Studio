@@ -1,6 +1,6 @@
 // See https://containers.dev/implementors/json_reference/ for configuration reference
 {
-    "workspaceFolder": "/workspaces",
+    "workspaceFolder": "/workspace",
     "name": "Metacity Server",
     "dockerComposeFile": "docker-compose.yml",
     "service": "devcontainer",
@@ -11,7 +11,8 @@
     "customizations": {
         "vscode": {
             "extensions": [
-                "esbenp.prettier-vscode"
+                "esbenp.prettier-vscode",
+                "surrealdb.surrealql"
             ]
         }
     }
