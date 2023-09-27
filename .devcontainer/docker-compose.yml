@@ -10,6 +10,4 @@ services:
         env_file: .env
         container_name: ${COMPOSE_PROJECT_NAME:-metacity-dev}-surrealdb
         restart: always
-        command: start --log trace --user root --pass root file:/data/database.db
-        volumes:
-            - ./data:/data
+        command: start --log trace --user root --pass root

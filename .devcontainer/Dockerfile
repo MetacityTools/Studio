@@ -8,7 +8,5 @@ RUN echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
 
 ENV DEVCONTAINER=true
 
-RUN npm i
-
 CMD /bin/sh -c "while sleep 1000; do :; done"
 
