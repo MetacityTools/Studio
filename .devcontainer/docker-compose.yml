@@ -3,9 +3,9 @@ version: '3'
 services:
     devcontainer:
         container_name: ${COMPOSE_PROJECT_NAME:-metacity-dev}-devcontainer
-            build: .
-            volumes:
-                - ..:/workspace
+        build: .
+        volumes:
+            - ..:/workspace
                 
     surrealdb:
         image: surrealdb/surrealdb:latest
