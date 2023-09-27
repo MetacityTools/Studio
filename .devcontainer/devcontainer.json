@@ -1,6 +1,6 @@
 // See https://containers.dev/implementors/json_reference/ for configuration reference
 {
-    "workspaceFolder": "/workspace",
+    "workspaceFolder": "/workspaces",
     "name": "Metacity Server",
     "dockerComposeFile": "docker-compose.yml",
     "service": "devcontainer",
