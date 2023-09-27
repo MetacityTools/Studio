@@ -1,17 +1,14 @@
-FROM node:18-alpine as builder
+FROM node:20
 
-WORKDIR /app
+RUN apt update && apt install -y less man-db sudo
 
-COPY package.json package-lock.json ./
-RUN npm ci
+ARG USERNAME=node
+RUN echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
+    && chmod 0440 /etc/sudoers.d/$USERNAME
 
-COPY . . 
-RUN npm run build
+ENV DEVCONTAINER=true
 
-RUN npm prune --production
+RUN npm i
 
+CMD /bin/sh -c "while sleep 1000; do :; done"
 
-FROM nginx:1.21-alpine
-
-COPY --from=builder /app/dist /usr/share/nginx/html
-COPY nginx.conf /etc/nginx/conf.d/default.conf

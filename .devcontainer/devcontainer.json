@@ -5,7 +5,7 @@
     "dockerComposeFile": "docker-compose.yml",
     "service": "devcontainer",
     "forwardPorts": [
-        3000, // NestJS
+        5173, // Metacty Server
         "surrealdb:8000"
     ],
     "customizations": {

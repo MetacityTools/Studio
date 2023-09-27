@@ -1,13 +1,19 @@
 version: '3'
 
 services:
-  surrealdb:
-    image: surrealdb/surrealdb:latest
-    env_file: .env
-    container_name: surrealdb
-    restart: always
-    command: start --log trace --user $SURREALDB_USER --pass $SURREALDB_PASSWORD file:/data/database.db
-    volumes:
-      - ./data:/data
-    ports:
-      - 80:8000
+	devcontainer:
+    	container_name: ${COMPOSE_PROJECT_NAME:-metacity-dev}-devcontainer
+        	build: .
+        	volumes:
+        	    - ..:/workspace
+
+	surrealdb:
+    	image: surrealdb/surrealdb:latest
+    	env_file: .env
+    	container_name: ${COMPOSE_PROJECT_NAME:-metacity-dev}-surrealdb
+    	restart: always
+    	command: start --log trace --user root --pass root file:/data/database.db
+    	volumes:
+    		- ./data:/data
+    	ports:
+    		- 80:8000
