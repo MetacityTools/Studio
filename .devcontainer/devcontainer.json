@@ -1,0 +1,18 @@
+// See https://containers.dev/implementors/json_reference/ for configuration reference
+{
+    "workspaceFolder": "/workspace",
+    "name": "Metacty Server",
+    "dockerComposeFile": "docker-compose.yml",
+    "service": "devcontainer",
+    "forwardPorts": [
+        3000, // NestJS
+        "surrealdb:8000"
+    ],
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "esbenp.prettier-vscode"
+            ]
+        }
+    }
+}

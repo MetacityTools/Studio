@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  surrealdb:
+    image: surrealdb/surrealdb:latest
+    env_file: .env
+    container_name: surrealdb
+    restart: always
+    command: start --log trace --user $SURREALDB_USER --pass $SURREALDB_PASSWORD file:/data/database.db
+    volumes:
+      - ./data:/data
+    ports:
+      - 80:8000
