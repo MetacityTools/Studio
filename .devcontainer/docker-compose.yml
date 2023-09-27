@@ -4,9 +4,11 @@ services:
         build: .
         volumes:
             - ..:/workspace
-                
+
     surrealdb:
         image: surrealdb/surrealdb:latest
         container_name: ${COMPOSE_PROJECT_NAME:-metacity-dev}-surrealdb
         restart: always
         command: start --log trace --username root --password root --auth
+        ports:
+            - 8000:8000
