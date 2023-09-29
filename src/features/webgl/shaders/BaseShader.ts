@@ -2,11 +2,11 @@ export const vs = `
 in vec3 position;
 in vec3 color;
 
-out vec3 oColor;
-
 uniform mat4 uModelMatrix;
 uniform mat4 uProjectionMatrix;
 uniform mat4 uViewMatrix;
+
+out vec3 oColor;
 
 void main() {
     oColor = color;

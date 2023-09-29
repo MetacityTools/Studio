@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 
-import { context } from '@gl/context/Scene';
+import { context } from '@gl/components/Scene';
 
 export const useAfterRender = () => {
     const ctx = useContext(context);

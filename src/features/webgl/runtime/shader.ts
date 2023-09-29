@@ -2,7 +2,7 @@ import equal from 'fast-deep-equal/es6';
 
 import { TypedArray } from './buffer';
 import { cloneValue } from './clone';
-import { handleErrors } from './errors';
+import { handleProgramErrors } from './errors';
 
 const VER = `#version 300 es
 `;
@@ -62,6 +62,7 @@ export class Shader {
         const vs = gl.createShader(gl.VERTEX_SHADER);
         if (!vs) throw new Error('Failed to create vertex shader');
         const vsCode = this.preprocessCode(this.vertexShader);
+
         gl.shaderSource(vs, vsCode);
         gl.compileShader(vs);
 
@@ -77,7 +78,7 @@ export class Shader {
         gl.attachShader(program, fs);
         gl.linkProgram(program);
 
-        if (!handleErrors(gl, program, vs, fs)) this.active = true;
+        if (!handleProgramErrors(gl, program, vs, fs)) this.active = true;
 
         gl.deleteShader(vs);
         gl.deleteShader(fs);

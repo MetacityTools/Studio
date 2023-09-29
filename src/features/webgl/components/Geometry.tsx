@@ -2,9 +2,7 @@ import { createContext, useEffect, useState } from 'react';
 
 import { useGL } from '@gl/hooks/useGL';
 import { useRenderableGeometry } from '@gl/hooks/useRenderable';
-import { Attribute } from '@gl/runtime/attribute';
 import { Attributes, Geometry as GeometryClass } from '@gl/runtime/geometry';
-import { InstancedAttribute } from '@gl/runtime/instancedAttribute';
 
 interface GeometryProviderProps {
     attributes: Attributes;

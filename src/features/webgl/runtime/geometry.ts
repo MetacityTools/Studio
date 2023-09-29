@@ -55,7 +55,10 @@ export class Geometry {
     }
 
     get count() {
-        if (!this.attributes.size) throw new Error('No attributes');
+        if (!this.attributes.size) {
+            console.warn('Trying to get count of geometry with no attributes');
+            return 0;
+        }
         const anyAttribtue = this.attributes.values().next().value;
 
         if (this.elements) {
@@ -66,7 +69,10 @@ export class Geometry {
     }
 
     get instanceCount() {
-        if (!this.attributes.size) throw new Error('No attributes');
+        if (!this.attributes.size) {
+            console.warn('Trying to get instance count of geometry with no attributes');
+            return 0;
+        }
         if (!this.isInstanced_) throw new Error('Not instanced');
 
         for (const attribute of this.attributes) {

@@ -6,10 +6,8 @@ interface GLContextProviderProps {
     gl?: WebGL2RenderingContext;
     setGL: React.Dispatch<React.SetStateAction<WebGL2RenderingContext | undefined>>;
     canvasRef: React.RefObject<HTMLCanvasElement>;
-    shaderCatalog: Map<string, Shader>;
-    setShaderCatalog: React.Dispatch<React.SetStateAction<Map<string, Shader>>>;
-    size: [number, number];
-    setSize: React.Dispatch<React.SetStateAction<[number, number]>>;
+    shaders: Map<string, Shader>;
+    setShaders: React.Dispatch<React.SetStateAction<Map<string, Shader>>>;
 }
 
 export const context = createContext<GLContextProviderProps>({} as GLContextProviderProps);
@@ -23,8 +21,7 @@ export const GLContext = (props: GLContextProps) => {
     const { options } = props;
     const [gl, setGL] = useState<WebGL2RenderingContext | undefined>();
     const canvasRef = useRef<HTMLCanvasElement>(null);
-    const [shaderCatalog, setShaderCatalog] = useState<Map<string, Shader>>(new Map());
-    const [size, setSize] = useState<[number, number]>([0, 0]);
+    const [shaders, setShaders] = useState<Map<string, Shader>>(new Map());
 
     useEffect(() => {
         if (canvasRef.current === null) return;
@@ -39,10 +36,9 @@ export const GLContext = (props: GLContextProps) => {
             failIfMajorPerformanceCaveat: options?.failIfMajorPerformanceCaveat ?? false,
         });
 
-        if (gl === null) throw new Error('WebGL is not supported');
+        if (gl === null) throw new Error('WebGL2 is not supported');
 
-        gl.enable(gl.SCISSOR_TEST);
-        gl.enable(gl.DEPTH_TEST);
+        gl.disable(gl.DEPTH_TEST);
         gl.disable(gl.CULL_FACE);
         gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
         gl.clearColor(0, 0, 0, 255);
@@ -55,10 +51,8 @@ export const GLContext = (props: GLContextProps) => {
                 gl,
                 setGL,
                 canvasRef,
-                shaderCatalog,
-                setShaderCatalog,
-                size,
-                setSize,
+                shaders,
+                setShaders,
             }}
         >
             {props.children}

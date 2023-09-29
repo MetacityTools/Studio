@@ -1,11 +1,10 @@
 import { createContext, useEffect, useRef, useState } from 'react';
 
+import { useGL } from '@gl/hooks/useGL';
 import { useResize } from '@gl/hooks/useResize';
 import { Camera } from '@gl/runtime/camera';
 import { SortedRenderables, renderPass } from '@gl/runtime/renderPass';
 import { Renderable } from '@gl/runtime/renderable';
-
-import { useGL } from '../hooks/useGL';
 
 interface SceneProviderProps {
     renderables: Map<string, Renderable>;
@@ -33,10 +32,10 @@ export const Scene = (props: SceneProps) => {
 
     //update camera
     useEffect(() => {
-        camera.updateScreenSize(...size);
         if (!gl) return;
-        gl.viewport(0, 0, ...size);
-        gl.scissor(0, 0, ...size);
+        camera.updateScreenSize(size.width, size.height);
+        gl.viewport(0, 0, size.width, size.height);
+        gl.scissor(0, 0, size.width, size.height);
     }, [size]);
 
     //render loop for the scene

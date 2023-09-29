@@ -30,7 +30,7 @@ const handleShaderErrors = (gl: WebGL2RenderingContext, shader: WebGLShader, typ
     }
 };
 
-export const handleErrors = (
+export const handleProgramErrors = (
     gl: WebGL2RenderingContext,
     program: WebGLProgram,
     vs: WebGLShader,
@@ -60,4 +60,11 @@ export const handleErrors = (
         console.warn('WebGLProgram: Program Info Log:', programLog);
     }
     return true;
+};
+
+export const handleErrors = (gl: WebGL2RenderingContext) => {
+    const error = gl.getError();
+    if (error !== gl.NO_ERROR) {
+        console.error('WebGLRenderer:', error);
+    }
 };

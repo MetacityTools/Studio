@@ -58,7 +58,7 @@ export class Camera {
     }
 
     constructor(options: CameraProps = {}) {
-        this.position = options.position ?? vec3.fromValues(0, 0, 10);
+        this.position = options.position ?? vec3.fromValues(0, 0, 400);
         this.target = options.target ?? vec3.fromValues(0, 0, 0);
         this.upV = options.up ?? vec3.fromValues(0, 0, 1);
         this.rightV = options.right ?? vec3.fromValues(1, 0, 0);
@@ -68,7 +68,7 @@ export class Camera {
         this.height = options.height ?? 1;
         this.aspectRatio = this.width / this.height;
         this.near = options.near ?? 1;
-        this.far = options.far ?? 100;
+        this.far = options.far ?? 500;
 
         this.uniforms_['uCameraPosition'] = this.position;
         this.uniforms_['uCameraTarget'] = this.target;

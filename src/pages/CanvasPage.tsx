@@ -2,23 +2,23 @@ import { useState } from 'react';
 
 import { Attribute } from '@gl/components/Attribute';
 import { Canvas } from '@gl/components/Canvas';
+import { GLContext } from '@gl/components/GLContext';
+import { Geometry } from '@gl/components/Geometry';
+import { Renderable } from '@gl/components/Renderable';
+import { Scene } from '@gl/components/Scene';
 import { Shader } from '@gl/components/Shader';
-import { GLContext } from '@gl/context/GLContext';
-import { Geometry } from '@gl/context/Geometry';
-import { Renderable } from '@gl/context/Renderable';
-import { Scene } from '@gl/context/Scene';
 import { Buffer } from '@gl/runtime/buffer';
 import { fs, vs } from '@gl/shaders/BaseShader';
 
 const triangle = new Float32Array([
-    -0.5,
-    -0.5,
+    -50,
+    -50,
     0.0, // bottom left
-    0.5,
-    -0.5,
+    50,
+    -50,
     0.0, // bottom right
     0.0,
-    0.5,
+    50,
     0.0, // top
 ]);
 
@@ -46,11 +46,15 @@ export const CanvasPage = () => {
         <GLContext>
             <Canvas>
                 <Scene>
-                    {Array.from({ length: props }).map(() => (
-                        <Renderable key={Math.random() * 1000}>
+                    {Array.from({ length: props }).map((_, i) => (
+                        <Renderable key={i}>
                             <Shader vs={vs} fs={fs} />
                             <Geometry>
-                                <Attribute name="position" buffer={new Buffer(triangle)} size={3} />
+                                <Attribute
+                                    name="position"
+                                    buffer={new Buffer(triangle.map((v) => v * (i + 1) * 0.1))}
+                                    size={3}
+                                />
                                 <Attribute name="color" buffer={new Buffer(colors)} size={3} />
                             </Geometry>
                         </Renderable>

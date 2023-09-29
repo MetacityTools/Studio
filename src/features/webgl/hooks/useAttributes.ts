@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 
-import { context } from '@gl/context/Geometry';
+import { context } from '@gl/components/Geometry';
 
 export const useAttributes = () => {
     const ctx = useContext(context);

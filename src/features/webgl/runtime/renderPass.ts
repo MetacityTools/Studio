@@ -1,4 +1,5 @@
 import { Camera } from './camera';
+import { handleErrors } from './errors';
 import { Renderable } from './renderable';
 import { Shader } from './shader';
 
@@ -15,7 +16,6 @@ export const renderPass = (
 ) => {
     //TODO it might be possible that the gl context changes between render passes
     //     so we should probably check how we setup programs/buffers etc.
-
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT | gl.STENCIL_BUFFER_BIT);
     gl.disable(gl.DEPTH_TEST);
     gl.disable(gl.BLEND);

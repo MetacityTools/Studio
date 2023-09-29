@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 
-import { context } from '@gl/context/Renderable';
+import { context } from '@gl/components/Renderable';
 
 export const useRenderableGeometry = () => {
     const ctx = useContext(context);

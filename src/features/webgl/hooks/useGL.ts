@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 
-import { context } from '@gl/context/GLContext';
+import { context } from '@gl/components/GLContext';
 
 export const useGL = () => {
     const ctx = useContext(context);

@@ -1,18 +1,19 @@
-import { useEffect } from 'react';
+import { createContext, useEffect, useState } from 'react';
 
-import { useResize } from '@gl/hooks/useResize';
+import { useCanvasRef } from '@gl/hooks/useCanvas';
+import { useDebouce } from '@gl/hooks/useDebounce';
 
-import { useCanvasRef } from '../hooks/useCanvas';
-
-const debounce = (fn: Function, time: number) => {
-    let timeout: any;
-    return (...args: any[]) => {
-        clearTimeout(timeout);
-        timeout = setTimeout(() => {
-            fn(...args);
-        }, time);
-    };
+type CanvasSize = {
+    width: number;
+    height: number;
 };
+
+type CanvasProviderProps = {
+    size: CanvasSize;
+    setSize: React.Dispatch<React.SetStateAction<CanvasSize>>;
+};
+
+export const context = createContext<CanvasProviderProps>({} as CanvasProviderProps);
 
 type CanvasProps = {
     children: React.ReactNode;
@@ -20,14 +21,26 @@ type CanvasProps = {
 
 export const Canvas = (props: CanvasProps) => {
     const canvasRef = useCanvasRef();
-    const [size, setSize] = useResize();
+    const [size, setSize] = useState<CanvasSize>({
+        width: canvasRef.current?.clientWidth ?? 0,
+        height: canvasRef.current?.clientHeight ?? 0,
+    });
+    const debounce = useDebouce();
 
     useEffect(() => {
         const observer = new ResizeObserver(
             debounce((entries: ResizeObserverEntry[]) => {
                 for (const entry of entries) {
                     const { width, height } = entry.contentRect;
-                    setSize([width, height]);
+                    const canvas = canvasRef.current;
+                    if (!canvas) return;
+                    const dpr = window.devicePixelRatio;
+                    canvas.width = width * dpr;
+                    canvas.height = height * dpr;
+                    setSize({
+                        width: canvas.width,
+                        height: canvas.height,
+                    });
                 }
             }, 100)
         );
@@ -36,9 +49,19 @@ export const Canvas = (props: CanvasProps) => {
     }, [canvasRef]);
 
     return (
-        <>
-            <canvas ref={canvasRef} className="w-full h-full" />
+        <context.Provider
+            value={{
+                size,
+                setSize,
+            }}
+        >
+            <canvas
+                ref={canvasRef}
+                className="w-full h-full outline-none"
+                key="canvas"
+                tabIndex={1000}
+            />
             {props.children}
-        </>
+        </context.Provider>
     );
 };
