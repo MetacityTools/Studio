@@ -1,15 +1,22 @@
 import { mat2, mat3, mat4, vec2, vec3, vec4 } from 'gl-matrix';
 
-import { TypedArray } from '@bananagl/shaders/shader';
+export type TypedArray =
+    | Float32Array
+    | Uint32Array
+    | Uint16Array
+    | Uint8Array
+    | Int32Array
+    | Int16Array
+    | Int8Array;
 
-export function cloneTypedArrayWithSize(arr: TypedArray, size: number) {
+export const cloneTypedArrayWithSize = (arr: TypedArray, size: number) => {
     const newArr = new (arr.constructor as any)(size);
     return newArr;
-}
+};
 
-interface ConstructableTypedArray {
+type ConstructableTypedArray = {
     new (buffer: ArrayBuffer): TypedArray;
-}
+};
 
 export class Buffer {
     buffer: WebGLBuffer | null = null;
@@ -139,33 +146,5 @@ export class Buffer {
         if (this.buffer) gl.deleteBuffer(this.buffer);
         this.buffer = null;
         this.data = null as any;
-    }
-}
-
-export class ElementBuffer extends Buffer {
-    buffer: WebGLBuffer | null = null;
-    constructor(public data: Uint16Array | Uint32Array) {
-        super(data);
-    }
-
-    protected setup(gl: WebGL2RenderingContext) {
-        const buffer = gl.createBuffer();
-        if (!buffer) throw new Error('Failed to create buffer');
-        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffer);
-        gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, this.data, gl.STATIC_DRAW);
-        this.buffer = buffer;
-    }
-
-    bind(gl: WebGL2RenderingContext): asserts this is { buffer: WebGLBuffer } {
-        if (!this.buffer) this.setup(gl);
-        else gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.buffer);
-    }
-
-    get BYTES_PER_ELEMENT() {
-        return this.data.BYTES_PER_ELEMENT;
-    }
-
-    get bytesAllocated() {
-        return this.data.length * this.data.BYTES_PER_ELEMENT;
     }
 }

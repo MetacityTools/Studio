@@ -24,7 +24,7 @@
       "@pages/*": ["./pages/*"],
       "@contexts/*": ["./contexts/*"],
       "@hooks/*": ["./hooks/*"],
-      "@features/*": ["./features/*"],
+      "@gl/*": ["./features/webgl/*"],
     }
   },
   "include": ["src"],

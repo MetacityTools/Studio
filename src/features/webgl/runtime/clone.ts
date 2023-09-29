@@ -1,10 +1,10 @@
 import { UniformValue } from './shader';
 
-function isArray(a: any): a is any[] {
+const isArray = (a: any): a is any[] => {
     return Array.isArray(a);
-}
+};
 
-export function cloneValue(value: UniformValue) {
+export const cloneValue = (value: UniformValue) => {
     if (isArray(value)) return value.slice();
     if (value instanceof Float32Array) return new Float32Array(value);
     if (value instanceof Int32Array) return new Int32Array(value);
@@ -14,13 +14,13 @@ export function cloneValue(value: UniformValue) {
     if (value instanceof Uint16Array) return new Uint16Array(value);
     if (value instanceof Uint8Array) return new Uint8Array(value);
     return value;
-}
+};
 
-export function cloneUniforms(uniforms: { [name: string]: UniformValue }) {
+export const cloneUniforms = (uniforms: { [name: string]: UniformValue }) => {
     const clone: { [name: string]: UniformValue } = {};
     for (const name in uniforms) {
         const value = uniforms[name];
         clone[name] = cloneValue(value);
     }
     return clone;
-}
+};

@@ -1,5 +1,6 @@
 import equal from 'fast-deep-equal/es6';
 
+import { TypedArray } from './buffer';
 import { cloneValue } from './clone';
 import { handleErrors } from './errors';
 
@@ -11,21 +12,11 @@ precision highp float;
 precision highp int;
 `;
 
-export type TypedArray =
-    | Float32Array
-    | Uint32Array
-    | Uint16Array
-    | Uint8Array
-    | Int32Array
-    | Int16Array
-    | Int8Array;
-
 export type UniformValue = number | number[] | boolean | boolean[] | TypedArray | null;
 
 const ROW_MAJOR = false;
 
 export class Shader {
-    private gl_?: WebGL2RenderingContext;
     private program_?: WebGLProgram;
     private attributes_: { [name: string]: number } = {};
     private uniforms_: {
@@ -44,10 +35,9 @@ export class Shader {
     ) {}
 
     setup(gl: WebGL2RenderingContext) {
-        this.gl_ = gl;
-        this.program_ = this.compile();
-        this.getUniforms();
-        this.getAttributes();
+        this.program_ = this.compile(gl);
+        this.getUniforms(gl);
+        this.getAttributes(gl);
         this.active = true;
     }
 
@@ -68,9 +58,7 @@ export class Shader {
         return VER + extensions.join('\n') + '\n' + PRE + rest.join('\n');
     }
 
-    private compile() {
-        const gl = this.gl;
-
+    private compile(gl: WebGL2RenderingContext) {
         const vs = gl.createShader(gl.VERTEX_SHADER);
         if (!vs) throw new Error('Failed to create vertex shader');
         const vsCode = this.preprocessCode(this.vertexShader);
@@ -89,17 +77,15 @@ export class Shader {
         gl.attachShader(program, fs);
         gl.linkProgram(program);
 
-        if (!handleErrors(this.gl, program, vs, fs)) this.active = true;
+        if (!handleErrors(gl, program, vs, fs)) this.active = true;
 
         gl.deleteShader(vs);
         gl.deleteShader(fs);
         return program;
     }
 
-    private getUniforms() {
+    private getUniforms(gl: WebGL2RenderingContext) {
         const program = this.program;
-        const gl = this.gl;
-
         const uniforms = gl.getProgramParameter(program, gl.ACTIVE_UNIFORMS);
         for (let i = 0; i < uniforms; i++) {
             const uniform = gl.getActiveUniform(program, i);
@@ -113,10 +99,8 @@ export class Shader {
         }
     }
 
-    private getAttributes() {
+    private getAttributes(gl: WebGL2RenderingContext) {
         const program = this.program;
-        const gl = this.gl;
-
         const attributes = gl.getProgramParameter(program, gl.ACTIVE_ATTRIBUTES);
         for (let i = 0; i < attributes; i++) {
             const attribute = gl.getActiveAttrib(program, i);
@@ -137,9 +121,7 @@ export class Shader {
         return uValues;
     }
 
-    set uniforms(values: { [name: string]: UniformValue }) {
-        const gl = this.gl;
-
+    setUniforms(gl: WebGL2RenderingContext, values: { [name: string]: UniformValue }) {
         for (const name in values) {
             const uniform = this.uniforms_[name];
             if (!uniform) continue;
@@ -244,16 +226,13 @@ export class Shader {
         return this.program_;
     }
 
-    private get gl() {
-        if (!this.gl_) throw new Error('No WebGL context');
-        return this.gl_;
+    use(gl: WebGL2RenderingContext) {
+        gl.useProgram(this.program);
     }
 
-    use() {
-        this.gl.useProgram(this.program);
-    }
-
-    dispose() {
-        this.gl.deleteProgram(this.program);
+    dispose(gl?: WebGL2RenderingContext) {
+        if (this.program_) {
+            if (gl) gl.deleteProgram(this.program);
+        }
     }
 }

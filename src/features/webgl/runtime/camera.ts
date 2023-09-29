@@ -1,9 +1,25 @@
 import { mat4, quat, vec2, vec3 } from 'gl-matrix';
 
-import { Ray } from '@bananagl/picking/ray';
-import { UniformValue } from '@bananagl/shaders/shader';
+import { Ray } from './ray';
+import { UniformValue } from './shader';
 
-import { CameraOptions, ProjectionType } from './cameraInterface';
+export enum ProjectionType {
+    PERSPECTIVE,
+    ORTHOGRAPHIC,
+}
+
+export type CameraProps = {
+    position?: vec3;
+    target?: vec3;
+    up?: vec3;
+    right?: vec3;
+    projectionType?: ProjectionType;
+    fovYRadian?: number;
+    width?: number;
+    height?: number;
+    near?: number;
+    far?: number;
+};
 
 export class Camera {
     position: vec3;
@@ -41,18 +57,18 @@ export class Camera {
         return this.uniforms_;
     }
 
-    constructor(options: CameraOptions = {}) {
-        this.position = options.position ?? vec3.fromValues(0, 0, 5000);
+    constructor(options: CameraProps = {}) {
+        this.position = options.position ?? vec3.fromValues(0, 0, 10);
         this.target = options.target ?? vec3.fromValues(0, 0, 0);
         this.upV = options.up ?? vec3.fromValues(0, 0, 1);
         this.rightV = options.right ?? vec3.fromValues(1, 0, 0);
-        this.type = options.projectionType ?? ProjectionType.ORTHOGRAPHIC;
+        this.type = options.projectionType ?? ProjectionType.PERSPECTIVE;
         this.fovYRadian = options.fovYRadian ?? Math.PI / 4;
         this.width = options.width ?? 1;
         this.height = options.height ?? 1;
         this.aspectRatio = this.width / this.height;
         this.near = options.near ?? 1;
-        this.far = options.far ?? 10000;
+        this.far = options.far ?? 100;
 
         this.uniforms_['uCameraPosition'] = this.position;
         this.uniforms_['uCameraTarget'] = this.target;
@@ -73,7 +89,7 @@ export class Camera {
         this.top = this.height / 2;
     }
 
-    set(options: CameraOptions) {
+    set(options: CameraProps) {
         if (options.position) this.position = options.position;
         if (options.target) this.target = options.target;
         if (options.up) this.upV = options.up;
@@ -194,7 +210,7 @@ export class Camera {
         mat4.invert(this.viewProjectionInverse, this.projectionViewMatrix);
     }
 
-    updateAspectRatio(width: number, height: number) {
+    updateScreenSize(width: number, height: number) {
         this.aspectRatio = width / height;
         this.width = width;
         this.height = height;

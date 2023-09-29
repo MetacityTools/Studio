@@ -1,4 +1,4 @@
-function handleSource(string: string, errorLine: number) {
+const handleSource = (string: string, errorLine: number) => {
     const lines = string.split('\n');
     const lines2 = [];
 
@@ -11,9 +11,9 @@ function handleSource(string: string, errorLine: number) {
     }
 
     return lines2.join('\n');
-}
+};
 
-function handleShaderErrors(gl: WebGL2RenderingContext, shader: WebGLShader, type: string) {
+const handleShaderErrors = (gl: WebGL2RenderingContext, shader: WebGLShader, type: string) => {
     const status = gl.getShaderParameter(shader, gl.COMPILE_STATUS);
     const errors = gl.getShaderInfoLog(shader)?.trim();
 
@@ -28,14 +28,14 @@ function handleShaderErrors(gl: WebGL2RenderingContext, shader: WebGLShader, typ
         if (!source) return errors;
         return type.toUpperCase() + '\n\n' + errors + '\n\n' + handleSource(source, errorLine);
     }
-}
+};
 
-export function handleErrors(
+export const handleErrors = (
     gl: WebGL2RenderingContext,
     program: WebGLProgram,
     vs: WebGLShader,
     fs: WebGLShader
-) {
+) => {
     const programLog = gl.getProgramInfoLog(program)?.trim();
     if (gl.getProgramParameter(program, gl.LINK_STATUS) === false) {
         const vertexErrors = handleShaderErrors(gl, vs, 'vertex');
@@ -60,4 +60,4 @@ export function handleErrors(
         console.warn('WebGLProgram: Program Info Log:', programLog);
     }
     return true;
-}
+};

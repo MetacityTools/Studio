@@ -1,6 +1,6 @@
 import { mat4, vec3 } from 'gl-matrix';
 
-import { TypedArray } from '@bananagl/shaders/shader';
+import { TypedArray } from './buffer';
 
 const ab = vec3.create();
 const ac = vec3.create();
@@ -9,7 +9,7 @@ const qvec = vec3.create();
 const ao = vec3.create();
 const invDir = vec3.create();
 
-export function transformMat4ZeroW(out: vec3, a: vec3, m: mat4) {
+export const transformMat4ZeroW = (out: vec3, a: vec3, m: mat4) => {
     const x = a[0],
         y = a[1],
         z = a[2];
@@ -19,7 +19,7 @@ export function transformMat4ZeroW(out: vec3, a: vec3, m: mat4) {
     out[1] = (m[1] * x + m[5] * y + m[9] * z) / w;
     out[2] = (m[2] * x + m[6] * y + m[10] * z) / w;
     return out;
-}
+};
 
 export class Ray {
     origin: vec3;
