@@ -1,0 +1,24 @@
+volumes:
+  postgres:
+
+services:
+  devcontainer:
+    # container_name: container_name: pds_devcontainer
+    build: .
+    command: sleep infinity
+    environment:
+      - DB_USER=pds
+      - DB_PASSWORD=pds-pass
+      - DB_DATABASE=pds
+
+  postgres:
+        # container_name: pds_postgres
+        image: postgres:16
+        shm_size: 2g
+        environment:
+            - POSTGRES_USER=pds
+            - POSTGRES_PASSWORD=pds-pass
+            - POSTGRES_DB=pds
+            - PGDATA=/data/postgres
+        volumes:
+            - postgres:/data/postgres
