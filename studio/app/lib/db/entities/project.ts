@@ -2,9 +2,11 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
+import { User } from "./user";
 
 @Entity()
 export class Project {
@@ -20,6 +22,10 @@ export class Project {
 
   @Column() name!: string;
   @Column() description!: string;
+
+  @ManyToOne(() => User, (user) => user.projects)
+  user!: User;
+
   @CreateDateColumn() created_at!: Date;
   @UpdateDateColumn() updated_at!: Date;
 }

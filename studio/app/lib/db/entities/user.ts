@@ -1,7 +1,11 @@
-import { Column, Entity } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryColumn } from "typeorm";
+import { Project } from "./project";
 
 @Entity()
 export class User {
-  @Column() id!: number;
+  @PrimaryColumn() id!: string;
   @Column() email!: string;
+
+  @OneToMany(() => Project, (project) => project.user)
+  projects!: Project[];
 }
