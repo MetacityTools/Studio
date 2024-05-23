@@ -3,8 +3,8 @@
 
 import { useUser, withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { useEffect, useState } from "react";
-import { getOwnProjects } from "../../actions/projects";
-import { Project } from "../../lib/db/entities/project";
+import { Project } from "../../features/db/entities/project";
+import { getOwnProjects } from "../../features/projects/projects";
 
 function SecretPage() {
   const [projects, setProjects] = useState<Project[]>([]);
