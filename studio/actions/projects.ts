@@ -4,9 +4,9 @@ import {
   canCreateProject,
   canEditOwnProject,
   canReadOwnProjects,
-} from "@/app/lib/auth/acl";
-import { Project } from "@/app/lib/db/entities/project";
-import { injectRepository } from "@/app/lib/db/helpers";
+} from "@/lib/auth/acl";
+import { Project } from "@/lib/db/entities/project";
+import { injectRepository } from "@/lib/db/helpers";
 import { getUser } from "../lib/auth/user";
 
 export async function createProject(
