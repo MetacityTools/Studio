@@ -1,0 +1,9 @@
+# secrets
+/.env
+
+# dependencies
+/node_modules
+
+# build output
+/.next
+/next-env.d.ts
