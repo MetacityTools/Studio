@@ -3,7 +3,7 @@
 
 import { useUser, withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { useEffect, useState } from "react";
-import { getProjects } from "../actions/projects/getProjects";
+import { getOwnProjects } from "../actions/projects";
 import { Project } from "../lib/db/entities/project";
 
 function SecretPage() {
@@ -12,7 +12,7 @@ function SecretPage() {
   // https://nextjs.org/docs/app/building-your-application/data-fetching/server-actions-and-mutations#useeffect
   useEffect(() => {
     const updateProjects = async () => {
-      const projects = await getProjects();
+      const projects = await getOwnProjects();
       setProjects(projects);
     };
     updateProjects();
