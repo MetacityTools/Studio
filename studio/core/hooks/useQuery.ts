@@ -4,19 +4,29 @@ import { useCallback, useEffect, useState } from "react";
 
 type useQueryProps<T> = {
   queryFn: () => Promise<T>;
+  defaultValue: T;
 };
 
-export const useQuery = <T>(props: useQueryProps<T>) => {
-  const { queryFn } = props;
+type useQueryResult<T> = {
+  data: T;
+  isLoading: boolean;
+  error: Error | null;
+  refetch: () => void;
+};
+
+export const useQuery = <T>(props: useQueryProps<T>): useQueryResult<T> => {
+  const { queryFn, defaultValue } = props;
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [data, setData] = useState<T | null>(null);
+  const [data, setData] = useState<T>(defaultValue);
   const [error, setError] = useState<Error | null>(null);
 
   const fetch = useCallback(async () => {
     setIsLoading(true);
     try {
       const result = await queryFn();
-      setData(result);
+      if (result === undefined)
+        setError(new Error("Query function returned undefined"));
+      else setData(result);
     } catch (error) {
       setError(error as Error);
     } finally {

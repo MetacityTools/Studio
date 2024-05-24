@@ -12,6 +12,7 @@
     "@adobe/react-spectrum": "^3.35.1",
     "@auth0/nextjs-auth0": "^3.5.0",
     "@headlessui/react": "^2.0.3",
+    "@spectrum-icons/illustrations": "^3.6.13",
     "@uiw/react-color": "^2.3.0",
     "clsx": "^2.1.1",
     "jsonwebtoken": "^9.0.2",

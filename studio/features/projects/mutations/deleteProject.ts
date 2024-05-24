@@ -10,6 +10,8 @@ export async function deleteProject(id: number): Promise<boolean> {
 
   const user = await getUser()!;
 
+  //TODO maybe we do not have user - check it, or just use the user returned by canEditOwnProject
+
   const ProjectRepository = await injectRepository(Project);
 
   const project = await ProjectRepository.findOne({

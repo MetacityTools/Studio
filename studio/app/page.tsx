@@ -1,6 +1,7 @@
 "use client";
 
 import { Button, Flex } from "@adobe/react-spectrum";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -15,7 +16,7 @@ export default function Home() {
       alignItems="center"
     >
       <h1>Metacity Studio</h1>
-      <Button href="/secret" variant="accent" elementType="a">
+      <Button href="/projects" variant="accent" elementType={Link}>
         Log In
       </Button>
     </Flex>
