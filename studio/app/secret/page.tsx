@@ -1,23 +1,10 @@
-// MK: this is page behind withPageAuthRequired, which forces Auth0 to log in
 "use client";
 
 import { useUser, withPageAuthRequired } from "@auth0/nextjs-auth0/client";
-import { useEffect, useState } from "react";
-import { Project } from "@features/db/entities/project";
-import { getOwnProjects } from "@features/projects";
+import { useOwnProjects } from "@features/projects/hooks/useOwnProjects";
 
 function SecretPage() {
-  const [projects, setProjects] = useState<Project[]>([]);
-
-  // https://nextjs.org/docs/app/building-your-application/data-fetching/server-actions-and-mutations#useeffect
-  useEffect(() => {
-    const updateProjects = async () => {
-      const projects = await getOwnProjects();
-      setProjects(projects);
-    };
-    updateProjects();
-  }, []);
-
+  const { data, isLoading } = useOwnProjects();
   const session = useUser();
 
   const userPicture = session?.user?.picture ?? "";
@@ -31,12 +18,11 @@ function SecretPage() {
       <img src={userPicture} alt="User picture" />
 
       <h2>Projects</h2>
-
-      <ul>
-        {projects.map((project) => (
-          <li key={project.id}>{JSON.stringify(project, null, 2)}</li>
-        ))}
-      </ul>
+      {isLoading ? (
+        <p>Loading...</p>
+      ) : (
+        <pre>{JSON.stringify(data, null, 2)}</pre>
+      )}
     </div>
   );
 }
