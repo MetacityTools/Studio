@@ -16,7 +16,10 @@ export class Project {
   @Column() name!: string;
   @Column() description!: string;
 
-  @ManyToOne(() => User, (user) => user.projects)
+  @ManyToOne(() => User, (user) => user.projects, {
+    onDelete: "SET NULL",
+    onUpdate: "CASCADE",
+  })
   user?: User;
 
   @CreateDateColumn() created_at!: Date;

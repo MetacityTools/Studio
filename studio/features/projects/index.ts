@@ -5,25 +5,31 @@ import {
   canEditOwnProject,
   canReadOwnProjects,
 } from "../auth/acl";
-import { getUser } from "../auth/user";
+import { getUserToken } from "../auth/user";
 import { Project } from "../db/entities/project";
 import { injectRepository } from "../db/helpers";
 
 export async function createProject(
-  projectData: Omit<Project, "id">
+  projectData: Pick<Project, "name" | "description">
 ): Promise<Project> {
   if (!(await canCreateProject())) throw new Error("Unauthorized");
 
+  const user = await getUserToken()!;
+
   const ProjectRepository = await injectRepository(Project);
 
-  const project = await ProjectRepository.save(projectData);
+  const project = await ProjectRepository.save({
+    ...projectData,
+    user: { id: user.id, email: user.email },
+  });
+
   return project;
 }
 
 export async function getOwnProjects(): Promise<Project[]> {
   if (!(await canReadOwnProjects())) throw new Error("Unauthorized");
 
-  const user = await getUser()!;
+  const user = await getUserToken()!;
 
   const ProjectRepository = await injectRepository(Project);
 
@@ -36,7 +42,7 @@ export async function getOwnProjects(): Promise<Project[]> {
 export async function getProjectById(id: number): Promise<Project | null> {
   if (!(await canReadOwnProjects())) throw new Error("Unauthorized");
 
-  const user = await getUser()!;
+  const user = await getUserToken()!;
 
   const ProjectRepository = await injectRepository(Project);
 
@@ -52,7 +58,7 @@ export async function updateProject(
 ): Promise<Project | null> {
   if (!(await canEditOwnProject())) throw new Error("Unauthorized");
 
-  const user = await getUser()!;
+  const user = await getUserToken()!;
 
   const ProjectRepository = await injectRepository(Project);
 
@@ -68,7 +74,7 @@ export async function updateProject(
 export async function deleteProject(id: number): Promise<boolean> {
   if (!(await canEditOwnProject())) throw new Error("Unauthorized");
 
-  const user = await getUser()!;
+  const user = await getUserToken()!;
 
   const ProjectRepository = await injectRepository(Project);
 

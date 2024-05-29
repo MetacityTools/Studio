@@ -15,5 +15,3 @@ const db = {
 export const Config = {
   db,
 };
-
-console.log(Config);
