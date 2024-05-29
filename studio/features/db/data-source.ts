@@ -1,6 +1,6 @@
 import "reflect-metadata";
 import { DataSource } from "typeorm";
-import { Config } from "../config/config";
+import { Config } from "../config";
 import { Project } from "./entities/project";
 import { User } from "./entities/user";
 

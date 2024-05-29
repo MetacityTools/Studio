@@ -1,4 +1,5 @@
 import { config } from "dotenv";
+import * as Minio from "minio";
 
 config({
   override: true,
@@ -12,8 +13,17 @@ const db = {
   database: process.env["DB_DATABASE"] || "postgres",
 };
 
+const fileStorage: Minio.ClientOptions = {
+  accessKey: process.env["MINIO_ACCESS_KEY"] ?? "",
+  secretKey: process.env["MINIO_SECRET_KEY"] ?? "",
+  endPoint: process.env["MINIO_ENDPOINT"] ?? "",
+  useSSL: false,
+  port: parseInt(process.env["MINIO_PORT"] ?? "9000"),
+};
+
 export const Config = {
   db,
+  fileStorage,
 };
 
 console.log(Config);
