@@ -15,3 +15,18 @@ export async function canEditOwnProject() {
   const user = await getUserToken();
   return !!user;
 }
+
+export async function canCreateModel() {
+  const user = await getUserToken();
+  return !!user;
+}
+
+export async function canReadOwnModels() {
+  const user = await getUserToken();
+  return !!user;
+}
+
+export async function canEditOwnModel() {
+  const user = await getUserToken();
+  return !!user;
+}

@@ -51,6 +51,15 @@ export async function ensureDirectory(directory: string): Promise<void> {
   }
 }
 
+export async function checkFileExists(file: string, directory: string) {
+  try {
+    await client.statObject(directory, file);
+    return true;
+  } catch (err) {
+    return false;
+  }
+}
+
 export async function getFileInfo(file: string, directory: string) {
   return client.statObject(directory, file);
 }
