@@ -30,7 +30,10 @@
       "@features/*": [
         "./features/*"
       ],
-    }
+    },
+    "types": [
+      "reflect-metadata"
+    ]
   },
   "include": [
     "next-env.d.ts",

@@ -25,5 +25,3 @@ export const Config = {
   db,
   fileStorage,
 };
-
-console.log(Config);

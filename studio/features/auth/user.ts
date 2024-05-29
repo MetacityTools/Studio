@@ -1,6 +1,6 @@
 import { getSession } from "@auth0/nextjs-auth0";
 
-export const getUser = async () => {
+export const getUserToken = async () => {
   const session = await getSession();
   return {
     id: session?.user?.sub,
