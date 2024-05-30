@@ -4,7 +4,10 @@ on:
   push:
     branches:
       - dev
-      - feature/testing
+    paths:
+      - "studio/**"
+      - ".github/workflows/ci.yml"
+  pull_request:
     paths:
       - "studio/**"
       - ".github/workflows/ci.yml"
