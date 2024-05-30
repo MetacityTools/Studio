@@ -16,6 +16,7 @@ jobs:
   test:
     name: Run tests
     runs-on: ubuntu-latest
+
     services:
       postgres:
         image: postgres:16
@@ -25,11 +26,24 @@ jobs:
           POSTGRES_USER: pds
           POSTGRES_PASSWORD: pds-pass
           POSTGRES_DB: pds
+      minio:
+        image: bitnami/minio # using bitnami image because minio official image doesnt have command specified and github actions dont allow to specify
+        ports:
+          - 9000:9000
+        environment:
+          MINIO_VOLUMES: /data
+          MINIO_ROOT_USER: pds
+          MINIO_ROOT_PASSWORD: pdspdspds
+
     env:
       DB_HOST: localhost
       DB_USERNAME: pds
       DB_PASSWORD: pds-pass
       DB_DATABASE: pds
+      MINIO_ENDPOINT: localhost
+      MINIO_ACCESS_KEY: pds
+      MINIO_SECRET_KEY: pdspdspds
+
     steps:
       - uses: actions/checkout@v3
 
