@@ -7,11 +7,26 @@ on:
       - feature/testing
     paths:
       - "studio/**"
+      - ".github/workflows/ci.yml"
 
 jobs:
   test:
     name: Run tests
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: pds
+          POSTGRES_PASSWORD: pds-pass
+          POSTGRES_DB: pds
+    env:
+      DB_HOST: localhost
+      DB_USERNAME: pds
+      DB_PASSWORD: pds-pass
+      DB_DATABASE: pds
     steps:
       - uses: actions/checkout@v3
 
