@@ -28,11 +28,11 @@ jobs:
           POSTGRES_PASSWORD: pds-pass
           POSTGRES_DB: pds
       minio:
-        image: bitnami/minio # using bitnami image because minio official image doesnt have command specified and github actions dont allow to specify
+        image: minio/minio:edge-cicd
+        options: --health-cmd "curl -s http://localhost:9000/minio/health/live"
         ports:
           - 9000:9000
         env:
-          MINIO_VOLUMES: /data
           MINIO_ROOT_USER: pds
           MINIO_ROOT_PASSWORD: pdspdspds
 
