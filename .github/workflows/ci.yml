@@ -1,0 +1,45 @@
+name: Metacity Studio CI
+
+on:
+  push:
+    branches:
+      - dev
+    paths:
+      - "studio/**"
+      - ".github/workflows/ci.yml"
+  pull_request:
+    paths:
+      - "studio/**"
+      - ".github/workflows/ci.yml"
+
+jobs:
+  test:
+    name: Run tests
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: pds
+          POSTGRES_PASSWORD: pds-pass
+          POSTGRES_DB: pds
+    env:
+      DB_HOST: localhost
+      DB_USERNAME: pds
+      DB_PASSWORD: pds-pass
+      DB_DATABASE: pds
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: "Setup Node.js"
+        uses: "actions/setup-node@v3"
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: cd studio && npm ci
+
+      - name: Run tests
+        run: cd studio && npm test
