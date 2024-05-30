@@ -31,7 +31,7 @@ jobs:
         image: bitnami/minio # using bitnami image because minio official image doesnt have command specified and github actions dont allow to specify
         ports:
           - 9000:9000
-        environment:
+        env:
           MINIO_VOLUMES: /data
           MINIO_ROOT_USER: pds
           MINIO_ROOT_PASSWORD: pdspdspds
