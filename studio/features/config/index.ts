@@ -13,7 +13,7 @@ const db = {
   database: process.env["DB_DATABASE"] || "postgres",
 };
 
-const fileStorage: Minio.ClientOptions = {
+const minio: Minio.ClientOptions = {
   accessKey: process.env["MINIO_ACCESS_KEY"] ?? "",
   secretKey: process.env["MINIO_SECRET_KEY"] ?? "",
   endPoint: process.env["MINIO_ENDPOINT"] ?? "",
@@ -23,5 +23,5 @@ const fileStorage: Minio.ClientOptions = {
 
 export const Config = {
   db,
-  fileStorage,
+  minio,
 };

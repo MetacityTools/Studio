@@ -2,7 +2,7 @@ import { Client } from "minio";
 import { Readable } from "node:stream";
 import { Config } from "../config";
 
-const client = new Client(Config.fileStorage);
+const client = new Client(Config.minio);
 
 export function resolveBucket(directory: string) {
   return directory.replaceAll(/[^a-z0-9\-]/g, "-");
