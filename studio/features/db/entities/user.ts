@@ -1,6 +1,4 @@
-import { Column, Entity, OneToMany, PrimaryColumn } from "typeorm";
-import { Model } from "./model";
-import { Project } from "./project";
+import { Column, Entity, PrimaryColumn } from "typeorm";
 
 @Entity()
 export class User {
@@ -8,10 +6,4 @@ export class User {
 
   @Column() email!: string;
   @Column({ nullable: true }) picture?: string;
-
-  @OneToMany(() => Project, (project) => project.user)
-  projects!: Project[];
-
-  @OneToMany(() => Model, (model) => model.user)
-  models!: Model[];
 }

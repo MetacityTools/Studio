@@ -16,9 +16,9 @@ export async function createProject(
 
   const user = (await getUserToken())!;
 
-  const ProjectRepository = await injectRepository(Project);
+  const projectRepository = await injectRepository(Project);
 
-  const project = await ProjectRepository.save({
+  const project = await projectRepository.save({
     ...projectData,
     user: { id: user.id, email: user.email },
   });
@@ -31,9 +31,9 @@ export async function getOwnProjects(): Promise<Project[]> {
 
   const user = (await getUserToken())!;
 
-  const ProjectRepository = await injectRepository(Project);
+  const projectRepository = await injectRepository(Project);
 
-  const projects = await ProjectRepository.find({
+  const projects = await projectRepository.find({
     where: { user: { id: user.id } },
   });
   return projects;
@@ -44,9 +44,9 @@ export async function getProjectById(id: number): Promise<Project | null> {
 
   const user = (await getUserToken())!;
 
-  const ProjectRepository = await injectRepository(Project);
+  const projectRepository = await injectRepository(Project);
 
-  const project = await ProjectRepository.findOne({
+  const project = await projectRepository.findOne({
     where: { id, user: { id: user.id } },
   });
   return project;
@@ -60,15 +60,15 @@ export async function updateProject(
 
   const user = (await getUserToken())!;
 
-  const ProjectRepository = await injectRepository(Project);
+  const projectRepository = await injectRepository(Project);
 
-  const project = await ProjectRepository.findOne({
+  const project = await projectRepository.findOne({
     where: { id, user: { id: user.id } },
   });
 
   if (!project) throw new Error("Not Found");
 
-  return ProjectRepository.save({ ...projectData, id });
+  return projectRepository.save({ ...projectData, id });
 }
 
 export async function deleteProject(id: number): Promise<boolean> {
@@ -76,14 +76,14 @@ export async function deleteProject(id: number): Promise<boolean> {
 
   const user = (await getUserToken())!;
 
-  const ProjectRepository = await injectRepository(Project);
+  const projectRepository = await injectRepository(Project);
 
-  const project = await ProjectRepository.findOne({
+  const project = await projectRepository.findOne({
     where: { id, user: { id: user.id } },
   });
 
   if (!project) throw new Error("Not Found");
 
-  await ProjectRepository.delete(id);
+  await projectRepository.delete(id);
   return true;
 }

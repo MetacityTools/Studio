@@ -15,7 +15,7 @@ export class Model {
   @Column() name!: string;
   @Column("varchar", { nullable: true }) coordinateSystem?: string | null;
 
-  @ManyToOne(() => User, (user) => user.models, {
+  @ManyToOne(() => User, {
     nullable: false,
     onDelete: "RESTRICT",
     onUpdate: "CASCADE",

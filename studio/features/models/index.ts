@@ -1,3 +1,5 @@
+"use server";
+
 import { Readable } from "stream";
 import { ReadableStream } from "stream/web";
 import { canCreateModel, canReadOwnModels } from "../auth/acl";
