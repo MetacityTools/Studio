@@ -1,5 +1,5 @@
 import "reflect-metadata";
-import { beforeAll } from "vitest";
+import { beforeAll, vi } from "vitest";
 import { User } from "./features/db/entities/user";
 import { injectRepository } from "./features/db/helpers";
 
@@ -12,4 +12,14 @@ beforeAll(async () => {
     picture: "https://test.com/test.jpg",
     projects: [],
   });
+
+  vi.mock("@auth0/nextjs-auth0", () => ({
+    getSession: async () => ({
+      user: {
+        sub: "test",
+        email: "test@test",
+        picture: "https://example.com/picture.png",
+      },
+    }),
+  }));
 });

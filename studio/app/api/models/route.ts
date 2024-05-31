@@ -1,16 +1,30 @@
-import { saveModel } from "@/features/models";
-import { Readable } from "node:stream";
-import { ReadableStream } from "stream/web";
+import { createOwnModel } from "@/features/models";
+import { z } from "zod";
 import { zfd } from "zod-form-data";
 
 const postSchema = zfd.formData({
-  file: zfd.file(),
+  file: zfd.repeatableOfType(zfd.file()),
+  name: zfd.text(),
+  coordinateSystem: zfd.text().optional(),
 });
 
 export async function POST(req: Request) {
-  const data = postSchema.parse(await req.formData());
+  try {
+    const data = postSchema.parse(await req.formData());
 
-  const fileStream = Readable.fromWeb(data.file.stream() as ReadableStream);
+    const model = await createOwnModel(
+      {
+        name: data.name,
+        coordinateSystem: data.coordinateSystem,
+      },
+      data.file
+    );
 
-  await saveModel(fileStream);
+    return Response.json(model, { status: 201 });
+  } catch (e) {
+    if (e instanceof z.ZodError) {
+      return new Response(e.message, { status: 400 });
+    }
+    throw e;
+  }
 }

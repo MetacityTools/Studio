@@ -1,43 +1,34 @@
-import { describe, expect, test, vi } from "vitest";
+import { describe, expect, test } from "vitest";
 import { createProject, deleteProject, getProjectById, updateProject } from ".";
-import { pick } from "../helpers/objects";
-
-vi.mock("@auth0/nextjs-auth0", () => ({
-  getSession: async () => ({
-    user: {
-      sub: "test",
-      email: "test@test",
-      picture: "https://example.com/picture.png",
-    },
-  }),
-}));
+import { Project } from "../db/entities/project";
 
 describe("project actions", () => {
   let projectId: number;
 
-  test("Create a project", async () => {
-    const project = await createProject({
+  test("project CRUD", async () => {
+    // CREATE
+    let project: Project | null = await createProject({
       name: "Test Project",
       description: "This is a test project",
     });
 
     projectId = project.id;
 
-    expect(pick(project, ["name", "description"])).toEqual({
+    // READ
+    project = await getProjectById(projectId);
+    expect(project).toMatchObject({
       name: "Test Project",
       description: "This is a test project",
     });
-  });
 
-  test("Update a project", async () => {
+    // UPDATE
     const updatedProject = await updateProject(projectId, {
       description: "This is an updated test project",
     });
 
     expect(updatedProject?.description).toBe("This is an updated test project");
-  });
 
-  test("Delete a project", async () => {
+    // DELETE
     await deleteProject(projectId);
 
     expect(await getProjectById(projectId)).toBe(null);

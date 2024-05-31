@@ -1,4 +1,5 @@
 import { Column, Entity, OneToMany, PrimaryColumn } from "typeorm";
+import { Model } from "./model";
 import { Project } from "./project";
 
 @Entity()
@@ -10,4 +11,7 @@ export class User {
 
   @OneToMany(() => Project, (project) => project.user)
   projects!: Project[];
+
+  @OneToMany(() => Model, (model) => model.user)
+  models!: Model[];
 }

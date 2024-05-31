@@ -17,7 +17,7 @@ export class Project {
   @Column() description!: string;
 
   @ManyToOne(() => User, (user) => user.projects, {
-    onDelete: "SET NULL",
+    onDelete: "RESTRICT",
     onUpdate: "CASCADE",
   })
   user?: User;

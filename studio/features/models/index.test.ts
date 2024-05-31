@@ -1,34 +1,40 @@
-import { Readable } from "stream";
 import { describe, expect, test } from "vitest";
-import {
-  checkFileExists,
-  deleteFile,
-  ensureDirectory,
-  readFile,
-  saveFileStream,
-} from "../storage";
+import { createOwnModel, deleteOwnModel, getOwnModel } from ".";
+import { Model } from "../db/entities/model";
 
 describe("model actions", () => {
-  const model = new Readable();
-  model.push("test");
-  model.push(null);
+  const modelFile = {
+    stream: () =>
+      new ReadableStream({
+        start(controller) {
+          controller.enqueue(new TextEncoder().encode("test"));
+          controller.close();
+        },
+      }),
+    name: "test.txt",
+  } as File;
 
-  test("saveModel", async () => {
-    // Save the model file
-    await ensureDirectory("models");
-    await saveFileStream("model", "models", model);
+  const modelMetadata: Pick<Model, "name" | "coordinateSystem"> = {
+    name: "My best model",
+    coordinateSystem: "WGS84",
+  };
 
-    // Check if the file exists
-    const data = await readFile("model", "models");
-    expect(data.toString()).toBe("test");
-  });
+  test("model CRD", async () => {
+    let model: Model | null;
 
-  test("deleteModel", async () => {
-    // Delete the model file
-    await deleteFile("model", "models");
+    // CREATE
+    model = await createOwnModel(modelMetadata, [modelFile]);
+    expect(model).toMatchObject(modelMetadata);
 
-    // Check if the file exists
-    const exists = await checkFileExists("model", "models");
-    expect(exists).toBe(false);
+    // READ
+    model = await getOwnModel(model.id);
+    expect(model).toMatchObject(modelMetadata);
+    expect(model?.files).toHaveLength(1);
+    expect(model?.files?.[0]).toBe(modelFile.name);
+
+    // DELETE
+    await deleteOwnModel(model!.id);
+    model = await getOwnModel(model!.id);
+    expect(model).toBe(null);
   });
 });

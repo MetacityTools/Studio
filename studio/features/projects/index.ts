@@ -14,7 +14,7 @@ export async function createProject(
 ): Promise<Project> {
   if (!(await canCreateProject())) throw new Error("Unauthorized");
 
-  const user = await getUserToken()!;
+  const user = (await getUserToken())!;
 
   const ProjectRepository = await injectRepository(Project);
 
@@ -29,7 +29,7 @@ export async function createProject(
 export async function getOwnProjects(): Promise<Project[]> {
   if (!(await canReadOwnProjects())) throw new Error("Unauthorized");
 
-  const user = await getUserToken()!;
+  const user = (await getUserToken())!;
 
   const ProjectRepository = await injectRepository(Project);
 
@@ -42,7 +42,7 @@ export async function getOwnProjects(): Promise<Project[]> {
 export async function getProjectById(id: number): Promise<Project | null> {
   if (!(await canReadOwnProjects())) throw new Error("Unauthorized");
 
-  const user = await getUserToken()!;
+  const user = (await getUserToken())!;
 
   const ProjectRepository = await injectRepository(Project);
 
@@ -58,7 +58,7 @@ export async function updateProject(
 ): Promise<Project | null> {
   if (!(await canEditOwnProject())) throw new Error("Unauthorized");
 
-  const user = await getUserToken()!;
+  const user = (await getUserToken())!;
 
   const ProjectRepository = await injectRepository(Project);
 
@@ -74,7 +74,7 @@ export async function updateProject(
 export async function deleteProject(id: number): Promise<boolean> {
   if (!(await canEditOwnProject())) throw new Error("Unauthorized");
 
-  const user = await getUserToken()!;
+  const user = (await getUserToken())!;
 
   const ProjectRepository = await injectRepository(Project);
 
