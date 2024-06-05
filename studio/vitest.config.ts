@@ -16,8 +16,8 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      "@": "./",
-      "@features": "./features",
+      "@app": new URL("./app", import.meta.url).pathname,
+      "@features": new URL("./features", import.meta.url).pathname,
     },
   },
 });
