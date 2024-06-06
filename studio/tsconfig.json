@@ -30,7 +30,13 @@
       "@features/*": [
         "./features/*"
       ],
-    },
+      "@shared/*": [
+        "./shared/*"
+      ],
+      "@core/*": [
+        "./core/*"
+      ],
+    },    
     "types": [
       "reflect-metadata"
     ]
