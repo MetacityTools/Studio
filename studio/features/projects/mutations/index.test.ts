@@ -1,6 +1,10 @@
 import { expect, test } from "vitest";
-import { createProject, deleteProject, getProjectById, updateProject } from ".";
-import { Project } from "../db/entities/project";
+
+import { Project } from "@features/db/entities/project";
+import { createProject } from "./createProject";
+import { getProjectById } from "../queries/getProjectbyId";
+import { updateProject } from "./updateProject";
+import { deleteProject } from "./deleteProject";
 
 test("project CRUD", async () => {
   let project: Project | null;

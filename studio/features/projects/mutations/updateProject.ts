@@ -7,8 +7,8 @@ import { Project } from "@features/db/entities/project";
 import { injectRepository } from "@features/db/helpers";
 
 const updateProjectData = z.object({
-  name: z.string(),
-  description: z.string(),
+  name: z.string().optional(),
+  description: z.string().optional(),
 });
 
 export async function updateProject(
@@ -35,4 +35,3 @@ export async function updateProject(
     description: projectData.description ?? project.description,
   });
 }
-

@@ -4,7 +4,7 @@ import { Config } from "../config";
 
 const client = new Client(Config.minio);
 
-export function resolveBucket(directory: string) {
+function resolveBucket(directory: string) {
   return directory.replaceAll(/[^a-z0-9\-]/g, "-");
 }
 
@@ -55,7 +55,7 @@ export async function deleteFile(file: string, directory: string) {
   await client.removeObject(bucket, file);
 }
 
-export async function ensureDirectory(directory: string): Promise<string> {
+export async function ensureBucket(directory: string): Promise<string> {
   const bucket = resolveBucket(directory);
 
   const bucketExists = await client.bucketExists(bucket);
@@ -81,7 +81,7 @@ export async function getFileInfo(file: string, directory: string) {
   return client.statObject(bucket, file);
 }
 
-export async function listFilesInDirectory(directory: string) {
+export async function listFilesInBucket(directory: string) {
   return new Promise<string[]>((resolve, reject) => {
     const bucket = resolveBucket(directory);
     const files: string[] = [];

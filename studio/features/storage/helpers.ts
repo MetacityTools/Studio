@@ -1,12 +1,12 @@
-export function getUserDirectory(userId: string, directory?: string) {
+export function getUserBucketName(userId: string, directory?: string) {
   let userDir = `users/${userId}`;
   if (directory) userDir += `/${directory}`;
   return userDir;
 }
 
-export function getUserModelDirectory(
+export function getUserModelBucketName(
   userId: string,
   modelId: string | number
 ) {
-  return getUserDirectory(userId, `models/${modelId}`);
+  return getUserBucketName(userId, `models/${modelId}`);
 }
