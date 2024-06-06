@@ -1,18 +1,18 @@
 "use server";
 
 import { canReadOwnProjects } from "@features/auth/acl";
-import { getUser } from "@features/auth/user";
+import { getUserToken } from "@features/auth/user";
 import { Project } from "@features/db/entities/project";
 import { injectRepository } from "@features/db/helpers";
 
 export async function getOwnProjects(): Promise<Project[]> {
   if (!(await canReadOwnProjects())) throw new Error("Unauthorized");
 
-  const user = await getUser()!;
+  const user = await getUserToken();
 
-  const ProjectRepository = await injectRepository(Project);
+  const projectRepository = await injectRepository(Project);
 
-  const projects = await ProjectRepository.find({
+  const projects = await projectRepository.find({
     where: { user: { id: user.id } },
   });
 
@@ -22,3 +22,4 @@ export async function getOwnProjects(): Promise<Project[]> {
     return JSON.parse(JSON.stringify(project));
   });
 }
+

@@ -2,13 +2,13 @@
 
 import { z } from "zod";
 import { canEditOwnProject } from "@features/auth/acl";
-import { getUser } from "@features/auth/user";
+import { getUserToken } from "@features/auth/user";
 import { Project } from "@features/db/entities/project";
 import { injectRepository } from "@features/db/helpers";
 
 const updateProjectData = z.object({
-  name: z.string(),
-  description: z.string(),
+  name: z.string().optional(),
+  description: z.string().optional(),
 });
 
 export async function updateProject(
@@ -19,17 +19,17 @@ export async function updateProject(
 
   if (!(await canEditOwnProject())) throw new Error("Unauthorized");
 
-  const user = await getUser()!;
+  const user = await getUserToken();
 
-  const ProjectRepository = await injectRepository(Project);
+  const projectRepository = await injectRepository(Project);
 
-  const project = await ProjectRepository.findOne({
+  const project = await projectRepository.findOne({
     where: { id, user: { id: user.id } },
   });
 
   if (!project) throw new Error("Not Found");
 
-  return ProjectRepository.save({
+  return projectRepository.save({
     id,
     name: projectData.name ?? project.name,
     description: projectData.description ?? project.description,

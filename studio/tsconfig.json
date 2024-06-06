@@ -24,6 +24,9 @@
       }
     ],
     "paths": {
+      "@app/*": [
+        "./app/*"
+      ],
       "@features/*": [
         "./features/*"
       ],
@@ -33,7 +36,10 @@
       "@core/*": [
         "./core/*"
       ],
-    }
+    },    
+    "types": [
+      "reflect-metadata"
+    ]
   },
   "include": [
     "next-env.d.ts",
