@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - dev
-      - fix/test-dependency
     paths:
       - "studio/**"
       - ".github/workflows/ci.yml"
