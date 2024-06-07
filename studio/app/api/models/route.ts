@@ -1,4 +1,4 @@
-import { createOwnModel } from "@features/models";
+import { createOwnModel } from "@features/models/mutations/createOwnModel";
 import { z } from "zod";
 import { zfd } from "zod-form-data";
 

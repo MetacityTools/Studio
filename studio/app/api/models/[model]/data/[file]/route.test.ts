@@ -1,6 +1,7 @@
 "use server";
 
-import { createOwnModel, deleteOwnModel } from "@features/models";
+import { createOwnModel } from "@features/models/mutations/createOwnModel";
+import { deleteOwnModel } from "@features/models/mutations/deleteOwnModel";
 import { expect, test } from "vitest";
 import { GET } from "./route";
 
