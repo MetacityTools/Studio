@@ -44,7 +44,9 @@
     "postcss": "^8",
     "typescript": "^5",
     "unplugin-swc": "^1.4.5",
-    "vitest": "^1.6.0",
+    "vitest": "^1.6.0"
+  },
+  "optionalDependencies": {
     "@rollup/rollup-linux-x64-gnu": "4.18.0"
   }
 }
