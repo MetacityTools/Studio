@@ -1,6 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  plugins: [],
+  experimental: {
+    serverComponentsExternalPackages: ["typeorm"],
+  },
 };
 
 export default nextConfig;
