@@ -1,6 +1,6 @@
 "use server";
 
-import { getUserToken } from "../user";
+import { getUserToken } from "./user";
 import { injectRepository } from "@features/db/helpers";
 import { User } from "@features/db/entities/user";
 

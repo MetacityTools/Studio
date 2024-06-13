@@ -1,5 +1,5 @@
 import { useQuery } from "@core/hooks/useQuery";
-import { hasAccess } from "@features/auth/query/hasAccess";
+import { hasAccess } from "@features/auth/hasAccess";
 import { redirect } from "next/navigation";
 import { useEffect } from "react";
 
