@@ -60,6 +60,7 @@ function ModelListPage() {
                     const response = fetch(`/api/models/${splitKey[1]}`, {
                       method: "DELETE",
                     });
+                    router.push("/models");
                   }
                 }}
               >

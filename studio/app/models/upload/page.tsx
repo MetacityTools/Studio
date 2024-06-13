@@ -20,11 +20,13 @@ import { NoData } from "@core/components/Empty";
 import Header from "@features/projects/components/Header";
 import File from "@spectrum-icons/illustrations/File";
 import Upload from "@spectrum-icons/illustrations/Upload";
+import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 
 function ModelUploadPage() {
   const [name, setName] = useState<string>("");
-  let [files, setFiles] = useState<File[]>([]);
+  const [files, setFiles] = useState<File[]>([]);
+  const router = useRouter();
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -37,6 +39,7 @@ function ModelUploadPage() {
       body: formData,
     });
     const data = await response.json();
+    router.push("/models");
   }
 
   return (
