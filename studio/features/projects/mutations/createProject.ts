@@ -14,6 +14,7 @@ const createProjectData = z.object({
 export async function createProject(
   projectData: Pick<Project, "name" | "description">
 ): Promise<Project> {
+  console.log("Creating project", projectData);
   projectData = createProjectData.parse(projectData);
 
   if (!(await canCreateProject())) throw new Error("Unauthorized");
@@ -29,4 +30,3 @@ export async function createProject(
 
   return project;
 }
-
