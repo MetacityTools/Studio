@@ -11,8 +11,9 @@ export async function listOwnModels() {
     const user = (await getUserToken())!;
   
     const modelRepository = await injectRepository(Model);
-  
-    return await modelRepository.find({
+
+    const models = await modelRepository.find({
       where: { user: { id: user.id } },
     });
+    return models.map(model => Object.assign({}, model));
   }
