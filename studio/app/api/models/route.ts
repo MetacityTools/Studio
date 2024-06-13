@@ -3,7 +3,7 @@ import { z } from "zod";
 import { zfd } from "zod-form-data";
 
 const postSchema = zfd.formData({
-  file: zfd.repeatableOfType(zfd.file()),
+  files: zfd.repeatableOfType(zfd.file()),
   name: zfd.text(),
   coordinateSystem: zfd.text().optional(),
 });
@@ -11,13 +11,12 @@ const postSchema = zfd.formData({
 export async function POST(req: Request) {
   try {
     const data = postSchema.parse(await req.formData());
-
     const model = await createOwnModel(
       {
         name: data.name,
         coordinateSystem: data.coordinateSystem,
       },
-      data.file
+      data.files
     );
 
     return Response.json(model, { status: 201 });

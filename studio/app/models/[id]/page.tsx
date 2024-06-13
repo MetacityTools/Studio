@@ -2,6 +2,7 @@
 
 import {
   ActionButton,
+  ActionMenu,
   Button,
   Flex,
   Item,
@@ -12,14 +13,66 @@ import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { ContentContainer } from "@core/components/ContentContainer";
 import { NoData } from "@core/components/Empty";
 import Header from "@features/projects/components/Header";
-import { useOwnModels } from "@features/models/hooks/useOwnModels";
 import File from "@spectrum-icons/illustrations/File";
-import Link from "next/link";
 import { useOwnModel } from "@features/models/hooks/useOwnModel";
 
 function ModelDetailPage({ params }: { params: { id: string } }) {
-    const { data: model, isLoading } = useOwnModel(Number(params.id));
-    return <h1>My Model {model?.name}</h1>
-  }
+  const { data: model, isLoading } = useOwnModel(Number(params.id));
+  return (
+    <Flex
+      direction="column"
+      width="100%"
+      height="100%"
+      gap="size-10"
+      justifyContent="start"
+      alignItems="start"
+    >
+      <Header
+        nav={[
+          {
+            key: "models",
+            children: "Models",
+            link: "/models",
+          },
+          {
+            key: "detail",
+            children: "Model Detail",
+          },
+        ]}
+      />
+      <ContentContainer>
+        <Text>{model?.name}</Text>
+        {model && model.files.length > 0 ? (
+          <ListView
+            width="size-3000"
+            minHeight="size-3000"
+            aria-label="ListView multiple selection example"
+            renderEmptyState={() => <NoData />}
+          >
+            {model.files.map((file) => (
+              <Item key={file} textValue={file}>
+                <File />
+                <Text>{file}</Text>
+                <ActionMenu
+                      onAction={(key) => {
+                        const splitKey = key.toString().split("/");
+                        splitKey[0] === "download" &&
+                          console.log("download", splitKey[1]);
+                      }}
+                    >
+                      <Item key={`download/${file}`} textValue="Download">
+                        <Text>Download</Text>
+                      </Item>
+                    </ActionMenu>
+              </Item>
+            ))}
+          </ListView>
+        ) : (
+          <NoData />
+        )}
+      </ContentContainer>
+    </Flex>
+  );
+}
 
 export default withPageAuthRequired(ModelDetailPage);

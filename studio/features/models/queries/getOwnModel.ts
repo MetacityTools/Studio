@@ -18,13 +18,12 @@ export async function getOwnModel(modelId: number) {
       where: { id: modelId, user: { id: user.id } },
     });
     if (!model) return null;
-     
+  
     const bucketName = getUserModelBucketName(user.id, model.id);
     const files = await listFilesInBucket(bucketName);
   
     return {
       ...model,
-      // files,
-      files: [],
+      files,
     };
   }

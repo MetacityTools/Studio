@@ -7,32 +7,36 @@ import {
   Form,
   TextField,
   DropZone,
-  FileTrigger,
   IllustratedMessage,
   Heading,
+  ListView,
+  Item,
+  Text,
+  ActionMenu,
 } from "@adobe/react-spectrum";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { ContentContainer } from "@core/components/ContentContainer";
+import { NoData } from "@core/components/Empty";
 import Header from "@features/projects/components/Header";
-
-import { FormEvent, useState } from 'react'
+import File from "@spectrum-icons/illustrations/File";
+import Upload from "@spectrum-icons/illustrations/Upload";
+import { FormEvent, useState } from "react";
 
 function ModelUploadPage() {
   const [name, setName] = useState<string>("");
-  const [file, setFile] = useState<string[]>([]);
-  let [isFilled, setIsFilled] = useState(false);
+  let [files, setFiles] = useState<File[]>([]);
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault()
-    const formData = new FormData(event.currentTarget)
-
-    const response = await fetch('/api/models', {
-      method: 'POST',
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    for (const file of files) {
+      formData.append("files", file);
+    }
+    const response = await fetch("/api/models", {
+      method: "POST",
       body: formData,
-    })
- 
-    // Handle response if necessary
-    const data = await response.json()
+    });
+    const data = await response.json();
   }
 
   return (
@@ -59,29 +63,62 @@ function ModelUploadPage() {
       />
       <ContentContainer>
         <Form maxWidth="size-6000" onSubmit={onSubmit}>
-          <TextField 
-            label="Model name" 
+          <TextField
+            label="Model name"
             name="name"
-            value={name} 
-            onChange={(e) => setName(e)}/>
-          {/* <FileTrigger
-            onSelect={(e) => {
-              let files = Array.from(e);
-              let filenames = files.map((file) => file.name);
-              setFile(filenames);
-              console.log(file);
-            }}>
-            <Button variant="accent">Select a file</Button>
-          </FileTrigger> */}
+            value={name}
+            onChange={(e) => setName(e)}
+          />
           <DropZone
             maxWidth="size-3000"
-            isFilled={isFilled}
-            onDrop={() => setIsFilled(true)}>
-            <IllustratedMessage>
-              <Heading>
-                {isFilled ? 'You dropped something!' : 'Drag and drop your file'}
-              </Heading>
-            </IllustratedMessage>
+            isFilled={!!files.length}
+            replaceMessage="Drop file to add"
+            onDrop={async (e) => {
+              const newFiles = [];
+              for (const item of e.items) {
+                if (
+                  item.kind === "file" &&
+                  files.findIndex((file) => file.name === item.name) === -1
+                ) {
+                  newFiles.push(await item.getFile());
+                }
+              }
+              if (newFiles.length != 0) {
+                setFiles([...files, ...newFiles]);
+              }
+            }}
+          >
+            {files.length ? (
+              <ListView
+                width="size-3000"
+                minHeight="size-3000"
+                aria-label="ListView multiple selection example"
+                renderEmptyState={() => <NoData />}
+              >
+                {files.map((file) => (
+                  <Item key={file.name} textValue={file.name}>
+                    <File />
+                    <Text>{file.name}</Text>
+                    <ActionMenu
+                      onAction={(key) => {
+                        const splitKey = key.toString().split("/");
+                        splitKey[0] === "delete" &&
+                          setFiles(files.filter((f) => f.name !== splitKey[1]));
+                      }}
+                    >
+                      <Item key={`delete/${file.name}`} textValue="Delete">
+                        <Text>Delete</Text>
+                      </Item>
+                    </ActionMenu>
+                  </Item>
+                ))}
+              </ListView>
+            ) : (
+              <IllustratedMessage>
+                <Upload />
+                <Heading>Drag and drop here</Heading>
+              </IllustratedMessage>
+            )}
           </DropZone>
           <ButtonGroup>
             <Button type="submit" variant="primary">

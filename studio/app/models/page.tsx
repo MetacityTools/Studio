@@ -1,7 +1,7 @@
 "use client";
 
 import {
-  ActionButton,
+  ActionMenu,
   Button,
   Flex,
   Item,
@@ -15,9 +15,11 @@ import Header from "@features/projects/components/Header";
 import { useOwnModels } from "@features/models/hooks/useOwnModels";
 import File from "@spectrum-icons/illustrations/File";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 function ModelListPage() {
   const { data: models, isLoading } = useOwnModels();
+  const router = useRouter();
 
   return (
     <Flex
@@ -36,7 +38,6 @@ function ModelListPage() {
           },
         ]}
       />
-
       <ContentContainer>
         <Button variant="secondary" href="/models/upload" elementType={Link}>
           Upload New Model
@@ -44,15 +45,28 @@ function ModelListPage() {
         <ListView
           width="size-6000"
           minHeight="size-3000"
-          selectionMode="multiple"
           aria-label="ListView multiple selection example"
           renderEmptyState={() => <NoData />}
+          onAction={(key) => router.push(`/models/${key}`)}
         >
           {models.map((model) => (
             <Item key={model.id}>
               <File />
               <Text>{model.name}</Text>
-              <Button variant="secondary" href={`/models/detail/${model.id}`} elementType={Link}>Detail</Button>
+              <ActionMenu
+                onAction={(key) => {
+                  const splitKey = key.toString().split("/");
+                  if (splitKey[0] === "delete") {
+                    const response = fetch(`/api/models/${splitKey[1]}`, {
+                      method: "DELETE",
+                    });
+                  }
+                }}
+              >
+                <Item key={`delete/${model.id}`} textValue="Delete">
+                  <Text>Delete</Text>
+                </Item>
+              </ActionMenu>
             </Item>
           ))}
         </ListView>
