@@ -10,3 +10,11 @@ export const NoData = () => {
     </IllustratedMessage>
   );
 };
+
+export const Loading = () => {
+  return (
+    <IllustratedMessage>
+      <Content>Loading...</Content>
+    </IllustratedMessage>
+  );
+};

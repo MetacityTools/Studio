@@ -2,8 +2,7 @@
 
 import {
   ActionButton,
-  Button,
-  Dialog,
+  ActionMenu,
   DialogTrigger,
   Flex,
   Item,
@@ -12,17 +11,26 @@ import {
 } from "@adobe/react-spectrum";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { ContentContainer } from "@core/components/ContentContainer";
-import { NoData } from "@core/components/Empty";
+import { Loading, NoData } from "@core/components/Empty";
 import { withUserEnabled } from "@core/utils/withUserEnabled";
 import CreateProjectDialog from "@features/projects/components/CreateDialog";
 import Header from "@features/projects/components/Header";
 import { useOwnProjects } from "@features/projects/hooks/useOwnProjects";
 import File from "@spectrum-icons/illustrations/File";
-import Link from "next/link";
 import { ToastContainer } from "@react-spectrum/toast";
+import { Key, useCallback } from "react";
+import { useHandleProjectAction } from "@features/projects/hooks/useHandleProjectAction";
+import EditDialog from "@features/projects/components/EditDialog";
+import DeleteDialog from "@features/projects/components/DeleteDialog";
 
-function SecretPage() {
-  const { data: projects, isLoading } = useOwnProjects();
+function ProjectListPage() {
+  const { data: projects, isLoading, refetch } = useOwnProjects();
+  const [dispatchAction, closeDialog, dialogState] = useHandleProjectAction();
+
+  const handleCloseActionDialog = useCallback(() => {
+    closeDialog();
+    refetch();
+  }, [closeDialog, refetch]);
 
   return (
     <Flex
@@ -44,53 +52,54 @@ function SecretPage() {
       <ContentContainer>
         <DialogTrigger>
           <ActionButton>Create Project</ActionButton>
-          {(close) => <CreateProjectDialog close={close} />}
+          {(close) => (
+            <CreateProjectDialog
+              close={() => {
+                close();
+                refetch();
+              }}
+            />
+          )}
         </DialogTrigger>
         <ListView
           width="size-6000"
           minHeight="size-3000"
           selectionMode="multiple"
           aria-label="ListView multiple selection example"
-          renderEmptyState={() => <NoData />}
+          renderEmptyState={() => (isLoading ? <Loading /> : <NoData />)}
           selectionStyle="highlight"
         >
           {projects.map((project) => (
             <Item key={project.id}>
               <File />
               <Text>{project.name}</Text>
+              <ActionMenu
+                onAction={(action: Key) => dispatchAction(project.id, action)}
+              >
+                <Item key="edit" textValue="Edit">
+                  <Text>Edit</Text>
+                </Item>
+                <Item key="delete" textValue="Delete">
+                  <Text>Delete</Text>
+                </Item>
+              </ActionMenu>
             </Item>
           ))}
         </ListView>
       </ContentContainer>
+      <EditDialog
+        open={dialogState.edit}
+        close={handleCloseActionDialog}
+        projectId={dialogState.projectId}
+      />
+      <DeleteDialog
+        open={dialogState.delete}
+        close={handleCloseActionDialog}
+        projectId={dialogState.projectId}
+      />
       <ToastContainer />
     </Flex>
   );
 }
 
-export default withPageAuthRequired(withUserEnabled(SecretPage));
-
-/*
-
-        >
-          {projects ? (
-            projects?.map((project) => (
-              <Item key="Charmander">
-                <File />
-                <Text>Onboarding</Text>
-              </Item>
-            ))
-          ) : (
-            <NoData />
-          )}
-<p>This page is only accessible to authenticated users.</p>
-      <h2>User</h2>
-      <pre>{JSON.stringify(session, null, 2)}</pre>
-      <img src={userPicture} alt="User picture" />
-
-      <h2>Projects</h2>
-      {isLoading ? (
-        <p>Loading...</p>
-      ) : (
-        <pre>{JSON.stringify(data, null, 2)}</pre>
-      )}
-*/
+export default withPageAuthRequired(withUserEnabled(ProjectListPage));

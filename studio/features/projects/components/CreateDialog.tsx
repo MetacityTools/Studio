@@ -16,11 +16,6 @@ import { ToastQueue } from "@react-spectrum/toast";
 import { useCreateProjects } from "@features/projects/hooks/useCreateProject";
 import { FormEvent, useCallback, useState } from "react";
 
-type CreateProjectFormData = {
-  name: string;
-  description: string;
-};
-
 type CreateProjectDialogProps = {
   close: () => void;
 };
@@ -30,11 +25,15 @@ export default function CreateProjectDialog({
 }: CreateProjectDialogProps) {
   const { call, inProgress } = useCreateProjects();
 
-  //form fields
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
 
   const handleSubmit = useCallback(async () => {
+    if (!name || !description) {
+      ToastQueue.negative("Project name and description are required");
+      return;
+    }
+
     const data = {
       name,
       description,
@@ -50,8 +49,6 @@ export default function CreateProjectDialog({
     }
   }, [name, description, call, close]);
 
-  console.log("rendering create project page");
-
   return (
     <Dialog>
       <Heading>Create Project</Heading>
@@ -61,6 +58,11 @@ export default function CreateProjectDialog({
             label="Project name"
             name="name"
             isRequired
+            validate={(value) => {
+              if (!value) {
+                return "Project name is required";
+              }
+            }}
             value={name}
             onChange={setName}
           />
@@ -68,6 +70,11 @@ export default function CreateProjectDialog({
             label="Description"
             name="description"
             isRequired
+            validate={(value) => {
+              if (!value) {
+                return "Description is required";
+              }
+            }}
             value={description}
             onChange={setDescription}
           />
@@ -77,12 +84,7 @@ export default function CreateProjectDialog({
         <Button variant="secondary" onPress={close}>
           Cancel
         </Button>
-        <Button
-          variant="accent"
-          type="submit"
-          isPending={inProgress}
-          onPress={handleSubmit}
-        >
+        <Button variant="accent" isPending={inProgress} onPress={handleSubmit}>
           Create
         </Button>
       </ButtonGroup>

@@ -13,8 +13,9 @@ export async function getProjectById(id: number): Promise<Project | null> {
   const projectRepository = await injectRepository(Project);
 
   const project = await projectRepository.findOne({
-    where: { id, user: { id: user.id } }, 
+    where: { id, user: { id: user.id } },
   });
-  return project;
-}
 
+  console.log("project", project);
+  return JSON.parse(JSON.stringify(project));
+}
