@@ -104,12 +104,11 @@ function ModelUploadPage() {
                     <Text>{file.name}</Text>
                     <ActionMenu
                       onAction={(key) => {
-                        const splitKey = key.toString().split("/");
-                        splitKey[0] === "delete" &&
-                          setFiles(files.filter((f) => f.name !== splitKey[1]));
+                        key === "delete" &&
+                          setFiles(files.filter((f) => f.name !== file.name));
                       }}
                     >
-                      <Item key={`delete/${file.name}`} textValue="Delete">
+                      <Item key="delete" textValue="Delete">
                         <Text>Delete</Text>
                       </Item>
                     </ActionMenu>

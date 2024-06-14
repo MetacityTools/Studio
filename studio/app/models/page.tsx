@@ -45,26 +45,24 @@ function ModelListPage() {
         <ListView
           width="size-6000"
           minHeight="size-3000"
-          aria-label="ListView multiple selection example"
+          aria-label="ListView"
           renderEmptyState={() => <NoData />}
-          onAction={(key) => router.push(`/models/${key}`)}
         >
           {models.map((model) => (
-            <Item key={model.id}>
+            <Item href={`/models/${model.id}`} key={model.id}>
               <File />
               <Text>{model.name}</Text>
               <ActionMenu
                 onAction={(key) => {
-                  const splitKey = key.toString().split("/");
-                  if (splitKey[0] === "delete") {
-                    const response = fetch(`/api/models/${splitKey[1]}`, {
+                  if (key === "delete") {
+                    const response = fetch(`/api/models/${model.id}`, {
                       method: "DELETE",
                     });
                     router.push("/models");
                   }
                 }}
               >
-                <Item key={`delete/${model.id}`} textValue="Delete">
+                <Item key="delete" textValue="Delete">
                   <Text>Delete</Text>
                 </Item>
               </ActionMenu>

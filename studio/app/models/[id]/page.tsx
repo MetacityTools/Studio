@@ -18,6 +18,23 @@ import { useOwnModel } from "@features/models/hooks/useOwnModel";
 
 function ModelDetailPage({ params }: { params: { id: string } }) {
   const { data: model, isLoading } = useOwnModel(Number(params.id));
+
+  async function downloadModelFile(model: number, file: string) {
+    const response = await fetch(`/api/models/${model}/data/${file}`, {
+      method: "GET",
+    });
+    const data = await response.blob();
+
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(data);
+    link.download = file;
+    link.style.display = "none";
+
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
   return (
     <Flex
       direction="column"
@@ -54,16 +71,16 @@ function ModelDetailPage({ params }: { params: { id: string } }) {
                 <File />
                 <Text>{file}</Text>
                 <ActionMenu
-                      onAction={(key) => {
-                        const splitKey = key.toString().split("/");
-                        splitKey[0] === "download" &&
-                          console.log("download", splitKey[1]);
-                      }}
-                    >
-                      <Item key={`download/${file}`} textValue="Download">
-                        <Text>Download</Text>
-                      </Item>
-                    </ActionMenu>
+                  onAction={(key) => {
+                    if (key === "download") {
+                      downloadModelFile(model.id, file);
+                    }
+                  }}
+                >
+                  <Item key="download" textValue="Download">
+                    <Text>Download</Text>
+                  </Item>
+                </ActionMenu>
               </Item>
             ))}
           </ListView>
