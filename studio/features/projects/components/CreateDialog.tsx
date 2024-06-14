@@ -5,16 +5,14 @@ import {
   ButtonGroup,
   Content,
   Dialog,
-  Divider,
-  Flex,
   Form,
   Heading,
   TextArea,
   TextField,
 } from "@adobe/react-spectrum";
-import { ToastQueue } from "@react-spectrum/toast";
 import { useCreateProjects } from "@features/projects/hooks/useCreateProject";
-import { FormEvent, useCallback, useState } from "react";
+import { ToastQueue } from "@react-spectrum/toast";
+import { useCallback, useState } from "react";
 
 type CreateProjectDialogProps = {
   close: () => void;

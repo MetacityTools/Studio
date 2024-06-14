@@ -9,10 +9,10 @@ import {
   TextArea,
   TextField,
 } from "@adobe/react-spectrum";
-import { useCallback, useEffect, useState } from "react";
-import { useUpdateProject } from "../hooks/useUpdateProject";
 import { ToastQueue } from "@react-spectrum/toast";
+import { useCallback, useEffect, useState } from "react";
 import { useGetProjectById } from "../hooks/useProjectData";
+import { useUpdateProject } from "../hooks/useUpdateProject";
 
 type EditDialogProps = {
   open: boolean;
@@ -25,7 +25,7 @@ export default function EditDialog({
   close,
   projectId,
 }: EditDialogProps) {
-  const { data, isLoading } = useGetProjectById(projectId);
+  const { data } = useGetProjectById(projectId);
   const { call, inProgress } = useUpdateProject();
 
   const [name, setName] = useState("");

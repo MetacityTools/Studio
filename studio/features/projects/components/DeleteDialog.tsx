@@ -1,7 +1,7 @@
 import { AlertDialog, DialogContainer } from "@adobe/react-spectrum";
-import { useDeleteProject } from "../hooks/useDeleteProject";
 import { ToastQueue } from "@react-spectrum/toast";
 import { useCallback } from "react";
+import { useDeleteProject } from "../hooks/useDeleteProject";
 
 type DeleteDialogProps = {
   open: boolean;
