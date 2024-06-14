@@ -1,14 +1,25 @@
 "use client";
 
-import { Button, Flex, Item, ListView, Text } from "@adobe/react-spectrum";
+import {
+  ActionButton,
+  Button,
+  Dialog,
+  DialogTrigger,
+  Flex,
+  Item,
+  ListView,
+  Text,
+} from "@adobe/react-spectrum";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { ContentContainer } from "@core/components/ContentContainer";
 import { NoData } from "@core/components/Empty";
 import { withUserEnabled } from "@core/utils/withUserEnabled";
+import CreateProjectDialog from "@features/projects/components/CreateDialog";
 import Header from "@features/projects/components/Header";
 import { useOwnProjects } from "@features/projects/hooks/useOwnProjects";
 import File from "@spectrum-icons/illustrations/File";
 import Link from "next/link";
+import { ToastContainer } from "@react-spectrum/toast";
 
 function SecretPage() {
   const { data: projects, isLoading } = useOwnProjects();
@@ -30,26 +41,28 @@ function SecretPage() {
           },
         ]}
       />
-
       <ContentContainer>
-        <Button variant="secondary" href="/projects/create" elementType={Link}>
-          Create new Project
-        </Button>
+        <DialogTrigger>
+          <ActionButton>Create Project</ActionButton>
+          {(close) => <CreateProjectDialog close={close} />}
+        </DialogTrigger>
         <ListView
           width="size-6000"
           minHeight="size-3000"
           selectionMode="multiple"
           aria-label="ListView multiple selection example"
           renderEmptyState={() => <NoData />}
+          selectionStyle="highlight"
         >
           {projects.map((project) => (
-            <Item key="Charmander">
+            <Item key={project.id}>
               <File />
-              <Text>Onboarding</Text>
+              <Text>{project.name}</Text>
             </Item>
           ))}
         </ListView>
       </ContentContainer>
+      <ToastContainer />
     </Flex>
   );
 }
