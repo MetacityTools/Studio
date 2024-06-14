@@ -22,5 +22,6 @@ export async function duplicateProject(id: number): Promise<Project> {
     ...project,
     id: undefined,
     name: `${project.name} (copy)`,
+    user: user,
   });
 }

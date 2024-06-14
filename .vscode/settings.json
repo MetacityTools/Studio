@@ -3,6 +3,6 @@
   "editor.codeActionsOnSave": {
     "source.removeUnusedImports": "always",
     "source.organizeImports": "always",
-    "formatter.formatOnSave": "always"
+    "source.fixAll.eslint": "always"
   }
 }

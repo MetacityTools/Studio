@@ -14,14 +14,15 @@ import { ContentContainer } from "@core/components/ContentContainer";
 import { Loading, NoData } from "@core/components/Empty";
 import { withUserEnabled } from "@core/utils/withUserEnabled";
 import CreateProjectDialog from "@features/projects/components/CreateDialog";
-import Header from "@features/projects/components/Header";
-import { useOwnProjects } from "@features/projects/hooks/useOwnProjects";
-import File from "@spectrum-icons/illustrations/File";
-import { ToastContainer } from "@react-spectrum/toast";
-import { Key, useCallback } from "react";
-import { useHandleProjectAction } from "@features/projects/hooks/useHandleProjectAction";
-import EditDialog from "@features/projects/components/EditDialog";
 import DeleteDialog from "@features/projects/components/DeleteDialog";
+import DuplicateDialog from "@features/projects/components/DuplicateDialog";
+import EditDialog from "@features/projects/components/EditDialog";
+import Header from "@features/projects/components/Header";
+import { useHandleProjectAction } from "@features/projects/hooks/useHandleProjectAction";
+import { useOwnProjects } from "@features/projects/hooks/useOwnProjects";
+import { ToastContainer } from "@react-spectrum/toast";
+import File from "@spectrum-icons/illustrations/File";
+import { Key, useCallback } from "react";
 
 function ProjectListPage() {
   const { data: projects, isLoading, refetch } = useOwnProjects();
@@ -79,6 +80,9 @@ function ProjectListPage() {
                 <Item key="edit" textValue="Edit">
                   <Text>Edit</Text>
                 </Item>
+                <Item key="duplicate" textValue="Duplicate">
+                  <Text>Duplicate</Text>
+                </Item>
                 <Item key="delete" textValue="Delete">
                   <Text>Delete</Text>
                 </Item>
@@ -94,6 +98,11 @@ function ProjectListPage() {
       />
       <DeleteDialog
         open={dialogState.delete}
+        close={handleCloseActionDialog}
+        projectId={dialogState.projectId}
+      />
+      <DuplicateDialog
+        open={dialogState.duplicate}
         close={handleCloseActionDialog}
         projectId={dialogState.projectId}
       />
