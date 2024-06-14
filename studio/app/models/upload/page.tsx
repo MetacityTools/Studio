@@ -36,21 +36,26 @@ function ModelUploadPage() {
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    // check if files are empty
     if (!files.length) {
-      console.log("No files");
+      // show alert
       setNoFiles(true);
       return;
     }
+    // display loading state
     setIsUploading(true);
     const formData = new FormData(event.currentTarget);
+    // append files to form data
     for (const file of files) {
       formData.append("files", file);
     }
+    // send form data to server
     const response = await fetch("/api/models", {
       method: "POST",
       body: formData,
     });
     const data = await response.json();
+    // redirect to models page if successful
     response.ok && router.push(`/models`);
   }
 
@@ -86,9 +91,7 @@ function ModelUploadPage() {
             {noFiles ? (
               <InlineAlert variant="negative" autoFocus>
                 <Heading>Unable to submit</Heading>
-                <Content>
-                  No files selected.
-                </Content>
+                <Content>No files selected.</Content>
               </InlineAlert>
             ) : null}
           </>
@@ -108,14 +111,17 @@ function ModelUploadPage() {
               for (const item of e.items) {
                 if (
                   item.kind === "file" &&
-                  files.findIndex((file) => file.name === item.name) === -1
+                  files.findIndex((file) => file.name === item.name) === -1 // check if file already exists
                 ) {
                   newFiles.push(await item.getFile());
                 }
               }
+
               if (newFiles.length != 0) {
-                setFiles([...files, ...newFiles]);
+                // hide alert if displayed
                 setNoFiles(false);
+                // add new files to existing files
+                setFiles([...files, ...newFiles]);
               }
             }}
           >
@@ -131,7 +137,9 @@ function ModelUploadPage() {
                           files.findIndex((f) => f.name === file.name) === -1
                       );
                       if (newFiles.length != 0) {
+                        // hide alert if displayed
                         setNoFiles(false);
+                        // add new files to existing files
                         setFiles([...files, ...newFiles]);
                       }
                     }
@@ -159,6 +167,7 @@ function ModelUploadPage() {
                 <Text>{file.name}</Text>
                 <ActionMenu
                   onAction={(key) => {
+                    // delete file from list
                     key === "delete" &&
                       setFiles(files.filter((f) => f.name !== file.name));
                   }}
