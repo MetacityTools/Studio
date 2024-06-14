@@ -1,8 +1,10 @@
 "use client";
 
 import {
+  ActionButton,
   ActionMenu,
   Button,
+  DialogTrigger,
   Flex,
   Item,
   ListView,
@@ -16,6 +18,7 @@ import { useOwnModels } from "@features/models/hooks/useOwnModels";
 import File from "@spectrum-icons/illustrations/File";
 import Link from "next/link";
 import { withUserEnabled } from "@core/utils/withUserEnabled";
+import UploadModelDialog from "@features/models/components/UploadModelDialog";
 
 function ModelListPage() {
   const { data: models, isLoading, refetch } = useOwnModels();
@@ -38,9 +41,10 @@ function ModelListPage() {
         ]}
       />
       <ContentContainer>
-        <Button variant="secondary" href="/models/upload" elementType={Link}>
-          Upload New Model
-        </Button>
+        <DialogTrigger>
+          <ActionButton>Upload New Model</ActionButton>
+          {(close) => <UploadModelDialog close={close} refetch={refetch} />}
+        </DialogTrigger>
         <ListView
           width="size-6000"
           minHeight="size-3000"
@@ -54,10 +58,9 @@ function ModelListPage() {
               <ActionMenu
                 onAction={(key) => {
                   if (key === "delete") {
-                    const response = fetch(`/api/models/${model.id}`, {
+                    fetch(`/api/models/${model.id}`, {
                       method: "DELETE",
-                    });
-                    refetch();
+                    }).then(() => refetch());
                   }
                 }}
               >
