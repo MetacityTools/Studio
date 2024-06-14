@@ -13,10 +13,13 @@ import {
   Item,
   Text,
   ActionMenu,
+  FileTrigger,
+  Content,
+  InlineAlert,
 } from "@adobe/react-spectrum";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { ContentContainer } from "@core/components/ContentContainer";
-import { NoData } from "@core/components/Empty";
+import NotFound from "@spectrum-icons/illustrations/NotFound";
 import { withUserEnabled } from "@core/utils/withUserEnabled";
 import Header from "@features/projects/components/Header";
 import File from "@spectrum-icons/illustrations/File";
@@ -28,9 +31,17 @@ function ModelUploadPage() {
   const [name, setName] = useState<string>("");
   const [files, setFiles] = useState<File[]>([]);
   const router = useRouter();
+  const [noFiles, setNoFiles] = useState<boolean>(false);
+  const [isUploading, setIsUploading] = useState<boolean>(false);
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (!files.length) {
+      console.log("No files");
+      setNoFiles(true);
+      return;
+    }
+    setIsUploading(true);
     const formData = new FormData(event.currentTarget);
     for (const file of files) {
       formData.append("files", file);
@@ -40,7 +51,7 @@ function ModelUploadPage() {
       body: formData,
     });
     const data = await response.json();
-    router.push("/models");
+    response.ok && router.push(`/models`);
   }
 
   return (
@@ -66,15 +77,30 @@ function ModelUploadPage() {
         ]}
       />
       <ContentContainer>
-        <Form maxWidth="size-6000" onSubmit={onSubmit}>
+        <Form
+          validationBehavior="native"
+          maxWidth="size-6000"
+          onSubmit={onSubmit}
+        >
+          <>
+            {noFiles ? (
+              <InlineAlert variant="negative" autoFocus>
+                <Heading>Unable to submit</Heading>
+                <Content>
+                  No files selected.
+                </Content>
+              </InlineAlert>
+            ) : null}
+          </>
           <TextField
             label="Model name"
             name="name"
             value={name}
             onChange={(e) => setName(e)}
+            isRequired
           />
           <DropZone
-            maxWidth="size-3000"
+            width="size-3000"
             isFilled={!!files.length}
             replaceMessage="Drop file to add"
             onDrop={async (e) => {
@@ -89,42 +115,63 @@ function ModelUploadPage() {
               }
               if (newFiles.length != 0) {
                 setFiles([...files, ...newFiles]);
+                setNoFiles(false);
               }
             }}
           >
-            {files.length ? (
-              <ListView
-                width="size-3000"
-                minHeight="size-3000"
-                aria-label="ListView multiple selection example"
-                renderEmptyState={() => <NoData />}
-              >
-                {files.map((file) => (
-                  <Item key={file.name} textValue={file.name}>
-                    <File />
-                    <Text>{file.name}</Text>
-                    <ActionMenu
-                      onAction={(key) => {
-                        key === "delete" &&
-                          setFiles(files.filter((f) => f.name !== file.name));
-                      }}
-                    >
-                      <Item key="delete" textValue="Delete">
-                        <Text>Delete</Text>
-                      </Item>
-                    </ActionMenu>
-                  </Item>
-                ))}
-              </ListView>
-            ) : (
+            <IllustratedMessage>
+              <Upload />
+              <Heading>Drag and drop here</Heading>
+              <Content>
+                <FileTrigger
+                  onSelect={(e) => {
+                    if (!!e) {
+                      const newFiles = Array.from(e).filter(
+                        (file) =>
+                          files.findIndex((f) => f.name === file.name) === -1
+                      );
+                      if (newFiles.length != 0) {
+                        setNoFiles(false);
+                        setFiles([...files, ...newFiles]);
+                      }
+                    }
+                  }}
+                >
+                  <Button variant="primary">Browse</Button>
+                </FileTrigger>
+              </Content>
+            </IllustratedMessage>
+          </DropZone>
+          <ListView
+            minHeight="size-3000"
+            aria-label="ListView multiple selection example"
+            renderEmptyState={() => (
               <IllustratedMessage>
-                <Upload />
-                <Heading>Drag and drop here</Heading>
+                <NotFound />
+                <Heading>No Data</Heading>
+                <Content>No files have been selected yet</Content>
               </IllustratedMessage>
             )}
-          </DropZone>
+          >
+            {files.map((file) => (
+              <Item key={file.name} textValue={file.name}>
+                <File />
+                <Text>{file.name}</Text>
+                <ActionMenu
+                  onAction={(key) => {
+                    key === "delete" &&
+                      setFiles(files.filter((f) => f.name !== file.name));
+                  }}
+                >
+                  <Item key="delete" textValue="Delete">
+                    <Text>Delete</Text>
+                  </Item>
+                </ActionMenu>
+              </Item>
+            ))}
+          </ListView>
           <ButtonGroup>
-            <Button type="submit" variant="primary">
+            <Button type="submit" variant="primary" isPending={isUploading}>
               Upload
             </Button>
           </ButtonGroup>
