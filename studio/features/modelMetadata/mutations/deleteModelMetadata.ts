@@ -14,7 +14,7 @@ export async function deleteModelMetadata(
 
   const modelMetadataRepository = await injectRepository(ModelMetadata);
 
-  modelMetadataRepository.delete({
+  await modelMetadataRepository.delete({
     ...where,
     user_id: user!.id,
   });
