@@ -30,10 +30,11 @@ test("project CRUD", async () => {
 
   const modelMetadataData: Pick<
     ModelMetadata,
-    "project_id" | "model_id" | "key" | "value" | "type"
+    "project_id" | "model_id" | "object_id" | "key" | "value" | "type"
   > = {
     project_id: project.id,
     model_id: model!.id,
+    object_id: "testObjectId",
     type: "color",
     key: "testKey",
     value: "testValue",

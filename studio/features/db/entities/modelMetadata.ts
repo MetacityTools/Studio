@@ -10,8 +10,9 @@ export class ModelMetadata {
   @PrimaryColumn() user_id!: string;
   @PrimaryColumn("varchar") key!: string;
 
-  @Column("varchar", { nullable: true }) value?: string | null;
+  @Column("varchar", { nullable: false }) object_id!: string;
   @Column("varchar", { nullable: false }) type!: string;
+  @Column("varchar", { nullable: true }) value?: string | null;
 
   @ManyToOne(() => Model, { onDelete: "CASCADE", onUpdate: "CASCADE" })
   @JoinColumn({ name: "model_id" })

@@ -7,7 +7,7 @@ import { toPlain } from "@features/helpers/objects";
 export async function saveModelMetadata(
   metadata: Pick<
     ModelMetadata,
-    "project_id" | "model_id" | "key" | "value" | "type"
+    "project_id" | "model_id" | "object_id" | "key" | "value" | "type"
   >
 ) {
   if (!(await canEditOwnModelMetadata())) throw new Error("Unauthorized");
