@@ -1,7 +1,8 @@
 import { ModelMetadata } from "@features/db/entities/modelMetadata";
 import { injectRepository } from "@features/db/helpers";
+import { toPlain } from "@features/helpers/objects";
 
-export async function getProjectMetadata(projectId: number) {
+export async function getAllProjectMetadata(projectId: number) {
   const modelMedatadatRepository = await injectRepository(ModelMetadata);
 
   const metadata = await modelMedatadatRepository.find({
@@ -12,5 +13,5 @@ export async function getProjectMetadata(projectId: number) {
     },
   });
 
-  return instan;
+  return toPlain(metadata);
 }

@@ -16,10 +16,8 @@ export async function getOwnProjects(): Promise<Project[]> {
     where: { user: { id: user.id } },
   });
 
-  console.log(projects);
   //seriaize to plain objects
   return projects.map((project) => {
     return JSON.parse(JSON.stringify(project));
   });
 }
-
