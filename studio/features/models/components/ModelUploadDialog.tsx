@@ -26,20 +26,16 @@ import File from "@spectrum-icons/illustrations/File";
 
 type UploadModelDialogProps = {
   close: () => void;
-  refetch: () => void;
 };
 
-export default function UploadModelDialog({
+export default function ModelUploadDialog({
   close,
-  refetch,
 }: UploadModelDialogProps) {
-  //   const { call, inProgress } = useCreateProjects();
-
   const [name, setName] = useState<string>("");
   const [files, setFiles] = useState<File[]>([]);
   const [noFiles, setNoFiles] = useState<boolean>(false);
   const [emptyName, setEmptyName] = useState<boolean>(false);
-  const [isUploading, setIsUploading] = useState<boolean>(false);
+  const [isPending, setIsPending] = useState<boolean>(false);
 
   const handleSubmit = useCallback(async () => {
     // check if files are empty
@@ -54,9 +50,8 @@ export default function UploadModelDialog({
     if (!files.length || !name) {
       return;
     }
-    console.log("submitting");
     // display loading state
-    setIsUploading(true);
+    setIsPending(true);
     const formData = new FormData();
     // append name to form data
     formData.append("name", name);
@@ -72,10 +67,9 @@ export default function UploadModelDialog({
     const data = await response.json();
     if (response.ok) {
       close();
-      refetch();
     } else {
     }
-  }, [name, files, close, refetch]);
+  }, [name, files, close]);
 
   return (
     <Dialog>
@@ -196,7 +190,7 @@ export default function UploadModelDialog({
         <Button
           variant="accent"
           type="submit"
-          isPending={isUploading}
+          isPending={isPending}
           onPress={handleSubmit}
         >
           Create

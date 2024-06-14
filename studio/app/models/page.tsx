@@ -16,9 +16,8 @@ import { NoData } from "@core/components/Empty";
 import Header from "@features/projects/components/Header";
 import { useOwnModels } from "@features/models/hooks/useOwnModels";
 import File from "@spectrum-icons/illustrations/File";
-import Link from "next/link";
 import { withUserEnabled } from "@core/utils/withUserEnabled";
-import UploadModelDialog from "@features/models/components/UploadModelDialog";
+import ModelUploadDialog from "@features/models/components/ModelUploadDialog";
 
 function ModelListPage() {
   const { data: models, isLoading, refetch } = useOwnModels();
@@ -43,7 +42,14 @@ function ModelListPage() {
       <ContentContainer>
         <DialogTrigger>
           <ActionButton>Upload New Model</ActionButton>
-          {(close) => <UploadModelDialog close={close} refetch={refetch} />}
+          {(close) => (
+            <ModelUploadDialog
+              close={() => {
+                close();
+                refetch();
+              }}
+            />
+          )}
         </DialogTrigger>
         <ListView
           width="size-6000"
