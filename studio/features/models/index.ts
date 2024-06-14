@@ -1,11 +1,10 @@
 "use server";
 
-import { Readable } from "stream";
-import { ReadableStream } from "stream/web";
 import { canCreateModel, canReadOwnModels } from "@features/auth/acl";
 import { getUserToken } from "@features/auth/user";
 import { Model } from "@features/db/entities/model";
 import { injectRepository } from "@features/db/helpers";
+import { toPlain } from "@features/helpers/objects";
 import {
   deleteFile,
   ensureBucket,
@@ -14,6 +13,8 @@ import {
   readFileStream,
   saveFileStream,
 } from "@features/storage";
+import { Readable } from "stream";
+import { ReadableStream } from "stream/web";
 
 export async function createOwnModel(
   metadata: Partial<Pick<Model, "name" | "coordinateSystem">>,
@@ -44,10 +45,10 @@ export async function createOwnModel(
     throw e;
   }
 
-  return {
+  return toPlain({
     ...model,
     files: files.map((f) => f.name),
-  };
+  });
 }
 
 export async function downloadOwnModelFile(modelId: number, fileName: string) {
@@ -98,9 +99,11 @@ export async function listOwnModels() {
 
   const modelRepository = await injectRepository(Model);
 
-  return await modelRepository.find({
+  const models = await modelRepository.find({
     where: { user: { id: user.id } },
   });
+
+  return toPlain(models);
 }
 
 export async function getOwnModel(modelId: number) {
@@ -118,8 +121,8 @@ export async function getOwnModel(modelId: number) {
   const bucketName = getUserModelBucketName(user.id, model.id);
   const files = await listFilesInBucket(bucketName);
 
-  return {
+  return toPlain({
     ...model,
     files,
-  };
+  });
 }
