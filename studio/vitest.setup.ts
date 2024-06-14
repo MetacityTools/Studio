@@ -11,6 +11,8 @@ beforeAll(async () => {
     email: "test@test",
     picture: "https://test.com/test.jpg",
     projects: [],
+    idAuth0: "test",
+    enabled: true,
   });
 
   vi.mock("@auth0/nextjs-auth0", () => ({
@@ -19,6 +21,8 @@ beforeAll(async () => {
         sub: "test",
         email: "test@test",
         picture: "https://example.com/picture.png",
+        idAuth0: "test",
+        enabled: true,
       },
     }),
   }));

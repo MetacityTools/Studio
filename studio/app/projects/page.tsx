@@ -1,16 +1,10 @@
 "use client";
 
-import {
-  ActionButton,
-  Button,
-  Flex,
-  Item,
-  ListView,
-  Text,
-} from "@adobe/react-spectrum";
+import { Button, Flex, Item, ListView, Text } from "@adobe/react-spectrum";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { ContentContainer } from "@core/components/ContentContainer";
 import { NoData } from "@core/components/Empty";
+import { withUserEnabled } from "@core/utils/withUserEnabled";
 import Header from "@features/projects/components/Header";
 import { useOwnProjects } from "@features/projects/hooks/useOwnProjects";
 import File from "@spectrum-icons/illustrations/File";
@@ -60,7 +54,7 @@ function SecretPage() {
   );
 }
 
-export default withPageAuthRequired(SecretPage);
+export default withPageAuthRequired(withUserEnabled(SecretPage));
 
 /*
 

@@ -9,6 +9,7 @@ import {
 } from "@adobe/react-spectrum";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { ContentContainer } from "@core/components/ContentContainer";
+import { withUserEnabled } from "@core/utils/withUserEnabled";
 import Header from "@features/projects/components/Header";
 import { useCreateProjects } from "@features/projects/hooks/useCreateProject";
 
@@ -53,4 +54,4 @@ function SecretPage() {
   );
 }
 
-export default withPageAuthRequired(SecretPage);
+export default withPageAuthRequired(withUserEnabled(SecretPage));
