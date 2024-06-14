@@ -15,8 +15,11 @@ import { NoData } from "@core/components/Empty";
 import Header from "@features/projects/components/Header";
 import File from "@spectrum-icons/illustrations/File";
 import { useOwnModel } from "@features/models/hooks/useOwnModel";
+import { withUserEnabled } from "@core/utils/withUserEnabled";
 
-function ModelDetailPage({ params }: { params: { id: string } }) {
+type ModelDetailPageProps = {params : {id : string}};
+
+function ModelDetailPage({ params }: ModelDetailPageProps) {
   const { data: model, isLoading } = useOwnModel(Number(params.id));
 
   async function downloadModelFile(model: number, file: string) {
@@ -25,14 +28,14 @@ function ModelDetailPage({ params }: { params: { id: string } }) {
     });
     const data = await response.blob();
 
-    const link = document.createElement("a");
+    const link = document.createElement('a');
     link.href = URL.createObjectURL(data);
-    link.download = file;
-    link.style.display = "none";
+    link.download = file;    
+    link.style.display = 'none';
 
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    document.body.appendChild(link);    
+    link.click();    
+    document.body.removeChild(link);    
   }
 
   return (
@@ -92,4 +95,4 @@ function ModelDetailPage({ params }: { params: { id: string } }) {
   );
 }
 
-export default withPageAuthRequired(ModelDetailPage);
+export default withPageAuthRequired(withUserEnabled<ModelDetailPageProps>(ModelDetailPage));

@@ -15,6 +15,7 @@ import Header from "@features/projects/components/Header";
 import { useOwnModels } from "@features/models/hooks/useOwnModels";
 import File from "@spectrum-icons/illustrations/File";
 import Link from "next/link";
+import { withUserEnabled } from "@core/utils/withUserEnabled";
 
 function ModelListPage() {
   const { data: models, isLoading, refetch } = useOwnModels();
@@ -72,4 +73,4 @@ function ModelListPage() {
   );
 }
 
-export default withPageAuthRequired(ModelListPage);
+export default withPageAuthRequired(withUserEnabled(ModelListPage));

@@ -17,6 +17,7 @@ import {
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { ContentContainer } from "@core/components/ContentContainer";
 import { NoData } from "@core/components/Empty";
+import { withUserEnabled } from "@core/utils/withUserEnabled";
 import Header from "@features/projects/components/Header";
 import File from "@spectrum-icons/illustrations/File";
 import Upload from "@spectrum-icons/illustrations/Upload";
@@ -133,4 +134,4 @@ function ModelUploadPage() {
   );
 }
 
-export default withPageAuthRequired(ModelUploadPage);
+export default withPageAuthRequired(withUserEnabled(ModelUploadPage));
