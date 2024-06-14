@@ -15,11 +15,9 @@ import Header from "@features/projects/components/Header";
 import { useOwnModels } from "@features/models/hooks/useOwnModels";
 import File from "@spectrum-icons/illustrations/File";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 
 function ModelListPage() {
-  const { data: models, isLoading } = useOwnModels();
-  const router = useRouter();
+  const { data: models, isLoading, refetch } = useOwnModels();
 
   return (
     <Flex
@@ -58,7 +56,7 @@ function ModelListPage() {
                     const response = fetch(`/api/models/${model.id}`, {
                       method: "DELETE",
                     });
-                    router.push("/models");
+                    refetch();
                   }
                 }}
               >
