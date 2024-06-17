@@ -1,7 +1,8 @@
 {
-  "todohighlight.keywords": [
-    "FIXME:",
-    "TODO:",
-    "MK:"
-  ]
+  "todohighlight.keywords": ["FIXME:", "TODO:", "MK:"],
+  "editor.codeActionsOnSave": {
+    "source.removeUnusedImports": "always",
+    "source.organizeImports": "always",
+    "source.fixAll.eslint": "always"
+  }
 }

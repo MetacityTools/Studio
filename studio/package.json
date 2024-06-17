@@ -12,6 +12,7 @@
   "dependencies": {
     "@adobe/react-spectrum": "^3.35.1",
     "@auth0/nextjs-auth0": "^3.5.0",
+    "@react-spectrum/toast": "^3.0.0-beta.12",
     "@spectrum-icons/illustrations": "^3.6.13",
     "class-transformer": "^0.5.1",
     "clsx": "^2.1.1",
@@ -33,6 +34,7 @@
     "@rollup/rollup-linux-x64-gnu": "4.18.0",
     "@swc/core": "^1.5.7",
     "@testing-library/react": "^15.0.7",
+    "@trivago/prettier-plugin-sort-imports": "^4.3.0",
     "@types/formidable": "^3.4.5",
     "@types/jsonwebtoken": "^9.0.6",
     "@types/node": "^20",
@@ -47,5 +49,8 @@
     "typescript": "^5",
     "unplugin-swc": "^1.4.5",
     "vitest": "^1.6.0"
+  },
+  "optionalDependencies": {
+    "@rollup/rollup-linux-x64-gnu": "4.18.0"
   }
 }
