@@ -29,19 +29,15 @@ export default function ModelUploadDialog({
 }: UploadModelDialogProps) {
   const [name, setName] = useState<string>("");
   const [files, setFiles] = useState<File[]>([]);
-  // const [noFiles, setNoFiles] = useState<boolean>(false);
-  // const [emptyName, setEmptyName] = useState<boolean>(false);
   const [isPending, setIsPending] = useState<boolean>(false);
 
   const handleSubmit = useCallback(async () => {
     // check if files are empty
     if (!files.length) {
       ToastQueue.negative("At least one file is required");
-      // setNoFiles(true);
     }
     if (!name) {
       ToastQueue.negative("Model name is required");
-      // setEmptyName(true);
     }
     if (!files.length || !name) {
       return;

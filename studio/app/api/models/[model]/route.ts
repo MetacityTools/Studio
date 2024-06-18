@@ -1,9 +1,9 @@
-import { deleteOwnModel } from "@features/models/mutations/deleteOwnModel";
+import { deleteModel } from "@features/models/mutations/deleteModel";
 
 export async function DELETE(
   req: Request,
   { params }: { params: { model: string } }
 ) {
-  await deleteOwnModel(Number(params.model));
+  await deleteModel(Number(params.model));
   return Response.json(true, { status: 201 });
 }

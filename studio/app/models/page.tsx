@@ -13,15 +13,18 @@ import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { ContentContainer } from "@core/components/ContentContainer";
 import { NoData } from "@core/components/Empty";
 import { withUserEnabled } from "@core/utils/withUserEnabled";
-// import ModelDetailDialog from "@features/models/components/ModelDetailDialog";
+import ModelDetailDialog from "@features/models/components/ModelDetailDialog";
 import ModelUploadDialog from "@features/models/components/ModelUploadDialog";
 import { useOwnModels } from "@features/models/hooks/useOwnModels";
 import Header from "@features/projects/components/Header";
 import { ToastContainer } from "@react-spectrum/toast";
 import File from "@spectrum-icons/illustrations/File";
+import { useState } from "react";
 
 function ModelListPage() {
   const { data: models, isLoading, refetch } = useOwnModels();
+  const [detailDialogOpen, setDetailDialogOpen] = useState(false);
+  const [modelId, setModelId] = useState<number | null>(null);
 
   return (
     <Flex
@@ -70,6 +73,8 @@ function ModelListPage() {
                     }).then(() => refetch());
                   } else if (key === "detail") {
                     console.log("Detail");
+                    setDetailDialogOpen(true);
+                    setModelId(model.id);
                   }
                 }}
               >
@@ -84,11 +89,14 @@ function ModelListPage() {
           ))}
         </ListView>
       </ContentContainer>
-      {/* <ModelDetailDialog
-        open={dialogState.edit}
-        close={handleCloseActionDialog}
-        modelId={dialogState.projectId}
-      /> */}
+      <ModelDetailDialog
+        open={detailDialogOpen}
+        close={() => {
+          setDetailDialogOpen(false);
+          setModelId(null);
+        }}
+        modelId={modelId}
+      />
       <ToastContainer />
     </Flex>
   );

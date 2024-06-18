@@ -13,7 +13,7 @@ import {
 import { Readable } from "stream";
 import { ReadableStream } from "stream/web";
 
-export async function createOwnModel(
+export async function createModel(
   metadata: Partial<Pick<Model, "name" | "coordinateSystem">>,
   files: File[],
 ) {

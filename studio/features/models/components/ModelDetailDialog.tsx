@@ -6,24 +6,27 @@ import {
   ButtonGroup,
   Content,
   Dialog,
+  DialogContainer,
   Heading,
   Item,
   ListView,
   Text,
 } from "@adobe/react-spectrum";
-// import { ToastQueue } from "@react-spectrum/toast";
+import { NoData } from "@core/components/Empty";
+import { ToastQueue } from "@react-spectrum/toast";
 import File from "@spectrum-icons/illustrations/File";
 import { useOwnModel } from "../hooks/useOwnModel";
-import { NoData } from "@core/components/Empty";
 
 type ModelDetailDialogProps = {
-  modelId: number;
+  open: boolean;
   close: () => void;
+  modelId: number | null;
 };
 
 export default function ModelDetailDialog({
-  modelId,
+  open,
   close,
+  modelId,
 }: ModelDetailDialogProps) {
   const { data: model, isLoading } = useOwnModel(modelId);
 
@@ -44,43 +47,48 @@ export default function ModelDetailDialog({
   }
 
   return (
-    <Dialog>
-      <Heading>Model detail: {model?.name}</Heading>
-      <Content>
-        {model && model.files.length > 0 ? (
-          <ListView
-            width="size-3000"
-            minHeight="size-3000"
-            aria-label="ListView multiple selection example"
-            renderEmptyState={() => <NoData />}
-          >
-            {model.files.map((file) => (
-              <Item key={file} textValue={file}>
-                <File />
-                <Text>{file}</Text>
-                <ActionMenu
-                  onAction={(key) => {
-                    if (key === "download") {
-                      downloadModelFile(model.id, file);
-                    }
-                  }}
-                >
-                  <Item key="download" textValue="Download">
-                    <Text>Download</Text>
+    <DialogContainer onDismiss={close}>
+      {open && (
+        <Dialog>
+          <Heading>Model detail: {model?.name}</Heading>
+          <Content>
+            {model && model.files.length > 0 ? (
+              <ListView
+                width="size-3000"
+                minHeight="size-3000"
+                aria-label="ListView multiple selection example"
+                renderEmptyState={() => <NoData />}
+              >
+                {model.files.map((file) => (
+                  <Item key={file} textValue={file}>
+                    <File />
+                    <Text>{file}</Text>
+                    <ActionMenu
+                      onAction={(key) => {
+                        if (key === "download") {
+                          downloadModelFile(model.id, file);
+                          ToastQueue.info("Downloading file...");
+                        }
+                      }}
+                    >
+                      <Item key="download" textValue="Download">
+                        <Text>Download</Text>
+                      </Item>
+                    </ActionMenu>
                   </Item>
-                </ActionMenu>
-              </Item>
-            ))}
-          </ListView>
-        ) : (
-          <NoData />
-        )}
-      </Content>
-      <ButtonGroup marginTop={20}>
-        <Button variant="secondary" onPress={close}>
-          Close
-        </Button>
-      </ButtonGroup>
-    </Dialog>
+                ))}
+              </ListView>
+            ) : (
+              <NoData />
+            )}
+          </Content>
+          <ButtonGroup marginTop={20}>
+            <Button variant="secondary" onPress={close}>
+              Close
+            </Button>
+          </ButtonGroup>
+        </Dialog>
+      )}
+    </DialogContainer>
   );
 }

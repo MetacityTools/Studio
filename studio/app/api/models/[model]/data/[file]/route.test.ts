@@ -1,6 +1,6 @@
 "use server";
 
-import { createOwnModel } from "@features/models/mutations/createOwnModel";
+import { createModel } from "@features/models/mutations/createOwnModel";
 import { deleteOwnModel } from "@features/models/mutations/deleteOwnModel";
 import { expect, test } from "vitest";
 import { GET } from "./route";
@@ -17,7 +17,7 @@ const file = {
 } as File;
 
 test("GET /models/[model]/data/[file]", async () => {
-  const model = await createOwnModel(
+  const model = await createModel(
     {
       name: "TEST",
       coordinateSystem: "WGS84",

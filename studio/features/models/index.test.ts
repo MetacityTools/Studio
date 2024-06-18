@@ -1,8 +1,8 @@
 import { expect, test } from "vitest";
 import { Model } from "../db/entities/model";
-import { createOwnModel } from "./mutations/createOwnModel";
+import { createModel } from "./mutations/createModel";
+import { deleteModel } from "./mutations/deleteModel";
 import { getOwnModel } from "./queries/getOwnModel";
-import { deleteOwnModel } from "./mutations/deleteOwnModel";
 
 const modelFile = {
   stream: () =>
@@ -24,7 +24,7 @@ test("model CRD", async () => {
   let model: Model | null;
 
   // CREATE
-  model = await createOwnModel(modelMetadata, [modelFile]);
+  model = await createModel(modelMetadata, [modelFile]);
   expect(model).toMatchObject(modelMetadata);
 
   // READ
@@ -34,7 +34,7 @@ test("model CRD", async () => {
   expect(model?.files?.[0]).toBe(modelFile.name);
 
   // DELETE
-  await deleteOwnModel(model!.id);
+  await deleteModel(model!.id);
   model = await getOwnModel(model!.id);
   expect(model).toBe(null);
 });
