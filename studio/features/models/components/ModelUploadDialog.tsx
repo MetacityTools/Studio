@@ -7,22 +7,18 @@ import {
   Content,
   Dialog,
   DropZone,
-  FileTrigger,
-  Flex,
-  Form,
+  FileTrigger, Form,
   Heading,
-  IllustratedMessage,
-  InlineAlert,
-  Item,
+  IllustratedMessage, Item,
   ListView,
   Text,
-  TextField,
+  TextField
 } from "@adobe/react-spectrum";
-// import { ToastQueue } from "@react-spectrum/toast";
-import { FormEvent, useCallback, useState } from "react";
-import Upload from "@spectrum-icons/illustrations/Upload";
-import NotFound from "@spectrum-icons/illustrations/NotFound";
+import { ToastQueue } from "@react-spectrum/toast";
 import File from "@spectrum-icons/illustrations/File";
+import NotFound from "@spectrum-icons/illustrations/NotFound";
+import Upload from "@spectrum-icons/illustrations/Upload";
+import { useCallback, useState } from "react";
 
 type UploadModelDialogProps = {
   close: () => void;
@@ -33,19 +29,19 @@ export default function ModelUploadDialog({
 }: UploadModelDialogProps) {
   const [name, setName] = useState<string>("");
   const [files, setFiles] = useState<File[]>([]);
-  const [noFiles, setNoFiles] = useState<boolean>(false);
-  const [emptyName, setEmptyName] = useState<boolean>(false);
+  // const [noFiles, setNoFiles] = useState<boolean>(false);
+  // const [emptyName, setEmptyName] = useState<boolean>(false);
   const [isPending, setIsPending] = useState<boolean>(false);
 
   const handleSubmit = useCallback(async () => {
     // check if files are empty
     if (!files.length) {
-      // show alert
-      setNoFiles(true);
+      ToastQueue.negative("At least one file is required");
+      // setNoFiles(true);
     }
     if (!name) {
-      // show alert
-      setEmptyName(true);
+      ToastQueue.negative("Model name is required");
+      // setEmptyName(true);
     }
     if (!files.length || !name) {
       return;
@@ -78,29 +74,12 @@ export default function ModelUploadDialog({
         <Form
           validationBehavior="native"
           width="size-4000"
-          //   onSubmit={handleSubmit}
         >
-          <>
-            {noFiles || emptyName ? (
-              <InlineAlert variant="negative" autoFocus>
-                <Heading>Unable to submit</Heading>
-                <Content>
-                  <Flex direction="column" gap="size-125">
-                    {noFiles && <Text>No files selected.</Text>}
-                    {emptyName && <Text>Name cannot be empty.</Text>}
-                  </Flex>
-                </Content>
-              </InlineAlert>
-            ) : null}
-          </>
           <TextField
             label="Model name"
             name="name"
             value={name}
-            onChange={(e) => {
-              setName(e);
-              !!e && setEmptyName(false);
-            }}
+            onChange={(e) =>  setName(e)}
             isRequired
             validate={(value) => (value ? "" : "Name is required")}
           />
@@ -121,8 +100,6 @@ export default function ModelUploadDialog({
             }
 
             if (newFiles.length != 0) {
-              // hide alert if displayed
-              setNoFiles(false);
               // add new files to existing files
               setFiles([...files, ...newFiles]);
             }
@@ -140,8 +117,6 @@ export default function ModelUploadDialog({
                         files.findIndex((f) => f.name === file.name) === -1
                     );
                     if (newFiles.length != 0) {
-                      // hide alert if displayed
-                      setNoFiles(false);
                       // add new files to existing files
                       setFiles([...files, ...newFiles]);
                     }

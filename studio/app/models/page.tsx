@@ -3,7 +3,6 @@
 import {
   ActionButton,
   ActionMenu,
-  Button,
   DialogTrigger,
   Flex,
   Item,
@@ -13,11 +12,13 @@ import {
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { ContentContainer } from "@core/components/ContentContainer";
 import { NoData } from "@core/components/Empty";
-import Header from "@features/projects/components/Header";
-import { useOwnModels } from "@features/models/hooks/useOwnModels";
-import File from "@spectrum-icons/illustrations/File";
 import { withUserEnabled } from "@core/utils/withUserEnabled";
+// import ModelDetailDialog from "@features/models/components/ModelDetailDialog";
 import ModelUploadDialog from "@features/models/components/ModelUploadDialog";
+import { useOwnModels } from "@features/models/hooks/useOwnModels";
+import Header from "@features/projects/components/Header";
+import { ToastContainer } from "@react-spectrum/toast";
+import File from "@spectrum-icons/illustrations/File";
 
 function ModelListPage() {
   const { data: models, isLoading, refetch } = useOwnModels();
@@ -58,7 +59,7 @@ function ModelListPage() {
           renderEmptyState={() => <NoData />}
         >
           {models.map((model) => (
-            <Item href={`/models/${model.id}`} key={model.id}>
+            <Item key={model.id}>
               <File />
               <Text>{model.name}</Text>
               <ActionMenu
@@ -67,9 +68,14 @@ function ModelListPage() {
                     fetch(`/api/models/${model.id}`, {
                       method: "DELETE",
                     }).then(() => refetch());
+                  } else if (key === "detail") {
+                    console.log("Detail");
                   }
                 }}
               >
+                <Item key="detail" textValue="View">
+                  <Text>Detail</Text>
+                </Item>
                 <Item key="delete" textValue="Delete">
                   <Text>Delete</Text>
                 </Item>
@@ -78,6 +84,12 @@ function ModelListPage() {
           ))}
         </ListView>
       </ContentContainer>
+      {/* <ModelDetailDialog
+        open={dialogState.edit}
+        close={handleCloseActionDialog}
+        modelId={dialogState.projectId}
+      /> */}
+      <ToastContainer />
     </Flex>
   );
 }
