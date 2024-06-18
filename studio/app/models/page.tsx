@@ -15,6 +15,7 @@ import { NoData } from "@core/components/Empty";
 import { withUserEnabled } from "@core/utils/withUserEnabled";
 import ModelDetailDialog from "@features/models/components/ModelDetailDialog";
 import ModelUploadDialog from "@features/models/components/ModelUploadDialog";
+import { useDeleteModel } from "@features/models/hooks/useDeleteModel";
 import { useOwnModels } from "@features/models/hooks/useOwnModels";
 import Header from "@features/projects/components/Header";
 import { ToastContainer } from "@react-spectrum/toast";
@@ -25,6 +26,7 @@ function ModelListPage() {
   const { data: models, isLoading, refetch } = useOwnModels();
   const [detailDialogOpen, setDetailDialogOpen] = useState(false);
   const [modelId, setModelId] = useState<number | null>(null);
+  const { call:deleteModel } = useDeleteModel();
 
   return (
     <Flex
@@ -68,11 +70,8 @@ function ModelListPage() {
               <ActionMenu
                 onAction={(key) => {
                   if (key === "delete") {
-                    fetch(`/api/models/${model.id}`, {
-                      method: "DELETE",
-                    }).then(() => refetch());
+                    deleteModel(model.id).then(() => refetch());
                   } else if (key === "detail") {
-                    console.log("Detail");
                     setDetailDialogOpen(true);
                     setModelId(model.id);
                   }

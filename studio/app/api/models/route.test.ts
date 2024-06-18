@@ -1,6 +1,6 @@
 "use server";
 
-import { deleteOwnModel } from "@features/models/mutations/deleteOwnModel";
+import { deleteModel } from "@features/models/mutations/deleteModel";
 import { expect, test } from "vitest";
 import { POST } from "./route";
 
@@ -32,5 +32,5 @@ test("POST /models", async () => {
     },
   });
 
-  await deleteOwnModel(body.id);
+  await deleteModel(body.id);
 });

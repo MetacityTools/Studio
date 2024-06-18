@@ -1,7 +1,7 @@
 "use server";
 
-import { createModel } from "@features/models/mutations/createOwnModel";
-import { deleteOwnModel } from "@features/models/mutations/deleteOwnModel";
+import { createModel } from "@features/models/mutations/createModel";
+import { deleteModel } from "@features/models/mutations/deleteModel";
 import { expect, test } from "vitest";
 import { GET } from "./route";
 
@@ -41,5 +41,5 @@ test("GET /models/[model]/data/[file]", async () => {
   expect(response.status).toBe(200);
   expect(body).toBe("test");
 
-  await deleteOwnModel(model.id);
+  await deleteModel(model.id);
 });
