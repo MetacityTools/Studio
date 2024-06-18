@@ -13,9 +13,9 @@ import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { ContentContainer } from "@core/components/ContentContainer";
 import { NoData } from "@core/components/Empty";
 import { withUserEnabled } from "@core/utils/withUserEnabled";
+import ModelDeleteDialog from "@features/models/components/ModelDeleteDialog";
 import ModelDetailDialog from "@features/models/components/ModelDetailDialog";
 import ModelUploadDialog from "@features/models/components/ModelUploadDialog";
-import { useDeleteModel } from "@features/models/hooks/useDeleteModel";
 import { useOwnModels } from "@features/models/hooks/useOwnModels";
 import Header from "@features/projects/components/Header";
 import { ToastContainer } from "@react-spectrum/toast";
@@ -25,8 +25,8 @@ import { useState } from "react";
 function ModelListPage() {
   const { data: models, isLoading, refetch } = useOwnModels();
   const [detailDialogOpen, setDetailDialogOpen] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [modelId, setModelId] = useState<number | null>(null);
-  const { call:deleteModel } = useDeleteModel();
 
   return (
     <Flex
@@ -64,13 +64,14 @@ function ModelListPage() {
           renderEmptyState={() => <NoData />}
         >
           {models.map((model) => (
-            <Item key={model.id}>
+            <Item key={model.id} textValue={model.name}>
               <File />
               <Text>{model.name}</Text>
               <ActionMenu
                 onAction={(key) => {
                   if (key === "delete") {
-                    deleteModel(model.id).then(() => refetch());
+                    setDeleteDialogOpen(true);
+                    setModelId(model.id);
                   } else if (key === "detail") {
                     setDetailDialogOpen(true);
                     setModelId(model.id);
@@ -78,7 +79,10 @@ function ModelListPage() {
                 }}
               >
                 <Item key="detail" textValue="View">
-                  <Text>Detail</Text>
+                  <Text>View</Text>
+                </Item>
+                <Item key="download" textValue="Download">
+                  <Text>Download</Text>
                 </Item>
                 <Item key="delete" textValue="Delete">
                   <Text>Delete</Text>
@@ -93,6 +97,15 @@ function ModelListPage() {
         close={() => {
           setDetailDialogOpen(false);
           setModelId(null);
+        }}
+        modelId={modelId}
+      />
+      <ModelDeleteDialog
+        open={deleteDialogOpen}
+        close={() => {
+          setDeleteDialogOpen(false);
+          setModelId(null);
+          refetch();
         }}
         modelId={modelId}
       />
