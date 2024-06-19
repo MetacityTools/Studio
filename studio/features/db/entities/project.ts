@@ -26,7 +26,7 @@ export class Project {
   user?: User;
 
   @ManyToMany(() => Model, (model) => model.projects)
-  @JoinTable()
+  @JoinTable({ name: "projects_models" })
   models?: Model[];
 
   @CreateDateColumn() created_at!: Date;
