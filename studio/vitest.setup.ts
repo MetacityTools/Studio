@@ -1,5 +1,5 @@
 import "reflect-metadata";
-import { beforeAll, vi } from "vitest";
+import { afterAll, beforeAll, vi } from "vitest";
 import { User } from "./features/db/entities/user";
 import { injectRepository } from "./features/db/helpers";
 
@@ -26,4 +26,10 @@ beforeAll(async () => {
       },
     }),
   }));
+});
+
+afterAll(async () => {
+  const userRepository = await injectRepository(User);
+
+  await userRepository.delete("test");
 });
