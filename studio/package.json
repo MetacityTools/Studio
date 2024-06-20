@@ -29,10 +29,10 @@
     "react-icons": "^5.2.1",
     "reflect-metadata": "^0.2.2",
     "typeorm": "^0.3.20",
+    "typeorm-naming-strategies": "^4.1.0",
     "zod-form-data": "^2.0.2"
   },
   "devDependencies": {
-    "@rollup/rollup-linux-x64-gnu": "4.18.0",
     "@swc/core": "^1.5.7",
     "@testing-library/react": "^15.0.7",
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
