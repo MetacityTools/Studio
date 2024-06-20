@@ -22,6 +22,7 @@ import { useHandleProjectAction } from "@features/projects/hooks/useHandleProjec
 import { useProjects } from "@features/projects/hooks/useProjects";
 import { ToastContainer } from "@react-spectrum/toast";
 import File from "@spectrum-icons/illustrations/File";
+import { redirect } from "next/navigation";
 import { Key, useCallback } from "react";
 
 function ProjectListPage() {
@@ -32,6 +33,11 @@ function ProjectListPage() {
     closeDialog();
     refetch();
   }, [closeDialog, refetch]);
+
+  const handleOpenProject = useCallback((key: Key) => {
+    console.log(key);
+    redirect(`/projects/${key}`);
+  }, []); 
 
   return (
     <Flex
@@ -72,7 +78,7 @@ function ProjectListPage() {
           marginX="size-200"
         >
           {projects.map((project) => (
-            <Item key={project.id}>
+            <Item key={project.id} href={`/projects/${project.id}`} target="_blank">
               <File />
               <Text>{project.name}</Text>
               <ActionMenu

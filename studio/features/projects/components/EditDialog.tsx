@@ -11,7 +11,7 @@ import {
 } from "@adobe/react-spectrum";
 import { ToastQueue } from "@react-spectrum/toast";
 import { useCallback, useEffect, useState } from "react";
-import { useGetProjectById } from "../hooks/useProjectData";
+import { useGetProjectById } from "../hooks/useGetProjectById";
 import { useUpdateProject } from "../hooks/useUpdateProject";
 
 type EditDialogProps = {
