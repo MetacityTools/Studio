@@ -2,6 +2,7 @@ import "reflect-metadata";
 import { DataSource } from "typeorm";
 import { SnakeNamingStrategy } from "typeorm-naming-strategies";
 import { Config } from "../config";
+import { Embed } from "./entities/embed";
 import { Model } from "./entities/model";
 import { ModelMetadata } from "./entities/modelMetadata";
 import { Project } from "./entities/project";
@@ -16,7 +17,7 @@ export const AppDataSource = new DataSource({
   database: Config.db.database,
   synchronize: true,
   logging: ["error"],
-  entities: [Project, User, Model, ModelMetadata],
+  entities: [Project, User, Model, ModelMetadata, Embed],
   subscribers: [],
   migrations: [],
   namingStrategy: new SnakeNamingStrategy(),
