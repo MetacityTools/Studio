@@ -1,6 +1,6 @@
 "use server";
 
-import { deleteOwnModel } from "@features/models";
+import { deleteOwnModel } from "@features/models/mutations/deleteOwnModel";
 import { expect, test } from "vitest";
 import { POST } from "./route";
 
