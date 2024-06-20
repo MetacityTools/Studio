@@ -28,6 +28,20 @@ function ModelListPage() {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [modelId, setModelId] = useState<number | null>(null);
 
+  async function downloadModelArchive(modelId: number, modelName: string) {
+    const response = await fetch(`/api/models/${modelId}/data`, {
+      method: "GET",
+    });
+    const data = await response.blob();
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(data);
+    link.download = `${modelName}.zip`;
+    link.style.display = "none";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
   return (
     <Flex
       direction="column"
@@ -75,15 +89,17 @@ function ModelListPage() {
                   } else if (key === "detail") {
                     setDetailDialogOpen(true);
                     setModelId(model.id);
+                  } else if (key === "download") {
+                    downloadModelArchive(model.id, model.name);
                   }
                 }}
               >
                 <Item key="detail" textValue="View">
                   <Text>View</Text>
                 </Item>
-                {/* <Item key="download" textValue="Download">
+                <Item key="download" textValue="Download">
                   <Text>Download</Text>
-                </Item> */}
+                </Item>
                 <Item key="delete" textValue="Delete">
                   <Text>Delete</Text>
                 </Item>
