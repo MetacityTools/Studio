@@ -1,5 +1,6 @@
 import "reflect-metadata";
 import { DataSource } from "typeorm";
+import { SnakeNamingStrategy } from "typeorm-naming-strategies";
 import { Config } from "../config";
 import { Model } from "./entities/model";
 import { Project } from "./entities/project";
@@ -17,4 +18,5 @@ export const AppDataSource = new DataSource({
   entities: [Project, User, Model],
   subscribers: [],
   migrations: [],
+  namingStrategy: new SnakeNamingStrategy(),
 });
