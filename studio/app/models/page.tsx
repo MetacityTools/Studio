@@ -15,6 +15,7 @@ import { NoData } from "@core/components/Empty";
 import { withUserEnabled } from "@core/utils/withUserEnabled";
 import ModelDeleteDialog from "@features/models/components/ModelDeleteDialog";
 import ModelDetailDialog from "@features/models/components/ModelDetailDialog";
+import ModelRenameDialog from "@features/models/components/ModelRenameDialog";
 import ModelUploadDialog from "@features/models/components/ModelUploadDialog";
 import { useModels } from "@features/models/hooks/useModels";
 import Header from "@features/projects/components/Header";
@@ -26,6 +27,7 @@ function ModelListPage() {
   const { data: models, isLoading, refetch } = useModels();
   const [detailDialogOpen, setDetailDialogOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [renameDialogOpen, setRenameDialogOpen] = useState(false);
   const [modelId, setModelId] = useState<number | null>(null);
 
   async function downloadModelArchive(modelId: number, modelName: string) {
@@ -91,11 +93,17 @@ function ModelListPage() {
                     setModelId(model.id);
                   } else if (key === "download") {
                     downloadModelArchive(model.id, model.name);
+                  } else if (key === "rename") {
+                    setRenameDialogOpen(true);
+                    setModelId(model.id);
                   }
                 }}
               >
                 <Item key="detail" textValue="View">
                   <Text>View</Text>
+                </Item>
+                <Item key="rename" textValue="Rename">
+                  <Text>Rename</Text>
                 </Item>
                 <Item key="download" textValue="Download">
                   <Text>Download</Text>
@@ -120,6 +128,15 @@ function ModelListPage() {
         open={deleteDialogOpen}
         close={() => {
           setDeleteDialogOpen(false);
+          setModelId(null);
+          refetch();
+        }}
+        modelId={modelId}
+      />
+      <ModelRenameDialog
+        open={renameDialogOpen}
+        close={() => {
+          setRenameDialogOpen(false);
           setModelId(null);
           refetch();
         }}
