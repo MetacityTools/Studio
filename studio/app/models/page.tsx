@@ -81,9 +81,9 @@ function ModelListPage() {
                 <Item key="detail" textValue="View">
                   <Text>View</Text>
                 </Item>
-                <Item key="download" textValue="Download">
+                {/* <Item key="download" textValue="Download">
                   <Text>Download</Text>
-                </Item>
+                </Item> */}
                 <Item key="delete" textValue="Delete">
                   <Text>Delete</Text>
                 </Item>

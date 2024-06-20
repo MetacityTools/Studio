@@ -164,7 +164,7 @@ export default function ModelUploadDialog({
           isPending={isPending}
           onPress={handleSubmit}
         >
-          Create
+          Upload
         </Button>
       </ButtonGroup>
     </Dialog>

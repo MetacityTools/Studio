@@ -48,7 +48,7 @@ export default function ModelDetailDialog({
 
   return (
     <DialogContainer onDismiss={close}>
-      {open && (
+      {(open && model) && (
         <Dialog>
           <Heading>Model detail: {model?.name}</Heading>
           <Content>
@@ -66,8 +66,8 @@ export default function ModelDetailDialog({
                     <ActionMenu
                       onAction={(key) => {
                         if (key === "download") {
-                          downloadModelFile(model.id, file);
                           ToastQueue.info("Downloading file...");
+                          downloadModelFile(model.id, file);
                         }
                       }}
                     >
