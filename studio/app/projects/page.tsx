@@ -52,7 +52,7 @@ function ProjectListPage() {
       />
       <ContentContainer>
         <DialogTrigger>
-          <ActionButton>Create Project</ActionButton>
+          <ActionButton marginX="size-200">Create Project</ActionButton>
           {(close) => (
             <CreateProjectDialog
               close={() => {
@@ -69,6 +69,7 @@ function ProjectListPage() {
           aria-label="ListView multiple selection example"
           renderEmptyState={() => (isLoading ? <Loading /> : <NoData />)}
           selectionStyle="highlight"
+          marginX="size-200"
         >
           {projects.map((project) => (
             <Item key={project.id}>
