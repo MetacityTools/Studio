@@ -13,6 +13,7 @@
     "@adobe/react-spectrum": "^3.35.1",
     "@auth0/nextjs-auth0": "^3.5.0",
     "@react-spectrum/toast": "^3.0.0-beta.12",
+    "@shortercode/webzip": "^1.1.1-0",
     "@spectrum-icons/illustrations": "^3.6.13",
     "class-transformer": "^0.5.1",
     "clsx": "^2.1.1",

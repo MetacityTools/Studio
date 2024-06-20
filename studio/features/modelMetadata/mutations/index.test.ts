@@ -4,8 +4,8 @@ import { Model } from "@features/db/entities/model";
 import { Project } from "@features/db/entities/project";
 
 import { ModelMetadata } from "@features/db/entities/modelMetadata";
-import { createOwnModel } from "@features/models/mutations/createOwnModel";
-import { deleteOwnModel } from "@features/models/mutations/deleteOwnModel";
+import { createModel } from "@features/models/mutations/createModel";
+import { deleteModel } from "@features/models/mutations/deleteModel";
 import { deleteProject } from "@features/projects/mutations/deleteProject";
 import { createProject } from "../../projects/mutations/createProject";
 import { getAllProjectMetadata } from "../queries/getAllProjectMetadata";
@@ -21,7 +21,7 @@ test("project CRUD", async () => {
     description: "This is a test project",
   });
 
-  model = await createOwnModel(
+  model = await createModel(
     {
       name: "Test Model",
     },
@@ -65,5 +65,5 @@ test("project CRUD", async () => {
 
   // CLEANUP
   await deleteProject(project.id);
-  await deleteOwnModel(model!.id);
+  await deleteModel(model!.id);
 });

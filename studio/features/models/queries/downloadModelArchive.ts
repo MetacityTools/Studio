@@ -4,15 +4,10 @@ import { canReadModels } from "@features/auth/acl";
 import { getUserToken } from "@features/auth/user";
 import { Model } from "@features/db/entities/model";
 import { injectRepository } from "@features/db/helpers";
-import {
-    deleteFile,
-    getUserModelBucketName,
-    listFilesInBucket
-} from "@features/storage";
+import { getUserModelBucketName, listFilesInBucket, readFile } from "@features/storage";
+import { ZipArchive } from "@shortercode/webzip";
 
-
-
-export async function deleteOwnModel(modelId: number) {
+export async function downloadModelArchive(modelId: number) {
     if (!(await canReadModels())) throw new Error("Unauthorized");
   
     const user = (await getUserToken())!;
@@ -24,16 +19,13 @@ export async function deleteOwnModel(modelId: number) {
     });
     if (!model) throw new Error("Not found");
   
-    // delete files
     const bucketName = getUserModelBucketName(user.id, model.id);
-  
     const files = await listFilesInBucket(bucketName);
+
+    const archive = new ZipArchive;
     for (const file of files) {
-      await deleteFile(file, bucketName);
+        const data = await readFile(file, bucketName);
+        await archive.set(file, data);
     }
-  
-    // delete model
-    await modelRepository.remove(model);
+    return archive.to_blob().stream();
   }
-  
-  

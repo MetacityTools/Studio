@@ -1,10 +1,10 @@
 "use server";
 
-import { z } from "zod";
-import { canEditOwnProject } from "@features/auth/acl";
+import { canEditProject } from "@features/auth/acl";
 import { getUserToken } from "@features/auth/user";
 import { Project } from "@features/db/entities/project";
 import { injectRepository } from "@features/db/helpers";
+import { z } from "zod";
 
 const updateProjectData = z.object({
   name: z.string().optional(),
@@ -17,7 +17,7 @@ export async function updateProject(
 ): Promise<Project | null> {
   projectData = updateProjectData.parse(projectData);
 
-  if (!(await canEditOwnProject())) throw new Error("Unauthorized");
+  if (!(await canEditProject())) throw new Error("Unauthorized");
 
   const user = await getUserToken();
 

@@ -1,12 +1,12 @@
 "use server";
 
-import { canEditOwnProject } from "@features/auth/acl";
+import { canEditProject } from "@features/auth/acl";
 import { getUserToken } from "@features/auth/user";
 import { Project } from "@features/db/entities/project";
 import { injectRepository } from "@features/db/helpers";
 
 export async function deleteProject(id: number): Promise<boolean> {
-  if (!(await canEditOwnProject())) throw new Error("Unauthorized");
+  if (!(await canEditProject())) throw new Error("Unauthorized");
 
   const user = await getUserToken();
 
