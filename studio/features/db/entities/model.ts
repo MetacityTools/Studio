@@ -2,10 +2,12 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToMany,
   ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
+import { Project } from "./project";
 import { User } from "./user";
 
 @Entity("models")
@@ -21,6 +23,9 @@ export class Model {
     onUpdate: "CASCADE",
   })
   user?: User;
+
+  @ManyToMany(() => Project, (project) => project.models)
+  projects?: Project[];
 
   @CreateDateColumn() createdAt!: Date;
   @UpdateDateColumn() updatedAt!: Date;
