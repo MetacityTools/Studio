@@ -30,3 +30,8 @@ export async function canEditOwnModel() {
   const user = await getUserToken();
   return !!user;
 }
+
+export async function canEditOwnModelMetadata() {
+  const user = await getUserToken();
+  return !!user;
+}
