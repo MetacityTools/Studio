@@ -6,7 +6,14 @@ export function getUserBucketName(userId: string, directory?: string) {
 
 export function getUserModelBucketName(
   userId: string,
-  modelId: string | number
+  modelId: string | number,
 ) {
   return getUserBucketName(userId, `models/${modelId}`);
+}
+
+export function getUserEmbedBucketName(
+  userId: string,
+  embedId: string | number,
+) {
+  return getUserBucketName(userId, `embeds/${embedId}`);
 }

@@ -30,3 +30,8 @@ export async function canEditOwnModel() {
   const user = await getUserToken();
   return !!user;
 }
+
+export async function canCreateEmbedOfOwnProject() {
+  const user = await getUserToken();
+  return !!user;
+}
