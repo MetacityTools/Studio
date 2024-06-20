@@ -12,13 +12,14 @@ import { Project } from "./project";
 export class Embed {
   @PrimaryGeneratedColumn() id!: number;
 
-  @Column() geometryFile!: string;
-  @Column() metadataFile!: string;
-  @Column() styleFile!: string;
+  @Column() bucketId!: string;
+  @Column() version!: string;
 
   @ManyToOne(() => Project)
   project?: Project;
 
   @CreateDateColumn() createdAt!: Date;
   @UpdateDateColumn() updatedAt!: Date;
+
+  files?: string[];
 }

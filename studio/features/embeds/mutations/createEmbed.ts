@@ -1,4 +1,4 @@
-import { canCreateEmbedOfOwnProject } from "@features/auth/acl";
+import { canEditOwnProject } from "@features/auth/acl";
 import { getUserToken } from "@features/auth/user";
 import { Embed } from "@features/db/entities/embed";
 import { injectRepository } from "@features/db/helpers";
@@ -11,15 +11,8 @@ import {
 import { Readable } from "stream";
 import { ReadableStream } from "stream/web";
 
-export async function createEmbed(
-  projectId: number,
-  files: {
-    geometry: File;
-    metadata: File;
-    style: File;
-  },
-) {
-  if (!(await canCreateEmbedOfOwnProject())) throw new Error("Unauthorized");
+export async function createEmbed(projectId: number, files: File[]) {
+  if (!(await canEditOwnProject())) throw new Error("Unauthorized");
 
   const user = await getUserToken();
 
@@ -33,9 +26,9 @@ export async function createEmbed(
   await ensureBucket(bucketName);
 
   try {
-    for (const [filename, file] of Object.entries(files)) {
+    for (const file of files) {
       const fileStream = Readable.fromWeb(file.stream() as ReadableStream);
-      await saveFileStream(filename, bucketName, fileStream);
+      await saveFileStream(file.name, bucketName, fileStream);
     }
   } catch (e) {
     await embedRepository.remove(embed);
