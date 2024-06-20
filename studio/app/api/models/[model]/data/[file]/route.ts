@@ -1,4 +1,4 @@
-import { downloadOwnModelFile } from "@features/models";
+import { downloadOwnModelFile } from "@features/models/queries/downloadOwnModelFile";
 import mime from "mime";
 import { Readable } from "stream";
 

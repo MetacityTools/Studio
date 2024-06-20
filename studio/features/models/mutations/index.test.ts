@@ -1,6 +1,8 @@
 import { expect, test } from "vitest";
-import { createOwnModel, deleteOwnModel, getOwnModel } from ".";
-import { Model } from "../db/entities/model";
+import { Model } from "../../db/entities/model";
+import { getOwnModel } from "../queries/getOwnModel";
+import { createOwnModel } from "./createOwnModel";
+import { deleteOwnModel } from "./deleteOwnModel";
 
 const modelFile = {
   stream: () =>

@@ -31,5 +31,7 @@ beforeAll(async () => {
 afterAll(async () => {
   const userRepository = await injectRepository(User);
 
-  await userRepository.delete("test");
+  await userRepository.delete({
+    id: "test",
+  });
 });
