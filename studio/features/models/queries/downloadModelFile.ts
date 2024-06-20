@@ -1,13 +1,13 @@
 "use server";
 
-import { canReadOwnModels } from "@features/auth/acl";
+import { canReadModels } from "@features/auth/acl";
 import { getUserToken } from "@features/auth/user";
 import { Model } from "@features/db/entities/model";
 import { injectRepository } from "@features/db/helpers";
 import { getUserModelBucketName, readFileStream } from "@features/storage";
 
 export async function downloadModelFile(modelId: number, fileName: string) {
-    if (!(await canReadOwnModels())) throw new Error("Unauthorized");
+    if (!(await canReadModels())) throw new Error("Unauthorized");
   
     const user = (await getUserToken())!;
   

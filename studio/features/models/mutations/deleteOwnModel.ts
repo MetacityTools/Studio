@@ -1,6 +1,6 @@
 "use server";
 
-import { canReadOwnModels } from "@features/auth/acl";
+import { canReadModels } from "@features/auth/acl";
 import { getUserToken } from "@features/auth/user";
 import { Model } from "@features/db/entities/model";
 import { injectRepository } from "@features/db/helpers";
@@ -13,7 +13,7 @@ import {
 
 
 export async function deleteOwnModel(modelId: number) {
-    if (!(await canReadOwnModels())) throw new Error("Unauthorized");
+    if (!(await canReadModels())) throw new Error("Unauthorized");
   
     const user = (await getUserToken())!;
   

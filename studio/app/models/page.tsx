@@ -16,7 +16,7 @@ import { withUserEnabled } from "@core/utils/withUserEnabled";
 import ModelDeleteDialog from "@features/models/components/ModelDeleteDialog";
 import ModelDetailDialog from "@features/models/components/ModelDetailDialog";
 import ModelUploadDialog from "@features/models/components/ModelUploadDialog";
-import { useOwnModels } from "@features/models/hooks/useOwnModels";
+import { useOwnModels } from "@features/models/hooks/useModels";
 import Header from "@features/projects/components/Header";
 import { ToastContainer } from "@react-spectrum/toast";
 import File from "@spectrum-icons/illustrations/File";

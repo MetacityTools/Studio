@@ -1,4 +1,4 @@
-import { canEditOwnModelMetadata } from "@features/auth/acl";
+import { canEditModelMetadata } from "@features/auth/acl";
 import { getUserToken } from "@features/auth/user";
 import { ModelMetadata } from "@features/db/entities/modelMetadata";
 import { injectRepository } from "@features/db/helpers";
@@ -10,7 +10,7 @@ export async function saveModelMetadata(
     "project_id" | "model_id" | "object_id" | "key" | "value" | "type"
   >
 ) {
-  if (!(await canEditOwnModelMetadata())) throw new Error("Unauthorized");
+  if (!(await canEditModelMetadata())) throw new Error("Unauthorized");
 
   const userToken = await getUserToken();
 

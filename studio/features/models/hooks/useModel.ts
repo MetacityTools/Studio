@@ -2,12 +2,12 @@
 
 import { useQuery } from "@core/hooks/useQuery";
 import { useCallback } from "react";
-import { getOwnModel } from "../queries/getOwnModel";
+import { getModel } from "../queries/getModel";
 
-export const useOwnModel = (modelId : number | null) => {
+export const useModel = (modelId : number | null) => {
   const queryFn = useCallback(async () => {
     if (modelId === null) return Promise.resolve(null);
-    return getOwnModel(modelId);
+    return getModel(modelId);
   }, [modelId]);
 
   return useQuery({

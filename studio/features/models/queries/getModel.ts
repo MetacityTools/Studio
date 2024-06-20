@@ -1,6 +1,6 @@
 "use server";
 
-import { canReadOwnModels } from "@features/auth/acl";
+import { canReadModels } from "@features/auth/acl";
 import { getUserToken } from "@features/auth/user";
 import { injectRepository } from "@features/db/helpers";
 import { toPlain } from "@features/helpers/objects";
@@ -8,8 +8,8 @@ import { getUserModelBucketName, listFilesInBucket } from "@features/storage";
 
 import { Model } from "@features/db/entities/model";
 
-export async function getOwnModel(modelId: number) {
-  if (!(await canReadOwnModels())) throw new Error("Unauthorized");
+export async function getModel(modelId: number) {
+  if (!(await canReadModels())) throw new Error("Unauthorized");
 
   const user = (await getUserToken())!;
 

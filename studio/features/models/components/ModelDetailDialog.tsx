@@ -15,7 +15,7 @@ import {
 import { NoData } from "@core/components/Empty";
 import { ToastQueue } from "@react-spectrum/toast";
 import File from "@spectrum-icons/illustrations/File";
-import { useOwnModel } from "../hooks/useOwnModel";
+import { useModel } from "../hooks/useModel";
 
 type ModelDetailDialogProps = {
   open: boolean;
@@ -28,7 +28,7 @@ export default function ModelDetailDialog({
   close,
   modelId,
 }: ModelDetailDialogProps) {
-  const { data: model, isLoading } = useOwnModel(modelId);
+  const { data: model, isLoading } = useModel(modelId);
 
   async function downloadModelFile(modelId: number, file: string) {
     const response = await fetch(`/api/models/${modelId}/data/${file}`, {
