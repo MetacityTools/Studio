@@ -19,7 +19,7 @@ import EditorStyle from "./EditorStyle";
 
 export default function Editor() {
   return (
-    <Allotment height="100%">
+    <Allotment>
       <Allotment.Pane snap>
         <SidePanel />
       </Allotment.Pane>
