@@ -49,7 +49,7 @@ export default function ProjectList() {
         selectionStyle="highlight"
       >
         {projects.map((project) => (
-          <Item key={project.id}>
+          <Item key={project.id} textValue={project.name}>
             <File />
             <Text>{project.name}</Text>
             <ActionMenu
