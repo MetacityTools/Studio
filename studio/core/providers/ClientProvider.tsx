@@ -1,7 +1,7 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { defaultTheme, Provider } from "@adobe/react-spectrum";
+import { useRouter } from "next/navigation";
 
 declare module "@adobe/react-spectrum" {
   interface RouterConfig {
@@ -24,7 +24,7 @@ export function ClientProviders(props: ClientProvidersProps) {
       theme={defaultTheme}
       router={{ navigate: router.push }}
       width="100vw"
-      height="100vh"
+      minHeight="100vh"
     >
       {children}
     </Provider>
