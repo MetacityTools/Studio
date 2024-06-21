@@ -1,6 +1,6 @@
 import { Embed } from "@features/db/entities/embed";
+import { Metadata } from "@features/db/entities/metadata";
 import { Model } from "@features/db/entities/model";
-import { ModelMetadata } from "@features/db/entities/modelMetadata";
 import { Project } from "@features/db/entities/project";
 import { User } from "@features/db/entities/user";
 import { injectRepository } from "@features/db/helpers";
@@ -23,7 +23,7 @@ interface Fixtures {
   embed: Embed;
   model: Model;
   file: File;
-  metadata: ModelMetadata;
+  metadata: Metadata;
 }
 
 export const testWithFixtures = test.extend<Fixtures>({
@@ -66,7 +66,7 @@ export const testWithFixtures = test.extend<Fixtures>({
 
   model: async ({ user, file }, use) => {
     const modelRepository = await injectRepository(Model);
-    const metadataRepository = await injectRepository(ModelMetadata);
+    const metadataRepository = await injectRepository(Metadata);
 
     const model = await modelRepository.save({
       name: "Test Model",
@@ -107,7 +107,7 @@ export const testWithFixtures = test.extend<Fixtures>({
   },
 
   metadata: async ({ project, model, user }, use) => {
-    const metadataRepository = await injectRepository(ModelMetadata);
+    const metadataRepository = await injectRepository(Metadata);
 
     const metadata = await metadataRepository.save({
       model: { id: model.id },

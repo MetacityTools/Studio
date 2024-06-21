@@ -3,8 +3,8 @@ import { DataSource } from "typeorm";
 import { SnakeNamingStrategy } from "typeorm-naming-strategies";
 import { Config } from "../config";
 import { Embed } from "./entities/embed";
+import { Metadata } from "./entities/metadata";
 import { Model } from "./entities/model";
-import { ModelMetadata } from "./entities/modelMetadata";
 import { Project } from "./entities/project";
 import { User } from "./entities/user";
 
@@ -17,7 +17,7 @@ export const AppDataSource = new DataSource({
   database: Config.db.database,
   synchronize: true,
   logging: ["error"],
-  entities: [Project, User, Model, ModelMetadata, Embed],
+  entities: [Project, User, Model, Metadata, Embed],
   subscribers: [],
   migrations: [],
   namingStrategy: new SnakeNamingStrategy(),
