@@ -10,7 +10,7 @@ function resolveBucket(directory: string) {
 
 export async function readFile(
   file: string,
-  directory: string
+  directory: string,
 ): Promise<Buffer> {
   return new Promise(async (resolve, reject) => {
     const bucket = resolveBucket(directory);
@@ -43,7 +43,7 @@ export async function readFileStream(file: string, directory: string) {
 export async function saveFileStream(
   file: string,
   directory: string,
-  data: Readable
+  data: Readable,
 ) {
   const bucket = resolveBucket(directory);
   return await client.putObject(bucket, file, data);
@@ -55,6 +55,12 @@ export async function deleteFile(file: string, directory: string) {
   await client.removeObject(bucket, file);
 }
 
+export async function deleteBucket(directory: string) {
+  const bucket = resolveBucket(directory);
+
+  await client.removeBucket(bucket);
+}
+
 export async function ensureBucket(directory: string): Promise<string> {
   const bucket = resolveBucket(directory);
 
@@ -64,6 +70,11 @@ export async function ensureBucket(directory: string): Promise<string> {
   }
 
   return directory;
+}
+
+export async function checkBucketExists(directory: string) {
+  const bucket = resolveBucket(directory);
+  return client.bucketExists(bucket);
 }
 
 export async function checkFileExists(file: string, directory: string) {
