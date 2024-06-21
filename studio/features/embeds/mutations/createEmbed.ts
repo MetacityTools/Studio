@@ -1,4 +1,4 @@
-import { canEditOwnProject } from "@features/auth/acl";
+import { canEditProject } from "@features/auth/acl";
 import { getUserToken } from "@features/auth/user";
 import { Embed } from "@features/db/entities/embed";
 import { injectRepository } from "@features/db/helpers";
@@ -12,7 +12,7 @@ import { Readable } from "stream";
 import { ReadableStream } from "stream/web";
 
 export async function createEmbed(projectId: number, files: File[]) {
-  if (!(await canEditOwnProject())) throw new Error("Unauthorized");
+  if (!(await canEditProject())) throw new Error("Unauthorized");
 
   const user = await getUserToken();
 

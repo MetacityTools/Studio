@@ -1,4 +1,4 @@
-import { canEditOwnProject } from "@features/auth/acl";
+import { canEditProject } from "@features/auth/acl";
 import { getUserToken } from "@features/auth/user";
 import { Embed } from "@features/db/entities/embed";
 import { injectRepository } from "@features/db/helpers";
@@ -6,7 +6,7 @@ import { toPlain } from "@features/helpers/objects";
 import { deleteBucket, deleteFile, listFilesInBucket } from "@features/storage";
 
 export async function deleteEmbed(embedId: number) {
-  if (!(await canEditOwnProject())) throw new Error("Unauthorized");
+  if (!(await canEditProject())) throw new Error("Unauthorized");
 
   const user = await getUserToken();
 
