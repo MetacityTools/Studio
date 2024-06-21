@@ -48,5 +48,4 @@ function ProjectListPage() {
   );
 }
 
-<ModelList />;
 export default withPageAuthRequired(withUserEnabled(ProjectListPage));

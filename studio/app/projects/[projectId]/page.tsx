@@ -1,8 +1,9 @@
 "use client";
 
-import { Flex } from "@adobe/react-spectrum";
+import { Flex, View } from "@adobe/react-spectrum";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
 import { withUserEnabled } from "@core/utils/withUserEnabled";
+import Editor from "@features/editor/components/Editor";
 import Header from "@features/projects/components/Header";
 import { useGetProjectById } from "@features/projects/hooks/useGetProjectById";
 
@@ -18,27 +19,25 @@ function ProjectPage({ params }: ProjectPageProps) {
   const { data } = useGetProjectById(sanitizedId);
 
   return (
-    <Flex
-      direction="column"
-      width="100%"
-      height="100%"
-      gap="size-10"
-      justifyContent="start"
-      alignItems="start"
-    >
-      <Header
-        nav={[
-          {
-            key: "projects",
-            children: "Projects",
-            link: "/projects",
-          },
-          {
-            key: data?.name ?? "loading",
-            children: data?.name ?? "loading",
-          },
-        ]}
-      />
+    <Flex width="100vw" height="100vh" direction="column">
+      <View gridArea="header" width="100%">
+        <Header
+          nav={[
+            {
+              key: "projects",
+              children: "Projects",
+              link: "/projects",
+            },
+            {
+              key: data?.name ?? "loading",
+              children: data?.name ?? "loading",
+            },
+          ]}
+        />
+      </View>
+      <View gridArea="content" overflow="hidden" width="100%" height="100%">
+        <Editor />
+      </View>
     </Flex>
   );
 }
