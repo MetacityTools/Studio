@@ -1,22 +1,22 @@
-import { canEditModelMetadata } from "@features/auth/acl";
+import { canEditMetadata } from "@features/auth/acl";
 import { getUserToken } from "@features/auth/user";
-import { ModelMetadata } from "@features/db/entities/modelMetadata";
+import { Metadata } from "@features/db/entities/metadata";
 import { injectRepository } from "@features/db/helpers";
 import { toPlain } from "@features/helpers/objects";
 
-export async function saveModelMetadata(
+export async function saveMetadata(
   metadata: Pick<
-    ModelMetadata,
+    Metadata,
     "project_id" | "model_id" | "object_id" | "key" | "value" | "type"
-  >
+  >,
 ) {
-  if (!(await canEditModelMetadata())) throw new Error("Unauthorized");
+  if (!(await canEditMetadata())) throw new Error("Unauthorized");
 
   const userToken = await getUserToken();
 
-  const modelMetadataRepository = await injectRepository(ModelMetadata);
+  const metadataRepository = await injectRepository(Metadata);
 
-  const savedMetadata = await modelMetadataRepository.save({
+  const savedMetadata = await metadataRepository.save({
     ...metadata,
     id: null,
     user_id: userToken!.id,

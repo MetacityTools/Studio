@@ -1,15 +1,15 @@
 import { expect } from "vitest";
 
-import { ModelMetadata } from "@features/db/entities/modelMetadata";
+import { Metadata } from "@features/db/entities/metadata";
 import { omit } from "@features/helpers/objects";
-import { deleteModelMetadata } from "@features/modelMetadata/mutations/deleteModelMetadata";
-import { saveModelMetadata } from "@features/modelMetadata/mutations/saveModelMetadata";
-import { getAllProjectMetadata } from "@features/modelMetadata/queries/getAllProjectMetadata";
+import { deleteMetadata } from "@features/metadata/mutations/deleteMetadata";
+import { saveMetadata } from "@features/metadata/mutations/saveMetadata";
+import { getAllProjectMetadata } from "@features/metadata/queries/getAllProjectMetadata";
 import { testWithFixtures } from "./helpers";
 
 testWithFixtures("create metadata", async ({ project, model }) => {
-  const modelMetadataData: Pick<
-    ModelMetadata,
+  const metadataData: Pick<
+    Metadata,
     "project_id" | "model_id" | "object_id" | "key" | "value" | "type"
   > = {
     project_id: project.id,
@@ -20,8 +20,8 @@ testWithFixtures("create metadata", async ({ project, model }) => {
     value: "testValue",
   };
 
-  const metadata = await saveModelMetadata(modelMetadataData);
-  expect(metadata).toMatchObject(modelMetadataData);
+  const metadata = await saveMetadata(metadataData);
+  expect(metadata).toMatchObject(metadataData);
 });
 
 testWithFixtures("get metadata", async ({ project, model, metadata }) => {
@@ -32,7 +32,7 @@ testWithFixtures("get metadata", async ({ project, model, metadata }) => {
 });
 
 testWithFixtures("update metadata", async ({ project, model, metadata }) => {
-  const updatedMetadata = await saveModelMetadata({
+  const updatedMetadata = await saveMetadata({
     ...metadata,
     value: "updatedValue",
   });
@@ -40,7 +40,7 @@ testWithFixtures("update metadata", async ({ project, model, metadata }) => {
 });
 
 testWithFixtures("delete metadata", async ({ project, model, metadata }) => {
-  await deleteModelMetadata({
+  await deleteMetadata({
     project_id: project.id,
     model_id: model!.id,
     key: "testKey",
