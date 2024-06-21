@@ -149,7 +149,10 @@ function DialogDropZone(props: DialogDropZoneProps) {
       onDrop={handleDrop}
     >
       <FileTrigger onSelect={handleSelect} allowsMultiple>
-        <Button variant="primary">Browse Files</Button>
+        <Content>Drop files here or</Content>
+        <Button variant="primary" marginTop="size-100">
+          Select Files
+        </Button>
       </FileTrigger>
     </DropZone>
   );
