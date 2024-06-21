@@ -1,8 +1,7 @@
 "use client";
 
-import { Flex, Grid, View } from "@adobe/react-spectrum";
+import { Grid, View } from "@adobe/react-spectrum";
 import { withPageAuthRequired } from "@auth0/nextjs-auth0/client";
-import { ContentContainer } from "@core/components/ContentContainer";
 import { withUserEnabled } from "@core/utils/withUserEnabled";
 import ModelList from "@features/models/components/ModelList";
 import Header from "@features/projects/components/Header";
@@ -13,8 +12,10 @@ function ProjectListPage() {
   return (
     <Grid
       areas={{
-        base: ["header", "content"],
+        base: ["header header", "projects models"],
       }}
+      width="100vw"
+      gap="size-100"
     >
       <View gridArea="header">
         <Header
@@ -26,25 +27,26 @@ function ProjectListPage() {
           ]}
         />
       </View>
-      <View gridArea="content">
-        <ContentContainer>
-          <Flex
-            gap="size-100"
-            width="100%"
-            UNSAFE_style={{
-              paddingLeft: "10px",
-              paddingRight: "10px",
-              boxSizing: "border-box",
-            }}
-          >
-            <ProjectList />
-            <ModelList />
-          </Flex>
-        </ContentContainer>
-        <ToastContainer />
+      <View
+        gridArea="projects"
+        position="relative"
+        overflow="hidden"
+        marginStart="size-100"
+      >
+        <ProjectList />
       </View>
+      <View
+        gridArea="models"
+        position="relative"
+        overflow="hidden"
+        marginEnd="size-100"
+      >
+        <ModelList />
+      </View>
+      <ToastContainer />
     </Grid>
   );
 }
 
+<ModelList />;
 export default withPageAuthRequired(withUserEnabled(ProjectListPage));
