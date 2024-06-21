@@ -31,8 +31,6 @@ export default function EditDialog({
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
 
-  console.log("data", data);
-
   useEffect(() => {
     if (data) {
       console.log("data", data);

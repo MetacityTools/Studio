@@ -1,11 +1,11 @@
-import { canReadOwnProjects } from "@features/auth/acl";
+import { canReadProjects } from "@features/auth/acl";
 import { getUserToken } from "@features/auth/user";
 import { Embed } from "@features/db/entities/embed";
 import { injectRepository } from "@features/db/helpers";
 import { toPlain } from "@features/helpers/objects";
 
 export async function getProjectEmbeds(projectId: number) {
-  if (!(await canReadOwnProjects())) throw new Error("Unauthorized");
+  if (!(await canReadProjects())) throw new Error("Unauthorized");
 
   const user = await getUserToken();
 

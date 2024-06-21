@@ -4,6 +4,7 @@ import { canCreateModel } from "@features/auth/acl";
 import { getUserToken } from "@features/auth/user";
 import { Model } from "@features/db/entities/model";
 import { injectRepository } from "@features/db/helpers";
+import { toPlain } from "@features/helpers/objects";
 import {
   ensureBucket,
   getUserModelBucketName,
@@ -12,9 +13,9 @@ import {
 import { Readable } from "stream";
 import { ReadableStream } from "stream/web";
 
-export async function createOwnModel(
+export async function createModel(
   metadata: Partial<Pick<Model, "name" | "coordinateSystem">>,
-  files: File[]
+  files: File[],
 ) {
   if (!(await canCreateModel())) throw new Error("Unauthorized");
 
@@ -41,8 +42,8 @@ export async function createOwnModel(
     throw e;
   }
 
-  return {
+  return toPlain({
     ...model,
     files: files.map((f) => f.name),
-  };
+  });
 }

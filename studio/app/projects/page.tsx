@@ -19,13 +19,13 @@ import DuplicateDialog from "@features/projects/components/DuplicateDialog";
 import EditDialog from "@features/projects/components/EditDialog";
 import Header from "@features/projects/components/Header";
 import { useHandleProjectAction } from "@features/projects/hooks/useHandleProjectAction";
-import { useOwnProjects } from "@features/projects/hooks/useOwnProjects";
+import { useProjects } from "@features/projects/hooks/useProjects";
 import { ToastContainer } from "@react-spectrum/toast";
 import File from "@spectrum-icons/illustrations/File";
 import { Key, useCallback } from "react";
 
 function ProjectListPage() {
-  const { data: projects, isLoading, refetch } = useOwnProjects();
+  const { data: projects, isLoading, refetch } = useProjects();
   const [dispatchAction, closeDialog, dialogState] = useHandleProjectAction();
 
   const handleCloseActionDialog = useCallback(() => {
