@@ -11,7 +11,7 @@ import {
   listFilesInBucket,
 } from "@features/storage";
 
-export async function deleteOwnModel(modelId: number) {
+export async function deleteModel(modelId: number) {
   if (!(await canEditModel())) throw new Error("Unauthorized");
 
   const user = (await getUserToken())!;
