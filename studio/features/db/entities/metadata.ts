@@ -3,8 +3,8 @@ import { Model } from "./model";
 import { Project } from "./project";
 import { User } from "./user";
 
-@Entity("model_metadata")
-export class ModelMetadata {
+@Entity("metadata")
+export class Metadata {
   @PrimaryColumn() model_id!: number;
   @PrimaryColumn() project_id!: number;
   @PrimaryColumn() user_id!: string;
