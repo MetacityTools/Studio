@@ -56,10 +56,10 @@ export default function ModelUploadDialog({
       method: "POST",
       body: formData,
     });
-    const data = await response.json();
     if (response.ok) {
       close();
     } else {
+      ToastQueue.negative("Failed to upload model");
     }
   }, [name, files, close]);
 

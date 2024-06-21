@@ -16,6 +16,7 @@ export default defineConfig({
   },
   resolve: {
     alias: {
+      "@core": new URL("./core", import.meta.url).pathname,
       "@app": new URL("./app", import.meta.url).pathname,
       "@features": new URL("./features", import.meta.url).pathname,
     },
