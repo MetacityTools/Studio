@@ -16,11 +16,10 @@ export async function getEmbed(id: number) {
   const embed = await embedRepository.findOne({
     where: { id, project: { user: { id: user.id } } },
   });
-
-  if (!embed) throw new Error("Embed not found");
+  if (!embed) return null;
 
   // get the filenames in the embed bucket
-  const files = await listFilesInBucket(embed.bucketId);
+  const files = embed.bucketId ? await listFilesInBucket(embed.bucketId) : null;
 
   // return the embed
   return toPlain({ ...embed, files });

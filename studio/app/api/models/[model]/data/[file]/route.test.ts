@@ -1,32 +1,13 @@
 "use server";
 
-import { createOwnModel } from "@features/models/mutations/createOwnModel";
 import { deleteOwnModel } from "@features/models/mutations/deleteOwnModel";
-import { expect, test } from "vitest";
+import { expect } from "vitest";
+import { testWithFixtures } from "../../../../../../tests/helpers";
 import { GET } from "./route";
 
-const file = {
-  stream: () =>
-    new ReadableStream({
-      start(controller) {
-        controller.enqueue(new TextEncoder().encode("test"));
-        controller.close();
-      },
-    }),
-  name: "test.txt",
-} as File;
-
-test("GET /models/[model]/data/[file]", async () => {
-  const model = await createOwnModel(
-    {
-      name: "TEST",
-      coordinateSystem: "WGS84",
-    },
-    [file]
-  );
-
+testWithFixtures("GET /models/[model]/data/[file]", async ({ model, file }) => {
   const url = new URL(
-    `http://localhost:3000/models/${model.id}/data/${file.name}`
+    `http://localhost:3000/models/${model.id}/data/${file.name}`,
   );
 
   const req = new Request(url, {

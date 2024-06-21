@@ -12,10 +12,10 @@ import { Project } from "./project";
 export class Embed {
   @PrimaryGeneratedColumn() id!: number;
 
-  @Column() bucketId!: string;
-  @Column() version!: string;
+  @Column({ nullable: true }) bucketId?: string;
+  @Column({ nullable: true }) version?: string;
 
-  @ManyToOne(() => Project)
+  @ManyToOne(() => Project, { onDelete: "CASCADE", onUpdate: "CASCADE" })
   project?: Project;
 
   @CreateDateColumn() createdAt!: Date;

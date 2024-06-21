@@ -72,6 +72,11 @@ export async function ensureBucket(directory: string): Promise<string> {
   return directory;
 }
 
+export async function checkBucketExists(directory: string) {
+  const bucket = resolveBucket(directory);
+  return client.bucketExists(bucket);
+}
+
 export async function checkFileExists(file: string, directory: string) {
   try {
     const bucket = resolveBucket(directory);
