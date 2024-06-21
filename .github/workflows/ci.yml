@@ -8,7 +8,7 @@ on:
       - "studio/**"
       - ".github/workflows/ci.yml"
   pull_request:
-    types: [opened, reopened, ready_for_review, synchronize]
+    types: [opened, reopened, synchronize]
     paths:
       - "studio/**"
       - ".github/workflows/ci.yml"
