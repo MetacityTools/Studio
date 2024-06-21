@@ -1,6 +1,6 @@
 "use server";
 
-import { deleteOwnModel } from "@features/models/mutations/deleteOwnModel";
+import { deleteModel } from "@features/models/mutations/deleteModel";
 import { expect } from "vitest";
 import { testWithFixtures } from "../../../../../../tests/helpers";
 import { GET } from "./route";
@@ -22,5 +22,5 @@ testWithFixtures("GET /models/[model]/data/[file]", async ({ model, file }) => {
   expect(response.status).toBe(200);
   expect(body).toBe("test");
 
-  await deleteOwnModel(model.id);
+  await deleteModel(model.id);
 });

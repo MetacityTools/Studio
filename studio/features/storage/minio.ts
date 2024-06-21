@@ -104,6 +104,9 @@ export async function listFilesInBucket(directory: string) {
 
     objectStream.on("end", () => resolve(files));
 
-    objectStream.on("error", (err) => reject(err));
+    objectStream.on("error", (err) => {
+      console.error(err);
+      reject(err);
+    });
   });
 }

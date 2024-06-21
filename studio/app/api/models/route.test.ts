@@ -1,6 +1,6 @@
 "use server";
 
-import { deleteOwnModel } from "@features/models/mutations/deleteOwnModel";
+import { deleteModel } from "@features/models/mutations/deleteModel";
 import { expect } from "vitest";
 import { testWithFixtures } from "../../../tests/helpers";
 import { POST } from "./route";
@@ -33,5 +33,5 @@ testWithFixtures("POST /models", async ({ user }) => {
     },
   });
 
-  await deleteOwnModel(body.id);
+  await deleteModel(body.id);
 });
