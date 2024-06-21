@@ -49,7 +49,12 @@ export default function ProjectList() {
         selectionStyle="highlight"
       >
         {projects.map((project) => (
-          <Item key={project.id} textValue={project.name}>
+          <Item
+            key={project.id}
+            href={`/projects/${project.id}`}
+            target="_blank"
+            textValue={project.name}
+          >
             <File />
             <Text>{project.name}</Text>
             <ActionMenu
