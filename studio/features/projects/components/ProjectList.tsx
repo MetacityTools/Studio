@@ -48,7 +48,12 @@ export default function ProjectList() {
         overflowMode="truncate"
       >
         {(project) => (
-          <Item key={project.id} textValue={project.name}>
+          <Item
+            key={project.id}
+            href={`/projects/${project.id}`}
+            target="_blank"
+            textValue={project.name}
+          >
             <Text>{project.name}</Text>
             <ActionMenu
               onAction={(action: Key) => dispatchAction(project.id, action)}
