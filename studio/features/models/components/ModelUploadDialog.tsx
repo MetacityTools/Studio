@@ -7,12 +7,14 @@ import {
   Content,
   Dialog,
   DropZone,
-  FileTrigger, Form,
+  FileTrigger,
+  Form,
   Heading,
-  IllustratedMessage, Item,
+  IllustratedMessage,
+  Item,
   ListView,
   Text,
-  TextField
+  TextField,
 } from "@adobe/react-spectrum";
 import { ToastQueue } from "@react-spectrum/toast";
 import File from "@spectrum-icons/illustrations/File";
@@ -24,22 +26,25 @@ type UploadModelDialogProps = {
   close: () => void;
 };
 
-export default function ModelUploadDialog({
-  close,
-}: UploadModelDialogProps) {
+export default function ModelUploadDialog({ close }: UploadModelDialogProps) {
   const [name, setName] = useState<string>("");
   const [files, setFiles] = useState<File[]>([]);
   const [isPending, setIsPending] = useState<boolean>(false);
 
   const handleSubmit = useCallback(async () => {
     // check if files are empty
+    let errorText = "";
     if (!files.length) {
-      ToastQueue.negative("At least one file is required");
+      errorText = "At least one file is required.";
     }
     if (!name) {
-      ToastQueue.negative("Model name is required");
+      if (errorText) {
+        errorText += " ";
+      }
+      errorText += "Name is required.";
     }
     if (!files.length || !name) {
+      ToastQueue.negative(errorText);
       return;
     }
     // display loading state
@@ -67,15 +72,12 @@ export default function ModelUploadDialog({
     <Dialog>
       <Heading>Create Project</Heading>
       <Content>
-        <Form
-          validationBehavior="native"
-          width="size-4000"
-        >
+        <Form validationBehavior="native" width="size-4000">
           <TextField
             label="Model name"
             name="name"
             value={name}
-            onChange={(e) =>  setName(e)}
+            onChange={(e) => setName(e)}
             isRequired
             validate={(value) => (value ? "" : "Name is required")}
           />
@@ -106,11 +108,12 @@ export default function ModelUploadDialog({
             <Heading>Drag and drop here</Heading>
             <Content>
               <FileTrigger
+                allowsMultiple
                 onSelect={(e) => {
                   if (!!e) {
                     const newFiles = Array.from(e).filter(
                       (file) =>
-                        files.findIndex((f) => f.name === file.name) === -1
+                        files.findIndex((f) => f.name === file.name) === -1,
                     );
                     if (newFiles.length != 0) {
                       // add new files to existing files
