@@ -4,7 +4,6 @@ import {
   ActionButton,
   ActionMenu,
   DialogTrigger,
-  Flex,
   Item,
   ListView,
   Text,
@@ -16,7 +15,6 @@ import DuplicateDialog from "@features/projects/components/DuplicateDialog";
 import EditDialog from "@features/projects/components/EditDialog";
 import { useHandleProjectAction } from "@features/projects/hooks/useHandleProjectAction";
 import { useProjects } from "@features/projects/hooks/useProjects";
-import File from "@spectrum-icons/illustrations/File";
 import { Key, useCallback } from "react";
 
 export default function ProjectList() {
@@ -29,9 +27,9 @@ export default function ProjectList() {
   }, [closeDialog, refetch]);
 
   return (
-    <Flex direction="column" gap="size-100" alignItems="start" flex="1 0">
+    <>
       <DialogTrigger>
-        <ActionButton>Create Project</ActionButton>
+        <ActionButton marginBottom="size-100">Create Project</ActionButton>
         {(close) => (
           <CreateProjectDialog
             close={() => {
@@ -42,15 +40,15 @@ export default function ProjectList() {
         )}
       </DialogTrigger>
       <ListView
-        width="100%"
         minHeight="size-3000"
-        selectionMode="multiple"
+        selectionMode="single"
+        items={projects}
         renderEmptyState={() => (isLoading ? <Loading /> : <NoData />)}
         selectionStyle="highlight"
+        overflowMode="truncate"
       >
-        {projects.map((project) => (
+        {(project) => (
           <Item key={project.id} textValue={project.name}>
-            <File />
             <Text>{project.name}</Text>
             <ActionMenu
               onAction={(action: Key) => dispatchAction(project.id, action)}
@@ -66,7 +64,7 @@ export default function ProjectList() {
               </Item>
             </ActionMenu>
           </Item>
-        ))}
+        )}
       </ListView>
       <EditDialog
         open={dialogState.edit}
@@ -83,6 +81,6 @@ export default function ProjectList() {
         close={handleCloseActionDialog}
         projectId={dialogState.projectId}
       />
-    </Flex>
+    </>
   );
 }
