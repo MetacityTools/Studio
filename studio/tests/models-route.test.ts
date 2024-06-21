@@ -1,7 +1,6 @@
 "use server";
 
 import { GET } from "@app/api/models/[model]/data/[file]/route";
-import { deleteModel } from "@features/models/mutations/deleteModel";
 import { expect } from "vitest";
 import { POST } from "../app/api/models/route";
 import { testWithFixtures } from "./helpers";
@@ -69,6 +68,4 @@ testWithFixtures("GET /models/[model]/data/[file]", async ({ model, file }) => {
 
   expect(response.status).toBe(200);
   expect(body).toBe("test");
-
-  await deleteModel(model.id);
 });
