@@ -4,7 +4,6 @@ import {
   ActionButton,
   ActionMenu,
   DialogTrigger,
-  Flex,
   Item,
   ListView,
   Text,
@@ -40,9 +39,9 @@ export default function ModelList() {
   }
 
   return (
-    <Flex direction="column" gap="size-100" alignItems="start" flex="1 0">
+    <>
       <DialogTrigger>
-        <ActionButton>Upload New Model</ActionButton>
+        <ActionButton marginBottom="size-100">Upload New Model</ActionButton>
         {(close) => (
           <ModelUploadDialog
             close={() => {
@@ -53,8 +52,7 @@ export default function ModelList() {
         )}
       </DialogTrigger>
       <ListView
-        width="100%"
-      minHeight="size-3000"
+        minHeight="size-3000"
         aria-label="ListView"
         renderEmptyState={() => <NoData />}
       >
@@ -82,8 +80,8 @@ export default function ModelList() {
                 <Text>View</Text>
               </Item>
               <Item key="rename" textValue="Rename">
-                  <Text>Rename</Text>
-                </Item>
+                <Text>Rename</Text>
+              </Item>
               <Item key="download" textValue="Download">
                 <Text>Download</Text>
               </Item>
@@ -120,6 +118,6 @@ export default function ModelList() {
         }}
         modelId={modelId}
       />
-    </Flex>
+    </>
   );
 }

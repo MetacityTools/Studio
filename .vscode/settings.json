@@ -9,7 +9,12 @@
     "source.organizeImports": "always",
     "source.fixAll.eslint": "always"
   },
-  "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"],
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ],
   "jest.runMode": "on-demand",
   "git-blame.gitWebUrl": ""
 }
