@@ -7,26 +7,26 @@ import {
   Content,
   Dialog,
   DropZone,
-  FileTrigger, Form,
+  FileTrigger,
+  Flex,
+  Form,
   Heading,
-  IllustratedMessage, Item,
+  Item,
   ListView,
   Text,
-  TextField
+  TextField,
 } from "@adobe/react-spectrum";
+
 import { ToastQueue } from "@react-spectrum/toast";
+import { DropEvent } from "@react-types/shared";
 import File from "@spectrum-icons/illustrations/File";
-import NotFound from "@spectrum-icons/illustrations/NotFound";
-import Upload from "@spectrum-icons/illustrations/Upload";
-import { useCallback, useState } from "react";
+import { Dispatch, Key, SetStateAction, useCallback, useState } from "react";
 
 type UploadModelDialogProps = {
   close: () => void;
 };
 
-export default function ModelUploadDialog({
-  close,
-}: UploadModelDialogProps) {
+export default function ModelUploadDialog({ close }: UploadModelDialogProps) {
   const [name, setName] = useState<string>("");
   const [files, setFiles] = useState<File[]>([]);
   const [isPending, setIsPending] = useState<boolean>(false);
@@ -56,10 +56,10 @@ export default function ModelUploadDialog({
       method: "POST",
       body: formData,
     });
-    const data = await response.json();
     if (response.ok) {
       close();
     } else {
+      ToastQueue.negative("Failed to upload model");
     }
   }, [name, files, close]);
 
@@ -67,92 +67,20 @@ export default function ModelUploadDialog({
     <Dialog>
       <Heading>Create Project</Heading>
       <Content>
-        <Form
-          validationBehavior="native"
-          width="size-4000"
-        >
+        <Form validationBehavior="native" width="size-4000">
           <TextField
             label="Model name"
             name="name"
             value={name}
-            onChange={(e) =>  setName(e)}
+            onChange={(e) => setName(e)}
             isRequired
             validate={(value) => (value ? "" : "Name is required")}
           />
         </Form>
-        <DropZone
-          width="size-4000"
-          isFilled={!!files.length}
-          replaceMessage="Drop file to add"
-          onDrop={async (e) => {
-            const newFiles = [];
-            for (const item of e.items) {
-              if (
-                item.kind === "file" &&
-                files.findIndex((file) => file.name === item.name) === -1 // check if file already exists
-              ) {
-                newFiles.push(await item.getFile());
-              }
-            }
-
-            if (newFiles.length != 0) {
-              // add new files to existing files
-              setFiles([...files, ...newFiles]);
-            }
-          }}
-        >
-          <IllustratedMessage>
-            <Upload />
-            <Heading>Drag and drop here</Heading>
-            <Content>
-              <FileTrigger
-                onSelect={(e) => {
-                  if (!!e) {
-                    const newFiles = Array.from(e).filter(
-                      (file) =>
-                        files.findIndex((f) => f.name === file.name) === -1
-                    );
-                    if (newFiles.length != 0) {
-                      // add new files to existing files
-                      setFiles([...files, ...newFiles]);
-                    }
-                  }
-                }}
-              >
-                <Button variant="primary">Browse</Button>
-              </FileTrigger>
-            </Content>
-          </IllustratedMessage>
-        </DropZone>
-        <ListView
-          minHeight="size-3000"
-          aria-label="ListView multiple selection example"
-          renderEmptyState={() => (
-            <IllustratedMessage>
-              <NotFound />
-              <Heading>No Data</Heading>
-              <Content>No files have been selected yet</Content>
-            </IllustratedMessage>
-          )}
-        >
-          {files.map((file) => (
-            <Item key={file.name} textValue={file.name}>
-              <File />
-              <Text>{file.name}</Text>
-              <ActionMenu
-                onAction={(key) => {
-                  // delete file from list
-                  key === "delete" &&
-                    setFiles(files.filter((f) => f.name !== file.name));
-                }}
-              >
-                <Item key="delete" textValue="Delete">
-                  <Text>Delete</Text>
-                </Item>
-              </ActionMenu>
-            </Item>
-          ))}
-        </ListView>
+        <Flex direction="column" gap="size-100" marginY="size-100">
+          <DialogDropZone files={files} setFiles={setFiles} />
+          <FileList files={files} setFiles={setFiles} />
+        </Flex>
       </Content>
       <ButtonGroup marginTop={20}>
         <Button variant="secondary" onPress={close}>
@@ -168,5 +96,107 @@ export default function ModelUploadDialog({
         </Button>
       </ButtonGroup>
     </Dialog>
+  );
+}
+
+type DialogDropZoneProps = {
+  files: File[];
+  setFiles: Dispatch<SetStateAction<File[]>>;
+};
+
+function DialogDropZone(props: DialogDropZoneProps) {
+  const { files, setFiles } = props;
+
+  const handleDrop = useCallback(
+    async (e: DropEvent) => {
+      const newFiles = [];
+      for (const item of e.items) {
+        if (
+          item.kind === "file" &&
+          files.findIndex((file) => file.name === item.name) === -1 // check if file already exists
+        ) {
+          newFiles.push(await item.getFile());
+        }
+      }
+
+      if (newFiles.length != 0) {
+        // add new files to existing files
+        setFiles([...files, ...newFiles]);
+      }
+    },
+    [files, setFiles],
+  );
+
+  const handleSelect = useCallback(
+    (e: FileList | null) => {
+      if (!!e) {
+        const newFiles = Array.from(e).filter(
+          (file) => files.findIndex((f) => f.name === file.name) === -1,
+        );
+        if (newFiles.length != 0) {
+          // add new files to existing files
+          setFiles([...files, ...newFiles]);
+        }
+      }
+    },
+    [files, setFiles],
+  );
+
+  return (
+    <DropZone
+      isFilled={!!files.length}
+      replaceMessage="Drop file to add"
+      onDrop={handleDrop}
+    >
+      <FileTrigger onSelect={handleSelect} allowsMultiple>
+        <Content>Drop files here or</Content>
+        <Button variant="primary" marginTop="size-100">
+          Select Files
+        </Button>
+      </FileTrigger>
+    </DropZone>
+  );
+}
+
+function NoSelectedData() {
+  return <Text marginTop="size-0">Nothing selected yet</Text>;
+}
+
+type FileListProps = {
+  files: File[];
+  setFiles: Dispatch<SetStateAction<File[]>>;
+};
+
+function FileList(props: FileListProps) {
+  const { files, setFiles } = props;
+
+  const handleAction = useCallback(
+    (key: Key, file: File) => {
+      // delete file from list
+      key === "delete" && setFiles(files.filter((f) => f.name !== file.name));
+    },
+    [files, setFiles],
+  );
+
+  return (
+    <ListView
+      items={files}
+      width="100%"
+      minHeight="size-600"
+      aria-label="ListView multiple selection example"
+      renderEmptyState={() => <NoSelectedData />}
+    >
+      {(file) => (
+        <Item key={file.name} textValue={file.name}>
+          <File />
+          <Text>{file.name}</Text>
+          <ActionMenu onAction={(key) => handleAction(key, file)}>
+            <Item key="delete" textValue="Delete">
+              <Text>Delete</Text>
+            </Item>
+          </ActionMenu>
+        </Item>
+      )}
+    </ListView>
   );
 }

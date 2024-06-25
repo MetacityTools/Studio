@@ -31,7 +31,7 @@ export async function canEditModel() {
   return !!user;
 }
 
-export async function canEditModelMetadata() {
+export async function canEditMetadata() {
   const user = await getUserToken();
   return !!user;
 }

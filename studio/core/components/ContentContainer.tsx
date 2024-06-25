@@ -13,7 +13,6 @@ export const ContentContainer = ({ children }: ContentContainerProps) => {
       gap="size-100"
       justifyContent="start"
       alignItems="start"
-      marginX="size-200"
       marginY="size-200"
     >
       {children}
