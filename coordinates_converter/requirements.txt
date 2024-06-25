@@ -1,0 +1,2 @@
+geopandas==0.14.4
+fastapi==0.111.0
