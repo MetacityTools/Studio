@@ -1,4 +1,4 @@
-name: Metacity Studio Deploy
+name: Metacity Studio Build
 
 on:
   workflow_call:
