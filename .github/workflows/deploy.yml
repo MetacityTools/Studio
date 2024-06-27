@@ -2,7 +2,7 @@ name: Metacity Studio Deploy
 
 on:
   push:
-    branch:
+    branches:
       - dev
 
 jobs:
