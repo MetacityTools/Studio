@@ -12,7 +12,7 @@ on:
     paths:
       - "studio/**"
       - ".github/workflows/test.yml"
-  workflow_dispatch:
+  workflow_call:
 
 jobs:
   test:
