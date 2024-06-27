@@ -1,10 +1,7 @@
 name: Metacity Studio Deploy
 
 on:
-  push:
-    branches:
-      - release
-      - feature/deployment
+  workflow_call:
 
 jobs:
   test:
