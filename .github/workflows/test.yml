@@ -1,12 +1,6 @@
 name: Metacity Studio Test
 
 on:
-  push:
-    branches:
-      - dev
-    paths:
-      - "studio/**"
-      - ".github/workflows/test.yml"
   pull_request:
     types: [opened, reopened, synchronize]
     paths:
