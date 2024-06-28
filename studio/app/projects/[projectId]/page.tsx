@@ -36,7 +36,7 @@ function ProjectPage({ params }: ProjectPageProps) {
         />
       </View>
       <View gridArea="content" overflow="hidden" width="100%" height="100%">
-        <Editor />
+        <Editor projectId={sanitizedId} />
       </View>
     </Flex>
   );

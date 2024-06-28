@@ -33,7 +33,6 @@ export default function EditDialog({
 
   useEffect(() => {
     if (data) {
-      console.log("data", data);
       setName(data.name);
       setDescription(data.description);
     }

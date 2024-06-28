@@ -1,4 +1,13 @@
-import { Button, ButtonGroup, Content, Dialog, DialogContainer, Form, Heading, TextField } from "@adobe/react-spectrum";
+import {
+  Button,
+  ButtonGroup,
+  Content,
+  Dialog,
+  DialogContainer,
+  Form,
+  Heading,
+  TextField,
+} from "@adobe/react-spectrum";
 import { ToastQueue } from "@react-spectrum/toast";
 import { useCallback, useEffect, useState } from "react";
 import { useModel } from "../hooks/useModel";
@@ -21,7 +30,6 @@ export default function ModelRenameDialog({
 
   useEffect(() => {
     if (data) {
-      console.log("data", data);
       setName(data.name);
     }
   }, [data]);
@@ -48,39 +56,38 @@ export default function ModelRenameDialog({
 
   return (
     <DialogContainer onDismiss={close}>
-      {(open && modelId) && (
+      {open && modelId && (
         <Dialog>
-        <Heading>Rename Model</Heading>
-        <Content>
-          <Form maxWidth="size-6000" validationBehavior="native">
-            <TextField
-              label="Project name"
-              name="name"
-              isRequired
-              validate={(value) => {
-                if (!value) {
-                  return "Project name is required";
-                }
-              }}
-              value={name}
-              onChange={setName}
-            />
-            
-          </Form>
-        </Content>
-        <ButtonGroup marginTop={20}>
-          <Button variant="secondary" onPress={close}>
-            Cancel
-          </Button>
-          <Button
-            variant="accent"
-            isPending={inProgress}
-            onPress={handleRename}
-          >
-            Rename
-          </Button>
-        </ButtonGroup>
-      </Dialog>
+          <Heading>Rename Model</Heading>
+          <Content>
+            <Form maxWidth="size-6000" validationBehavior="native">
+              <TextField
+                label="Project name"
+                name="name"
+                isRequired
+                validate={(value) => {
+                  if (!value) {
+                    return "Project name is required";
+                  }
+                }}
+                value={name}
+                onChange={setName}
+              />
+            </Form>
+          </Content>
+          <ButtonGroup marginTop={20}>
+            <Button variant="secondary" onPress={close}>
+              Cancel
+            </Button>
+            <Button
+              variant="accent"
+              isPending={inProgress}
+              onPress={handleRename}
+            >
+              Rename
+            </Button>
+          </ButtonGroup>
+        </Dialog>
       )}
     </DialogContainer>
   );
