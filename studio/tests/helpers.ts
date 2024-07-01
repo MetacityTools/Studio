@@ -1,3 +1,4 @@
+import { Embed } from "@features/db/entities/embed";
 import { Metadata } from "@features/db/entities/metadata";
 import { Model } from "@features/db/entities/model";
 import { Project } from "@features/db/entities/project";
@@ -19,6 +20,7 @@ import { test } from "vitest";
 interface Fixtures {
   user: User;
   project: Project;
+  embed: Embed;
   model: Model;
   file: File;
   metadata: Metadata;
@@ -90,6 +92,18 @@ export const testWithFixtures = test.extend<Fixtures>({
     await modelRepository.delete({
       id: model.id,
     });
+  },
+
+  embed: async ({ project }, use) => {
+    const embedRepository = await injectRepository(Embed);
+
+    const embed = await embedRepository.save({
+      project: { id: project.id },
+    });
+
+    await use(embed);
+
+    await embedRepository.remove(embed);
   },
 
   metadata: async ({ project, model, user }, use) => {
