@@ -137,6 +137,6 @@ async def convert_gltf(file: UploadFile, crsTarget: str, crsSource: str):
     return FileResponse(
         output_name,
         media_type="application/octet-stream",
-        filename="result.gltf",
+        filename=output_name,
         background=BackgroundTask(cleanup),
     )
