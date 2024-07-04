@@ -45,5 +45,6 @@ async function downloadModelArchive(modelId: number) {
     const data = await readFile(file, bucketName);
     await archive.set(file, data);
   }
+
   return archive.to_blob().stream();
 }

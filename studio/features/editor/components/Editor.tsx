@@ -13,8 +13,9 @@ import Code from "@spectrum-icons/workflow/Code";
 import Data from "@spectrum-icons/workflow/Data";
 import { Allotment } from "allotment";
 import "allotment/dist/style.css";
+import { CanvasWrapper } from "./Canvas/CanvasWrapper";
 import EditorMetadata from "./EditorMetadata";
-import EditorModels from "./EditorModels";
+import EditorModels from "./EditorModelTab/EditorModels";
 import EditorStyle from "./EditorStyle";
 
 type EditorProps = SidePanelProps;
@@ -26,7 +27,7 @@ export default function Editor(props: EditorProps) {
         <SidePanel {...props} />
       </Allotment.Pane>
       <Allotment.Pane>
-        <div />
+        <CanvasWrapper />
       </Allotment.Pane>
     </Allotment>
   );
