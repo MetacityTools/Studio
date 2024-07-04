@@ -10,3 +10,10 @@ export function getUserModelBucketName(
 ) {
   return getUserBucketName(userId, `models/${modelId}`);
 }
+
+export function getUserEmbedBucketName(
+  userId: string,
+  embedId: string | number,
+) {
+  return getUserBucketName(userId, `embeds/${embedId}`);
+}
