@@ -17,6 +17,7 @@ import ModelUploadDialog from "@features/models/components/ModelUploadDialog";
 import File from "@spectrum-icons/illustrations/File";
 import { Key, useCallback, useState } from "react";
 import { getModelsByUser } from "../queries/getModelsByUser";
+import { downloadModelArchiveFile } from "../utils/downloadModel";
 
 export default function ModelList() {
   const { items, isLoading, reload } = useAsyncList<Model>({
@@ -41,7 +42,7 @@ export default function ModelList() {
       setDeleteDialogOpen(true);
       setSelectedModelId(modelId);
     } else if (key === "download") {
-      downloadModelArchive(modelId);
+      downloadModelArchiveFile(modelId);
     } else if (key === "rename") {
       setRenameDialogOpen(true);
       setSelectedModelId(modelId);
@@ -97,18 +98,4 @@ export default function ModelList() {
       />
     </>
   );
-}
-
-async function downloadModelArchive(modelId: number) {
-  const response = await fetch(`/api/models/${modelId}/data`, {
-    method: "GET",
-  });
-  const data = await response.blob();
-  const link = document.createElement("a");
-  link.href = URL.createObjectURL(data);
-  link.download = "model.zip";
-  link.style.display = "none";
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
 }

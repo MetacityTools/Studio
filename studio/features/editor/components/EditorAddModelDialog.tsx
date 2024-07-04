@@ -8,18 +8,20 @@ import {
   Dialog,
   Flex,
   Heading,
+  Item,
+  ListView,
   Selection,
+  Text,
+  useAsyncList,
 } from "@adobe/react-spectrum";
-
-import { Item, ListView, Text } from "@adobe/react-spectrum";
 import { NoData } from "@core/components/Empty";
-import File from "@spectrum-icons/illustrations/File";
-
-import { useCallback } from "react";
-
-import { useAsyncList } from "@adobe/react-spectrum";
 import { Model } from "@features/db/entities/model";
 import { getModelsNotInProject } from "@features/models/queries/getModelsNotInProject";
+import { fetchModelArchive } from "@features/models/utils/downloadModel";
+import { ToastQueue } from "@react-spectrum/toast";
+import File from "@spectrum-icons/illustrations/File";
+import { useCallback } from "react";
+import { readFileZipContents } from "../utils/readZipContents";
 
 type EditorAddModelDialogProps = {
   projectId: number;
@@ -30,13 +32,33 @@ export default function EditorAddModelDialog({
   projectId,
   close,
 }: EditorAddModelDialogProps) {
-  const handleSubmit = useCallback(async () => {}, []);
-
   const sourceList = useAsyncList<Model>({
     load: async () => {
       return { items: await getModelsNotInProject({ projectId }) };
     },
   });
+
+  const handleSubmit = useCallback(async () => {
+    const modelList = Array.from(sourceList.selectedKeys);
+    console.log(modelList);
+
+    if (modelList.length === 0) {
+      close();
+      ToastQueue.info("No models selected");
+      return;
+    }
+
+    const fileMap = new Map<string, Blob>();
+
+    // Add models to project
+    for (const modelId of modelList) {
+      const id = parseInt(modelId as string);
+      const blob = await fetchModelArchive(id);
+      readFileZipContents(blob, fileMap);
+    }
+
+    //TODO load models from blobs here into editor context
+  }, [sourceList, close]);
 
   return (
     <Dialog>
@@ -48,9 +70,9 @@ export default function EditorAddModelDialog({
               <Heading level={5}>Adding Models to Project</Heading>
               <Content>
                 <Text>
-                  The editor begins downloading the selected files and converts
-                  them to a format that is compatible with the editor. This
-                  process may take some time.
+                  The editor downloads the selected files and converts them to a
+                  format that is compatible with the editor. This process may
+                  take some time.
                 </Text>
               </Content>
             </ContextualHelp>

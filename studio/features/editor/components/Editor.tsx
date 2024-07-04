@@ -7,6 +7,7 @@ import {
   Text,
   View,
 } from "@adobe/react-spectrum";
+import { ToastContainer } from "@react-spectrum/toast";
 import Brush from "@spectrum-icons/workflow/Brush";
 import Code from "@spectrum-icons/workflow/Code";
 import Data from "@spectrum-icons/workflow/Data";
@@ -79,6 +80,7 @@ function SidePanel(props: SidePanelProps) {
           </TabPanels>
         </View>
       </Tabs>
+      <ToastContainer />
     </PositioningContainer>
   );
 }

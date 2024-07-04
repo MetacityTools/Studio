@@ -25,6 +25,8 @@ export default function EditorModels({ projectId }: EditorModelsProps) {
     },
   });
 
+  const handleAddModels = () => {};
+
   return (
     <View position="relative" overflow="auto" margin="size-100" height="100%">
       <View>
