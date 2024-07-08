@@ -4,6 +4,9 @@ import struct
 import numpy as np
 import pygltflib
 import pyrr
+import logging
+
+logger = logging.getLogger("uvicorn.error")
 
 
 def count_vertices(gltf):
@@ -43,13 +46,13 @@ def get_triangles(gltf, primitive):
     data = gltf.get_data_from_buffer_uri(buffer.uri)
 
     triangles = []
-    for i in range(accessor.count // 3):
+    for i in range(accessor.count):
         index = (
-            bufferView.byteOffset + accessor.byteOffset + i * 6
+            bufferView.byteOffset + accessor.byteOffset + i * 2
         )  # the location in the buffer of this vertex
-        d = data[index : index + 6]  # the vertex data
-        v = struct.unpack("<HHH", d)  # convert from base64 to three uints
-        triangles.append(v)
+        d = data[index : index + 2]  # the vertex data
+        v = struct.unpack("<H", d)  # convert from base64 to one uint
+        triangles.append(v[0])
     return np.array(triangles, dtype=np.uint16)
 
 
@@ -118,7 +121,7 @@ def gltf_transform(gltf_input, transformer=None):
 
                 indices = get_triangles(gltf_input, primitive)
 
-                indices_bytes = indices.flatten().tobytes()
+                indices_bytes = indices.tobytes()
                 vertices_bytes = vertices_transformed.tobytes()
 
                 primitives_output.append(
@@ -127,6 +130,7 @@ def gltf_transform(gltf_input, transformer=None):
                             POSITION=buffer_view_counter + 1
                         ),
                         indices=buffer_view_counter,
+                        extras=primitive.extras,
                     )
                 )
 
@@ -171,8 +175,13 @@ def gltf_transform(gltf_input, transformer=None):
                 buffer_offset += len(vertices_bytes)
                 data += indices_bytes + vertices_bytes
                 buffer_view_counter += 2
+
             gltf_output.meshes.append(
-                pygltflib.Mesh(name=f"{mesh_input.name}", primitives=primitives_output)
+                pygltflib.Mesh(
+                    name=f"{mesh_input.name}",
+                    primitives=primitives_output,
+                    extras=mesh_input.extras,
+                )
             )
         gltf_output.nodes[i].translation = [0, 0, 0]
         gltf_output.nodes[i].rotation = [0, 0, 0, 1]
