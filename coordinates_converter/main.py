@@ -16,6 +16,7 @@ from pyproj import CRS, Transformer
 app = FastAPI()
 logger = logging.getLogger("uvicorn.error")
 
+
 def convert_gdf(gdf, crsTarget, crsSource, filename):
     if not crsTarget:
         logger("No target crs provided, using EPSG:4326 as fallback")
@@ -66,7 +67,9 @@ async def convert_geojson(
         logger.info("Cleaning up")
         os.remove(converted_geojson)
 
-    outname = f'{file.filename.split(".")[0]}_{crsTarget.replace(":", "").lower()}.geojson' 
+    outname = (
+        f'{file.filename.split(".")[0]}_{crsTarget.replace(":", "").lower()}.geojson'
+    )
 
     return FileResponse(
         converted_geojson,
@@ -94,8 +97,8 @@ async def convert_shapefile(
         logger.info("Cleaning up")
         shutil.rmtree(converted_filename)
         os.remove(converted_shapefile_archive)
-        
-    outname = f'{file.filename.split(".")[0]}_{crsTarget.replace(":", "").lower()}.zip' 
+
+    outname = f'{file.filename.split(".")[0]}_{crsTarget.replace(":", "").lower()}.zip'
 
     return FileResponse(
         converted_shapefile_archive,
@@ -111,9 +114,16 @@ async def convert_gltf(file: UploadFile, crsTarget: str, crsSource: str):
     name, suffix = file.filename.split(".")
     input_name = f"{name}_{uuid4()}.gltf"
 
-    transformer = Transformer.from_crs(
-        CRS.from_string(crsSource), CRS.from_string(crsTarget)
-    )
+    try:
+        transformer = Transformer.from_crs(
+            CRS.from_string(crsSource), CRS.from_string(crsTarget)
+        )
+    except CRSError as e:
+        logger.error(e)
+        raise HTTPException(
+            status_code=400,
+            detail=f"Invalid CRS transformation: {crsSource} to {crsTarget}",
+        )
 
     if suffix != "glb":
         with open(input_name, "w") as input_file:
@@ -140,6 +150,6 @@ async def convert_gltf(file: UploadFile, crsTarget: str, crsSource: str):
     return FileResponse(
         output_name,
         media_type="application/octet-stream",
-        filename=output_name,
+        filename=f'{name}_{crsTarget.replace(":", "").lower()}.gltf',
         background=BackgroundTask(cleanup),
     )
