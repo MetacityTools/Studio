@@ -189,4 +189,5 @@ def gltf_transform(gltf_input, transformer=None):
     gltf_output.buffers[0].byteLength = buffer_offset
     data = base64.b64encode(data).decode("utf-8")
     gltf_output.buffers[0].uri = f"data:application/octet-stream;base64,{data}"
+    gltf_output.extras = gltf_input.extras # copy over any extras
     return gltf_output

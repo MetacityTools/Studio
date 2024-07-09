@@ -7,7 +7,7 @@ from uuid import uuid4
 import geopandas as gpd
 import pygltflib
 from fastapi import FastAPI, HTTPException, UploadFile
-from gltf import gltf_transform
+from .gltf import gltf_transform
 from pyproj.exceptions import CRSError
 from starlette.background import BackgroundTask
 from starlette.responses import FileResponse
@@ -15,7 +15,6 @@ from pyproj import CRS, Transformer
 
 app = FastAPI()
 logger = logging.getLogger("uvicorn.error")
-
 
 def convert_gdf(gdf, crsTarget, crsSource, filename):
     if not crsTarget:
@@ -47,7 +46,7 @@ def convert_gdf(gdf, crsTarget, crsSource, filename):
         gdf_converted = gdf.to_crs(crsTarget)
     except CRSError as e:
         logger.error(e)
-        raise HTTPException(status_code=400, detail=f"Invalid target CRS: {crsSource}")
+        raise HTTPException(status_code=400, detail=f"Invalid target CRS: {crsTarget}")
     return gdf_converted, converted_filename
 
 
@@ -67,10 +66,12 @@ async def convert_geojson(
         logger.info("Cleaning up")
         os.remove(converted_geojson)
 
+    outname = f'{file.filename.split(".")[0]}_{crsTarget.replace(":", "").lower()}.geojson' 
+
     return FileResponse(
         converted_geojson,
         media_type="application/octet-stream",
-        filename=converted_geojson,
+        filename=outname,
         background=BackgroundTask(cleanup),
     )
 
@@ -93,18 +94,20 @@ async def convert_shapefile(
         logger.info("Cleaning up")
         shutil.rmtree(converted_filename)
         os.remove(converted_shapefile_archive)
+        
+    outname = f'{file.filename.split(".")[0]}_{crsTarget.replace(":", "").lower()}.zip' 
 
     return FileResponse(
         converted_shapefile_archive,
         media_type="application/octet-stream",
-        filename=converted_shapefile_archive,
+        filename=outname,
         background=BackgroundTask(cleanup),
     )
 
 
 @app.post("/convert_gltf")
 async def convert_gltf(file: UploadFile, crsTarget: str, crsSource: str):
-    # logger.info(f"Converting {file.filename} from {crsSource} to {crsTarget}")
+    logger.info(f"Converting {file.filename} from {crsSource} to {crsTarget}")
     name, suffix = file.filename.split(".")
     input_name = f"{name}_{uuid4()}.gltf"
 

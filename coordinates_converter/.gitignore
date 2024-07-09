@@ -3,3 +3,4 @@ __pycache__
 *.geojson
 *.gltf
 *.glb
+.pytest_cache
