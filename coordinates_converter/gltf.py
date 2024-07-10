@@ -34,7 +34,7 @@ def get_vertices(gltf, primitive):
         )  # the location in the buffer of this vertex
         d = data[index : index + 12]  # the vertex data
         v = struct.unpack("<fff", d)  # convert from base64 to three floats
-        vertices.append(v)
+        vertices.append((*v, 1.0))  # add the w component
     return np.array(vertices, dtype=np.float32)
 
 
@@ -102,17 +102,14 @@ def gltf_transform(gltf_input, transformer=None):
                 node, pyrr.matrix44.create_identity(), gltf_input.nodes
             )
             primitives_output = []
+            transform = (
+                (lambda vertex: transformer.transform(*(vertex @ mat)[:3]))
+                if transformer
+                else (lambda vertex: (vertex @ mat)[:3])
+            )
+            
             for primitive in mesh_input.primitives:
                 vertices = get_vertices(gltf_input, primitive)
-                transform = (
-                    (
-                        lambda vertex: transformer.transform(
-                            *pyrr.matrix44.apply_to_vector(mat, vertex)
-                        )
-                    )
-                    if transformer
-                    else (lambda vertex: pyrr.matrix44.apply_to_vector(mat, vertex))
-                )
 
                 vertices_transformed = np.array(
                     ([transform(vertex) for vertex in vertices]),
