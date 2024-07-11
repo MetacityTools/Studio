@@ -8,6 +8,12 @@
 	"workspaceFolder": "/workspace",
 	// Features to add to the dev container. More info: https://cont	ainers.dev/features.
 	"features": {
+		"ghcr.io/devcontainers/features/node:1": {
+			"version": "20"
+		},
+		"ghcr.io/devcontainers/features/python:1": {
+			"version": "3.12"
+		},
 		"ghcr.io/devcontainers/features/docker-in-docker:2": {}
 	},
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
