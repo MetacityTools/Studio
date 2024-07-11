@@ -1,4 +1,5 @@
 import { Config } from "@features/config";
+import { ZipArchive } from "@shortercode/webzip";
 import { Client } from "minio";
 import { Readable } from "node:stream";
 
@@ -125,4 +126,16 @@ export async function listFilesInBucket(directory: string) {
       reject(err);
     });
   });
+}
+
+export async function getFilesInBucketAsZip(directory: string) {
+  const files = await listFilesInBucket(directory);
+  const archive = new ZipArchive();
+
+  for (const file of files) {
+    const data = await readFile(file, directory);
+    await archive.set(file, data);
+  }
+
+  return archive;
 }

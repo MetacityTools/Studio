@@ -11,6 +11,7 @@ import {
 } from "@adobe/react-spectrum";
 import { useState } from "react";
 import { useModel } from "../hooks/useModel";
+import { convertModel } from "../mutations/convertModel";
 
 type ModelConvertDialogProps = {
   open: boolean;
@@ -25,11 +26,19 @@ export default function ModelConvertDialog({
 }: ModelConvertDialogProps) {
   const { data: model, isLoading } = useModel(modelId);
 
+  const [isConverting, setIsConverting] = useState<boolean>(false);
+
   const [targetInputValue, setTargetInputValue] = useState<string>("4326");
 
-  async function convertModel(modelId: number, targetEPSG: string) {
-    // TODO: call convert
-    console.log(`convertModel called ${targetEPSG}`);
+  async function runConvertModel(modelId: number, targetEPSG: string) {
+    setIsConverting(true);
+
+    const response = await convertModel(modelId, targetEPSG);
+
+    console.log(`Converting response: ${response}`);
+
+    setIsConverting(false);
+    close();
   }
 
   return (
@@ -50,9 +59,10 @@ export default function ModelConvertDialog({
             </Button>
             <Button
               variant="primary"
-              onPress={() => convertModel(model.id, targetInputValue)}
+              onPress={() => runConvertModel(model.id, targetInputValue)}
+              isDisabled={isConverting}
             >
-              Convert
+              {isConverting ? "Converting..." : "Convert"}
             </Button>
           </ButtonGroup>
         </Dialog>

@@ -21,7 +21,12 @@ const minio: Minio.ClientOptions = {
   port: parseInt(process.env["MINIO_PORT"] ?? "9000"),
 };
 
+const converter = {
+  endpoint: process.env["CONVERTED_ENDPOINT"] ?? "http://localhost:8000",
+};
+
 export const Config = {
   db,
   minio,
+  converter,
 };
