@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Button,
   ButtonGroup,
@@ -14,6 +16,11 @@ import {
 } from "@adobe/react-spectrum";
 import { NoData } from "@core/components/Empty";
 import { Model } from "@features/db/entities/model";
+import {
+  CoordinateMode,
+  useImportModels,
+} from "@features/editor/hooks/useImportModels";
+import { load } from "@features/editor/utils/formats/loader";
 import { getModelsNotInProject } from "@features/models/queries/getModelsNotInProject";
 import { fetchModelArchive } from "@features/models/utils/downloadModel";
 import { ToastQueue } from "@react-spectrum/toast";
@@ -30,6 +37,8 @@ export default function EditorAddModelDialog({
   projectId,
   close,
 }: EditorAddModelDialogProps) {
+  const importModels = useImportModels();
+
   const sourceList = useAsyncList<Model>({
     load: async () => {
       return { items: await getModelsNotInProject({ projectId }) };
@@ -38,7 +47,6 @@ export default function EditorAddModelDialog({
 
   const handleSubmit = useCallback(async () => {
     const modelList = Array.from(sourceList.selectedKeys);
-    console.log(modelList);
 
     if (modelList.length === 0) {
       close();
@@ -52,11 +60,15 @@ export default function EditorAddModelDialog({
     for (const modelId of modelList) {
       const id = parseInt(modelId as string);
       const blob = await fetchModelArchive(id);
-      readFileZipContents(blob, fileMap);
+      await readFileZipContents(blob, fileMap);
     }
 
-    //TODO load models from blobs here into editor context
-  }, [sourceList, close]);
+    const data = await load(fileMap);
+    await importModels(data.models, {
+      coordMode: CoordinateMode.Center,
+    });
+    close();
+  }, [sourceList, close, importModels]);
 
   return (
     <Dialog>
@@ -84,6 +96,7 @@ export default function EditorAddModelDialog({
             )}
             onSelectionChange={sourceList.setSelectedKeys}
             items={sourceList.items}
+            aria-label="Models available to add to project"
           >
             {(model) => (
               <Item key={model.id} textValue={model.name}>

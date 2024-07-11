@@ -117,6 +117,10 @@ export function EditorProvider(props: { children: ReactNode }) {
   }, [maxShade, models]);
 
   useEffect(() => {
+    console.log("models", models);
+  }, [models]);
+
+  useEffect(() => {
     const view = renderer.views[activeView].view;
     view.camera.z = camTargetZ;
   }, [activeView, renderer, camTargetZ]);

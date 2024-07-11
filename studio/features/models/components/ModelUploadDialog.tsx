@@ -183,7 +183,7 @@ function FileList(props: FileListProps) {
       items={files}
       width="100%"
       minHeight="size-600"
-      aria-label="ListView multiple selection example"
+      aria-label="Files"
       renderEmptyState={() => <NoSelectedData />}
     >
       {(file) => (

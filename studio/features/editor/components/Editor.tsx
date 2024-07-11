@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Grid,
   Item,
@@ -13,23 +15,28 @@ import Code from "@spectrum-icons/workflow/Code";
 import Data from "@spectrum-icons/workflow/Data";
 import { Allotment } from "allotment";
 import "allotment/dist/style.css";
+import { EditorProvider } from "../providers/EditorProvider";
 import { CanvasWrapper } from "./Canvas/CanvasWrapper";
-import EditorMetadata from "./EditorMetadata";
+import EditorMetadata from "./EditorMetadataTab/EditorMetadata";
 import EditorModels from "./EditorModelTab/EditorModels";
-import EditorStyle from "./EditorStyle";
+import EditorStyle from "./EditorStyleTab/EditorStyle";
 
 type EditorProps = SidePanelProps;
 
 export default function Editor(props: EditorProps) {
   return (
-    <Allotment>
-      <Allotment.Pane snap minSize={100} preferredSize={500}>
-        <SidePanel {...props} />
-      </Allotment.Pane>
-      <Allotment.Pane>
-        <CanvasWrapper />
-      </Allotment.Pane>
-    </Allotment>
+    <EditorProvider>
+      <Allotment>
+        <Allotment.Pane snap minSize={100} preferredSize={500}>
+          <SidePanel {...props} />
+        </Allotment.Pane>
+        <Allotment.Pane>
+          <View width="100%" height="100%" position="relative">
+            <CanvasWrapper />
+          </View>
+        </Allotment.Pane>
+      </Allotment>
+    </EditorProvider>
   );
 }
 
@@ -40,7 +47,7 @@ type SidePanelProps = {
 function SidePanel(props: SidePanelProps) {
   return (
     <PositioningContainer>
-      <Tabs height="100%">
+      <Tabs height="100%" aria-label="Editor tabs">
         <View
           borderBottomWidth="thin"
           borderBottomColor="light"
@@ -48,15 +55,15 @@ function SidePanel(props: SidePanelProps) {
           backgroundColor="gray-50"
         >
           <TabList>
-            <Item key="models">
+            <Item key="models" textValue="Models">
               <Data />
               <Text>Models</Text>
             </Item>
-            <Item key="metadata">
+            <Item key="metadata" textValue="Metadata">
               <Code />
               <Text>Metadata</Text>
             </Item>
-            <Item key="style">
+            <Item key="style" textValue="Style">
               <Brush />
               <Text>Style</Text>
             </Item>

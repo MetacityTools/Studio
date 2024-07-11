@@ -1,3 +1,5 @@
+"use client";
+
 type EditorMetadataProps = {
   projectId: number;
 };

@@ -1,3 +1,5 @@
+"use client";
+
 import * as GL from "@bananagl/bananagl";
 import { GridModel } from "@editor/data/GridModel";
 import { useDarkmode } from "@editor/hooks/useDarkmode";
@@ -16,6 +18,8 @@ export function CanvasWrapper() {
 
   React.useEffect(() => {
     if (canvasRef.current && renderer) {
+      console.log("mounting renderer");
+
       GL.mountRenderer(canvasRef.current, renderer, {}, [
         {
           view: new GL.View(scene),

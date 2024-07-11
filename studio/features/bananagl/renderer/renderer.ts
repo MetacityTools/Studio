@@ -4,7 +4,7 @@ export class Renderer {
   private context?: WebGL2RenderingContext;
   private window_?: Window;
   private onInitCallbacks: (() => void)[] = [];
-  private needsRedraw_ = false;
+  //private needsRedraw_ = false;
 
   constructor(canvas?: HTMLCanvasElement, options?: WebGLContextAttributes) {
     if (canvas) this.init(canvas, options);
@@ -85,7 +85,7 @@ export class Renderer {
   private lastFrameTime = 0;
 
   animationLoop() {
-    if (!this.needsRedraw_) return;
+    //if (!this.needsRedraw_) return;
     if (!this.context) return;
 
     this.running = true;
@@ -101,7 +101,7 @@ export class Renderer {
     this.frameTimeIndex = (this.frameTimeIndex + 1) % this.frameTimeLog.length;
 
     //TODO add handling of needs redraw from outside
-    this.needsRedraw_ = false;
+    //this.needsRedraw_ = false;
     requestAnimationFrame(() => this.animationLoop());
   }
 
@@ -111,7 +111,7 @@ export class Renderer {
     this.afterRenderCallbacks.push(callback);
   }
 
-  set needsRedraw(value: boolean) {
-    this.needsRedraw_ = this.needsRedraw_ || value;
-  }
+  //set needsRedraw(value: boolean) {
+  //  this.needsRedraw_ = this.needsRedraw_ || value;
+  //}
 }

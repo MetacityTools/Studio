@@ -75,6 +75,7 @@ export default function ProjectList() {
         renderEmptyState={() => (isLoading ? <Loading /> : <NoData />)}
         selectionStyle="highlight"
         overflowMode="truncate"
+        aria-label="Projects"
       >
         {(project) => (
           <Item

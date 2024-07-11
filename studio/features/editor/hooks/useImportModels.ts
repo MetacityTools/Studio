@@ -37,8 +37,9 @@ export function useImportModels() {
     const createdModels = [];
 
     //sort out the alignment
-    for (const model of data)
+    for (const model of data) {
       shift = alignModels(model.geometry.position, coordMode, shift);
+    }
 
     //generate geometry and metadata
     for (const model of data) {
@@ -55,7 +56,6 @@ export function useImportModels() {
 
     ctx.setModels(models);
     updateMetadata(models);
-
     return createdModels;
   };
 

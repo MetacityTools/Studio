@@ -1,4 +1,3 @@
-import { Metadata } from "@features/db/entities/metadata";
 import { Model } from "@features/db/entities/model";
 import { Project } from "@features/db/entities/project";
 import { User } from "@features/db/entities/user";
@@ -21,7 +20,6 @@ interface Fixtures {
   project: Project;
   model: Model;
   file: File;
-  metadata: Metadata;
 }
 
 export const testWithFixtures = test.extend<Fixtures>({
@@ -64,7 +62,6 @@ export const testWithFixtures = test.extend<Fixtures>({
 
   model: async ({ user, file }, use) => {
     const modelRepository = await injectRepository(Model);
-    const metadataRepository = await injectRepository(Metadata);
 
     const model = await modelRepository.save({
       name: "Test Model",
@@ -89,27 +86,6 @@ export const testWithFixtures = test.extend<Fixtures>({
 
     await modelRepository.delete({
       id: model.id,
-    });
-  },
-
-  metadata: async ({ project, model, user }, use) => {
-    const metadataRepository = await injectRepository(Metadata);
-
-    const metadata = await metadataRepository.save({
-      model: { id: model.id },
-      project: { id: project.id },
-      user: { id: user.id },
-      object_id: "testObjectId",
-      type: "color",
-      key: "testKey",
-      value: "testValue",
-    });
-
-    await use(metadata);
-
-    await metadataRepository.delete({
-      model_id: model.id,
-      project_id: project.id,
     });
   },
 

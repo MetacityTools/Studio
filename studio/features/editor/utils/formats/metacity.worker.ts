@@ -1,17 +1,20 @@
 //worker to parse models
-import { errorHandler } from './errors';
-import { parse } from './metacity/parse';
+import { errorHandler } from "./errors";
+import { parse } from "./metacity/parse";
 
 self.onmessage = (e) => {
-    errorHandler(process(e.data));
+  errorHandler(process(e.data));
 };
 
 async function process(data: any) {
-    const models = parse(data);
+  const models = parse(data);
 
-    const trnsfrbl = models
-        .map((model) => [model.geometry.position.buffer, model.geometry.submodel.buffer])
-        .flat();
+  const trnsfrbl = models
+    .map((model) => [
+      model.geometry.position.buffer,
+      model.geometry.submodel.buffer,
+    ])
+    .flat();
 
-    (self as any).postMessage(models, trnsfrbl);
+  (self as any).postMessage(models, trnsfrbl);
 }

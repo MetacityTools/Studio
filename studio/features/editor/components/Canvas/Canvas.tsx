@@ -1,3 +1,5 @@
+"use client";
+
 import * as GL from "@bananagl/bananagl";
 import { EditorModel } from "@editor/data/EditorModel";
 import { useRenderer } from "@editor/hooks/useRender";
@@ -76,7 +78,11 @@ export function Canvas(props: CanvasProps) {
       ref={props.canvasRef}
       key="canvas"
       tabIndex={1000}
-      className="w-full h-full outline-none"
+      style={{
+        width: "100%",
+        height: "100%",
+        outline: "none",
+      }}
       onPointerDown={(e) => {
         renderer.controls?.pointerDown(e.nativeEvent);
       }}

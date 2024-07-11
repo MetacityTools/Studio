@@ -1,3 +1,5 @@
+"use client";
+
 import {
   ActionButton,
   DialogTrigger,
@@ -10,7 +12,6 @@ import {
 } from "@adobe/react-spectrum";
 import { NoData } from "@core/components/Empty";
 import { Model } from "@features/db/entities/model";
-import { getModelsByProject } from "@features/models/queries/getModelsByProject";
 import File from "@spectrum-icons/illustrations/File";
 import EditorAddModelDialog from "./EditorAddModelDialog";
 
@@ -19,13 +20,12 @@ type EditorModelsProps = {
 };
 
 export default function EditorModels({ projectId }: EditorModelsProps) {
+  //TODO sync the list of models with the context locally
   const modelList = useAsyncList<Model>({
     load: async () => {
-      return { items: await getModelsByProject({ projectId }) };
+      return { items: [] };
     },
   });
-
-  const handleAddModels = () => {};
 
   return (
     <View position="relative" overflow="auto" margin="size-100" height="100%">
@@ -39,7 +39,7 @@ export default function EditorModels({ projectId }: EditorModelsProps) {
         </DialogTrigger>
         <ListView
           selectionMode="multiple"
-          aria-label="Static ListView items example"
+          aria-label="Models"
           minHeight="size-3000"
           height="100%"
           items={modelList.items}

@@ -64,7 +64,7 @@ export default function ModelList() {
       </DialogTrigger>
       <ListView
         minHeight="size-3000"
-        aria-label="ListView"
+        aria-label="Models"
         renderEmptyState={() => <NoData />}
         items={items}
       >

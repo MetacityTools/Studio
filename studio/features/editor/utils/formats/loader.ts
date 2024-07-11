@@ -1,16 +1,17 @@
+"use client";
+
 import { ModelData, UserInputModel } from "@editor/data/types";
 import { WorkerPool } from "./pool";
 
 export async function load(
-  event: React.ChangeEvent<HTMLInputElement>,
+  files: Map<string, Blob>,
   updateStatus?: (status: string) => void,
 ) {
-  const models = await filterModelFiles(event);
-  const tables = await filterTables(event);
-  const styles = await filterStyles(event);
+  const models = await filterModelFiles(files);
+  const styles = await filterStyles(files);
 
   const modelData = await loadModels(models, updateStatus);
-  return { models: modelData, tables, styles };
+  return { models: modelData, styles };
 }
 
 export async function loadProjectFiles(
@@ -29,14 +30,12 @@ export async function loadProjectFiles(
   return { models, styles };
 }
 
-async function filterStyles(event: React.ChangeEvent<HTMLInputElement>) {
-  const files = event.target.files;
+async function filterStyles(files: Map<string, Blob>) {
   if (!files) return [];
 
   const data = [];
-  for (let i = 0; i < files.length; i++) {
-    const file = files[i];
-    if (file.name.endsWith(".json.metacity") || file.name.endsWith("mcstyle")) {
+  for (const [name, file] of files) {
+    if (name.endsWith(".json.metacity") || name.endsWith("mcstyle")) {
       const content = await file.text();
       try {
         data.push(JSON.parse(content));
@@ -48,22 +47,7 @@ async function filterStyles(event: React.ChangeEvent<HTMLInputElement>) {
   return data;
 }
 
-async function filterTables(event: React.ChangeEvent<HTMLInputElement>) {
-  const files = event.target.files;
-  if (!files) return [];
-  const data = [];
-  for (let i = 0; i < files.length; i++) {
-    const file = files[i];
-    if (file.name.endsWith("csv")) {
-      const content = await file.text();
-      data.push(content);
-    }
-  }
-  return data;
-}
-
-async function filterModelFiles(event: React.ChangeEvent<HTMLInputElement>) {
-  const files = event.target.files;
+async function filterModelFiles(files: Map<string, Blob>) {
   if (!files) return [];
 
   const gltf = await filterGLTF(files);
@@ -74,18 +58,18 @@ async function filterModelFiles(event: React.ChangeEvent<HTMLInputElement>) {
   return [...gltf, ...ifc, ...shapefile, ...metacity];
 }
 
-async function filterMetacity(files: FileList): Promise<UserInputModel[]> {
+async function filterMetacity(
+  files: Map<string, Blob>,
+): Promise<UserInputModel[]> {
   const data = [];
-  for (let i = 0; i < files.length; i++) {
-    const file = files[i];
+  for (const [name, file] of files) {
     if (
-      (file.name.endsWith("metacity") &&
-        !file.name.endsWith("json.metacity")) ||
-      file.name.endsWith("mcmodel")
+      (name.endsWith("metacity") && !name.endsWith("json.metacity")) ||
+      name.endsWith("mcmodel")
     ) {
       const buffer = await file.arrayBuffer();
       data.push({
-        name: file.name,
+        name: name,
         data: {
           buffer,
         },
@@ -95,14 +79,13 @@ async function filterMetacity(files: FileList): Promise<UserInputModel[]> {
   return data;
 }
 
-async function filterGLTF(files: FileList): Promise<UserInputModel[]> {
+async function filterGLTF(files: Map<string, Blob>): Promise<UserInputModel[]> {
   const data = [];
-  for (let i = 0; i < files.length; i++) {
-    const file = files[i];
-    if (file.name.endsWith("gltf") || file.name.endsWith("glb")) {
+  for (const [name, file] of files) {
+    if (name.endsWith("gltf") || name.endsWith("glb")) {
       const buffer = await file.arrayBuffer();
       data.push({
-        name: file.name,
+        name: name,
         data: {
           buffer,
         },
@@ -112,14 +95,13 @@ async function filterGLTF(files: FileList): Promise<UserInputModel[]> {
   return data;
 }
 
-async function filterIFC(files: FileList): Promise<UserInputModel[]> {
+async function filterIFC(files: Map<string, Blob>): Promise<UserInputModel[]> {
   const data = [];
-  for (let i = 0; i < files.length; i++) {
-    const file = files[i];
-    if (file.name.endsWith("ifc")) {
+  for (const [name, file] of files) {
+    if (name.endsWith("ifc")) {
       const buffer = await file.arrayBuffer();
       data.push({
-        name: file.name,
+        name: name,
         data: {
           buffer,
         },
@@ -129,18 +111,19 @@ async function filterIFC(files: FileList): Promise<UserInputModel[]> {
   return data;
 }
 
-async function filterShapefile(files: FileList): Promise<UserInputModel[]> {
+async function filterShapefile(
+  files: Map<string, Blob>,
+): Promise<UserInputModel[]> {
   const data = [];
-  for (let i = 0; i < files.length; i++) {
-    const file = files[i];
-    if (file.name.endsWith("shp")) {
+  for (const [name, file] of files) {
+    if (name.endsWith("shp")) {
       const shp = await file.arrayBuffer();
-      const shx = await getFile(files, file.name.replace(".shp", ".shx"));
-      const dbf = await getFile(files, file.name.replace(".shp", ".dbf"));
-      const prj = await getFile(files, file.name.replace(".shp", ".prj"));
-      const cpg = await getFile(files, file.name.replace(".shp", ".cpg"));
+      const shx = await getFile(files, name.replace(".shp", ".shx"));
+      const dbf = await getFile(files, name.replace(".shp", ".dbf"));
+      const prj = await getFile(files, name.replace(".shp", ".prj"));
+      const cpg = await getFile(files, name.replace(".shp", ".cpg"));
       data.push({
-        name: file.name,
+        name: name,
         data: {
           shp,
           shx,
@@ -154,10 +137,9 @@ async function filterShapefile(files: FileList): Promise<UserInputModel[]> {
   return data;
 }
 
-async function getFile(files: FileList, name: string) {
-  for (let i = 0; i < files.length; i++) {
-    const file = files[i];
-    if (file.name.toLowerCase() === name.toLowerCase()) {
+async function getFile(files: Map<string, Blob>, name: string) {
+  for (const [key, file] of files) {
+    if (key.toLowerCase() === name.toLowerCase()) {
       return await file.arrayBuffer();
     }
   }
@@ -166,22 +148,16 @@ async function getFile(files: FileList, name: string) {
 
 const pool = new WorkerPool<UserInputModel, ModelData | ModelData[]>(10);
 
-class GLTFWorker extends Worker {
-  constructor() {
-    super("./gltf.worker");
-  }
+function spawnGLTFWorker() {
+  return new Worker(new URL("./gltf.worker.ts", import.meta.url));
 }
 
-class MetacityWorker extends Worker {
-  constructor() {
-    super("./metacity.worker");
-  }
+function spawnMetacityWorker() {
+  return new Worker(new URL("./metacity.worker.ts", import.meta.url));
 }
 
-class ShapefileWorker extends Worker {
-  constructor() {
-    super("./shapefile.worker");
-  }
+function spawnShapefileWorker() {
+  return new Worker(new URL("./shapefile.worker.ts", import.meta.url));
 }
 
 export async function loadModels(
@@ -191,14 +167,14 @@ export async function loadModels(
   const jobs: Promise<ModelData | ModelData[]>[] = [];
   for (const model of models) {
     if (model.name.endsWith("gltf") || model.name.endsWith("glb")) {
-      jobs.push(loadWorker(model, GLTFWorker, updateStatus));
+      jobs.push(loadWorker(model, spawnGLTFWorker, updateStatus));
     } else if (model.name.endsWith("shp")) {
-      jobs.push(loadWorker(model, ShapefileWorker, updateStatus));
+      jobs.push(loadWorker(model, spawnShapefileWorker, updateStatus));
     } else if (
       model.name.endsWith("metacity") ||
       model.name.endsWith("mcmodel")
     ) {
-      jobs.push(loadWorker(model, MetacityWorker, updateStatus));
+      jobs.push(loadWorker(model, spawnMetacityWorker, updateStatus));
     }
   }
 
@@ -214,7 +190,7 @@ export async function loadModels(
 
 function loadWorker(
   model: UserInputModel,
-  worker: new () => Worker,
+  worker: () => Worker,
   updateStatus?: (status: string) => void,
 ): Promise<ModelData | ModelData[]> {
   return new Promise((resolve, reject) => {
