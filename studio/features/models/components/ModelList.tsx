@@ -16,11 +16,13 @@ import ModelUploadDialog from "@features/models/components/ModelUploadDialog";
 import { useModels } from "@features/models/hooks/useModels";
 import File from "@spectrum-icons/illustrations/File";
 import { useState } from "react";
+import ModelConvertDialog from "./ModelConvertDialog";
 
 export default function ModelList() {
   const { data: models, isLoading, refetch } = useModels();
   const [detailDialogOpen, setDetailDialogOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [convertDialogOpen, setConvertDialogOpen] = useState(false);
   const [renameDialogOpen, setRenameDialogOpen] = useState(false);
   const [modelId, setModelId] = useState<number | null>(null);
 
@@ -68,6 +70,9 @@ export default function ModelList() {
                 } else if (key === "detail") {
                   setDetailDialogOpen(true);
                   setModelId(model.id);
+                } else if (key === "convert") {
+                  setConvertDialogOpen(true);
+                  setModelId(model.id)
                 } else if (key === "download") {
                   downloadModelArchive(model.id, model.name);
                 } else if (key === "rename") {
@@ -85,6 +90,9 @@ export default function ModelList() {
               <Item key="download" textValue="Download">
                 <Text>Download</Text>
               </Item>
+              <Item key="convert" textValue="Convert">
+                <Text>Convert</Text>
+              </Item>
               <Item key="delete" textValue="Delete">
                 <Text>Delete</Text>
               </Item>
@@ -97,6 +105,15 @@ export default function ModelList() {
         close={() => {
           setDetailDialogOpen(false);
           setModelId(null);
+        }}
+        modelId={modelId}
+      />
+      <ModelConvertDialog
+        open={convertDialogOpen}
+        close={() => {
+          setDeleteDialogOpen(false);
+          setModelId(null);
+          refetch();
         }}
         modelId={modelId}
       />
