@@ -68,70 +68,58 @@ export async function convertModel(modelId: number, targetEPSG: string) {
       break;
   }
 
-  try {
-    const params = {
-      crsTarget: targetEPSG,
-    };
-    const headers = {
-      ...form.getHeaders(),
-    };
+  const params = {
+    crsTarget: targetEPSG,
+  };
+  const headers = {
+    ...form.getHeaders(),
+  };
 
-    const response = await axios.post(url, form, {
-      params,
-      headers,
-      responseType: "arraybuffer",
-    });
+  const response = await axios.post(url, form, {
+    params,
+    headers,
+    responseType: "arraybuffer",
+  });
 
-    let files: File[] = [];
+  let files: File[] = [];
 
-    switch (format) {
-      case GeoFormat.SHP:
-        console.debug("Extracting ZIP file");
-        const zip = await ZipArchive.from_blob(response.data);
-        const zipfiles = zip.files();
-        let file: [string, ZipEntry];
+  switch (format) {
+    case GeoFormat.SHP:
+      console.debug("Extracting ZIP file");
+      const zip = await ZipArchive.from_blob(response.data);
+      const zipfiles = zip.files();
+      let file: [string, ZipEntry];
 
-        console.debug("Extracting filess");
-        while ((file = zipfiles.next().value)) {
-          const [name, entry] = file;
-          const data = await entry.get_blob();
-          files.push(
-            new File([data], name, {
-              type: mime.getType(name) ?? "application/octet-stream",
-            }),
-          );
-        }
-
-        break;
-
-      case GeoFormat.GLTF:
-      case GeoFormat.GEOJSON:
+      console.debug("Extracting filess");
+      while ((file = zipfiles.next().value)) {
+        const [name, entry] = file;
+        const data = await entry.get_blob();
         files.push(
-          new File([response.data], modelFiles[0], {
-            type: mime.getType(modelFiles[0]) ?? "application/octet-stream",
+          new File([data], name, {
+            type: mime.getType(name) ?? "application/octet-stream",
           }),
         );
-        break;
-    }
+      }
 
-    const newModel = await createModel(
-      {
-        name: oldModel.name + ` (converted to EPSG-${targetEPSG})`,
-        coordinateSystem: targetEPSG,
-      },
-      files,
-    );
+      break;
 
-    return newModel;
-  } catch (err: unknown) {
-    if (axios.isAxiosError(err)) {
-      console.log(err.response?.data.detail[0]);
-      if (err.response)
-        return `${err.response.status} ${err.response.statusText}`;
-      else return "502 Bad Gateway";
-    } else {
-      console.error(err);
-      return "500 Internal Server Error";
-    }
+    case GeoFormat.GLTF:
+    case GeoFormat.GEOJSON:
+      files.push(
+        new File([response.data], modelFiles[0], {
+          type: mime.getType(modelFiles[0]) ?? "application/octet-stream",
+        }),
+      );
+      break;
   }
+
+  const newModel = await createModel(
+    {
+      name: oldModel.name + ` (converted to EPSG-${targetEPSG})`,
+      coordinateSystem: targetEPSG,
+    },
+    files,
+  );
+
+  return newModel;
 }

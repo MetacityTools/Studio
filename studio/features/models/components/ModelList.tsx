@@ -54,11 +54,12 @@ export default function ModelList() {
         )}
       </DialogTrigger>
       <ListView
+        items={models}
         minHeight="size-3000"
         aria-label="ListView"
         renderEmptyState={() => <NoData />}
       >
-        {models.map((model) => (
+        {(model) => (
           <Item key={model.id} textValue={model.name}>
             <File />
             <Text>{model.name}</Text>
@@ -98,7 +99,7 @@ export default function ModelList() {
               </Item>
             </ActionMenu>
           </Item>
-        ))}
+        )}
       </ListView>
       <ModelDetailDialog
         open={detailDialogOpen}
