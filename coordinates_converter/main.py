@@ -1,5 +1,6 @@
 import logging
 import os
+import zipfile
 import shutil
 from typing import Union
 from uuid import uuid4
@@ -90,7 +91,13 @@ async def convert_shapefile(
 
     logger.info(f"Saving converted shapefile to {converted_filename}")
     gdf_converted.to_file(converted_filename)
-    shutil.make_archive(converted_filename, "zip", converted_filename)
+
+    with zipfile.ZipFile(f"{converted_filename}.zip", 'w', zipfile.ZIP_STORED) as zipf:
+        for root, dirs, files in os.walk(converted_filename):
+            for f in files:
+                zipf.write(os.path.join(root, f), os.path.relpath(os.path.join(root, f), converted_filename))
+
+    # shutil.make_archive(converted_filename, "zip", converted_filename)
     converted_shapefile_archive = f"{converted_filename}.zip"
 
     def cleanup():
