@@ -35,7 +35,7 @@ export default function ModelConvertDialog({
 
     const response = await convertModel(modelId, targetEPSG);
 
-    console.log(`Converting response: ${response}`);
+    console.log("Converting response:", response);
 
     setIsConverting(false);
     close();

@@ -72,7 +72,7 @@ export default function ModelList() {
                   setModelId(model.id);
                 } else if (key === "convert") {
                   setConvertDialogOpen(true);
-                  setModelId(model.id)
+                  setModelId(model.id);
                 } else if (key === "download") {
                   downloadModelArchive(model.id, model.name);
                 } else if (key === "rename") {
@@ -111,7 +111,7 @@ export default function ModelList() {
       <ModelConvertDialog
         open={convertDialogOpen}
         close={() => {
-          setDeleteDialogOpen(false);
+          setConvertDialogOpen(false);
           setModelId(null);
           refetch();
         }}

@@ -12,10 +12,13 @@ import {
   listFilesInBucket,
   readFileStream,
 } from "@features/storage";
+import { ZipArchive, ZipEntry } from "@shortercode/webzip";
 import axios from "axios";
 import FormData from "form-data";
+import mime from "mime";
 import { Readable } from "node:stream";
 import * as path from "path";
+import { createModel } from "./createModel";
 
 export async function convertModel(modelId: number, targetEPSG: string) {
   console.debug("Converting model...");
@@ -26,12 +29,12 @@ export async function convertModel(modelId: number, targetEPSG: string) {
 
   const modelRepository = await injectRepository(Model);
 
-  const model = await modelRepository.findOne({
+  const oldModel = await modelRepository.findOne({
     where: { id: modelId, user: { id: user.id } },
   });
-  if (!model) throw new Error("Not found");
+  if (!oldModel) throw new Error("Not found");
 
-  const bucketName = getUserModelBucketName(user.id, model.id);
+  const bucketName = getUserModelBucketName(user.id, oldModel.id);
 
   const modelFiles = await listFilesInBucket(bucketName);
 
@@ -73,20 +76,62 @@ export async function convertModel(modelId: number, targetEPSG: string) {
       ...form.getHeaders(),
     };
 
-    console.log(headers);
-
     const response = await axios.post(url, form, {
       params,
       headers,
+      responseType: "arraybuffer",
     });
 
-    return `${response.status} ${response.statusText}`;
+    let files: File[] = [];
+
+    switch (format) {
+      case GeoFormat.SHP:
+        console.debug("Extracting ZIP file");
+        const zip = await ZipArchive.from_blob(response.data);
+        const zipfiles = zip.files();
+        let file: [string, ZipEntry];
+
+        console.debug("Extracting filess");
+        while ((file = zipfiles.next().value)) {
+          const [name, entry] = file;
+          const data = await entry.get_blob();
+          files.push(
+            new File([data], name, {
+              type: mime.getType(name) ?? "application/octet-stream",
+            }),
+          );
+        }
+
+        break;
+
+      case GeoFormat.GLTF:
+      case GeoFormat.GEOJSON:
+        files.push(
+          new File([response.data], modelFiles[0], {
+            type: mime.getType(modelFiles[0]) ?? "application/octet-stream",
+          }),
+        );
+        break;
+    }
+
+    const newModel = await createModel(
+      {
+        name: oldModel.name + ` (converted to EPSG-${targetEPSG})`,
+        coordinateSystem: targetEPSG,
+      },
+      files,
+    );
+
+    return newModel;
   } catch (err: unknown) {
     if (axios.isAxiosError(err)) {
       console.log(err.response?.data.detail[0]);
       if (err.response)
         return `${err.response.status} ${err.response.statusText}`;
       else return "502 Bad Gateway";
+    } else {
+      console.error(err);
+      return "500 Internal Server Error";
     }
   }
 }
