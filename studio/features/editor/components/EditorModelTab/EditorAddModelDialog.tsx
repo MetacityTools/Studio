@@ -21,11 +21,11 @@ import {
   useImportModels,
 } from "@features/editor/hooks/useImportModels";
 import { load } from "@features/editor/utils/formats/loader";
-import { getModelsNotInProject } from "@features/models/queries/getModelsNotInProject";
+import { getModelsByUser } from "@features/models/queries/getModelsByUser";
 import { fetchModelArchive } from "@features/models/utils/downloadModel";
 import { ToastQueue } from "@react-spectrum/toast";
 import File from "@spectrum-icons/illustrations/File";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { readFileZipContents } from "../../utils/readZipContents";
 
 type EditorAddModelDialogProps = {
@@ -37,15 +37,18 @@ export default function EditorAddModelDialog({
   projectId,
   close,
 }: EditorAddModelDialogProps) {
+  const [loading, setLoading] = useState(false);
+
   const importModels = useImportModels();
 
   const sourceList = useAsyncList<Model>({
     load: async () => {
-      return { items: await getModelsNotInProject({ projectId }) };
+      return { items: await getModelsByUser() };
     },
   });
 
   const handleSubmit = useCallback(async () => {
+    setLoading(true);
     const modelList = Array.from(sourceList.selectedKeys);
 
     if (modelList.length === 0) {
@@ -111,10 +114,10 @@ export default function EditorAddModelDialog({
         </Flex>
       </Content>
       <ButtonGroup>
-        <Button variant="secondary" onPress={close}>
+        <Button variant="secondary" onPress={close} isDisabled={loading}>
           Cancel
         </Button>
-        <Button variant="accent" onPress={handleSubmit}>
+        <Button variant="accent" onPress={handleSubmit} isPending={loading}>
           Add
         </Button>
       </ButtonGroup>

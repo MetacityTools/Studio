@@ -2,17 +2,32 @@
 
 import {
   ActionButton,
+  ActionGroup,
+  ActionMenu,
   DialogTrigger,
+  Flex,
   Heading,
   Item,
   ListView,
   Text,
   View,
-  useAsyncList,
 } from "@adobe/react-spectrum";
 import { NoData } from "@core/components/Empty";
-import { Model } from "@features/db/entities/model";
-import File from "@spectrum-icons/illustrations/File";
+import { EditorModel } from "@features/editor/data/EditorModel";
+import useModelList from "@features/editor/hooks/useModelList";
+import { useModels } from "@features/editor/hooks/useModels";
+import useModelSelection from "@features/editor/hooks/useModelSelection";
+import useModelToggleVisibility from "@features/editor/hooks/useModelToggleVisibility";
+import { useRemoveModels } from "@features/editor/hooks/useRemoveModels";
+import { useRemoveSubmodels } from "@features/editor/hooks/useRemoveSubmodels";
+import { useSelected } from "@features/editor/hooks/useSelected";
+import { useSplitModel } from "@features/editor/hooks/useSplitModel";
+import Delete from "@spectrum-icons/workflow/Delete";
+import SplitView from "@spectrum-icons/workflow/SplitView";
+import Visibility from "@spectrum-icons/workflow/Visibility";
+import VisibilityOff from "@spectrum-icons/workflow/VisibilityOff";
+import { Key, useCallback } from "react";
+import { PositioningContainer } from "../PositioningContainer";
 import EditorAddModelDialog from "./EditorAddModelDialog";
 
 type EditorModelsProps = {
@@ -20,39 +35,112 @@ type EditorModelsProps = {
 };
 
 export default function EditorModels({ projectId }: EditorModelsProps) {
-  //TODO sync the list of models with the context locally
-  const modelList = useAsyncList<Model>({
-    load: async () => {
-      return { items: [] };
+  const [models] = useModels();
+  const removeModels = useRemoveModels();
+  const setVisibility = useModelToggleVisibility();
+  const removeSubmodels = useRemoveSubmodels();
+  const splitModel = useSplitModel();
+  const selected = useSelected();
+
+  const dispatchAction = useCallback(
+    async (model: EditorModel, action: Key) => {
+      switch (action) {
+        case "delete":
+          removeModels([model]);
+          break;
+        case "hide":
+          setVisibility(model, false);
+          break;
+        case "show":
+          setVisibility(model, true);
+          break;
+        case "deleteSubmodels":
+          await removeSubmodels(model, selected.get(model) || new Set());
+          break;
+        case "split":
+          await splitModel(model, selected.get(model) || new Set());
+          break;
+      }
     },
-  });
+    [setVisibility, removeModels, removeSubmodels, splitModel, selected],
+  );
+
+  const [modelList, selectedModelKeys] = useModelList();
+  const handleSelection = useModelSelection(selectedModelKeys);
 
   return (
-    <View position="relative" overflow="auto" margin="size-100" height="100%">
-      <View>
-        <Heading level={4}>Project Models</Heading>
-        <DialogTrigger>
-          <ActionButton marginBottom="size-100">Add Model</ActionButton>
-          {(close) => (
-            <EditorAddModelDialog projectId={projectId} close={close} />
-          )}
-        </DialogTrigger>
-        <ListView
-          selectionMode="multiple"
-          aria-label="Models"
-          minHeight="size-3000"
+    <PositioningContainer>
+      <Flex direction="column" height="100%" gap="size-100" marginX="size-200">
+        <View position="relative" overflow="hidden" marginTop="size-200">
+          <Heading level={4} margin="size-0">
+            Project Models
+          </Heading>
+        </View>
+        <View position="relative" overflow="hidden">
+          <DialogTrigger>
+            <ActionButton>Add Model</ActionButton>
+            {(close) => (
+              <EditorAddModelDialog projectId={projectId} close={close} />
+            )}
+          </DialogTrigger>
+        </View>
+        <View
+          position="relative"
+          flex
           height="100%"
-          items={modelList.items}
-          renderEmptyState={() => <NoData heading="No models in the project" />}
+          overflow="hidden"
+          marginBottom="size-200"
         >
-          {(model) => (
-            <Item key={model.id} textValue={model.name}>
-              <File />
-              <Text>{model.name}</Text>
-            </Item>
-          )}
-        </ListView>
-      </View>
-    </View>
+          <ListView
+            selectionMode="multiple"
+            aria-label="Model list"
+            width="100%"
+            height="100%"
+            onSelectionChange={handleSelection}
+            items={modelList}
+            selectedKeys={selectedModelKeys}
+            renderEmptyState={() => (
+              <NoData heading="No models in the project" />
+            )}
+          >
+            {(model) => (
+              <Item key={model.key} textValue={model.item.name}>
+                <Text>{model.item.name}</Text>
+                <Text slot="description">
+                  {model.selectedSubmodels} of {model.totalSubmodels} submodels
+                  selected
+                </Text>
+                <ActionGroup
+                  onAction={(key) => dispatchAction(model.item, key)}
+                >
+                  <Item key="delete" textValue="Delete">
+                    <Delete />
+                  </Item>
+                  {model.item.visible ? (
+                    <Item key="hide" textValue="Hide">
+                      <Visibility />
+                    </Item>
+                  ) : (
+                    <Item key="show" textValue="Show">
+                      <VisibilityOff />
+                    </Item>
+                  )}
+                </ActionGroup>
+                <ActionMenu onAction={(key) => dispatchAction(model.item, key)}>
+                  <Item key="deleteSubmodels" textValue="Delete submodels">
+                    <Delete />
+                    <Text>Delete selected submodels</Text>
+                  </Item>
+                  <Item key="split" textValue="Split model">
+                    <SplitView />
+                    <Text>Split model</Text>
+                  </Item>
+                </ActionMenu>
+              </Item>
+            )}
+          </ListView>
+        </View>
+      </Flex>
+    </PositioningContainer>
   );
 }

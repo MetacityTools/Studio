@@ -15,7 +15,6 @@ export async function getProjectById(id: number): Promise<Project | null> {
 
   const project = await projectRepository.findOne({
     where: { id, user: { id: user.id } },
-    relations: ["models"],
   });
 
   return toPlain(project);

@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  Grid,
   Item,
   TabList,
   TabPanels,
@@ -10,16 +9,19 @@ import {
   View,
 } from "@adobe/react-spectrum";
 import { ToastContainer } from "@react-spectrum/toast";
-import Brush from "@spectrum-icons/workflow/Brush";
+//import Brush from "@spectrum-icons/workflow/Brush";
+import BoxExport from "@spectrum-icons/workflow/BoxExport";
 import Code from "@spectrum-icons/workflow/Code";
 import Data from "@spectrum-icons/workflow/Data";
 import { Allotment } from "allotment";
 import "allotment/dist/style.css";
 import { EditorProvider } from "../providers/EditorProvider";
 import { CanvasWrapper } from "./Canvas/CanvasWrapper";
+import "./Editor.css";
 import EditorMetadata from "./EditorMetadataTab/EditorMetadata";
 import EditorModels from "./EditorModelTab/EditorModels";
 import EditorStyle from "./EditorStyleTab/EditorStyle";
+import { PositioningContainer } from "./PositioningContainer";
 
 type EditorProps = SidePanelProps;
 
@@ -64,8 +66,8 @@ function SidePanel(props: SidePanelProps) {
               <Text>Metadata</Text>
             </Item>
             <Item key="style" textValue="Style">
-              <Brush />
-              <Text>Style</Text>
+              <BoxExport />
+              <Text>Exports</Text>
             </Item>
           </TabList>
         </View>
@@ -75,7 +77,7 @@ function SidePanel(props: SidePanelProps) {
           overflow="auto"
           backgroundColor="gray-50"
         >
-          <TabPanels>
+          <TabPanels height="100%" UNSAFE_className="borderless">
             <Item key="models">
               <EditorModels {...props} />
             </Item>
@@ -90,28 +92,5 @@ function SidePanel(props: SidePanelProps) {
       </Tabs>
       <ToastContainer />
     </PositioningContainer>
-  );
-}
-
-function PositioningContainer({ children }: { children: React.ReactNode }) {
-  return (
-    <Grid
-      areas={{
-        base: ["content"],
-      }}
-      width="100%"
-      height="100%"
-      gap="size-100"
-    >
-      <View
-        gridArea="content"
-        position="relative"
-        overflow="hidden"
-        width="100%"
-        height="100%"
-      >
-        {children}
-      </View>
-    </Grid>
   );
 }
