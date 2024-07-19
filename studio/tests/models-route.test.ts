@@ -1,10 +1,11 @@
 "use server";
 
+import { GET } from "@app/api/auth/[auth0]/route";
 import { expect } from "vitest";
 import { POST } from "../app/api/models/route";
 import { testWithFixtures } from "./helpers";
 
-testWithFixtures("POST /models", async ({ model, user }) => {
+testWithFixtures("POST /models", async ({ user }) => {
   const url = new URL("http://localhost:3000/models");
 
   const requestBody = new FormData();
@@ -28,7 +29,7 @@ testWithFixtures("POST /models", async ({ model, user }) => {
     coordinateSystem: "WGS84",
     name: "model",
     user: {
-      id: "test",
+      id: user.id,
     },
   });
 });
@@ -46,6 +47,23 @@ testWithFixtures("POST /models", async ({ model, user }) => {
 //   const body = await response.blob();
 
 //   expect(response.status).toBe(200);
-//   //TODO fix this
-//   //expect(body).toBe("test");
+//   expect(body).toBe("test");
 // });
+
+testWithFixtures("GET /models/[model]/data/[file]", async ({ model }) => {
+  const url = new URL(
+    `http://localhost:3000/models/${model.id}/data/${file.name}`,
+  );
+
+  const req = new Request(url, {
+    method: "GET",
+  });
+
+  const response = await GET(req, {
+    params: { model: String(model.id) },
+  });
+  const body = await response.text();
+
+  expect(response.status).toBe(200);
+  expect(body).toBeDefined();
+});

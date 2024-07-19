@@ -1,3 +1,4 @@
+import { Embed } from "@features/db/entities/embed";
 import { Model } from "@features/db/entities/model";
 import { Project } from "@features/db/entities/project";
 import { User } from "@features/db/entities/user";
@@ -18,6 +19,7 @@ import { test } from "vitest";
 interface Fixtures {
   user: User;
   project: Project;
+  embed: Embed;
   model: Model;
   file: File;
 }
@@ -87,6 +89,18 @@ export const testWithFixtures = test.extend<Fixtures>({
     await modelRepository.delete({
       id: model.id,
     });
+  },
+
+  embed: async ({ project }, use) => {
+    const embedRepository = await injectRepository(Embed);
+
+    const embed = await embedRepository.save({
+      project: { id: project.id },
+    });
+
+    await use(embed);
+
+    await embedRepository.remove(embed);
   },
 
   file: async ({ user }, use) => {
