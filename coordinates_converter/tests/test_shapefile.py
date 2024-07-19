@@ -7,7 +7,7 @@ client = TestClient(main.app)
 
 
 def test_shapefile_with_projection_correct():
-    with open("./testdata/shapefile.zip", "rb") as f:
+    with open("./testdata/shapefile_5514.zip", "rb") as f:
         response = client.post(
             "/convert_shapefile?crsTarget=EPSG:4326", files={"file": f}
         )
@@ -20,7 +20,7 @@ def test_shapefile_with_projection_correct():
 
 
 def test_shapefile_with_projection_wrong_target():
-    with open("./testdata/shapefile.zip", "rb") as f:
+    with open("./testdata/shapefile_5514.zip", "rb") as f:
         response = client.post("/convert_shapefile?crsTarget=foobar", files={"file": f})
         assert response.status_code == 400
         assert response.json() == {"detail": "Invalid target CRS: foobar"}
