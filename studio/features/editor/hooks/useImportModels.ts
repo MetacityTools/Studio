@@ -11,6 +11,7 @@ import {
 } from "@editor/data/EditorModelShader";
 import { PrimitiveType } from "@editor/data/types";
 import { vec3 } from "gl-matrix";
+import { useCallback } from "react";
 import { useEditorContext } from "./useEditorContext";
 import { useUpdateMetadata } from "./useMetadataUpdate";
 
@@ -25,39 +26,39 @@ export interface EditorImportOptions {
 }
 
 export function useImportModels() {
-  const ctx = useEditorContext();
+  const { globalShift, scene, setGlobalShift, setModels } = useEditorContext();
   const updateMetadata = useUpdateMetadata();
 
-  const importModels = async (
-    data: EditorModelData[],
-    options?: EditorImportOptions,
-  ) => {
-    let shift = ctx.globalShift;
-    let coordMode = options?.coordMode ?? CoordinateMode.None;
-    const createdModels = [];
+  const importModels = useCallback(
+    async (data: EditorModelData[], options?: EditorImportOptions) => {
+      let shift = globalShift;
+      let coordMode = options?.coordMode ?? CoordinateMode.None;
+      const createdModels = [];
 
-    //sort out the alignment
-    for (const model of data) {
-      shift = alignModels(model.geometry.position, coordMode, shift);
-    }
+      //sort out the alignment
+      for (const model of data) {
+        shift = alignModels(model.geometry.position, coordMode, shift);
+      }
 
-    //generate geometry and metadata
-    for (const model of data) {
-      const glmodel = await importModel(model);
-      if (!glmodel) continue;
-      ctx.scene.add(glmodel);
-      createdModels.push(glmodel);
-    }
+      //generate geometry and metadata
+      for (const model of data) {
+        const glmodel = await importModel(model);
+        if (!glmodel) continue;
+        scene.add(glmodel);
+        createdModels.push(glmodel);
+      }
 
-    ctx.setGlobalShift(shift);
-    const models = ctx.scene.objects.filter(
-      (obj) => obj instanceof EditorModel,
-    ) as EditorModel[];
+      setGlobalShift(shift);
+      const models = scene.objects.filter(
+        (obj) => obj instanceof EditorModel,
+      ) as EditorModel[];
 
-    ctx.setModels(models);
-    updateMetadata(models);
-    return createdModels;
-  };
+      setModels(models);
+      updateMetadata(models);
+      return createdModels;
+    },
+    [globalShift, scene, setGlobalShift, setModels, updateMetadata],
+  );
 
   return importModels;
 }
@@ -227,4 +228,12 @@ function computeNormals(positions: number[] | Float32Array) {
   }
 
   return normals;
+}
+function useCalback(
+  arg0: (
+    data: EditorModelData[],
+    options?: EditorImportOptions,
+  ) => Promise<EditorModel[]>,
+) {
+  throw new Error("Function not implemented.");
 }

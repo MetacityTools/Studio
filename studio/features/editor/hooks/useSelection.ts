@@ -3,24 +3,28 @@ import {
   SelectFunction,
   SelectionType,
 } from "@editor/providers/EditorProvider";
+import { useCallback } from "react";
 import { useEditorContext } from "./useEditorContext";
 
 export function useSelection(): SelectFunction {
-  const ctx = useEditorContext();
+  const { selection, setSelection } = useEditorContext();
 
-  const select = (
-    seleciton: SelectionType,
-    toggle: boolean = false,
-    extend: boolean = false,
-  ) => {
-    const newSelection = changeSelection(
-      ctx.selection,
-      seleciton,
-      toggle,
-      extend,
-    );
-    ctx.setSelection(newSelection);
-  };
+  const select = useCallback(
+    (
+      seleciton: SelectionType,
+      toggle: boolean = false,
+      extend: boolean = false,
+    ) => {
+      const newSelection = changeSelection(
+        selection,
+        seleciton,
+        toggle,
+        extend,
+      );
+      setSelection(newSelection);
+    },
+    [selection, setSelection],
+  );
 
   return select;
 }

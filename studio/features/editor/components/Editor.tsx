@@ -12,6 +12,7 @@ import { ToastContainer } from "@react-spectrum/toast";
 //import Brush from "@spectrum-icons/workflow/Brush";
 import { PositioningContainer } from "@core/components/PositioningContainer";
 import EditorModels from "@features/editor-models/components/EditorModels";
+import ProjectionToolbar from "@features/editor-toolbar/components/ProjectionToolbar";
 import BoxExport from "@spectrum-icons/workflow/BoxExport";
 import Code from "@spectrum-icons/workflow/Code";
 import Data from "@spectrum-icons/workflow/Data";
@@ -31,6 +32,9 @@ export default function Editor(props: EditorProps) {
       <Allotment.Pane>
         <View width="100%" height="100%" position="relative">
           <CanvasWrapper />
+          <View position="absolute" top="size-100" left="size-100">
+            <ProjectionToolbar />
+          </View>
         </View>
       </Allotment.Pane>
     </Allotment>

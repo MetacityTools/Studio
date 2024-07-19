@@ -1,5 +1,6 @@
 import { EditorModel, EditorModelData } from "@editor/data/EditorModel";
 import { ModelMetadataRecords } from "@editor/data/types";
+import { useCallback } from "react";
 import { useImportModels } from "./useImportModels";
 import { useRemoveModels } from "./useRemoveModels";
 
@@ -7,15 +8,15 @@ export function useRemoveSubmodels() {
   const importModels = useImportModels();
   const removeModels = useRemoveModels();
 
-  const removeSubmodels = async (
-    model: EditorModel,
-    submodels: Set<number>,
-  ) => {
-    const data = removeSubmodelsFc(model, submodels);
-    if (!data) return;
-    if (data.geometry.position.length > 0) await importModels([data]);
-    removeModels([model]);
-  };
+  const removeSubmodels = useCallback(
+    async (model: EditorModel, submodels: Set<number>) => {
+      const data = removeSubmodelsFc(model, submodels);
+      if (!data) return;
+      if (data.geometry.position.length > 0) await importModels([data]);
+      removeModels([model]);
+    },
+    [importModels, removeModels],
+  );
 
   return removeSubmodels;
 }

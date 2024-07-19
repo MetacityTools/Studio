@@ -1,6 +1,6 @@
 import { deleteProject } from "@features/projects/mutations/deleteProject";
 import { updateProject } from "@features/projects/mutations/updateProject";
-import { getProjectById } from "@features/projects/queries/getProjectbyId";
+import { getProjectById } from "@features/projects/queries/getProjectById";
 import { expect } from "vitest";
 import { testWithFixtures } from "./helpers";
 

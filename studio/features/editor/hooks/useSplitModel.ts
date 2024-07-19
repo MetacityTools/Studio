@@ -3,6 +3,7 @@ import { vec3 } from "gl-matrix";
 import { EditorModel, EditorModelData } from "@editor/data/EditorModel";
 import { ModelMetadataRecords } from "@editor/data/types";
 
+import { useCallback } from "react";
 import { useImportModels } from "./useImportModels";
 import { useRemoveModels } from "./useRemoveModels";
 
@@ -10,12 +11,15 @@ export function useSplitModel() {
   const importModels = useImportModels();
   const removeModels = useRemoveModels();
 
-  const split = async (oldModel: EditorModel, submodels: Set<number>) => {
-    const newModels = splitModel(oldModel, submodels);
-    if (!newModels) return;
-    await importModels(newModels);
-    removeModels([oldModel]);
-  };
+  const split = useCallback(
+    async (oldModel: EditorModel, submodels: Set<number>) => {
+      const newModels = splitModel(oldModel, submodels);
+      if (!newModels) return;
+      await importModels(newModels);
+      removeModels([oldModel]);
+    },
+    [importModels, removeModels],
+  );
 
   return split;
 }

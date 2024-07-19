@@ -15,6 +15,7 @@ import {
   useAsyncList,
 } from "@adobe/react-spectrum";
 import { NoData } from "@core/components/Empty";
+import getModelArchive from "@features/api-sdk/getModelArchive";
 import { Model } from "@features/db/entities/model";
 import {
   CoordinateMode,
@@ -22,7 +23,6 @@ import {
 } from "@features/editor/hooks/useImportModels";
 import { load } from "@features/editor/utils/formats/loader";
 import { getModelsByUser } from "@features/models/queries/getModelsByUser";
-import { fetchModelArchive } from "@features/models/utils/downloadModel";
 import { ToastQueue } from "@react-spectrum/toast";
 import File from "@spectrum-icons/illustrations/File";
 import { useCallback, useState } from "react";
@@ -62,7 +62,7 @@ export default function EditorAddModelDialog({
     // Add models to project
     for (const modelId of modelList) {
       const id = parseInt(modelId as string);
-      const blob = await fetchModelArchive(id);
+      const blob = await getModelArchive(id);
       await readFileZipContents(blob, fileMap);
     }
 

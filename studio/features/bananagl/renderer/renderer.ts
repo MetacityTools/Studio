@@ -51,7 +51,8 @@ export class Renderer {
   }
 
   get views() {
-    if (!this.window_) throw new Error("Renderer not initialized");
+    //if (!this.window_) throw new Error("Renderer not initialized");
+    if (!this.window_) return undefined;
     return this.window_.views;
   }
 

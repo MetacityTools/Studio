@@ -24,6 +24,7 @@ export default function Header(props: HeaderProps) {
       padding="size-10"
       width="100%"
       paddingY="size-100"
+      backgroundColor="gray-50"
     >
       <Flex
         direction="row"

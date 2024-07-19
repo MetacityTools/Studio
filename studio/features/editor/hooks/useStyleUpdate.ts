@@ -1,14 +1,18 @@
 import { Metadata, Style } from "@editor/data/types";
+import { useCallback } from "react";
 import { useEditorContext } from "./useEditorContext";
 
 export function useUpdateStyles() {
-  const ctx = useEditorContext();
+  const { styles, metadata, setStyles } = useEditorContext();
 
-  const setStyle = (style?: Style, metadata?: Metadata) => {
-    const s = style ?? ctx.styles;
-    autoUpdateStyle(metadata ?? ctx.metadata, s);
-    ctx.setStyles({ ...s });
-  };
+  const setStyle = useCallback(
+    (style?: Style, newMetadata?: Metadata) => {
+      const s = style ?? styles;
+      autoUpdateStyle(newMetadata ?? metadata, s);
+      setStyles({ ...s });
+    },
+    [styles, metadata, setStyles],
+  );
 
   return setStyle;
 }

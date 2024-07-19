@@ -5,13 +5,13 @@ import { useCallback } from "react";
 import { useEditorContext } from "./useEditorContext";
 
 export function useExportModels() {
-  const ctx = useEditorContext();
+  const { models } = useEditorContext();
 
   const exportProject = useCallback(() => {
-    const models = extractModels(ctx.models);
-    if (!models) return;
-    return exportModel(models);
-  }, [ctx.models]);
+    const modelData = extractModels(models);
+    if (!modelData) return;
+    return exportModel(modelData);
+  }, [models]);
 
   return exportProject;
 }
