@@ -1,8 +1,11 @@
 # Metacity Studio Coordinates Converter Utility
 
+## Requirements
+- Python 3.12
+- pip
+
 ## How to install
 
-- `python get_pip.py` if no pip :'(
 - `pip install -r requirements.txt` to install dependencies
 
 ## How to run
