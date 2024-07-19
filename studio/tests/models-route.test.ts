@@ -1,5 +1,6 @@
 "use server";
 
+import { GET } from "@app/api/models/[model]/data/route";
 import { expect } from "vitest";
 import { POST } from "../app/api/models/route";
 import { testWithFixtures } from "./helpers";
@@ -33,21 +34,18 @@ testWithFixtures("POST /models", async ({ user }) => {
   });
 });
 
-//TODO fix this test
-// testWithFixtures("GET /models/[model]/data/[file]", async ({ model }) => {
-//   const url = new URL(
-//     `http://localhost:3000/models/${model.id}/data/${file.name}`,
-//   );
+testWithFixtures("GET /models/[model]/data", async ({ model }) => {
+  const url = new URL(`http://localhost:3000/models/${model.id}/data`);
 
-//   const req = new Request(url, {
-//     method: "GET",
-//   });
+  const req = new Request(url, {
+    method: "GET",
+  });
 
-//   const response = await GET(req, {
-//     params: { model: String(model.id) },
-//   });
-//   const body = await response.text();
+  const response = await GET(req, {
+    params: { model: String(model.id) },
+  });
+  const body = await response.text();
 
-//   expect(response.status).toBe(200);
-//   expect(body).toBeDefined();
-// });
+  expect(response.status).toBe(200);
+  expect(body).toBeDefined();
+});
