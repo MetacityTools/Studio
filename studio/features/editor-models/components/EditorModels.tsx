@@ -13,10 +13,11 @@ import {
   View,
 } from "@adobe/react-spectrum";
 import { NoData } from "@core/components/Empty";
+import { PositioningContainer } from "@core/components/PositioningContainer";
+import useModelSelection from "@features/editor-models/hooks/useModelSelection";
 import { EditorModel } from "@features/editor/data/EditorModel";
 import useModelList from "@features/editor/hooks/useModelList";
 import { useModels } from "@features/editor/hooks/useModels";
-import useModelSelection from "@features/editor/hooks/useModelSelection";
 import useModelToggleVisibility from "@features/editor/hooks/useModelToggleVisibility";
 import { useRemoveModels } from "@features/editor/hooks/useRemoveModels";
 import { useRemoveSubmodels } from "@features/editor/hooks/useRemoveSubmodels";
@@ -27,7 +28,6 @@ import SplitView from "@spectrum-icons/workflow/SplitView";
 import Visibility from "@spectrum-icons/workflow/Visibility";
 import VisibilityOff from "@spectrum-icons/workflow/VisibilityOff";
 import { Key, useCallback } from "react";
-import { PositioningContainer } from "../PositioningContainer";
 import EditorAddModelDialog from "./EditorAddModelDialog";
 
 type EditorModelsProps = {

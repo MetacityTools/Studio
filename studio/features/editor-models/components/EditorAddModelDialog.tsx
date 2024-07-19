@@ -26,7 +26,7 @@ import { fetchModelArchive } from "@features/models/utils/downloadModel";
 import { ToastQueue } from "@react-spectrum/toast";
 import File from "@spectrum-icons/illustrations/File";
 import { useCallback, useState } from "react";
-import { readFileZipContents } from "../../utils/readZipContents";
+import { readFileZipContents } from "../utils/readZipContents";
 
 type EditorAddModelDialogProps = {
   projectId: number;

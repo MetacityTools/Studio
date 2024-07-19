@@ -10,35 +10,30 @@ import {
 } from "@adobe/react-spectrum";
 import { ToastContainer } from "@react-spectrum/toast";
 //import Brush from "@spectrum-icons/workflow/Brush";
+import { PositioningContainer } from "@core/components/PositioningContainer";
+import EditorModels from "@features/editor-models/components/EditorModels";
 import BoxExport from "@spectrum-icons/workflow/BoxExport";
 import Code from "@spectrum-icons/workflow/Code";
 import Data from "@spectrum-icons/workflow/Data";
 import { Allotment } from "allotment";
 import "allotment/dist/style.css";
-import { EditorProvider } from "../providers/EditorProvider";
 import { CanvasWrapper } from "./Canvas/CanvasWrapper";
 import "./Editor.css";
-import EditorMetadata from "./EditorMetadataTab/EditorMetadata";
-import EditorModels from "./EditorModelTab/EditorModels";
-import EditorStyle from "./EditorStyleTab/EditorStyle";
-import { PositioningContainer } from "./PositioningContainer";
 
 type EditorProps = SidePanelProps;
 
 export default function Editor(props: EditorProps) {
   return (
-    <EditorProvider>
-      <Allotment>
-        <Allotment.Pane snap minSize={100} preferredSize={500}>
-          <SidePanel {...props} />
-        </Allotment.Pane>
-        <Allotment.Pane>
-          <View width="100%" height="100%" position="relative">
-            <CanvasWrapper />
-          </View>
-        </Allotment.Pane>
-      </Allotment>
-    </EditorProvider>
+    <Allotment>
+      <Allotment.Pane snap minSize={100} preferredSize={500}>
+        <SidePanel {...props} />
+      </Allotment.Pane>
+      <Allotment.Pane>
+        <View width="100%" height="100%" position="relative">
+          <CanvasWrapper />
+        </View>
+      </Allotment.Pane>
+    </Allotment>
   );
 }
 
@@ -81,12 +76,8 @@ function SidePanel(props: SidePanelProps) {
             <Item key="models">
               <EditorModels {...props} />
             </Item>
-            <Item key="metadata">
-              <EditorMetadata {...props} />
-            </Item>
-            <Item key="style">
-              <EditorStyle {...props} />
-            </Item>
+            <Item key="metadata">metadata</Item>
+            <Item key="style">style</Item>
           </TabPanels>
         </View>
       </Tabs>

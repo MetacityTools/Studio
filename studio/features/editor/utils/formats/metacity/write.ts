@@ -1,15 +1,10 @@
 import { TypedArray } from "@bananagl/bananagl";
 
 import { EditorModelData } from "@editor/data/EditorModel";
-import { Style } from "@editor/data/types";
 
 import { WriteOnlyMemoryStream } from "./streams";
 
-export function exportModel(
-  models: EditorModelData[],
-  styles: Style,
-  title: string,
-) {
+export function exportModel(models: EditorModelData[]) {
   const stream = new WriteOnlyMemoryStream();
   //write version
   writeString("mtctv2", stream);
@@ -21,26 +16,29 @@ export function exportModel(
   const file = new File(stream.buffers, "project.metacity", {
     type: "application/octet-stream",
   });
-  const url = URL.createObjectURL(file);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = `${title}.mcmodel`;
-  a.click();
-  URL.revokeObjectURL(url);
+  return file;
 
+  // const url = URL.createObjectURL(file);
+  // const a = document.createElement("a");
+  // a.href = url;
+  // a.download = `${title}.mcmodel`;
+  // a.click();
+  // URL.revokeObjectURL(url);
+
+  //export styles
   //sleep a bit
-  setTimeout(() => {
-    const styleData = JSON.stringify(styles);
-    const styleFile = new File([styleData], "styles.json", {
-      type: "application/json",
-    });
-    const styleUrl = URL.createObjectURL(styleFile);
-    const styleA = document.createElement("a");
-    styleA.href = styleUrl;
-    styleA.download = `${title}.mcstyle`;
-    styleA.click();
-    URL.revokeObjectURL(styleUrl);
-  }, 1000);
+  // setTimeout(() => {
+  //   const styleData = JSON.stringify(styles);
+  //   const styleFile = new File([styleData], "styles.json", {
+  //     type: "application/json",
+  //   });
+  //   const styleUrl = URL.createObjectURL(styleFile);
+  //   const styleA = document.createElement("a");
+  //   styleA.href = styleUrl;
+  //   styleA.download = `${title}.mcstyle`;
+  //   styleA.click();
+  //   URL.revokeObjectURL(styleUrl);
+  // }, 1000);
 }
 
 function writeModel(model: EditorModelData, stream: WriteOnlyMemoryStream) {

@@ -1,7 +1,7 @@
+import { useModels } from "@features/editor/hooks/useModels";
+import { useSelected } from "@features/editor/hooks/useSelected";
+import { useSelection } from "@features/editor/hooks/useSelection";
 import { Key, useCallback } from "react";
-import { useModels } from "./useModels";
-import { useSelected } from "./useSelected";
-import { useSelection } from "./useSelection";
 
 export default function useModelSelection(fullySelectedModelKeys: Set<string>) {
   const [models] = useModels();
