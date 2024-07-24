@@ -26,6 +26,7 @@ interface Fixtures {
   model: Model;
   file: File;
   metadata: Metadata;
+  blob: Blob;
 }
 
 export const testWithFixtures = test.extend<Fixtures>({
@@ -72,7 +73,7 @@ export const testWithFixtures = test.extend<Fixtures>({
 
     const model = await modelRepository.save({
       name: "Test Model",
-      coordinateSystem: "EPSG:3857",
+      coordinateSystem: "3857",
       user: { id: user.id },
     });
 
@@ -174,5 +175,26 @@ export const testWithFixtures = test.extend<Fixtures>({
     } as unknown as File;
 
     await use(dummyFile);
+  },
+
+  blob: async ({}, use) => {
+    const testFilePath = path.join(
+      __dirname,
+      "..",
+      "..",
+      "testdata",
+      "climate.geojson",
+    );
+
+    const fileStream = createReadStream(testFilePath);
+    const chunks: Uint8Array[] = [];
+
+    for await (const chunk of fileStream) {
+      chunks.push(chunk);
+    }
+
+    const blob = new Blob(chunks);
+
+    await use(blob);
   },
 });
