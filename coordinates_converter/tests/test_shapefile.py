@@ -15,7 +15,7 @@ def test_shapefile_with_projection_correct():
         assert response.headers["content-type"] == "application/octet-stream"
         assert (
             response.headers["content-disposition"]
-            == 'attachment; filename="shapefile_epsg4326.zip"'
+            == 'attachment; filename="shapefile_5514_epsg4326.zip"'
         )
 
 
