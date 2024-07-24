@@ -75,51 +75,56 @@ export async function convertModel(modelId: number, targetEPSG: string) {
     ...form.getHeaders(),
   };
 
-  const response = await axios.post(url, form, {
-    params,
-    headers,
-    responseType: "arraybuffer",
-  });
+  try {
+    const response = await axios.post(url, form, {
+      params,
+      headers,
+      responseType: "arraybuffer",
+    });
 
-  let files: File[] = [];
+    let files: File[] = [];
 
-  switch (format) {
-    case GeoFormat.SHP:
-      console.debug("Extracting ZIP file");
-      const zip = await ZipArchive.from_blob(response.data);
-      const zipfiles = zip.files();
-      let file: [string, ZipEntry];
+    switch (format) {
+      case GeoFormat.SHP:
+        console.debug("Extracting ZIP file");
+        const zip = await ZipArchive.from_blob(response.data);
+        const zipfiles = zip.files();
+        let file: [string, ZipEntry];
 
-      console.debug("Extracting filess");
-      while ((file = zipfiles.next().value)) {
-        const [name, entry] = file;
-        const data = await entry.get_blob();
+        console.debug("Extracting filess");
+        while ((file = zipfiles.next().value)) {
+          const [name, entry] = file;
+          const data = await entry.get_blob();
+          files.push(
+            new File([data], name, {
+              type: mime.getType(name) ?? "application/octet-stream",
+            }),
+          );
+        }
+
+        break;
+
+      case GeoFormat.GLTF:
+      case GeoFormat.GEOJSON:
         files.push(
-          new File([data], name, {
-            type: mime.getType(name) ?? "application/octet-stream",
+          new File([response.data], modelFiles[0], {
+            type: mime.getType(modelFiles[0]) ?? "application/octet-stream",
           }),
         );
-      }
+        break;
+    }
 
-      break;
+    const newModel = await createModel(
+      {
+        name: oldModel.name + ` (converted to EPSG-${targetEPSG})`,
+        coordinateSystem: targetEPSG,
+      },
+      files,
+    );
 
-    case GeoFormat.GLTF:
-    case GeoFormat.GEOJSON:
-      files.push(
-        new File([response.data], modelFiles[0], {
-          type: mime.getType(modelFiles[0]) ?? "application/octet-stream",
-        }),
-      );
-      break;
+    return newModel;
+  } catch (err) {
+    console.error(err);
+    throw new Error("Conversion failed");
   }
-
-  const newModel = await createModel(
-    {
-      name: oldModel.name + ` (converted to EPSG-${targetEPSG})`,
-      coordinateSystem: targetEPSG,
-    },
-    files,
-  );
-
-  return newModel;
 }

@@ -1,5 +1,6 @@
 import { Model } from "@features/db/entities/model";
 import { injectRepository } from "@features/db/helpers";
+import { convertModel } from "@features/models/mutations/convertModel";
 import { createModel } from "@features/models/mutations/createModel";
 import { deleteModel } from "@features/models/mutations/deleteModel";
 import { getModel } from "@features/models/queries/getModel";
@@ -35,4 +36,17 @@ testWithFixtures("delete model", async ({ model }) => {
 
   const response = await modelRepository.findOne({ where: { id: model!.id } });
   expect(response).toBe(null);
+});
+
+testWithFixtures("convert model coordinate system", async ({ model }) => {
+  expect(model.coordinateSystem).toBe("EPSG:3857");
+
+  const response = await convertModel(model.id, "EPSG:4326").catch((err) => {
+    console.error(err);
+    return null;
+  });
+
+  expect(response).toBeTruthy();
+
+  expect(response?.coordinateSystem).toBe("EPSG:4326");
 });
