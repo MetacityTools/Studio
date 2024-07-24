@@ -57,6 +57,7 @@ async def convert_geojson(
     file: UploadFile, crsTarget: str, crsSource: Union[str, None] = None
 ):
 
+    print(file.filename)
     gdf_converted, converted_filename = convert_gdf(
         gpd.read_file(file.file), crsTarget, crsSource, file.filename
     )
@@ -85,6 +86,7 @@ async def convert_shapefile(
     file: UploadFile, crsTarget: str, crsSource: Union[str, None] = None
 ):
 
+    
     gdf_converted, converted_filename = convert_gdf(
         gpd.read_file(file.file), crsTarget, crsSource, file.filename
     )
