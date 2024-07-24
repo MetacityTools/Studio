@@ -6,7 +6,7 @@ on:
 jobs:
   test:
     name: Run tests
-    uses: ./.github/workflows/test.yml
+    uses: ./.github/workflows/studio-test.yml
 
   build:
     name: Build Docker image

@@ -5,7 +5,7 @@ on:
     types: [opened, reopened, synchronize]
     paths:
       - "studio/**"
-      - ".github/workflows/test.yml"
+      - ".github/workflows/studio-test.yml"
   workflow_call:
 
 jobs:
