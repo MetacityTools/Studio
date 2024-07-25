@@ -19,7 +19,7 @@ export type SelectFunction = (
 export type SelectionType = Map<EditorModel, Set<number>>;
 export type Tooltip = { data: any; x: number; y: number } | null;
 
-type EditorProviderProps = {
+type EditorContextProps = {
   scene: GL.Scene;
   renderer: GL.Renderer;
   activeView: number;
@@ -53,8 +53,8 @@ type EditorProviderProps = {
   setDarkmode: Dispatch<SetStateAction<boolean>>;
 };
 
-export const context = createContext<EditorProviderProps>(
-  {} as EditorProviderProps,
+export const context = createContext<EditorContextProps>(
+  {} as EditorContextProps,
 );
 
 export function EditorProvider(props: { children: ReactNode }) {
@@ -121,9 +121,10 @@ export function EditorProvider(props: { children: ReactNode }) {
   }, [models]);
 
   useEffect(() => {
-    const view = renderer.views[activeView].view;
+    const view = renderer.views?.[activeView].view;
+    if (!view) return;
     view.camera.z = camTargetZ;
-  }, [activeView, renderer, camTargetZ]);
+  }, [activeView, renderer.views, camTargetZ]);
 
   useEffect(() => {
     if (darkmode) {

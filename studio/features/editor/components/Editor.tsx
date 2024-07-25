@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  Grid,
   Item,
   TabList,
   TabPanels,
@@ -12,7 +13,10 @@ import { ToastContainer } from "@react-spectrum/toast";
 //import Brush from "@spectrum-icons/workflow/Brush";
 import { PositioningContainer } from "@core/components/PositioningContainer";
 import EditorModels from "@features/editor-models/components/EditorModels";
+import CameraViewToolbar from "@features/editor-toolbar/components/CameraViewToolbar";
 import ProjectionToolbar from "@features/editor-toolbar/components/ProjectionToolbar";
+import SelectionToolbar from "@features/editor-toolbar/components/SelectionToolbar";
+import ShaderToolbar from "@features/editor-toolbar/components/ShaderToolbar";
 import BoxExport from "@spectrum-icons/workflow/BoxExport";
 import Code from "@spectrum-icons/workflow/Code";
 import Data from "@spectrum-icons/workflow/Data";
@@ -33,7 +37,18 @@ export default function Editor(props: EditorProps) {
         <View width="100%" height="100%" position="relative">
           <CanvasWrapper />
           <View position="absolute" top="size-100" left="size-100">
-            <ProjectionToolbar />
+            <Grid
+              areas={["projection camera shader selection"]}
+              columns={["auto auto auto auto"]}
+              rows={["auto"]}
+              gap="size-100"
+              width="size-100"
+            >
+              <ProjectionToolbar />
+              <CameraViewToolbar />
+              <ShaderToolbar />
+              <SelectionToolbar />
+            </Grid>
           </View>
         </View>
       </Allotment.Pane>

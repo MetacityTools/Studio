@@ -12,11 +12,14 @@ export default function useLoadLatestVersion() {
     async (projectId: number) => {
       try {
         const version = await getLatestProjectVersions(projectId);
+        if (!version) return;
         const blob = await getProjectVersionArchive(version.id);
         const fileMap = new Map<string, Blob>();
         await readFileZipContents(blob, fileMap);
         const data = await load(fileMap);
-        await importModels(data.models);
+        await importModels(data.models, {
+          overwriteCurrent: true,
+        });
       } catch (error) {
         console.error(error);
       }

@@ -17,6 +17,6 @@ export default async function getLatestProjectVersions(projectId: number) {
     where: { project: { id: projectId, user: { id: user.id } } },
     order: { updated_at: "DESC" },
   });
-  if (!latestProjectVersion) throw new Error("Not found");
+  if (!latestProjectVersion) return null;
   return toPlain(latestProjectVersion);
 }

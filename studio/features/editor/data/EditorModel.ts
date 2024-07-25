@@ -34,6 +34,24 @@ export class EditorModel extends GL.Pickable implements GL.Selectable {
     super();
   }
 
+  cleanUpMetadata() {
+    const submodelIds = this.submodelIDs;
+    const metadataKeys = Object.keys(this.metadata);
+
+    for (const key of submodelIds) {
+      if (metadataKeys.indexOf(key.toString()) === -1) {
+        delete this.metadata[key];
+      }
+    }
+
+    for (const key of metadataKeys) {
+      const numberKey = parseInt(key);
+      if (!submodelIds.has(numberKey)) {
+        delete this.metadata[numberKey];
+      }
+    }
+  }
+
   get submodelIDs() {
     const attr = this.attributes.getAttribute("submodel");
     if (!attr) throw new Error("No submodel attribute found");

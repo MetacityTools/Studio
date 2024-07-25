@@ -15,14 +15,8 @@ import { useCallback } from "react";
 import { useEditorContext } from "./useEditorContext";
 import { useUpdateMetadata } from "./useMetadataUpdate";
 
-export enum CoordinateMode {
-  Keep,
-  Center,
-  None,
-}
-
 export interface EditorImportOptions {
-  coordMode?: CoordinateMode;
+  overwriteCurrent?: boolean;
 }
 
 export function useImportModels() {
@@ -32,29 +26,46 @@ export function useImportModels() {
   const importModels = useCallback(
     async (data: EditorModelData[], options?: EditorImportOptions) => {
       let shift = globalShift;
-      let coordMode = options?.coordMode ?? CoordinateMode.None;
       const createdModels = [];
 
       //sort out the alignment
       for (const model of data) {
-        shift = alignModels(model.geometry.position, coordMode, shift);
+        shift = alignModels(model.geometry.position, shift);
       }
 
       //generate geometry and metadata
       for (const model of data) {
         const glmodel = await importModel(model);
         if (!glmodel) continue;
-        scene.add(glmodel);
         createdModels.push(glmodel);
       }
 
-      setGlobalShift(shift);
+      if (options?.overwriteCurrent) {
+        const objCopy = scene.objects.slice();
+        for (const obj of objCopy) {
+          if (obj instanceof EditorModel) scene.remove(obj);
+        }
+      }
+
+      //add to scene
+      for (const model of createdModels) {
+        scene.add(model);
+      }
+
+      //all current models
       const models = scene.objects.filter(
         (obj) => obj instanceof EditorModel,
       ) as EditorModel[];
 
+      //cleanup metadata
+      for (const model of models) {
+        model.cleanUpMetadata();
+      }
+
+      setGlobalShift(shift);
       setModels(models);
       updateMetadata(models);
+
       return createdModels;
     },
     [globalShift, scene, setGlobalShift, setModels, updateMetadata],
@@ -119,20 +130,13 @@ async function addTriangleModel(data: EditorModelData) {
   return glmodel;
 }
 
-function alignModels(
-  positions: Float32Array,
-  coordMode: CoordinateMode,
-  shift: vec3 | null = null,
-) {
-  //TODO investigate what's up with the null shift
-  if (coordMode === CoordinateMode.Center) alignToCenter(positions);
-  if (coordMode === CoordinateMode.Keep) {
-    if (shift === null) {
-      shift = vec3.create();
-      alignToCenter(positions, shift);
-    } else {
-      shiftModel(positions, shift);
-    }
+function alignModels(positions: Float32Array, shift: vec3 | null = null) {
+  if (shift === null) {
+    //if this is the first model we are importing, align it to the center
+    shift = vec3.create();
+    alignToCenter(positions, shift);
+  } else {
+    shiftModel(positions, shift);
   }
 
   return shift;

@@ -1,18 +1,20 @@
 import { ActionGroup, Item, Selection, View } from "@adobe/react-spectrum";
-import { ProjectionType } from "@bananagl/bananagl";
+import { CameraView } from "@bananagl/bananagl";
+import {
+  CubeEmpty,
+  CubeLeft,
+  CubeRight,
+  CubeTop,
+} from "@core/components/Icons";
 import { useActiveView } from "@features/editor/hooks/useActiveView";
 import { useRenderer } from "@features/editor/hooks/useRender";
 import { useCallback, useState } from "react";
-import { BiRectangle } from "react-icons/bi";
-import { TbPerspective } from "react-icons/tb";
 
-export default function ProjectionToolbar() {
+export default function CameraViewToolbar() {
   const renderer = useRenderer();
   const activeView = useActiveView();
 
-  const [projection, setProjection] = useState<ProjectionType>(
-    ProjectionType.ORTHOGRAPHIC,
-  );
+  const [mode, setMode] = useState<CameraView>(CameraView.Free);
 
   const handleAction = useCallback(
     (keys: Selection) => {
@@ -20,13 +22,14 @@ export default function ProjectionToolbar() {
       if (keys === "all") return;
 
       //get first key
-      const key = keys.values().next().value as ProjectionType;
+      const viewMode = keys.values().next().value as CameraView;
       const view = renderer.views?.[activeView].view;
       if (!view) return;
-      view.camera.projectionType = key;
-      setProjection(key);
+      view.cameraLock.mode = viewMode;
+      setMode(viewMode);
     },
-    [activeView, renderer.views],
+
+    [activeView, renderer.views, setMode],
   );
 
   return (
@@ -36,20 +39,32 @@ export default function ProjectionToolbar() {
       borderRadius="medium"
       borderColor="gray-300"
       borderWidth="thin"
-      gridArea="projection"
+      gridArea="camera"
     >
       <ActionGroup
         selectionMode="single"
         overflowMode="collapse"
         onSelectionChange={handleAction}
-        selectedKeys={[projection]}
+        selectedKeys={[mode]}
         isQuiet
       >
-        <Item key={ProjectionType.ORTHOGRAPHIC}>
-          <BiRectangle className="text-2xl" />
+        <Item key={CameraView.Free}>
+          <CubeEmpty />
         </Item>
-        <Item key={ProjectionType.PERSPECTIVE}>
-          <TbPerspective className="text-2xl" />
+        <Item key={CameraView.Top}>
+          <CubeTop />
+        </Item>
+        <Item key={CameraView.Front}>
+          <CubeLeft />
+        </Item>
+        <Item key={CameraView.Right}>
+          <CubeRight />
+        </Item>
+        <Item key={CameraView.Left}>
+          <CubeLeft />
+        </Item>
+        <Item key={CameraView.Back}>
+          <CubeRight />
         </Item>
       </ActionGroup>
     </View>

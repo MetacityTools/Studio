@@ -17,10 +17,7 @@ import {
 import { NoData } from "@core/components/Empty";
 import getModelArchive from "@features/api-sdk/getModelArchive";
 import { Model } from "@features/db/entities/model";
-import {
-  CoordinateMode,
-  useImportModels,
-} from "@features/editor/hooks/useImportModels";
+import { useImportModels } from "@features/editor/hooks/useImportModels";
 import { load } from "@features/editor/utils/formats/loader";
 import { getModelsByUser } from "@features/models/queries/getModelsByUser";
 import { ToastQueue } from "@react-spectrum/toast";
@@ -29,12 +26,10 @@ import { useCallback, useState } from "react";
 import { readFileZipContents } from "../utils/readZipContents";
 
 type EditorAddModelDialogProps = {
-  projectId: number;
   close: () => void;
 };
 
 export default function EditorAddModelDialog({
-  projectId,
   close,
 }: EditorAddModelDialogProps) {
   const [loading, setLoading] = useState(false);
@@ -67,9 +62,7 @@ export default function EditorAddModelDialog({
     }
 
     const data = await load(fileMap);
-    await importModels(data.models, {
-      coordMode: CoordinateMode.Center,
-    });
+    await importModels(data.models);
     close();
   }, [sourceList, close, importModels]);
 

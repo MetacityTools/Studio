@@ -110,9 +110,9 @@ export interface ModelMetadataRecords {
 }
 
 export enum GeometryMode {
-  WIREFRAME,
-  SOLID,
-  NOEDGES,
+  WIREFRAME = "WIREFRAME",
+  SOLID = "SOLID",
+  NOEDGES = "NOEDGES",
 }
 
 //------------------------------------------------------------

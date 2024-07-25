@@ -13,7 +13,7 @@ export class ProjectVersion {
   id!: number;
 
   @ManyToOne(() => Project, {
-    onDelete: "RESTRICT",
+    onDelete: "CASCADE",
     onUpdate: "CASCADE",
   })
   project?: Project;

@@ -24,11 +24,13 @@ import { useRemoveSubmodels } from "@features/editor/hooks/useRemoveSubmodels";
 import { useSelected } from "@features/editor/hooks/useSelected";
 import { useSplitModel } from "@features/editor/hooks/useSplitModel";
 import Delete from "@spectrum-icons/workflow/Delete";
+import Rename from "@spectrum-icons/workflow/Rename";
 import SplitView from "@spectrum-icons/workflow/SplitView";
 import Visibility from "@spectrum-icons/workflow/Visibility";
 import VisibilityOff from "@spectrum-icons/workflow/VisibilityOff";
-import { Key, useCallback } from "react";
+import { Key, useCallback, useState } from "react";
 import EditorAddModelDialog from "./EditorAddModelDialog";
+import EditorRenameModelDialog from "./EditorRenameModelDialog";
 
 type EditorModelsProps = {
   projectId: number;
@@ -41,6 +43,8 @@ export default function EditorModels({ projectId }: EditorModelsProps) {
   const removeSubmodels = useRemoveSubmodels();
   const splitModel = useSplitModel();
   const selected = useSelected();
+
+  const [editingModel, setEditingModel] = useState<EditorModel | null>(null);
 
   const dispatchAction = useCallback(
     async (model: EditorModel, action: Key) => {
@@ -59,6 +63,9 @@ export default function EditorModels({ projectId }: EditorModelsProps) {
           break;
         case "split":
           await splitModel(model, selected.get(model) || new Set());
+          break;
+        case "rename":
+          setEditingModel(model);
           break;
       }
     },
@@ -79,11 +86,14 @@ export default function EditorModels({ projectId }: EditorModelsProps) {
         <View position="relative" overflow="hidden">
           <DialogTrigger>
             <ActionButton>Add Model</ActionButton>
-            {(close) => (
-              <EditorAddModelDialog projectId={projectId} close={close} />
-            )}
+            {(close) => <EditorAddModelDialog close={close} />}
           </DialogTrigger>
         </View>
+        <EditorRenameModelDialog
+          close={() => setEditingModel(null)}
+          model={editingModel}
+          open={!!editingModel}
+        />
         <View
           position="relative"
           flex
@@ -127,6 +137,10 @@ export default function EditorModels({ projectId }: EditorModelsProps) {
                   )}
                 </ActionGroup>
                 <ActionMenu onAction={(key) => dispatchAction(model.item, key)}>
+                  <Item key="rename" textValue="Rename model">
+                    <Rename />
+                    <Text>Rename model</Text>
+                  </Item>
                   <Item key="deleteSubmodels" textValue="Delete submodels">
                     <Delete />
                     <Text>Delete selected submodels</Text>
