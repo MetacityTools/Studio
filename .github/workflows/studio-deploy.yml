@@ -8,7 +8,7 @@ on:
 jobs:
   build:
     name: Build Docker image
-    uses: ./.github/workflows/build.yml
+    uses: ./.github/workflows/studio-build.yml
 
   deploy:
     name: Deploy to server
