@@ -1,3 +1,5 @@
+import axios from "axios";
+
 export default async function uploadModel(name: string, files: File[]) {
   const formData = new FormData();
 
@@ -6,10 +8,9 @@ export default async function uploadModel(name: string, files: File[]) {
     formData.append("files", file);
   }
 
-  const response = await fetch("/api/models", {
-    method: "POST",
-    body: formData,
-  });
+  const response = await axios
+    .post("/api/models", formData)
+    .then((res) => res.data);
 
   return response;
 }
