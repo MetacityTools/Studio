@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - dev
-      - feature/MS-27/converter-deploy
 
 jobs:
   test-studio:
