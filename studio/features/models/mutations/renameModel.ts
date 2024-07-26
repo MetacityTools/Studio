@@ -12,11 +12,9 @@ const renameModelData = z.object({
 
 export async function renameModel(
   id: number,
-  modelData: Partial<Pick<Model, "name">>
+  modelData: Partial<Pick<Model, "name">>,
 ): Promise<Model | null> {
   modelData = renameModelData.parse(modelData);
-
-  console.log(modelData);
 
   if (!(await canEditModel())) throw new Error("Unauthorized");
 
@@ -29,7 +27,7 @@ export async function renameModel(
   });
 
   if (!model) throw new Error("Not Found");
-  console.log(modelData.name);
+
   return modelRepository.save({
     id,
     name: modelData.name ?? model.name,
