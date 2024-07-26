@@ -12,6 +12,8 @@ import {
   getUserModelBucketName,
   saveFileStream,
 } from "@features/storage";
+import { createReadStream, ReadStream } from "fs";
+import path from "path";
 import { Readable } from "stream";
 import { ReadableStream } from "stream/web";
 import { test } from "vitest";
@@ -22,6 +24,7 @@ interface Fixtures {
   embed: Embed;
   model: Model;
   file: File;
+  blob: Blob;
 }
 
 export const testWithFixtures = test.extend<Fixtures>({
@@ -67,7 +70,7 @@ export const testWithFixtures = test.extend<Fixtures>({
 
     const model = await modelRepository.save({
       name: "Test Model",
-      coordinateSystem: "WGS84",
+      coordinateSystem: "3857",
       user: { id: user.id },
     });
 
@@ -104,19 +107,70 @@ export const testWithFixtures = test.extend<Fixtures>({
   },
 
   file: async ({ user }, use) => {
-    const dummyFile = {
-      stream: () =>
-        new ReadableStream({
-          start(controller) {
-            controller.enqueue(new TextEncoder().encode("test"));
-            controller.close();
+    const testFilePath = path.join(
+      __dirname,
+      "..",
+      "..",
+      "testdata",
+      "climate.geojson",
+    );
+
+    function createWebStream(filename: string) {
+      async function* nodeStreamToIterator(stream: ReadStream) {
+        for await (const chunk of stream) {
+          yield chunk;
+        }
+      }
+
+      function iteratorToStream(iterator: AsyncGenerator<any, void, unknown>) {
+        return new ReadableStream({
+          async pull(controller) {
+            const { value, done } = await iterator.next();
+
+            if (done) {
+              controller.close();
+            } else {
+              controller.enqueue(new Uint8Array(value));
+            }
           },
-        }),
-      name: "test.txt",
+        });
+      }
+
+      const nodeStream = createReadStream(testFilePath);
+      const iterator = nodeStreamToIterator(nodeStream);
+      const webStream = iteratorToStream(iterator);
+
+      return webStream;
+    }
+
+    const dummyFile = {
+      stream: () => createWebStream(testFilePath),
+      name: "climate.geojson",
       size: 4,
       type: "text/plain",
     } as unknown as File;
 
     await use(dummyFile);
+  },
+
+  blob: async ({}, use) => {
+    const testFilePath = path.join(
+      __dirname,
+      "..",
+      "..",
+      "testdata",
+      "climate.geojson",
+    );
+
+    const fileStream = createReadStream(testFilePath);
+    const chunks: Uint8Array[] = [];
+
+    for await (const chunk of fileStream) {
+      chunks.push(chunk);
+    }
+
+    const blob = new Blob(chunks);
+
+    await use(blob);
   },
 });

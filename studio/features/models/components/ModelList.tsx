@@ -27,6 +27,7 @@ export default function ModelList() {
   });
 
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [convertDialogOpen, setConvertDialogOpen] = useState(false);
   const [renameDialogOpen, setRenameDialogOpen] = useState(false);
   const [selectedModelId, setSelectedModelId] = useState<number | null>(null);
 
@@ -78,6 +79,9 @@ export default function ModelList() {
               </Item>
               <Item key="download" textValue="Download">
                 <Text>Download</Text>
+              </Item>
+              <Item key="convert" textValue="Convert">
+                <Text>Convert</Text>
               </Item>
               <Item key="delete" textValue="Delete">
                 <Text>Delete</Text>

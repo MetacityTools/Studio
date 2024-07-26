@@ -1,0 +1,6 @@
+__pycache__
+*.zip
+*.geojson
+*.gltf
+*.glb
+.pytest_cache

@@ -47,5 +47,5 @@ testWithFixtures("GET /models/[model]/data", async ({ model }) => {
   const body = await response.text();
 
   expect(response.status).toBe(200);
-  expect(body).toBeDefined();
+  expect(body).toBeTruthy();
 });

@@ -1,0 +1,55 @@
+name: Metacity Studio Test
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+    paths:
+      - "studio/**"
+      - ".github/workflows/studio-test.yml"
+  workflow_call:
+
+jobs:
+  test:
+    name: Run tests
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: pds
+          POSTGRES_PASSWORD: pds-pass
+          POSTGRES_DB: pds
+      minio:
+        image: minio/minio:edge-cicd
+        options: --health-cmd "curl -s http://localhost:9000/minio/health/live"
+        ports:
+          - 9000:9000
+        env:
+          MINIO_ROOT_USER: pds
+          MINIO_ROOT_PASSWORD: pdspdspds
+
+    env:
+      DB_HOST: localhost
+      DB_USERNAME: pds
+      DB_PASSWORD: pds-pass
+      DB_DATABASE: pds
+      MINIO_ENDPOINT: localhost
+      MINIO_ACCESS_KEY: pds
+      MINIO_SECRET_KEY: pdspdspds
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: cd studio && npm ci
+
+      - name: Run tests
+        run: cd studio && npm test
