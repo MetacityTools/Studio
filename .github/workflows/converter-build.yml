@@ -1,4 +1,4 @@
-name: Metacity Studio Build
+name: Coordinates Converter Build
 
 on:
   workflow_call:
@@ -26,7 +26,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           push: true
-          context: ./converter
-          tags: "ghcr.io/metacitytools/coordinates-converter:latest"
+          context: ./studio
+          tags: "ghcr.io/metacitytools/studio:latest"
           cache-from: type=gha
           cache-to: type=gha,mode=max

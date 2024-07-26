@@ -1,0 +1,36 @@
+name: Metacity Studio Deploy
+
+on:
+  push:
+    branches:
+      - dev
+      - feature/MS-27/converter-deploy
+
+jobs:
+  test-studio:
+    name: Run studio tests
+    uses: ./.github/workflows/studio-test.yml
+
+  build-studio:
+    name: Build and push studio Docker image
+    needs: test-studio
+    uses: ./.github/workflows/studio-build.yml
+
+  test-converter:
+    name: Run coordinates converter tests
+    uses: ./.github/workflows/converter-test.yml
+
+  build-converter:
+    name: Build and push coordinates converter Docker image
+    needs: test-converter
+    uses: ./.github/workflows/converter-build.yml
+
+  deploy:
+    name: Notify Watchtower
+    runs-on: ubuntu-latest
+    needs:
+      - build-studio
+      - build-converter
+    steps:
+      - name: Notify Watchtower using curl
+        run: 'curl -I -H "Authorization: Bearer ${{ secrets.WATCHTOWER_TOKEN }}" ${{ vars.WATCHTOWER_URL }}'
