@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@spectrum-icons/workflow": "^4.2.12",
+    "allotment": "^1.20.2"
+  }
+}

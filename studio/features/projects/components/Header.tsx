@@ -9,10 +9,11 @@ type BreadcrumbItem = {
 
 type HeaderProps = {
   nav: BreadcrumbItem[];
+  children?: React.ReactNode;
 };
 
 export default function Header(props: HeaderProps) {
-  const { nav } = props;
+  const { nav, children } = props;
   const user = useUser();
 
   return (
@@ -23,6 +24,7 @@ export default function Header(props: HeaderProps) {
       padding="size-10"
       width="100%"
       paddingY="size-100"
+      backgroundColor="gray-50"
     >
       <Flex
         direction="row"
@@ -38,6 +40,7 @@ export default function Header(props: HeaderProps) {
             </Item>
           ))}
         </Breadcrumbs>
+        {children}
         {user?.picture && (
           <Avatar
             src={user?.picture}

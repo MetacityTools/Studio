@@ -1,12 +1,18 @@
 import { Content, Heading, IllustratedMessage } from "@adobe/react-spectrum";
 import NotFound from "@spectrum-icons/illustrations/NotFound";
 
-export const NoData = () => {
+type EmptyProps = {
+  heading?: string;
+  content?: string;
+};
+
+export const NoData = (props: EmptyProps) => {
+  const { heading = "No Data", content = "Nothing to find here" } = props;
   return (
     <IllustratedMessage>
       <NotFound />
-      <Heading>No Data</Heading>
-      <Content>Nothing to find here</Content>
+      <Heading>{heading}</Heading>
+      <Content>{content}</Content>
     </IllustratedMessage>
   );
 };

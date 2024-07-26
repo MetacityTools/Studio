@@ -16,6 +16,7 @@ import {
   Text,
   TextField,
 } from "@adobe/react-spectrum";
+import uploadModel from "@features/api-sdk/uploadModel";
 
 import { ToastQueue } from "@react-spectrum/toast";
 import { DropEvent } from "@react-types/shared";
@@ -42,20 +43,11 @@ export default function ModelUploadDialog({ close }: UploadModelDialogProps) {
     if (!files.length || !name) {
       return;
     }
+
     // display loading state
     setIsPending(true);
-    const formData = new FormData();
-    // append name to form data
-    formData.append("name", name);
-    // append files to form data
-    for (const file of files) {
-      formData.append("files", file);
-    }
-    // send form data to server
-    const response = await fetch("/api/models", {
-      method: "POST",
-      body: formData,
-    });
+
+    const response = await uploadModel(name, files);
     if (response.ok) {
       close();
     } else {
@@ -183,7 +175,7 @@ function FileList(props: FileListProps) {
       items={files}
       width="100%"
       minHeight="size-600"
-      aria-label="ListView multiple selection example"
+      aria-label="Files"
       renderEmptyState={() => <NoSelectedData />}
     >
       {(file) => (

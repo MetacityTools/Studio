@@ -1,24 +1,28 @@
 "use client";
 
-import { Button, Flex } from "@adobe/react-spectrum";
+import { Button, Grid, Heading, View } from "@adobe/react-spectrum";
 import Link from "next/link";
 
 export default function Home() {
   return (
-    <Flex
-      direction="column"
+    <Grid
       width="100%"
       height="100%"
-      maxWidth="size-6000"
-      marginX="auto"
       gap="size-100"
-      justifyContent="center"
-      alignItems="center"
+      justifyContent="start"
+      alignItems="start"
     >
-      <h1>Metacity Studio</h1>
-      <Button href="/projects" variant="accent" elementType={Link}>
-        Log In
-      </Button>
-    </Flex>
+      <View marginX="size-100">
+        <Heading level={1}>Metacity Studio</Heading>
+        <Button
+          href="/projects"
+          variant="accent"
+          style="outline"
+          elementType={Link}
+        >
+          Log In
+        </Button>
+      </View>
+    </Grid>
   );
 }

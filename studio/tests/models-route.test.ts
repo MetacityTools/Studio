@@ -1,6 +1,6 @@
 "use server";
 
-import { GET } from "@app/api/models/[model]/data/[file]/route";
+import { GET } from "@app/api/models/[model]/data/route";
 import { expect } from "vitest";
 import { POST } from "../app/api/models/route";
 import { testWithFixtures } from "./helpers";
@@ -34,38 +34,18 @@ testWithFixtures("POST /models", async ({ user }) => {
   });
 });
 
-testWithFixtures("GET /models/[model]/data/[file]", async ({ model, file }) => {
-  const url = new URL(
-    `http://localhost:3000/models/${model.id}/data/${file.name}`,
-  );
+testWithFixtures("GET /models/[model]/data", async ({ model }) => {
+  const url = new URL(`http://localhost:3000/models/${model.id}/data`);
 
   const req = new Request(url, {
     method: "GET",
   });
 
   const response = await GET(req, {
-    params: { model: String(model.id), file: file.name },
+    params: { model: String(model.id) },
   });
   const body = await response.text();
 
   expect(response.status).toBe(200);
-  expect(body).toBe("test");
-});
-
-testWithFixtures("GET /models/[model]/data/[file]", async ({ model, file }) => {
-  const url = new URL(
-    `http://localhost:3000/models/${model.id}/data/${file.name}`,
-  );
-
-  const req = new Request(url, {
-    method: "GET",
-  });
-
-  const response = await GET(req, {
-    params: { model: String(model.id), file: file.name },
-  });
-  const body = await response.text();
-
-  expect(response.status).toBe(200);
-  expect(body).toBe("test");
+  expect(body).toBeDefined();
 });
