@@ -1,9 +1,10 @@
 import axios from "axios";
 
 export default async function getProjectVersionArchive(projectVersion: number) {
-  const response = await axios
-    .get(`/api/projectVersions/${projectVersion}/data`)
+  const data = await axios
+    .get<Blob>(`/api/projectVersions/${projectVersion}/data`, {
+      responseType: "blob",
+    })
     .then((res) => res.data);
-  const data = await response.blob();
   return data;
 }

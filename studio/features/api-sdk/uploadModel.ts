@@ -8,9 +8,7 @@ export default async function uploadModel(name: string, files: File[]) {
     formData.append("files", file);
   }
 
-  const response = await axios
-    .post("/api/models", formData)
-    .then((res) => res.data);
+  const response = await axios.post("/api/models", formData);
 
   return response;
 }
