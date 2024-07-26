@@ -1,6 +1,6 @@
 import * as GL from "@bananagl/bananagl";
 import { EditorModel } from "@editor/data/EditorModel";
-import { Metadata, Style } from "@editor/data/types";
+import { Style } from "@editor/data/types";
 import { vec3 } from "gl-matrix";
 import {
   Dispatch,
@@ -39,8 +39,6 @@ type EditorContextProps = {
   setGridVisible: Dispatch<SetStateAction<boolean>>;
   globalShift: vec3 | null;
   setGlobalShift: Dispatch<SetStateAction<vec3 | null>>;
-  metadata: Metadata;
-  setMetadata: Dispatch<SetStateAction<Metadata>>;
   styles: Style;
   setStyles: Dispatch<SetStateAction<Style>>;
   usedStyle: string[] | null;
@@ -68,7 +66,6 @@ export function EditorProvider(props: { children: ReactNode }) {
   const [maxShade, setMaxShade] = useState<number>(10);
   const [gridVisible, setGridVisible] = useState<boolean>(false);
   const [globalShift, setGlobalShift] = useState<vec3 | null>(null);
-  const [metadata, setMetadata] = useState<Metadata>({});
   const [styles, setStyles] = useState<Style>({});
   const [lastUsedStyle, setLastUsedStyle] = useState<string[] | null>(null);
   const [usedStyle, setUsedStyle] = useState<string[] | null>(null);
@@ -162,8 +159,6 @@ export function EditorProvider(props: { children: ReactNode }) {
         setGridVisible,
         globalShift,
         setGlobalShift,
-        metadata,
-        setMetadata,
         styles,
         setStyles,
         usedStyle,

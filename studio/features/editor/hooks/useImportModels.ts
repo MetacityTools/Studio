@@ -13,7 +13,6 @@ import { PrimitiveType } from "@editor/data/types";
 import { vec3 } from "gl-matrix";
 import { useCallback } from "react";
 import { useEditorContext } from "./useEditorContext";
-import { useUpdateMetadata } from "./useMetadataUpdate";
 
 export interface EditorImportOptions {
   overwriteCurrent?: boolean;
@@ -21,7 +20,6 @@ export interface EditorImportOptions {
 
 export function useImportModels() {
   const { globalShift, scene, setGlobalShift, setModels } = useEditorContext();
-  const updateMetadata = useUpdateMetadata();
 
   const importModels = useCallback(
     async (data: EditorModelData[], options?: EditorImportOptions) => {
@@ -49,6 +47,7 @@ export function useImportModels() {
 
       //add to scene
       for (const model of createdModels) {
+        flattenModelMetadata(model);
         scene.add(model);
       }
 
@@ -64,11 +63,10 @@ export function useImportModels() {
 
       setGlobalShift(shift);
       setModels(models);
-      updateMetadata(models);
 
       return createdModels;
     },
-    [globalShift, scene, setGlobalShift, setModels, updateMetadata],
+    [globalShift, scene, setGlobalShift, setModels],
   );
 
   return importModels;
@@ -233,11 +231,38 @@ function computeNormals(positions: number[] | Float32Array) {
 
   return normals;
 }
-function useCalback(
-  arg0: (
-    data: EditorModelData[],
-    options?: EditorImportOptions,
-  ) => Promise<EditorModel[]>,
-) {
-  throw new Error("Function not implemented.");
+
+type HierarchicalMetadata = {
+  [key: string]: string | number | boolean | HierarchicalMetadata;
+};
+
+type FlatMetadata = {
+  [key: string]: string | number | boolean;
+};
+
+function flattenModelMetadata(model: EditorModel) {
+  Object.entries(model.metadata).forEach(([key, value]) => {
+    if (typeof value === "object") {
+      model.metadata[parseInt(key)] = flattenMetadata(value);
+    }
+  });
+}
+
+function flattenMetadata(metadata: HierarchicalMetadata) {
+  const flatMetadata: FlatMetadata = {};
+  const stack = Object.entries(metadata);
+
+  while (stack.length > 0) {
+    const [key, value] = stack.pop()!;
+    if (value === null || value === undefined) continue;
+    if (typeof value === "object") {
+      for (const [subkey, subvalue] of Object.entries(value)) {
+        stack.push([`${key} - ${subkey}`, subvalue]);
+      }
+    } else {
+      flatMetadata[key] = value;
+    }
+  }
+
+  return flatMetadata;
 }

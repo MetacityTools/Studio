@@ -12,6 +12,7 @@ import {
 import { ToastContainer } from "@react-spectrum/toast";
 //import Brush from "@spectrum-icons/workflow/Brush";
 import { PositioningContainer } from "@core/components/PositioningContainer";
+import EditorMetadata from "@features/editor-metadata/components/EditorMetadata";
 import EditorModels from "@features/editor-models/components/EditorModels";
 import CameraViewToolbar from "@features/editor-toolbar/components/CameraViewToolbar";
 import ProjectionToolbar from "@features/editor-toolbar/components/ProjectionToolbar";
@@ -95,7 +96,9 @@ function SidePanel(props: SidePanelProps) {
             <Item key="models">
               <EditorModels {...props} />
             </Item>
-            <Item key="metadata">metadata</Item>
+            <Item key="metadata">
+              <EditorMetadata {...props} />
+            </Item>
             <Item key="style">style</Item>
           </TabPanels>
         </View>

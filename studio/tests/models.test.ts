@@ -52,7 +52,7 @@ testWithFixtures("delete model", async ({ model }) => {
 testWithFixtures("convert model coordinate system", async ({ model, blob }) => {
   expect(model.coordinateSystem).toBe("3857");
 
-  axios.post.mockResolvedValue({
+  (axios.post as any).mockResolvedValue({
     data: blob,
   });
 

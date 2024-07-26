@@ -6,7 +6,6 @@ import {
   ActionMenu,
   DialogTrigger,
   Flex,
-  Heading,
   Item,
   ListView,
   Text,
@@ -17,7 +16,6 @@ import { PositioningContainer } from "@core/components/PositioningContainer";
 import useModelSelection from "@features/editor-models/hooks/useModelSelection";
 import { EditorModel } from "@features/editor/data/EditorModel";
 import useModelList from "@features/editor/hooks/useModelList";
-import { useModels } from "@features/editor/hooks/useModels";
 import useModelToggleVisibility from "@features/editor/hooks/useModelToggleVisibility";
 import { useRemoveModels } from "@features/editor/hooks/useRemoveModels";
 import { useRemoveSubmodels } from "@features/editor/hooks/useRemoveSubmodels";
@@ -37,7 +35,6 @@ type EditorModelsProps = {
 };
 
 export default function EditorModels({ projectId }: EditorModelsProps) {
-  const [models] = useModels();
   const removeModels = useRemoveModels();
   const setVisibility = useModelToggleVisibility();
   const removeSubmodels = useRemoveSubmodels();
@@ -79,11 +76,6 @@ export default function EditorModels({ projectId }: EditorModelsProps) {
     <PositioningContainer>
       <Flex direction="column" height="100%" gap="size-100" marginX="size-200">
         <View position="relative" overflow="hidden" marginTop="size-200">
-          <Heading level={4} margin="size-0">
-            Project Models
-          </Heading>
-        </View>
-        <View position="relative" overflow="hidden">
           <DialogTrigger>
             <ActionButton>Add Model</ActionButton>
             {(close) => <EditorAddModelDialog close={close} />}
