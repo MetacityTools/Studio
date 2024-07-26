@@ -5,9 +5,10 @@ import { getUserToken } from "@features/auth/user";
 import { Model } from "@features/db/entities/model";
 import { injectRepository } from "@features/db/helpers";
 import {
-    deleteFile,
-    getUserModelBucketName,
-    listFilesInBucket,
+  deleteBucket,
+  deleteFile,
+  getUserModelBucketName,
+  listFilesInBucket,
 } from "@features/storage";
 
 export async function deleteModel(modelId: number) {
@@ -29,6 +30,8 @@ export async function deleteModel(modelId: number) {
   for (const file of files) {
     await deleteFile(file, bucketName);
   }
+
+  await deleteBucket(bucketName);
 
   // delete model
   await modelRepository.remove(model);
