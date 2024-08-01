@@ -1,4 +1,11 @@
-import { ActionGroup, Item, Selection, View } from "@adobe/react-spectrum";
+import {
+  ActionGroup,
+  Item,
+  Selection,
+  Tooltip,
+  TooltipTrigger,
+  View,
+} from "@adobe/react-spectrum";
 import { CameraView } from "@bananagl/bananagl";
 import {
   CubeEmpty,
@@ -48,24 +55,42 @@ export default function CameraViewToolbar() {
         selectedKeys={[mode]}
         isQuiet
       >
-        <Item key={CameraView.Free}>
-          <CubeEmpty />
-        </Item>
-        <Item key={CameraView.Top}>
-          <CubeTop />
-        </Item>
-        <Item key={CameraView.Front}>
-          <CubeLeft />
-        </Item>
-        <Item key={CameraView.Right}>
-          <CubeRight />
-        </Item>
-        <Item key={CameraView.Left}>
-          <CubeLeft />
-        </Item>
-        <Item key={CameraView.Back}>
-          <CubeRight />
-        </Item>
+        <TooltipTrigger delay={0} placement="bottom">
+          <Item key={CameraView.Free}>
+            <CubeEmpty />
+          </Item>
+          <Tooltip>Free camera</Tooltip>
+        </TooltipTrigger>
+        <TooltipTrigger delay={0} placement="bottom">
+          <Item key={CameraView.Top}>
+            <CubeTop />
+          </Item>
+          <Tooltip>Top view</Tooltip>
+        </TooltipTrigger>
+        <TooltipTrigger delay={0} placement="bottom">
+          <Item key={CameraView.Front}>
+            <CubeLeft />
+          </Item>
+          <Tooltip>Front view</Tooltip>
+        </TooltipTrigger>
+        <TooltipTrigger delay={0} placement="bottom">
+          <Item key={CameraView.Right}>
+            <CubeRight />
+          </Item>
+          <Tooltip>Right view</Tooltip>
+        </TooltipTrigger>
+        <TooltipTrigger delay={0} placement="bottom">
+          <Item key={CameraView.Left}>
+            <CubeLeft />
+          </Item>
+          <Tooltip>Left view</Tooltip>
+        </TooltipTrigger>
+        <TooltipTrigger delay={0} placement="bottom">
+          <Item key={CameraView.Back}>
+            <CubeRight />
+          </Item>
+          <Tooltip>Back view</Tooltip>
+        </TooltipTrigger>
       </ActionGroup>
     </View>
   );

@@ -1,4 +1,11 @@
-import { ActionGroup, Item, Selection, View } from "@adobe/react-spectrum";
+import {
+  ActionGroup,
+  Item,
+  Selection,
+  Tooltip,
+  TooltipTrigger,
+  View,
+} from "@adobe/react-spectrum";
 import { ProjectionType } from "@bananagl/bananagl";
 import { useActiveView } from "@features/editor/hooks/useActiveView";
 import { useRenderer } from "@features/editor/hooks/useRender";
@@ -45,12 +52,18 @@ export default function ProjectionToolbar() {
         selectedKeys={[projection]}
         isQuiet
       >
-        <Item key={ProjectionType.ORTHOGRAPHIC}>
-          <BiRectangle className="text-2xl" />
-        </Item>
-        <Item key={ProjectionType.PERSPECTIVE}>
-          <TbPerspective className="text-2xl" />
-        </Item>
+        <TooltipTrigger delay={0} placement="bottom">
+          <Item key={ProjectionType.ORTHOGRAPHIC}>
+            <BiRectangle className="text-2xl" />
+          </Item>
+          <Tooltip>Orthographic projection</Tooltip>
+        </TooltipTrigger>
+        <TooltipTrigger delay={0} placement="bottom">
+          <Item key={ProjectionType.PERSPECTIVE}>
+            <TbPerspective className="text-2xl" />
+          </Item>
+          <Tooltip>Perspective projection</Tooltip>
+        </TooltipTrigger>
       </ActionGroup>
     </View>
   );

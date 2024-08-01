@@ -1,4 +1,11 @@
-import { ActionGroup, Item, Selection, View } from "@adobe/react-spectrum";
+import {
+  ActionGroup,
+  Item,
+  Selection,
+  Tooltip,
+  TooltipTrigger,
+  View,
+} from "@adobe/react-spectrum";
 import { TriangleFull, TriangleFullFilled } from "@core/components/Icons";
 import { EditorModel } from "@features/editor/data/EditorModel";
 import { GeometryMode } from "@features/editor/data/types";
@@ -83,15 +90,24 @@ export default function ShaderToolbar() {
         selectedKeys={[geometryMode]}
         isQuiet
       >
-        <Item key={GeometryMode.NOEDGES}>
-          <TriangleFullFilled />
-        </Item>
-        <Item key={GeometryMode.SOLID}>
-          <TriangleFull />
-        </Item>
-        <Item key={GeometryMode.WIREFRAME}>
-          <TbVectorTriangle />
-        </Item>
+        <TooltipTrigger delay={0} placement="bottom">
+          <Item key={GeometryMode.NOEDGES}>
+            <TriangleFullFilled />
+          </Item>
+          <Tooltip>No edges</Tooltip>
+        </TooltipTrigger>
+        <TooltipTrigger delay={0} placement="bottom">
+          <Item key={GeometryMode.SOLID}>
+            <TriangleFull />
+          </Item>
+          <Tooltip>Solid</Tooltip>
+        </TooltipTrigger>
+        <TooltipTrigger delay={0} placement="bottom">
+          <Item key={GeometryMode.WIREFRAME}>
+            <TbVectorTriangle />
+          </Item>
+          <Tooltip>Wireframe</Tooltip>
+        </TooltipTrigger>
       </ActionGroup>
     </View>
   );

@@ -1,4 +1,10 @@
-import { ActionGroup, Item, View } from "@adobe/react-spectrum";
+import {
+  ActionGroup,
+  Item,
+  Tooltip,
+  TooltipTrigger,
+  View,
+} from "@adobe/react-spectrum";
 import { useModels } from "@features/editor/hooks/useModels";
 import { useSelection } from "@features/editor/hooks/useSelection";
 import { Key, useCallback } from "react";
@@ -40,12 +46,18 @@ export default function SelectionToolbar() {
       gridArea="selection"
     >
       <ActionGroup overflowMode="collapse" onAction={handleAction} isQuiet>
-        <Item key="all">
-          <MdSelectAll />
-        </Item>
-        <Item key="none">
-          <MdDeselect />
-        </Item>
+        <TooltipTrigger delay={0} placement="bottom">
+          <Item key="all">
+            <MdSelectAll />
+          </Item>
+          <Tooltip>Select all</Tooltip>
+        </TooltipTrigger>
+        <TooltipTrigger delay={0} placement="bottom">
+          <Item key="none">
+            <MdDeselect />
+          </Item>
+          <Tooltip>Deselect all</Tooltip>
+        </TooltipTrigger>
       </ActionGroup>
     </View>
   );
