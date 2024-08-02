@@ -38,5 +38,5 @@ export default function useModelSelection(fullySelectedModelKeys: Set<string>) {
     [models, select, fullySelectedModelKeys, selected],
   );
 
-  return handleSelection;
+  return { handleSelection, select };
 }

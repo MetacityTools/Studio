@@ -8,6 +8,7 @@ export type MetadataListItem = {
 export type MetadataAggListItem = {
   column: string;
   value: number | string;
+  key: string;
   count: number;
   selected: number;
 };

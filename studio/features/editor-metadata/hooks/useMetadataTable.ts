@@ -3,7 +3,10 @@ import { useSelected } from "@features/editor/hooks/useSelected";
 import { useEffect, useState } from "react";
 import { MetadataAggListItem } from "../type";
 
-export default function useMetadataTable(activeColumnName?: string) {
+export default function useMetadataTable(
+  activeColumnName?: string,
+  sort?: boolean,
+) {
   const [models] = useModels();
   const [columns, setColumns] = useState<{ key: string }[]>([]);
 
@@ -18,7 +21,6 @@ export default function useMetadataTable(activeColumnName?: string) {
     }
 
     const newColumns = Array.from(columnNames).map((key) => ({ key }));
-
     setColumns(newColumns);
   }, [models]);
 
@@ -27,12 +29,16 @@ export default function useMetadataTable(activeColumnName?: string) {
     MetadataAggListItem[]
   >([]);
   const [undefinedItems, setUndefinedItems] = useState<MetadataAggListItem>();
+  const [selectedValueKeys, setSelectedValueKeys] = useState<Set<string>>(
+    new Set(),
+  );
 
   useEffect(() => {
     //create aggregation only for the active column
     if (!activeColumnName) {
       setAggregatedColumns([]);
       setUndefinedItems(undefined);
+      setSelectedValueKeys(new Set());
       return;
     }
 
@@ -49,50 +55,71 @@ export default function useMetadataTable(activeColumnName?: string) {
     for (const model of models) {
       const selectedModel = selected.get(model);
 
-      for (const submodelId in Object.values(model.metadata)) {
+      for (const submodelId of model.submodelIDs) {
         const value = model.metadata[submodelId]?.[activeColumnName];
 
         if (typeof value === "string" || typeof value === "number") {
           //has defined value
           const item = columnValues.get(value) || { count: 0, selected: 0 };
           item.count++;
-          if (selectedModel?.has(parseInt(submodelId))) item.selected++;
+          if (selectedModel?.has(submodelId)) item.selected++;
           columnValues.set(value, item);
         } else {
           //does not have defined value
           undefinedItems.count++;
-          if (selectedModel?.has(parseInt(submodelId)))
-            undefinedItems.selected++;
+          if (selectedModel?.has(submodelId)) undefinedItems.selected++;
         }
       }
     }
 
     const newAggregatedRows: MetadataAggListItem[] = [];
     for (const [value, count] of columnValues.entries()) {
-      newAggregatedRows.push({ column: activeColumnName, value, ...count });
+      newAggregatedRows.push({
+        column: activeColumnName,
+        value,
+        ...count,
+        key: value.toString(),
+      });
     }
 
-    newAggregatedRows.sort((a, b) => {
-      if (typeof a.value === "string" && typeof b.value === "string") {
-        return a.value.localeCompare(b.value);
-      } else if (typeof a.value === "number" && typeof b.value === "number") {
-        return a.value - b.value;
-      } else if (typeof a.value === "string" && typeof b.value === "number") {
-        return -1;
-      } else {
-        return 1;
-      }
-    });
+    if (sort) {
+      newAggregatedRows.sort((a, b) => {
+        if (a.selected === a.count && b.selected !== b.count) return -1;
+        if (a.selected !== a.count && b.selected === b.count) return 1;
 
+        if (a.selected > 0 && b.selected === 0) return -1;
+        if (a.selected === 0 && b.selected > 0) return 1;
+
+        if (typeof a.value === "string" && typeof b.value === "string") {
+          return a.value.localeCompare(b.value);
+        } else if (typeof a.value === "number" && typeof b.value === "number") {
+          return a.value - b.value;
+        } else if (typeof a.value === "string" && typeof b.value === "number") {
+          return -1;
+        } else {
+          return 1;
+        }
+      });
+    }
+
+    //go through all items and if selected is equal to count, add to selectedValueKeys
+    const selectedKeys = new Set<string>();
+    for (const item of newAggregatedRows) {
+      if (item.count === item.selected) selectedKeys.add(item.key);
+    }
+
+    setSelectedValueKeys(selectedKeys);
     setAggregatedColumns(newAggregatedRows);
     setUndefinedItems({
       column: activeColumnName,
       value: "undefined",
+      key: "undefined",
       ...undefinedItems,
     });
-  }, [models, activeColumnName, selected]);
+  }, [models, activeColumnName, selected, sort]);
 
   return {
+    selectedValueKeys,
     undefinedItems,
     aggregatedRows,
     columns,
