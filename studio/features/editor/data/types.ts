@@ -1,4 +1,4 @@
-import { mat4 } from "gl-matrix";
+import { mat4, vec3 } from "gl-matrix";
 
 //------------------------------------------------------------
 //GLTF MODEL INTERFACE
@@ -106,7 +106,7 @@ export type ModelMetadata = {
 };
 
 export type ModelMetadataRecord = {
-  [key: string]: string | number | boolean;
+  [key: string]: string | number;
 };
 
 export type ModelMetadataRecords = {
@@ -121,27 +121,12 @@ export enum GeometryMode {
 
 //------------------------------------------------------------
 export type Style = {
-  style?: {
-    scalars?: Scalars;
-    categories?: Categories;
+  [key: string]: StyleRecord;
+};
+
+export type StyleRecord = {
+  [value: string | number]: {
+    code: string;
+    vec: vec3;
   };
-  children?: {
-    [key: string]: Style;
-  };
-};
-
-export type Scalars = {
-  colormap: string | string[];
-  min: number;
-  max: number;
-};
-
-export type Categories = {
-  [key: string]: string;
-};
-
-export type Histogram = {
-  min: number;
-  max: number;
-  histogram: number[];
 };

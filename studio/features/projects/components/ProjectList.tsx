@@ -4,26 +4,23 @@ import {
   ActionButton,
   ActionMenu,
   DialogTrigger,
+  Flex,
+  Image,
   Item,
-  ListView,
   Text,
-  useAsyncList,
+  View,
 } from "@adobe/react-spectrum";
-import { Loading, NoData } from "@core/components/Empty";
 import { Project } from "@features/db/entities/project";
 import CreateProjectDialog from "@features/projects/components/CreateDialog";
 import DeleteDialog from "@features/projects/components/DeleteDialog";
 import DuplicateDialog from "@features/projects/components/DuplicateDialog";
 import EditDialog from "@features/projects/components/EditDialog";
+import Link from "next/link";
 import { Key, useCallback, useState } from "react";
-import { getProjects } from "../queries/getProjects";
+import useProjects from "../hooks/useProjects";
 
 export default function ProjectList() {
-  const { items, isLoading, reload } = useAsyncList<Project>({
-    load: async () => {
-      return { items: await getProjects() };
-    },
-  });
+  const { projects, isLoading, refetch } = useProjects();
 
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -52,8 +49,8 @@ export default function ProjectList() {
 
   const handleCloseActionDialog = useCallback(() => {
     closeDialog();
-    reload();
-  }, [closeDialog, reload]);
+    refetch();
+  }, [closeDialog, refetch]);
 
   return (
     <>
@@ -63,44 +60,20 @@ export default function ProjectList() {
           <CreateProjectDialog
             close={() => {
               close();
-              reload();
+              refetch();
             }}
           />
         )}
       </DialogTrigger>
-      <ListView
-        minHeight="size-3000"
-        selectionMode="single"
-        items={items}
-        renderEmptyState={() => (isLoading ? <Loading /> : <NoData />)}
-        selectionStyle="highlight"
-        overflowMode="truncate"
-        aria-label="Projects"
-      >
-        {(project) => (
-          <Item
+      <Flex direction="row" gap="size-100">
+        {projects.map((project) => (
+          <ProjectItem
             key={project.id}
-            href={`/projects/${project.id}`}
-            target="_blank"
-            textValue={project.name}
-          >
-            <Text>{project.name}</Text>
-            <ActionMenu
-              onAction={(action: Key) => dispatchAction(project.id, action)}
-            >
-              <Item key="edit" textValue="Edit">
-                <Text>Edit</Text>
-              </Item>
-              <Item key="duplicate" textValue="Duplicate">
-                <Text>Duplicate</Text>
-              </Item>
-              <Item key="delete" textValue="Delete">
-                <Text>Delete</Text>
-              </Item>
-            </ActionMenu>
-          </Item>
-        )}
-      </ListView>
+            project={project}
+            dispatchAction={dispatchAction}
+          />
+        ))}
+      </Flex>
       <EditDialog
         open={editDialogOpen}
         close={handleCloseActionDialog}
@@ -117,5 +90,69 @@ export default function ProjectList() {
         projectId={selectedProjectId}
       />
     </>
+  );
+}
+
+type ProjectItemProps = {
+  project: Project;
+  dispatchAction: (projectId: number, action: Key) => void;
+};
+
+function ProjectItem({ project, dispatchAction }: ProjectItemProps) {
+  return (
+    <View
+      padding="size-100"
+      borderWidth="thin"
+      borderColor="gray-500"
+      borderRadius="regular"
+      backgroundColor="gray-50"
+    >
+      <Link
+        href={`/projects/${project.id}`}
+        passHref
+        style={{
+          textDecoration: "none",
+          color: "inherit",
+        }}
+      >
+        <Image
+          src={project.thumbnail || "/viewer.png"}
+          width="size-3000"
+          height="size-3000"
+          marginBottom="size-100"
+          alt={`Thumbnail for ${project.name}`}
+          objectFit="cover"
+          UNSAFE_style={{
+            borderRadius: "var(--spectrum-alias-border-radius-regular)",
+          }}
+        />
+      </Link>
+      <Flex direction="row" alignItems="center" justifyContent="space-between">
+        <Link
+          href={`/projects/${project.id}`}
+          passHref
+          style={{
+            textDecoration: "none",
+            color: "inherit",
+          }}
+        >
+          <Text>{project.name}</Text>
+        </Link>
+        <ActionMenu
+          onAction={(action: Key) => dispatchAction(project.id, action)}
+          isQuiet
+        >
+          <Item key="edit" textValue="Edit">
+            <Text>Edit</Text>
+          </Item>
+          <Item key="duplicate" textValue="Duplicate">
+            <Text>Duplicate</Text>
+          </Item>
+          <Item key="delete" textValue="Delete">
+            <Text>Delete</Text>
+          </Item>
+        </ActionMenu>
+      </Flex>
+    </View>
   );
 }

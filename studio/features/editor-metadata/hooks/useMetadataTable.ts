@@ -1,6 +1,8 @@
+import { useEditorContext } from "@features/editor/hooks/useEditorContext";
 import { useModels } from "@features/editor/hooks/useModels";
 import { useSelected } from "@features/editor/hooks/useSelected";
 import { useEffect, useState } from "react";
+import { defaultColor } from "../constants";
 import { MetadataAggListItem } from "../type";
 
 export default function useMetadataTable(
@@ -79,6 +81,7 @@ export default function useMetadataTable(
         value,
         ...count,
         key: value.toString(),
+        color: defaultColor,
       });
     }
 
@@ -115,13 +118,38 @@ export default function useMetadataTable(
       value: "undefined",
       key: "undefined",
       ...undefinedItems,
+      color: defaultColor,
     });
   }, [models, activeColumnName, selected, sort]);
+
+  const [colorizedAggregatedRows, setColorizedAggregatedRows] = useState<
+    MetadataAggListItem[]
+  >([]);
+
+  //add trigger for styles separately
+  const { styles } = useEditorContext();
+  useEffect(() => {
+    if (!activeColumnName) return setColorizedAggregatedRows(aggregatedRows);
+
+    const columnStyles = styles[activeColumnName];
+    if (!columnStyles) return setColorizedAggregatedRows(aggregatedRows);
+
+    const colorized = [];
+    for (const item of aggregatedRows) {
+      const style = columnStyles[item.value];
+      let copy = item;
+      if (style) {
+        copy = { ...item, color: style.code };
+      }
+      colorized.push(copy);
+    }
+    setColorizedAggregatedRows(colorized);
+  }, [styles, aggregatedRows, activeColumnName]);
 
   return {
     selectedValueKeys,
     undefinedItems,
-    aggregatedRows,
+    aggregatedRows: colorizedAggregatedRows,
     columns,
   };
 }

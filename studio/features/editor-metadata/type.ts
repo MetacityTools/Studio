@@ -11,4 +11,5 @@ export type MetadataAggListItem = {
   key: string;
   count: number;
   selected: number;
+  color: string;
 };

@@ -51,8 +51,8 @@ export default function useMetadataEdits() {
     (columnName: string) => {
       console.log("deleteColumn", columnName);
 
-      for (const [model, submodelIds] of selected) {
-        for (const submodelId of submodelIds) {
+      for (const model of models) {
+        for (const submodelId of model.submodelIDs) {
           delete model.metadata[submodelId][columnName];
         }
       }
@@ -63,7 +63,7 @@ export default function useMetadataEdits() {
         return next;
       });
     },
-    [selected, setModels],
+    [models, setModels],
   );
 
   const renameColumn = useCallback(

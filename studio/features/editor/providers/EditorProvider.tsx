@@ -49,6 +49,8 @@ type EditorContextProps = {
   setGreyscale: Dispatch<SetStateAction<boolean>>;
   darkmode: boolean;
   setDarkmode: Dispatch<SetStateAction<boolean>>;
+  activeMetadataColumn: string;
+  setActiveMetadataColumn: Dispatch<SetStateAction<string>>;
 };
 
 export const context = createContext<EditorContextProps>(
@@ -70,6 +72,7 @@ export function EditorProvider(props: { children: ReactNode }) {
   const [lastUsedStyle, setLastUsedStyle] = useState<string[] | null>(null);
   const [usedStyle, setUsedStyle] = useState<string[] | null>(null);
   const [greyscale, setGreyscale] = useState<boolean>(false);
+  const [activeMetadataColumn, setActiveMetadataColumn] = useState<string>("");
 
   //TODO darkmode load from user device settings
   const sd = localStorage.getItem("darkmode");
@@ -169,6 +172,8 @@ export function EditorProvider(props: { children: ReactNode }) {
         setGreyscale: setGreyscale,
         darkmode,
         setDarkmode,
+        activeMetadataColumn,
+        setActiveMetadataColumn,
       }}
     >
       {props.children}

@@ -38,7 +38,12 @@ export default function useMetadataSelection(
               selectedIds.delete(submodelId);
             }
           }
-          newSelection.set(model, selectedIds);
+
+          if (selectedIds.size === 0) {
+            newSelection.delete(model);
+          } else {
+            newSelection.set(model, selectedIds);
+          }
         }
 
         select(newSelection);

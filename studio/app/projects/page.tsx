@@ -12,7 +12,7 @@ function ProjectListPage() {
   return (
     <Grid
       areas={{
-        base: ["header header", "projects models"],
+        base: ["header", "projects", "models"],
       }}
       width="100vw"
       gap="size-100"
@@ -31,7 +31,7 @@ function ProjectListPage() {
         gridArea="projects"
         position="relative"
         overflow="hidden"
-        marginStart="size-100"
+        marginX="size-100"
       >
         <ProjectList />
       </View>
@@ -39,7 +39,7 @@ function ProjectListPage() {
         gridArea="models"
         position="relative"
         overflow="hidden"
-        marginEnd="size-100"
+        marginX="size-100"
       >
         <ModelList />
       </View>

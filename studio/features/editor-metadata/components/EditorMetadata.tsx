@@ -1,3 +1,5 @@
+"use client";
+
 import {
   ActionBar,
   ActionBarContainer,
@@ -20,17 +22,25 @@ import {
 import { NoData } from "@core/components/Empty";
 import { PositioningContainer } from "@core/components/PositioningContainer";
 import useSelectedSubmodelCount from "@editor/hooks/useSelectedSubmodelCount";
+import { useEditorContext } from "@features/editor/hooks/useEditorContext";
 import { useSelected } from "@features/editor/hooks/useSelected";
-import { ColorEditor, ColorPicker } from "@react-spectrum/color";
+import {
+  Color,
+  ColorEditor,
+  ColorPicker,
+  parseColor,
+} from "@react-spectrum/color";
 import Add from "@spectrum-icons/workflow/Add";
 import ArrowRight from "@spectrum-icons/workflow/ArrowRight";
 import Delete from "@spectrum-icons/workflow/Delete";
 import Rename from "@spectrum-icons/workflow/Rename";
 import SortOrderDown from "@spectrum-icons/workflow/SortOrderDown";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import useMetadataEdits from "../hooks/useMetadataEdits";
+import useMetadataModelColors from "../hooks/useMetadataModelColors";
 import useMetadataSelection from "../hooks/useMetadataSelection";
 import useMetadataTable from "../hooks/useMetadataTable";
+import useStyles from "../hooks/useStyles";
 import AddColumnDialog from "./EditorMetadataAddColumnDialog";
 import AddValueDialog from "./EditorMetadataAddValueDialog";
 import { RenameColumnDialog } from "./EditorMetadataRenameColumnDialog";
@@ -40,7 +50,7 @@ type EditorMetadataProps = {
 };
 
 export default function EditorMetadata({ projectId }: EditorMetadataProps) {
-  const [selectedColumn, setSelectedColumn] = useState<string>("");
+  const { activeMetadataColumn, setActiveMetadataColumn } = useEditorContext();
   const [isSorted, setIsSorted] = useState(false);
 
   const [addValueDialogOpen, setAddValueDialogOpen] = useState(false);
@@ -49,12 +59,14 @@ export default function EditorMetadata({ projectId }: EditorMetadataProps) {
   const selected = useSelected();
   const selectedCount = useSelectedSubmodelCount();
 
+  const { setStyle } = useStyles();
+
   const { aggregatedRows, undefinedItems, columns, selectedValueKeys } =
-    useMetadataTable(selectedColumn, isSorted);
+    useMetadataTable(activeMetadataColumn, isSorted);
 
   const { handleSelection, select } = useMetadataSelection(
     selectedValueKeys,
-    selectedColumn,
+    activeMetadataColumn,
   );
   const { assignValue, removeValue, deleteColumn, renameColumn } =
     useMetadataEdits();
@@ -62,39 +74,35 @@ export default function EditorMetadata({ projectId }: EditorMetadataProps) {
   const handleCreateColumn = useCallback(
     (columnName: string, defaultValue: string | number) => {
       assignValue(defaultValue, columnName);
-      setSelectedColumn(columnName);
+      setActiveMetadataColumn(columnName);
     },
-    [assignValue, setSelectedColumn],
+    [assignValue, setActiveMetadataColumn],
   );
 
   const handleRenameColumn = useCallback(
     (newColumnName: string) => {
-      console.log("renameColumn", selectedColumn, newColumnName);
-      renameColumn(selectedColumn, newColumnName);
-      setSelectedColumn(newColumnName);
+      renameColumn(activeMetadataColumn, newColumnName);
+      setActiveMetadataColumn(newColumnName);
     },
-    [renameColumn, selectedColumn],
+    [renameColumn, activeMetadataColumn, setActiveMetadataColumn],
   );
 
   const handleDeleteColumn = useCallback(() => {
-    if (!selectedColumn) return;
-    deleteColumn(selectedColumn);
-    setSelectedColumn("");
-  }, [deleteColumn, selectedColumn]);
+    if (!activeMetadataColumn) return;
+    deleteColumn(activeMetadataColumn);
+    setActiveMetadataColumn("");
+  }, [deleteColumn, activeMetadataColumn, setActiveMetadataColumn]);
 
   const handleItemAction = useCallback(
     (key: Key, value: string | number) => {
       switch (key) {
         case "assignSingleValue":
-          if (!selectedColumn) return;
-          assignValue(value, selectedColumn || "");
-          break;
-        case "colorSingleValue":
-          console.log("Setting color for", value);
+          if (!activeMetadataColumn) return;
+          assignValue(value, activeMetadataColumn || "");
           break;
       }
     },
-    [assignValue, selectedColumn],
+    [assignValue, activeMetadataColumn],
   );
 
   const handleGlobalAction = useCallback((key: Key) => {
@@ -108,6 +116,8 @@ export default function EditorMetadata({ projectId }: EditorMetadataProps) {
     }
   }, []);
 
+  useMetadataModelColors();
+
   return (
     <PositioningContainer>
       <Flex direction="column" height="100%" gap="size-100" marginX="size-200">
@@ -118,9 +128,9 @@ export default function EditorMetadata({ projectId }: EditorMetadataProps) {
               items={columns}
               width="100%"
               onSelectionChange={(key) =>
-                setSelectedColumn(key?.toString() || "")
+                setActiveMetadataColumn(key?.toString() || "")
               }
-              selectedKey={selectedColumn}
+              selectedKey={activeMetadataColumn}
             >
               {(item) => <Item key={item.key}>{item.key}</Item>}
             </ComboBox>
@@ -151,7 +161,7 @@ export default function EditorMetadata({ projectId }: EditorMetadataProps) {
               </Text>
               <DialogTrigger>
                 <TooltipTrigger delay={0} placement="bottom">
-                  <ActionButton isDisabled={selectedColumn === undefined}>
+                  <ActionButton isDisabled={activeMetadataColumn === undefined}>
                     <Rename />
                   </ActionButton>
                   <Tooltip>Rename column</Tooltip>
@@ -166,14 +176,14 @@ export default function EditorMetadata({ projectId }: EditorMetadataProps) {
               </DialogTrigger>
               <DialogTrigger>
                 <TooltipTrigger delay={0} placement="bottom">
-                  <ActionButton isDisabled={selectedColumn === undefined}>
+                  <ActionButton isDisabled={activeMetadataColumn === undefined}>
                     <Delete />
                   </ActionButton>
                   <Tooltip>Delete column</Tooltip>
                 </TooltipTrigger>
                 {(close) => (
                   <AlertDialog
-                    title={`Delete column ${selectedColumn}?`}
+                    title={`Delete column ${activeMetadataColumn}?`}
                     variant="destructive"
                     primaryActionLabel="Delete"
                     secondaryActionLabel="Cancel"
@@ -221,6 +231,14 @@ export default function EditorMetadata({ projectId }: EditorMetadataProps) {
                   key={record.key}
                   textValue={record.value.toString() || "empty string"}
                 >
+                  <Text slot="image">
+                    <DebouncedColorPicker
+                      value={record.color}
+                      onChange={(color) => {
+                        setStyle(activeMetadataColumn, record.value, color);
+                      }}
+                    />
+                  </Text>
                   <Text
                     UNSAFE_style={{
                       opacity: record.selected > 0 ? 1 : 0.6,
@@ -237,35 +255,22 @@ export default function EditorMetadata({ projectId }: EditorMetadataProps) {
                     {record.count} items, {record.selected} selected
                   </Text>
                   <ActionGroup
+                    isQuiet
                     onAction={(key) => handleItemAction(key, record.value)}
                   >
                     <TooltipTrigger delay={0} placement="bottom">
-                      <Item key="assignSingleValue" textValue="Assign">
+                      <Item key="assignSingleValue" textValue="Assign Value">
                         <ArrowRight />
                       </Item>
                       <Tooltip>Assign to selected</Tooltip>
-                    </TooltipTrigger>
-                    <TooltipTrigger delay={0} placement="bottom">
-                      <Item key="colorSingleValue" textValue="Assign color">
-                        <View>
-                          <ColorPicker
-                            aria-label="Fill color"
-                            defaultValue="#184"
-                          >
-                            <ColorEditor />
-                          </ColorPicker>
-                        </View>
-                      </Item>
-                      <Tooltip>Assign Color</Tooltip>
                     </TooltipTrigger>
                   </ActionGroup>
                 </Item>
               )}
             </ListView>
-
             <ActionBar
               isEmphasized
-              selectedItemCount={selectedColumn ? selectedCount : 0}
+              selectedItemCount={activeMetadataColumn ? selectedCount : 0}
               onAction={(key) => handleGlobalAction(key)}
               onClearSelection={() => select(new Map())}
             >
@@ -286,18 +291,18 @@ export default function EditorMetadata({ projectId }: EditorMetadataProps) {
         {addValueDialogOpen && (
           <AddValueDialog
             close={() => setAddValueDialogOpen(false)}
-            onSubmit={(value) => assignValue(value, selectedColumn)}
+            onSubmit={(value) => assignValue(value, activeMetadataColumn)}
           />
         )}
       </DialogContainer>
       <DialogContainer onDismiss={() => setDeleteValuesDialogOpen(false)}>
         {deleteValuesDialogOpen && (
           <AlertDialog
-            title={`Delete addigned values for column ${selectedColumn}?`}
+            title={`Delete addigned values for column ${activeMetadataColumn}?`}
             variant="destructive"
             primaryActionLabel="Delete"
             secondaryActionLabel="Cancel"
-            onPrimaryAction={() => removeValue(selectedColumn)}
+            onPrimaryAction={() => removeValue(activeMetadataColumn)}
             onCancel={close}
           >
             Are you sure you want to delete the values?
@@ -305,5 +310,39 @@ export default function EditorMetadata({ projectId }: EditorMetadataProps) {
         )}
       </DialogContainer>
     </PositioningContainer>
+  );
+}
+
+type DebouncedColorPickerProps = {
+  value: string;
+  onChange: (color: Color) => void;
+};
+
+function DebouncedColorPicker({ value, onChange }: DebouncedColorPickerProps) {
+  const [color, setColor] = useState<Color>(parseColor(value).toFormat("hsb"));
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      color && onChange(color);
+    }, 500);
+
+    return () => {
+      clearTimeout(timeout);
+    };
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [color]);
+
+  useEffect(() => {
+    if (value === color.toString("css")) return;
+    setColor(parseColor(value).toFormat("hsb"));
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [value]);
+
+  return (
+    <ColorPicker value={color} onChange={setColor}>
+      <ColorEditor hideAlphaChannel />
+    </ColorPicker>
   );
 }
