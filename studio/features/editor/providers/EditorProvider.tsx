@@ -1,3 +1,4 @@
+import { useProvider } from "@adobe/react-spectrum";
 import * as GL from "@bananagl/bananagl";
 import { EditorModel } from "@editor/data/EditorModel";
 import { Style } from "@editor/data/types";
@@ -47,8 +48,6 @@ type EditorContextProps = {
   setLastUsedStyle: Dispatch<SetStateAction<string[] | null>>;
   greyscale: boolean;
   setGreyscale: Dispatch<SetStateAction<boolean>>;
-  darkmode: boolean;
-  setDarkmode: Dispatch<SetStateAction<boolean>>;
   activeMetadataColumn: string;
   setActiveMetadataColumn: Dispatch<SetStateAction<string>>;
 };
@@ -75,10 +74,7 @@ export function EditorProvider(props: { children: ReactNode }) {
   const [activeMetadataColumn, setActiveMetadataColumn] = useState<string>("");
 
   //TODO darkmode load from user device settings
-  const sd = localStorage.getItem("darkmode");
-  const [darkmode, setDarkmode] = useState<boolean>(
-    true, //sd === "true" ? true : false,
-  );
+  const { colorScheme } = useProvider();
 
   const activeView = 0;
 
@@ -127,7 +123,7 @@ export function EditorProvider(props: { children: ReactNode }) {
   }, [activeView, renderer.views, camTargetZ]);
 
   useEffect(() => {
-    if (darkmode) {
+    if (colorScheme === "dark") {
       renderer.clearColor = [0.1, 0.1, 0.1, 1];
       document.documentElement.style.setProperty("color-scheme", "dark");
       document.documentElement.classList.add("dark");
@@ -138,7 +134,7 @@ export function EditorProvider(props: { children: ReactNode }) {
       document.documentElement.classList.remove("dark");
       localStorage.setItem("darkmode", "false");
     }
-  }, [darkmode, renderer]);
+  }, [colorScheme, renderer]);
 
   return (
     <context.Provider
@@ -170,8 +166,6 @@ export function EditorProvider(props: { children: ReactNode }) {
         setLastUsedStyle,
         greyscale: greyscale,
         setGreyscale: setGreyscale,
-        darkmode,
-        setDarkmode,
         activeMetadataColumn,
         setActiveMetadataColumn,
       }}

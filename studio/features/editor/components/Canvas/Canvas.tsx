@@ -44,7 +44,7 @@ export function Canvas(props: CanvasProps) {
   const handlePointerMove = (event: PointerEvent) => {
     if (!props.onTooltip || !props.onHideTooltip) return;
     if (timerRef.current) clearTimeout(timerRef.current);
-    props.onHideTooltip!();
+    props.onHideTooltip?.();
     timerRef.current = setTimeout(() => {
       const selection = renderer.controls?.pointerHover(event);
       if (!selection) return;
@@ -56,8 +56,8 @@ export function Canvas(props: CanvasProps) {
       if (!metadata) return;
 
       const { xpos, ypos } = getOffset(event);
-      props.onTooltip!(metadata, xpos, ypos);
-    }, 100);
+      props.onTooltip?.(metadata, xpos, ypos);
+    }, 50);
   };
 
   const handlePointerLeave = (event: PointerEvent) => {

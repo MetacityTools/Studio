@@ -101,7 +101,9 @@ type ProjectItemProps = {
 function ProjectItem({ project, dispatchAction }: ProjectItemProps) {
   return (
     <View
-      padding="size-100"
+      paddingTop="size-200"
+      paddingX="size-200"
+      paddingBottom="size-100"
       borderWidth="thin"
       borderColor="gray-500"
       borderRadius="regular"

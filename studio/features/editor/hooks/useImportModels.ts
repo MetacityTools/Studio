@@ -233,11 +233,11 @@ function computeNormals(positions: number[] | Float32Array) {
 }
 
 type HierarchicalMetadata = {
-  [key: string]: string | number | boolean | HierarchicalMetadata;
+  [key: string]: string | number | HierarchicalMetadata;
 };
 
 type FlatMetadata = {
-  [key: string]: string | number | boolean;
+  [key: string]: string | number;
 };
 
 function flattenModelMetadata(model: EditorModel) {
