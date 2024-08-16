@@ -92,6 +92,7 @@ async function addTriangleModel(data: EditorModelData) {
   const byteSubmodel = new Uint8Array(submodel.buffer);
   const colors = new Uint8Array(vertices.length).fill(255);
   const selected = new Uint8Array(vertices.length).fill(0);
+  const highlighted = new Uint8Array(vertices.length).fill(0);
   const bar = new Uint8Array(vertices.length);
   for (let i = 0; i < vertices.length; i++) bar[i] = i % 3;
 
@@ -105,6 +106,9 @@ async function addTriangleModel(data: EditorModelData) {
   );
   glmodel.attributes.add(
     new GL.Attribute("selected", new GL.Buffer(selected), 1, true),
+  );
+  glmodel.attributes.add(
+    new GL.Attribute("highlighted", new GL.Buffer(highlighted), 1, true),
   );
   glmodel.attributes.add(
     new GL.Attribute("submodel", new GL.Buffer(byteSubmodel), 4),

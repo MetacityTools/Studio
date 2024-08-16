@@ -91,6 +91,23 @@ export class EditorModel extends GL.Pickable implements GL.Selectable {
     this.selectSubmodels(submodelIDs, 0);
   }
 
+  private lastHighlight = new Set<number>();
+
+  highlight(submodelIDs: Set<number>) {
+    if (this.disposed) return;
+    if (this.lastHighlight.size > 0)
+      this.selectSubmodels(this.lastHighlight, 0, "highlighted");
+    this.selectSubmodels(submodelIDs, 60, "highlighted");
+    this.lastHighlight = submodelIDs;
+  }
+
+  dehighlight() {
+    if (this.disposed) return;
+    if (this.lastHighlight.size > 0)
+      this.selectSubmodels(this.lastHighlight, 0, "highlighted");
+    this.lastHighlight.clear();
+  }
+
   setColorMap(colormap: Map<number, vec3>) {
     if (this.disposed) return;
 
@@ -135,10 +152,14 @@ export class EditorModel extends GL.Pickable implements GL.Selectable {
     color.buffer.toUpdate();
   }
 
-  private selectSubmodels(submodelIDs: Set<number>, s: number) {
+  private selectSubmodels(
+    submodelIDs: Set<number>,
+    s: number,
+    bufferName: "selected" | "highlighted" = "selected",
+  ) {
     if (this.disposed) return;
     if (submodelIDs.size === 0) return;
-    const selected = this.attributes.getAttribute("selected");
+    const selected = this.attributes.getAttribute(bufferName);
     const submodel = this.attributes.getAttribute("submodel");
     const submodelBuffer = submodel!.buffer.getView(Uint32Array);
 

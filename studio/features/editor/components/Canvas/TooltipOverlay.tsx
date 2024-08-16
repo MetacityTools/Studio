@@ -7,9 +7,7 @@ export function TooltipOverlay() {
   if (!tooltip) return null;
 
   const value = tooltip.data[activeMetadataColumn];
-  if (value === undefined) return null;
-
-  console.log("tooltip", tooltip, value);
+  //if (value === undefined) return null;
 
   return (
     <View

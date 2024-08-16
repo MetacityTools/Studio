@@ -1,1 +1,31 @@
 export const defaultColor = "hsb(0, 0%, 100%)";
+import * as d3ScaleChromatic from "d3-scale-chromatic";
+
+export const colorMaps = [
+  d3ScaleChromatic.interpolateBlues,
+  d3ScaleChromatic.interpolateGreens,
+  d3ScaleChromatic.interpolateGreys,
+  d3ScaleChromatic.interpolateOranges,
+  d3ScaleChromatic.interpolatePurples,
+  d3ScaleChromatic.interpolateReds,
+  d3ScaleChromatic.interpolateTurbo,
+  d3ScaleChromatic.interpolateViridis,
+  d3ScaleChromatic.interpolateInferno,
+  d3ScaleChromatic.interpolateMagma,
+  d3ScaleChromatic.interpolatePlasma,
+  d3ScaleChromatic.interpolateCividis,
+  d3ScaleChromatic.interpolateWarm,
+  d3ScaleChromatic.interpolateCool,
+  d3ScaleChromatic.interpolateRainbow,
+  d3ScaleChromatic.interpolateSinebow,
+  d3ScaleChromatic.interpolateSpectral,
+  d3ScaleChromatic.interpolateCubehelixDefault,
+  d3ScaleChromatic.interpolateBrBG,
+  d3ScaleChromatic.interpolatePRGn,
+  d3ScaleChromatic.interpolatePiYG,
+  d3ScaleChromatic.interpolatePuOr,
+  d3ScaleChromatic.interpolateRdBu,
+  d3ScaleChromatic.interpolateRdGy,
+  d3ScaleChromatic.interpolateRdYlBu,
+  d3ScaleChromatic.interpolateRdYlGn,
+];

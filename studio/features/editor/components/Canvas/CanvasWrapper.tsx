@@ -67,7 +67,7 @@ export function CanvasWrapper() {
   };
 
   const handleHideTooltip = () => {
-    //setTooltip(null);
+    setTooltip(null);
   };
 
   return (

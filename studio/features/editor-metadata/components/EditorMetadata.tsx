@@ -32,6 +32,7 @@ import {
 } from "@react-spectrum/color";
 import Add from "@spectrum-icons/workflow/Add";
 import ArrowRight from "@spectrum-icons/workflow/ArrowRight";
+import ColorPalette from "@spectrum-icons/workflow/ColorPalette";
 import Delete from "@spectrum-icons/workflow/Delete";
 import MultipleExclude from "@spectrum-icons/workflow/MultipleExclude";
 import Rename from "@spectrum-icons/workflow/Rename";
@@ -44,6 +45,7 @@ import useMetadataTable from "../hooks/useMetadataTable";
 import useStyles from "../hooks/useStyles";
 import AddColumnDialog from "./EditorMetadataAddColumnDialog";
 import AddValueDialog from "./EditorMetadataAddValueDialog";
+import ColorPaletteDialog from "./EditorMetadataColorPaletteDialog";
 import DeleteMultipleColumnsDialog from "./EditorMetadataDeleteMultipleColumnsDialog";
 import { RenameColumnDialog } from "./EditorMetadataRenameColumnDialog";
 
@@ -184,6 +186,15 @@ export default function EditorMetadata({ projectId }: EditorMetadataProps) {
               <Text flex>
                 {undefinedItems?.count} additional items with undefined value
               </Text>
+              <DialogTrigger>
+                <TooltipTrigger delay={0} placement="bottom">
+                  <ActionButton isDisabled={activeMetadataColumn === undefined}>
+                    <ColorPalette />
+                  </ActionButton>
+                  <Tooltip>Assign Color Pallete</Tooltip>
+                </TooltipTrigger>
+                {(close) => <ColorPaletteDialog close={close} />}
+              </DialogTrigger>
               <DialogTrigger>
                 <TooltipTrigger delay={0} placement="bottom">
                   <ActionButton isDisabled={activeMetadataColumn === undefined}>

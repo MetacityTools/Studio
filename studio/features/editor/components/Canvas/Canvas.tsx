@@ -19,11 +19,11 @@ type SelectionSingleType = {
 
 type SelectionOutput = SelectionArrayType | SelectionSingleType;
 
-interface CanvasProps {
+type CanvasProps = {
   canvasRef: RefObject<HTMLCanvasElement>;
   onTooltip?: (meta: any, x: number, y: number) => void;
   onHideTooltip?: () => void;
-}
+};
 
 export function Canvas(props: CanvasProps) {
   const renderer = useRenderer();
@@ -41,23 +41,41 @@ export function Canvas(props: CanvasProps) {
     event.preventDefault();
   };
 
+  const prevSelection = useRef<SelectionType>();
+
   const handlePointerMove = (event: PointerEvent) => {
     if (!props.onTooltip || !props.onHideTooltip) return;
     if (timerRef.current) clearTimeout(timerRef.current);
     props.onHideTooltip?.();
+
     timerRef.current = setTimeout(() => {
       const selection = renderer.controls?.pointerHover(event);
       if (!selection) return;
       const selectionObj = primitiveIndicesToSubmodelIndices(selection);
+
+      if (prevSelection.current) {
+        for (const [model] of prevSelection.current) {
+          if (!selectionObj.has(model)) model.dehighlight();
+        }
+      }
+
+      selectionObj.forEach((submodelIDs, model) => {
+        model.highlight(submodelIDs);
+      });
+
+      prevSelection.current = selectionObj;
+
       const model = selectionObj.keys().next().value;
       const submodel = selectionObj.get(model)?.values().next().value;
       const metadata = model.metadata[submodel];
-
       if (!metadata) return;
-
       const { xpos, ypos } = getOffset(event);
       props.onTooltip?.(metadata, xpos, ypos);
     }, 50);
+
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+    };
   };
 
   const handlePointerLeave = (event: PointerEvent) => {
