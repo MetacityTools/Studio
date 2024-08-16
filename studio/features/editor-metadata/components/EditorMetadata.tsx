@@ -33,6 +33,7 @@ import {
 import Add from "@spectrum-icons/workflow/Add";
 import ArrowRight from "@spectrum-icons/workflow/ArrowRight";
 import Delete from "@spectrum-icons/workflow/Delete";
+import MultipleExclude from "@spectrum-icons/workflow/MultipleExclude";
 import Rename from "@spectrum-icons/workflow/Rename";
 import SortOrderDown from "@spectrum-icons/workflow/SortOrderDown";
 import { useCallback, useEffect, useState } from "react";
@@ -43,6 +44,7 @@ import useMetadataTable from "../hooks/useMetadataTable";
 import useStyles from "../hooks/useStyles";
 import AddColumnDialog from "./EditorMetadataAddColumnDialog";
 import AddValueDialog from "./EditorMetadataAddValueDialog";
+import DeleteMultipleColumnsDialog from "./EditorMetadataDeleteMultipleColumnsDialog";
 import { RenameColumnDialog } from "./EditorMetadataRenameColumnDialog";
 
 type EditorMetadataProps = {
@@ -68,7 +70,7 @@ export default function EditorMetadata({ projectId }: EditorMetadataProps) {
     selectedValueKeys,
     activeMetadataColumn,
   );
-  const { assignValue, removeValue, deleteColumn, renameColumn } =
+  const { assignValue, removeValue, deleteColumns, renameColumn } =
     useMetadataEdits();
 
   const handleCreateColumn = useCallback(
@@ -89,9 +91,17 @@ export default function EditorMetadata({ projectId }: EditorMetadataProps) {
 
   const handleDeleteColumn = useCallback(() => {
     if (!activeMetadataColumn) return;
-    deleteColumn(activeMetadataColumn);
+    deleteColumns([activeMetadataColumn]);
     setActiveMetadataColumn("");
-  }, [deleteColumn, activeMetadataColumn, setActiveMetadataColumn]);
+  }, [deleteColumns, activeMetadataColumn, setActiveMetadataColumn]);
+
+  const handleDeleteColumns = useCallback(
+    (columns: string[]) => {
+      deleteColumns(columns);
+      setActiveMetadataColumn("");
+    },
+    [deleteColumns, setActiveMetadataColumn],
+  );
 
   const handleItemAction = useCallback(
     (key: Key, value: string | number) => {
@@ -134,6 +144,21 @@ export default function EditorMetadata({ projectId }: EditorMetadataProps) {
             >
               {(item) => <Item key={item.key}>{item.key}</Item>}
             </ComboBox>
+            <DialogTrigger>
+              <TooltipTrigger delay={0} placement="bottom">
+                <ActionButton isDisabled={columns.length === 0}>
+                  <MultipleExclude />
+                </ActionButton>
+                <Tooltip>Remove Multiple Columns</Tooltip>
+              </TooltipTrigger>
+              {(close) => (
+                <DeleteMultipleColumnsDialog
+                  columns={columns}
+                  close={close}
+                  onSubmit={handleDeleteColumns}
+                />
+              )}
+            </DialogTrigger>
             <DialogTrigger>
               <TooltipTrigger delay={0} placement="bottom">
                 <ActionButton isDisabled={selected.size === 0}>
@@ -189,6 +214,7 @@ export default function EditorMetadata({ projectId }: EditorMetadataProps) {
                     secondaryActionLabel="Cancel"
                     onPrimaryAction={handleDeleteColumn}
                     onCancel={close}
+                    autoFocusButton="primary"
                   >
                     Are you sure you want to delete the column?
                   </AlertDialog>
@@ -304,6 +330,7 @@ export default function EditorMetadata({ projectId }: EditorMetadataProps) {
             secondaryActionLabel="Cancel"
             onPrimaryAction={() => removeValue(activeMetadataColumn)}
             onCancel={close}
+            autoFocusButton="primary"
           >
             Are you sure you want to delete the values?
           </AlertDialog>
