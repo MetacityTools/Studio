@@ -13,6 +13,10 @@ import {
   Item,
   Key,
   ListView,
+  TabList,
+  TabPanels,
+  Tabs,
+  TagGroup,
   Text,
   ToggleButton,
   Tooltip,
@@ -23,30 +27,22 @@ import { NoData } from "@core/components/Empty";
 import { PositioningContainer } from "@core/components/PositioningContainer";
 import useSelectedSubmodelCount from "@editor/hooks/useSelectedSubmodelCount";
 import { useEditorContext } from "@features/editor/hooks/useEditorContext";
-import { useSelected } from "@features/editor/hooks/useSelected";
-import {
-  Color,
-  ColorEditor,
-  ColorPicker,
-  parseColor,
-} from "@react-spectrum/color";
-import Add from "@spectrum-icons/workflow/Add";
 import ArrowRight from "@spectrum-icons/workflow/ArrowRight";
 import ColorPalette from "@spectrum-icons/workflow/ColorPalette";
 import Delete from "@spectrum-icons/workflow/Delete";
-import MultipleExclude from "@spectrum-icons/workflow/MultipleExclude";
 import Rename from "@spectrum-icons/workflow/Rename";
 import SortOrderDown from "@spectrum-icons/workflow/SortOrderDown";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
+import useMetadataContext from "../hooks/useMetadataContext";
 import useMetadataEdits from "../hooks/useMetadataEdits";
 import useMetadataModelColors from "../hooks/useMetadataModelColors";
 import useMetadataSelection from "../hooks/useMetadataSelection";
-import useMetadataTable from "../hooks/useMetadataTable";
 import useStyles from "../hooks/useStyles";
+import { MetadataProvider } from "../providers/MetadataProvider";
+import DebouncedColorPicker from "./DebouncedColorPicker";
 import AddColumnDialog from "./EditorMetadataAddColumnDialog";
 import AddValueDialog from "./EditorMetadataAddValueDialog";
 import ColorPaletteDialog from "./EditorMetadataColorPaletteDialog";
-import DeleteMultipleColumnsDialog from "./EditorMetadataDeleteMultipleColumnsDialog";
 import { RenameColumnDialog } from "./EditorMetadataRenameColumnDialog";
 
 type EditorMetadataProps = {
@@ -54,56 +50,68 @@ type EditorMetadataProps = {
 };
 
 export default function EditorMetadata({ projectId }: EditorMetadataProps) {
+  return (
+    <MetadataProvider>
+      <PositioningContainer>
+        <Tabs height="100%" aria-label="Editor tabs">
+          <View
+            borderBottomWidth="thin"
+            borderBottomColor="light"
+            paddingX="size-200"
+            backgroundColor="gray-50"
+          >
+            <TabList>
+              <Item key="columns" textValue="Columns">
+                <Text>Columns</Text>
+              </Item>
+              <Item key="values" textValue="Values">
+                <Text>Values</Text>
+              </Item>
+            </TabList>
+          </View>
+          <View
+            position="relative"
+            height="100%"
+            overflow="auto"
+            backgroundColor="gray-50"
+          >
+            <TabPanels height="100%" UNSAFE_className="borderless">
+              <Item key="columns">
+                <EditorMetadataColumns projectId={projectId} />
+              </Item>
+              <Item key="values">
+                <EditorMetadataValues projectId={projectId} />
+              </Item>
+            </TabPanels>
+          </View>
+        </Tabs>
+      </PositioningContainer>
+    </MetadataProvider>
+  );
+}
+
+function EditorMetadataValues({ projectId }: EditorMetadataProps) {
   const { activeMetadataColumn, setActiveMetadataColumn } = useEditorContext();
-  const [isSorted, setIsSorted] = useState(false);
+  const selectedCount = useSelectedSubmodelCount();
+  const { setStyle } = useStyles();
 
   const [addValueDialogOpen, setAddValueDialogOpen] = useState(false);
   const [deleteValuesDialogOpen, setDeleteValuesDialogOpen] = useState(false);
 
-  const selected = useSelected();
-  const selectedCount = useSelectedSubmodelCount();
-
-  const { setStyle } = useStyles();
-
-  const { aggregatedRows, undefinedItems, columns, selectedValueKeys } =
-    useMetadataTable(activeMetadataColumn, isSorted);
+  const {
+    aggregatedRows,
+    undefinedItems,
+    columns,
+    selectedValueKeys,
+    sort,
+    setSort,
+  } = useMetadataContext();
 
   const { handleSelection, select } = useMetadataSelection(
     selectedValueKeys,
     activeMetadataColumn,
   );
-  const { assignValue, removeValue, deleteColumns, renameColumn } =
-    useMetadataEdits();
-
-  const handleCreateColumn = useCallback(
-    (columnName: string, defaultValue: string | number) => {
-      assignValue(defaultValue, columnName);
-      setActiveMetadataColumn(columnName);
-    },
-    [assignValue, setActiveMetadataColumn],
-  );
-
-  const handleRenameColumn = useCallback(
-    (newColumnName: string) => {
-      renameColumn(activeMetadataColumn, newColumnName);
-      setActiveMetadataColumn(newColumnName);
-    },
-    [renameColumn, activeMetadataColumn, setActiveMetadataColumn],
-  );
-
-  const handleDeleteColumn = useCallback(() => {
-    if (!activeMetadataColumn) return;
-    deleteColumns([activeMetadataColumn]);
-    setActiveMetadataColumn("");
-  }, [deleteColumns, activeMetadataColumn, setActiveMetadataColumn]);
-
-  const handleDeleteColumns = useCallback(
-    (columns: string[]) => {
-      deleteColumns(columns);
-      setActiveMetadataColumn("");
-    },
-    [deleteColumns, setActiveMetadataColumn],
-  );
+  const { assignValue, removeValue } = useMetadataEdits();
 
   const handleItemAction = useCallback(
     (key: Key, value: string | number) => {
@@ -134,45 +142,17 @@ export default function EditorMetadata({ projectId }: EditorMetadataProps) {
     <PositioningContainer>
       <Flex direction="column" height="100%" gap="size-100" marginX="size-200">
         <View width="100%" marginTop="size-100">
-          <Flex gap="size-100" direction="row" alignItems="end">
-            <ComboBox
-              label="Metadata column"
-              items={columns}
-              width="100%"
-              onSelectionChange={(key) =>
-                setActiveMetadataColumn(key?.toString() || "")
-              }
-              selectedKey={activeMetadataColumn}
-            >
-              {(item) => <Item key={item.key}>{item.key}</Item>}
-            </ComboBox>
-            <DialogTrigger>
-              <TooltipTrigger delay={0} placement="bottom">
-                <ActionButton isDisabled={columns.length === 0}>
-                  <MultipleExclude />
-                </ActionButton>
-                <Tooltip>Remove Multiple Columns</Tooltip>
-              </TooltipTrigger>
-              {(close) => (
-                <DeleteMultipleColumnsDialog
-                  columns={columns}
-                  close={close}
-                  onSubmit={handleDeleteColumns}
-                />
-              )}
-            </DialogTrigger>
-            <DialogTrigger>
-              <TooltipTrigger delay={0} placement="bottom">
-                <ActionButton isDisabled={selected.size === 0}>
-                  <Add />
-                </ActionButton>
-                <Tooltip>Add Column</Tooltip>
-              </TooltipTrigger>
-              {(close) => (
-                <AddColumnDialog close={close} onSubmit={handleCreateColumn} />
-              )}
-            </DialogTrigger>
-          </Flex>
+          <ComboBox
+            label="Metadata column"
+            items={columns}
+            width="100%"
+            onSelectionChange={(key) =>
+              setActiveMetadataColumn(key?.toString() || "")
+            }
+            selectedKey={activeMetadataColumn}
+          >
+            {(item) => <Item key={item.key}>{item.key}</Item>}
+          </ComboBox>
         </View>
         {undefinedItems && (
           <View position="relative" overflow="hidden">
@@ -195,47 +175,11 @@ export default function EditorMetadata({ projectId }: EditorMetadataProps) {
                 </TooltipTrigger>
                 {(close) => <ColorPaletteDialog close={close} />}
               </DialogTrigger>
-              <DialogTrigger>
-                <TooltipTrigger delay={0} placement="bottom">
-                  <ActionButton isDisabled={activeMetadataColumn === undefined}>
-                    <Rename />
-                  </ActionButton>
-                  <Tooltip>Rename column</Tooltip>
-                </TooltipTrigger>
-                {(close) => (
-                  <RenameColumnDialog
-                    close={close}
-                    existingColumns={columns}
-                    onSubmit={handleRenameColumn}
-                  />
-                )}
-              </DialogTrigger>
-              <DialogTrigger>
-                <TooltipTrigger delay={0} placement="bottom">
-                  <ActionButton isDisabled={activeMetadataColumn === undefined}>
-                    <Delete />
-                  </ActionButton>
-                  <Tooltip>Delete column</Tooltip>
-                </TooltipTrigger>
-                {(close) => (
-                  <AlertDialog
-                    title={`Delete column ${activeMetadataColumn}?`}
-                    variant="destructive"
-                    primaryActionLabel="Delete"
-                    secondaryActionLabel="Cancel"
-                    onPrimaryAction={handleDeleteColumn}
-                    onCancel={close}
-                    autoFocusButton="primary"
-                  >
-                    Are you sure you want to delete the column?
-                  </AlertDialog>
-                )}
-              </DialogTrigger>
               <TooltipTrigger delay={0} placement="bottom">
                 <ToggleButton
                   aria-label="Sort"
-                  isSelected={isSorted}
-                  onPress={() => setIsSorted(!isSorted)}
+                  isSelected={sort}
+                  onPress={() => setSort(!sort)}
                 >
                   <SortOrderDown />
                 </ToggleButton>
@@ -340,7 +284,7 @@ export default function EditorMetadata({ projectId }: EditorMetadataProps) {
             primaryActionLabel="Delete"
             secondaryActionLabel="Cancel"
             onPrimaryAction={() => removeValue(activeMetadataColumn)}
-            onCancel={close}
+            onCancel={() => setDeleteValuesDialogOpen(false)}
             autoFocusButton="primary"
           >
             Are you sure you want to delete the values?
@@ -351,36 +295,167 @@ export default function EditorMetadata({ projectId }: EditorMetadataProps) {
   );
 }
 
-type DebouncedColorPickerProps = {
-  value: string;
-  onChange: (color: Color) => void;
-};
+function EditorMetadataColumns({ projectId }: EditorMetadataProps) {
+  const { selection } = useEditorContext();
+  const { columns } = useMetadataContext();
 
-function DebouncedColorPicker({ value, onChange }: DebouncedColorPickerProps) {
-  const [color, setColor] = useState<Color>(parseColor(value).toFormat("hsb"));
+  const [columnsToDelete, setColumnsToDelete] = useState<string[]>([]);
+  const [columnToRename, setColumnToRename] = useState<string>();
 
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      color && onChange(color);
-    }, 500);
+  const { assignValue, deleteColumns, renameColumn } = useMetadataEdits();
 
-    return () => {
-      clearTimeout(timeout);
-    };
+  const handleCreateColumn = useCallback(
+    (columnName: string, defaultValue: string | number) => {
+      assignValue(defaultValue, columnName);
+    },
+    [assignValue],
+  );
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [color]);
+  const handleRenameColumn = useCallback(
+    (newColumnName: string) => {
+      if (!columnToRename) return;
+      renameColumn(columnToRename, newColumnName);
+    },
+    [renameColumn, columnToRename],
+  );
 
-  useEffect(() => {
-    if (value === color.toString("css")) return;
-    setColor(parseColor(value).toFormat("hsb"));
+  const handleDeleteColumns = useCallback(() => {
+    if (columnsToDelete.length === 0) return;
+    deleteColumns(columnsToDelete);
+  }, [deleteColumns, columnsToDelete]);
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [value]);
+  const handleItemAction = useCallback((key: Key, columnKey: string) => {
+    switch (key) {
+      case "renameColumn":
+        setColumnToRename(columnKey);
+        break;
+      case "deleteColumn":
+        setColumnsToDelete([columnKey]);
+        break;
+    }
+  }, []);
+
+  const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
+
+  const handleGlobalAction = useCallback(
+    (key: Key) => {
+      switch (key) {
+        case "deleteColumns":
+          setColumnsToDelete(selectedKeys);
+          break;
+      }
+    },
+    [selectedKeys],
+  );
 
   return (
-    <ColorPicker value={color} onChange={setColor}>
-      <ColorEditor hideAlphaChannel />
-    </ColorPicker>
+    <PositioningContainer>
+      <Flex direction="column" height="100%" gap="size-100" marginX="size-200">
+        <View width="100%" marginTop="size-200">
+          <Flex gap="size-100" direction="row" alignItems="end">
+            <DialogTrigger>
+              <ActionButton isDisabled={selection.size === 0}>
+                <Text>Add Column</Text>
+              </ActionButton>
+              {(close) => (
+                <AddColumnDialog close={close} onSubmit={handleCreateColumn} />
+              )}
+            </DialogTrigger>
+          </Flex>
+        </View>
+        <View
+          position="relative"
+          flex
+          height="100%"
+          overflow="hidden"
+          marginBottom="size-100"
+        >
+          <ActionBarContainer height="100%" width="100%">
+            <ListView
+              aria-label="Column list"
+              width="100%"
+              height="100%"
+              items={columns}
+              selectionMode="multiple"
+              selectedKeys={selectedKeys}
+              onSelectionChange={(keys) => {
+                if (keys === "all") {
+                  setSelectedKeys(columns.map((item) => item.key));
+                } else {
+                  setSelectedKeys(Array.from(keys) as string[]);
+                }
+              }}
+            >
+              {(item) => (
+                <Item key={item.key} textValue={item.key}>
+                  <Text>{item.key}</Text>
+                  <ActionGroup
+                    isQuiet
+                    onAction={(key) => handleItemAction(key, item.key)}
+                  >
+                    <Item key="renameColumn" textValue="Rename Column">
+                      <Rename />
+                    </Item>
+                    <Item key="deleteColumn" textValue="Delete Column">
+                      <Delete />
+                    </Item>
+                  </ActionGroup>
+                </Item>
+              )}
+            </ListView>
+            <ActionBar
+              isEmphasized
+              selectedItemCount={selectedKeys.length}
+              onAction={(key) => handleGlobalAction(key)}
+              onClearSelection={() => setSelectedKeys([])}
+            >
+              <Item key="deleteColumns">
+                <Delete />
+                <Text>Delete Columns</Text>
+              </Item>
+            </ActionBar>
+          </ActionBarContainer>
+        </View>
+      </Flex>
+      <DialogContainer onDismiss={() => setColumnToRename(undefined)}>
+        {columnToRename && (
+          <RenameColumnDialog
+            close={() => setColumnToRename(undefined)}
+            existingColumns={columns}
+            onSubmit={handleRenameColumn}
+          />
+        )}
+      </DialogContainer>
+      <DialogContainer onDismiss={() => setColumnsToDelete([])}>
+        {columnsToDelete.length > 0 && (
+          <AlertDialog
+            title="Delete columns"
+            variant="destructive"
+            primaryActionLabel="Delete"
+            secondaryActionLabel="Cancel"
+            onPrimaryAction={handleDeleteColumns}
+            onCancel={() => setColumnsToDelete([])}
+            autoFocusButton="primary"
+          >
+            <Text>Are you sure you want to delete following columns?</Text>
+            <View marginY="size-200">
+              <TagGroup aria-label="Static TagGroup items example">
+                {columnsToDelete.map((column) => (
+                  <Item key={column}>{column}</Item>
+                ))}
+              </TagGroup>
+            </View>
+            <Text
+              UNSAFE_style={{
+                fontSize: "0.9rem",
+              }}
+            >
+              This action cannot be undone. All values assigned to the columns
+              will be removed.
+            </Text>
+          </AlertDialog>
+        )}
+      </DialogContainer>
+    </PositioningContainer>
   );
 }

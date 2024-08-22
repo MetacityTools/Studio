@@ -14,6 +14,7 @@ export interface EditorModelData extends ModelData {
   rotation?: vec3;
   scale?: vec3;
   uniforms?: { [name: string]: any };
+  geometryMode?: GeometryMode;
 }
 
 export class EditorModel extends GL.Pickable implements GL.Selectable {

@@ -6,7 +6,6 @@ import {
   TabList,
   TabPanels,
   Tabs,
-  Text,
   View,
 } from "@adobe/react-spectrum";
 import { ToastContainer } from "@react-spectrum/toast";
@@ -68,33 +67,36 @@ type SidePanelProps = {
 function SidePanel(props: SidePanelProps) {
   return (
     <PositioningContainer>
-      <Tabs height="100%" aria-label="Editor tabs">
+      <Tabs height="100%" aria-label="Editor tabs" orientation="vertical">
         <View
           borderBottomWidth="thin"
           borderBottomColor="light"
-          paddingX="size-200"
           backgroundColor="gray-50"
         >
-          <TabList>
+          <TabList
+            UNSAFE_style={{
+              paddingRight: "var(--spectrum-global-dimension-size-50)",
+            }}
+          >
             <Item key="models" textValue="Models">
               <Data />
-              <Text>Models</Text>
             </Item>
             <Item key="metadata" textValue="Metadata">
               <Code />
-              <Text>Metadata</Text>
             </Item>
             <Item key="style" textValue="Style">
               <BoxExport />
-              <Text>Exports</Text>
             </Item>
           </TabList>
         </View>
         <View
           position="relative"
           height="100%"
+          width="100%"
           overflow="auto"
           backgroundColor="gray-50"
+          borderStartWidth="thin"
+          borderStartColor="light"
         >
           <TabPanels height="100%" UNSAFE_className="borderless">
             <Item key="models">

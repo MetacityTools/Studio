@@ -53,9 +53,9 @@ export default function ColorPaletteDialog({ close }: AddValueDialogProps) {
     <Dialog onDismiss={close}>
       <Heading>Pick color pallete</Heading>
       <Content>
-        {colorMaps.map((colorMap) => (
+        {colorMaps.map(([name, colorMap]) => (
           <div
-            key={colorMap.name}
+            key={name}
             style={{
               width: "100%",
               height: 50,

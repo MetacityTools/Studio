@@ -7,7 +7,7 @@ import { getModel } from "@features/models/queries/getModel";
 import {
   deleteBucket,
   deleteFile,
-  getUserModelBucketName,
+  getModelBucketName,
 } from "@features/storage";
 import axios from "axios";
 import { expect } from "vitest";
@@ -22,7 +22,7 @@ testWithFixtures("create model", async ({ file, user }) => {
   const response = await createModel(modelMetadata, [file]);
   expect(response).toMatchObject(modelMetadata);
 
-  const bucketName = getUserModelBucketName(user.id, response.id);
+  const bucketName = getModelBucketName(response.id);
 
   await deleteFile(file.name, bucketName);
   await deleteBucket(bucketName);

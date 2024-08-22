@@ -3,13 +3,14 @@
 import {
   ActionBar,
   ActionBarContainer,
-  ActionButton,
   ActionGroup,
   ActionMenu,
-  DialogTrigger,
   Flex,
   Item,
   ListView,
+  TabList,
+  TabPanels,
+  Tabs,
   Text,
   View,
 } from "@adobe/react-spectrum";
@@ -30,7 +31,7 @@ import SplitView from "@spectrum-icons/workflow/SplitView";
 import Visibility from "@spectrum-icons/workflow/Visibility";
 import VisibilityOff from "@spectrum-icons/workflow/VisibilityOff";
 import { Key, useCallback, useState } from "react";
-import EditorAddModelDialog from "./EditorAddModelDialog";
+import EditorAddModeButton from "./EditorAddModelButton";
 import EditorRenameModelDialog from "./EditorRenameModelDialog";
 
 type EditorModelsProps = {
@@ -38,6 +39,39 @@ type EditorModelsProps = {
 };
 
 export default function EditorModels({ projectId }: EditorModelsProps) {
+  return (
+    <PositioningContainer>
+      <Tabs height="100%" aria-label="Editor tabs">
+        <View
+          borderBottomWidth="thin"
+          borderBottomColor="light"
+          paddingX="size-200"
+          backgroundColor="gray-50"
+        >
+          <TabList>
+            <Item key="models" textValue="Models">
+              <Text>Models</Text>
+            </Item>
+          </TabList>
+        </View>
+        <View
+          position="relative"
+          height="100%"
+          overflow="auto"
+          backgroundColor="gray-50"
+        >
+          <TabPanels height="100%" UNSAFE_className="borderless">
+            <Item key="models">
+              <EditorModelList projectId={projectId} />
+            </Item>
+          </TabPanels>
+        </View>
+      </Tabs>
+    </PositioningContainer>
+  );
+}
+
+function EditorModelList({ projectId }: EditorModelsProps) {
   const removeModels = useRemoveModels();
   const setVisibility = useModelToggleVisibility();
   const removeSubmodels = useRemoveSubmodels();
@@ -80,10 +114,7 @@ export default function EditorModels({ projectId }: EditorModelsProps) {
     <PositioningContainer>
       <Flex direction="column" height="100%" gap="size-100" marginX="size-200">
         <View position="relative" overflow="hidden" marginTop="size-200">
-          <DialogTrigger>
-            <ActionButton>Add Model</ActionButton>
-            {(close) => <EditorAddModelDialog close={close} />}
-          </DialogTrigger>
+          <EditorAddModeButton />
         </View>
         <EditorRenameModelDialog
           close={() => setEditingModel(null)}

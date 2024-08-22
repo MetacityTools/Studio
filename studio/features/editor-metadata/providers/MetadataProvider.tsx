@@ -1,16 +1,37 @@
 import { useEditorContext } from "@features/editor/hooks/useEditorContext";
-import { useModels } from "@features/editor/hooks/useModels";
-import { useSelected } from "@features/editor/hooks/useSelected";
-import { useEffect, useState } from "react";
+import { createContext, ReactNode, useEffect, useState } from "react";
 import { defaultColor } from "../constants";
 import { MetadataAggListItem } from "../type";
 
-export default function useMetadataTable(
-  activeColumnName?: string,
-  sort?: boolean,
-) {
-  const [models] = useModels();
+type MetadataContextType = {
+  columns: { key: string }[];
+  sort: boolean;
+  setSort: (sort: boolean) => void;
+  aggregatedRows: MetadataAggListItem[];
+  undefinedItems?: MetadataAggListItem;
+  selectedValueKeys: Set<string>;
+};
+
+export const MetadataContext = createContext<MetadataContextType>(
+  {} as MetadataContextType,
+);
+
+export function MetadataProvider({ children }: { children: ReactNode }) {
+  const { models, selection, activeMetadataColumn, styles } =
+    useEditorContext();
+
   const [columns, setColumns] = useState<{ key: string }[]>([]);
+  const [sort, setSort] = useState<boolean>(false);
+  const [aggregatedRows, setAggregatedColumns] = useState<
+    MetadataAggListItem[]
+  >([]);
+  const [undefinedItems, setUndefinedItems] = useState<MetadataAggListItem>();
+  const [selectedValueKeys, setSelectedValueKeys] = useState<Set<string>>(
+    new Set(),
+  );
+  const [colorizedAggregatedRows, setColorizedAggregatedRows] = useState<
+    MetadataAggListItem[]
+  >([]);
 
   useEffect(() => {
     const columnNames = new Set<string>();
@@ -26,18 +47,9 @@ export default function useMetadataTable(
     setColumns(newColumns);
   }, [models]);
 
-  const selected = useSelected();
-  const [aggregatedRows, setAggregatedColumns] = useState<
-    MetadataAggListItem[]
-  >([]);
-  const [undefinedItems, setUndefinedItems] = useState<MetadataAggListItem>();
-  const [selectedValueKeys, setSelectedValueKeys] = useState<Set<string>>(
-    new Set(),
-  );
-
   useEffect(() => {
     //create aggregation only for the active column
-    if (!activeColumnName) {
+    if (!activeMetadataColumn) {
       setAggregatedColumns([]);
       setUndefinedItems(undefined);
       setSelectedValueKeys(new Set());
@@ -55,10 +67,10 @@ export default function useMetadataTable(
     const undefinedItems = { count: 0, selected: 0 };
 
     for (const model of models) {
-      const selectedModel = selected.get(model);
+      const selectedModel = selection.get(model);
 
       for (const submodelId of model.submodelIDs) {
-        const value = model.metadata[submodelId]?.[activeColumnName];
+        const value = model.metadata[submodelId]?.[activeMetadataColumn];
 
         if (typeof value === "string" || typeof value === "number") {
           //has defined value
@@ -77,7 +89,7 @@ export default function useMetadataTable(
     const newAggregatedRows: MetadataAggListItem[] = [];
     for (const [value, count] of columnValues.entries()) {
       newAggregatedRows.push({
-        column: activeColumnName,
+        column: activeMetadataColumn,
         value,
         ...count,
         key: value.toString(),
@@ -114,24 +126,19 @@ export default function useMetadataTable(
     setSelectedValueKeys(selectedKeys);
     setAggregatedColumns(newAggregatedRows);
     setUndefinedItems({
-      column: activeColumnName,
+      column: activeMetadataColumn,
       value: "undefined",
       key: "undefined",
       ...undefinedItems,
       color: defaultColor,
     });
-  }, [models, activeColumnName, selected, sort]);
+  }, [models, activeMetadataColumn, selection, sort]);
 
-  const [colorizedAggregatedRows, setColorizedAggregatedRows] = useState<
-    MetadataAggListItem[]
-  >([]);
-
-  //add trigger for styles separately
-  const { styles } = useEditorContext();
   useEffect(() => {
-    if (!activeColumnName) return setColorizedAggregatedRows(aggregatedRows);
+    if (!activeMetadataColumn)
+      return setColorizedAggregatedRows(aggregatedRows);
 
-    const columnStyles = styles[activeColumnName];
+    const columnStyles = styles[activeMetadataColumn];
     if (!columnStyles) return setColorizedAggregatedRows(aggregatedRows);
 
     const colorized = [];
@@ -144,12 +151,21 @@ export default function useMetadataTable(
       colorized.push(copy);
     }
     setColorizedAggregatedRows(colorized);
-  }, [styles, aggregatedRows, activeColumnName]);
+  }, [styles, aggregatedRows, activeMetadataColumn]);
 
-  return {
-    selectedValueKeys,
-    undefinedItems,
-    aggregatedRows: colorizedAggregatedRows,
-    columns,
-  };
+  return (
+    <MetadataContext.Provider
+      value={{
+        columns,
+        sort,
+        setSort,
+        aggregatedRows: colorizedAggregatedRows,
+        undefinedItems,
+        selectedValueKeys,
+        //colorizedAggregatedRows,
+      }}
+    >
+      {children}
+    </MetadataContext.Provider>
+  );
 }

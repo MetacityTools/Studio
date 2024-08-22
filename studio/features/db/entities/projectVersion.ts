@@ -1,4 +1,5 @@
 import {
+  Column,
   CreateDateColumn,
   Entity,
   ManyToOne,
@@ -18,8 +19,8 @@ export class ProjectVersion {
   })
   project?: Project;
 
-  // get from file system
-  file?: string;
+  @Column()
+  bucketName!: string;
 
   @CreateDateColumn() created_at!: Date;
   @UpdateDateColumn() updated_at!: Date;

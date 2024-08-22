@@ -17,7 +17,7 @@ export default function useLoadLatestVersion() {
         const fileMap = new Map<string, Blob>();
         await readFileZipContents(blob, fileMap);
         const data = await load(fileMap);
-        await importModels(data.models, {
+        await importModels(data, {
           overwriteCurrent: true,
         });
       } catch (error) {

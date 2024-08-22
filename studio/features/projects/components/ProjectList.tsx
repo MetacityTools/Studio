@@ -133,6 +133,7 @@ function ProjectItem({ project, dispatchAction }: ProjectItemProps) {
         <Link
           href={`/projects/${project.id}`}
           passHref
+          target="_blank"
           style={{
             textDecoration: "none",
             color: "inherit",

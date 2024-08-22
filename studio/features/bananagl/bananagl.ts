@@ -1,5 +1,5 @@
 import { ProjectionType } from "./camera/cameraInterface";
-import { CameraView } from "./camera/cameraLock";
+import { CameraView } from "./camera/cameraView";
 import {
   Attribute,
   ElementAttribute,

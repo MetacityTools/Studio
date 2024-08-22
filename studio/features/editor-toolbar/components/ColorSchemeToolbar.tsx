@@ -17,7 +17,6 @@ export default function ColorSchemeToolbar() {
 
   const handleToggleScheme = useCallback(() => {
     setColorScheme(colorScheme === "dark" ? "light" : "dark");
-    console.log("Color scheme toggled");
   }, [colorScheme, setColorScheme]);
 
   return (

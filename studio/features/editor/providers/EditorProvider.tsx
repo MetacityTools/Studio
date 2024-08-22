@@ -36,16 +36,10 @@ type EditorContextProps = {
   setMinShade: Dispatch<SetStateAction<number>>;
   maxShade: number;
   setMaxShade: Dispatch<SetStateAction<number>>;
-  gridVisible: boolean;
-  setGridVisible: Dispatch<SetStateAction<boolean>>;
   globalShift: vec3 | null;
   setGlobalShift: Dispatch<SetStateAction<vec3 | null>>;
   styles: Style;
   setStyles: Dispatch<SetStateAction<Style>>;
-  usedStyle: string[] | null;
-  setUsedStyle: Dispatch<SetStateAction<string[] | null>>;
-  lastUsedStyle: string[] | null;
-  setLastUsedStyle: Dispatch<SetStateAction<string[] | null>>;
   greyscale: boolean;
   setGreyscale: Dispatch<SetStateAction<boolean>>;
   activeMetadataColumn: string;
@@ -65,11 +59,8 @@ export function EditorProvider(props: { children: ReactNode }) {
   const [camTargetZ, setCamTargetZ] = useState<number>(0);
   const [minShade, setMinShade] = useState<number>(0);
   const [maxShade, setMaxShade] = useState<number>(10);
-  const [gridVisible, setGridVisible] = useState<boolean>(false);
   const [globalShift, setGlobalShift] = useState<vec3 | null>(null);
   const [styles, setStyles] = useState<Style>({});
-  const [lastUsedStyle, setLastUsedStyle] = useState<string[] | null>(null);
-  const [usedStyle, setUsedStyle] = useState<string[] | null>(null);
   const [greyscale, setGreyscale] = useState<boolean>(false);
   const [activeMetadataColumn, setActiveMetadataColumn] = useState<string>("");
 
@@ -113,7 +104,7 @@ export function EditorProvider(props: { children: ReactNode }) {
   }, [maxShade, models]);
 
   useEffect(() => {
-    console.log("models", models);
+    console.debug("models", models);
   }, [models]);
 
   useEffect(() => {
@@ -154,18 +145,12 @@ export function EditorProvider(props: { children: ReactNode }) {
         setMinShade,
         maxShade,
         setMaxShade,
-        gridVisible,
-        setGridVisible,
         globalShift,
         setGlobalShift,
         styles,
         setStyles,
-        usedStyle,
-        setUsedStyle,
-        lastUsedStyle,
-        setLastUsedStyle,
-        greyscale: greyscale,
-        setGreyscale: setGreyscale,
+        greyscale,
+        setGreyscale,
         activeMetadataColumn,
         setActiveMetadataColumn,
       }}

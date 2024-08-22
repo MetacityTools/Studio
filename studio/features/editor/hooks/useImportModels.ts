@@ -9,9 +9,10 @@ import {
   solidShader,
   wireframeShader,
 } from "@editor/data/EditorModelShader";
-import { PrimitiveType } from "@editor/data/types";
+import { ModelData, PrimitiveType } from "@editor/data/types";
 import { vec3 } from "gl-matrix";
 import { useCallback } from "react";
+import { EditorData, ProjectData } from "../utils/formats/metacity/types";
 import { useEditorContext } from "./useEditorContext";
 
 export interface EditorImportOptions {
@@ -19,20 +20,57 @@ export interface EditorImportOptions {
 }
 
 export function useImportModels() {
-  const { globalShift, scene, setGlobalShift, setModels } = useEditorContext();
+  const {
+    globalShift,
+    scene,
+    setGlobalShift,
+    setModels,
+    setActiveMetadataColumn,
+    setStyles,
+    renderer,
+    activeView,
+  } = useEditorContext();
 
   const importModels = useCallback(
-    async (data: EditorModelData[], options?: EditorImportOptions) => {
+    async (data: (ModelData | EditorData)[], options?: EditorImportOptions) => {
       let shift = globalShift;
       const createdModels = [];
 
+      let modelData: ModelData[];
+      let projectData: ProjectData | undefined;
+
+      if (data.length > 0 && isEditorData(data[0])) {
+        projectData = data[0].project;
+        modelData = data[0].models;
+      } else {
+        modelData = data as ModelData[];
+      }
+
+      //handle project data setup
+      if (projectData) {
+        setActiveMetadataColumn(projectData.activeMetadataColumn);
+        setStyles(projectData.style);
+        shift = projectData.globalShift;
+
+        const view = renderer.views?.[activeView];
+        if (view) {
+          view.view.camera.set({
+            position: projectData.cameraPosition,
+            target: projectData.cameraTarget,
+            projectionType: projectData.projectionType,
+          });
+
+          view.view.cameraLock.mode = projectData.cameraView;
+        }
+      }
+
       //sort out the alignment
-      for (const model of data) {
+      for (const model of modelData) {
         shift = alignModels(model.geometry.position, shift);
       }
 
       //generate geometry and metadata
-      for (const model of data) {
+      for (const model of modelData) {
         const glmodel = await importModel(model);
         if (!glmodel) continue;
         createdModels.push(glmodel);
@@ -66,10 +104,23 @@ export function useImportModels() {
 
       return createdModels;
     },
-    [globalShift, scene, setGlobalShift, setModels],
+    [
+      globalShift,
+      scene,
+      setGlobalShift,
+      setModels,
+      activeView,
+      setActiveMetadataColumn,
+      setStyles,
+      renderer,
+    ],
   );
 
   return importModels;
+}
+
+function isEditorData(data: ModelData | EditorData): data is EditorData {
+  return (data as EditorData).models !== undefined;
 }
 
 async function importModel(model: EditorModelData) {

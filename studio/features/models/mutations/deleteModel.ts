@@ -5,9 +5,9 @@ import { getUserToken } from "@features/auth/user";
 import { Model } from "@features/db/entities/model";
 import { injectRepository } from "@features/db/helpers";
 import {
-    deleteFile,
-    getUserModelBucketName,
-    listFilesInBucket,
+  deleteFile,
+  getModelBucketName,
+  listFilesInBucket,
 } from "@features/storage";
 
 export async function deleteModel(modelId: number) {
@@ -23,7 +23,7 @@ export async function deleteModel(modelId: number) {
   if (!model) throw new Error("Not found");
 
   // delete files
-  const bucketName = getUserModelBucketName(user.id, model.id);
+  const bucketName = getModelBucketName(model.id);
 
   const files = await listFilesInBucket(bucketName);
   for (const file of files) {

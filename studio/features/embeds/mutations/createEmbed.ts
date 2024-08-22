@@ -5,7 +5,7 @@ import { injectRepository } from "@features/db/helpers";
 import { toPlain } from "@features/helpers/objects";
 import {
   ensureBucket,
-  getUserEmbedBucketName,
+  getEmbedBucketName,
   saveFileStream,
 } from "@features/storage";
 import { Readable } from "stream";
@@ -24,7 +24,7 @@ export async function createEmbed(projectId: number, files: File[]) {
   });
 
   // create a bucket for the embed
-  embed.bucketId = getUserEmbedBucketName(user.id, embed.id);
+  embed.bucketId = getEmbedBucketName(embed.id);
   await ensureBucket(embed.bucketId);
 
   // save the bucket id to the database

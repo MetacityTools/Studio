@@ -1,13 +1,24 @@
-import { ModelData } from "@editor/data/types";
+import { ModelData, Style } from "@editor/data/types";
 
+import { CameraView, ProjectionType } from "@features/bananagl/bananagl";
+import { vec3 } from "gl-matrix";
 import { ReadOnlyMemoryStream } from "./streams";
+import { EditorData, ProjectData } from "./types";
 import { ConstructableTypedArray } from "./write";
 
-export function readModels(buffer: ArrayBuffer): ModelData[] {
+export function readModels(buffer: ArrayBuffer): EditorData {
   const stream = new ReadOnlyMemoryStream(buffer);
   const version = readString(stream);
-  if (version !== "mtctv2") return readLegacy(stream);
-  return readV2(stream);
+
+  if (version === "mtctv3") return readV3(stream);
+
+  if (version === "mtctv2")
+    return {
+      models: readV2(stream),
+    };
+  return {
+    models: readLegacy(stream),
+  };
 }
 
 function readLegacy(stream: ReadOnlyMemoryStream): ModelData[] {
@@ -23,6 +34,18 @@ function readV2(stream: ReadOnlyMemoryStream): ModelData[] {
     data.push(model);
   }
   return data;
+}
+
+function readV3(stream: ReadOnlyMemoryStream): EditorData {
+  const models: ModelData[] = [];
+  const project = readProjectData(stream);
+
+  while (!stream.empty()) {
+    const model = readModel(stream);
+    models.push(model);
+  }
+
+  return { models, project };
 }
 
 function readModel(stream: ReadOnlyMemoryStream) {
@@ -60,4 +83,24 @@ function readString(stream: ReadOnlyMemoryStream) {
   const buffer = stream.readUint8Array(length);
   const decoder = new TextDecoder();
   return decoder.decode(buffer);
+}
+
+function readProjectData(stream: ReadOnlyMemoryStream): ProjectData {
+  const activeMetadataColumn = readString(stream);
+  const projectionType = readString(stream) as ProjectionType;
+  const style = JSON.parse(readString(stream)) as Style;
+  const cameraView = readString(stream) as CameraView;
+  const cameraPosition = readTypedArray(stream, Float32Array) as vec3;
+  const cameraTarget = readTypedArray(stream, Float32Array) as vec3;
+  const globalShift = readTypedArray(stream, Float32Array) as vec3;
+
+  return {
+    activeMetadataColumn,
+    projectionType,
+    style,
+    cameraView,
+    cameraPosition,
+    cameraTarget,
+    globalShift,
+  };
 }

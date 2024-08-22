@@ -12,7 +12,5 @@ export default async function uploadProjectVerion(
     body: formData,
   });
 
-  console.log(response);
-
   return response;
 }

@@ -10,17 +10,17 @@ function getClient() {
   return client;
 }
 
-function resolveBucket(directory: string) {
-  return directory.replaceAll(/[^a-z0-9\-]/g, "-");
+function resolveBucket(bucketName: string) {
+  return bucketName.replaceAll(/[^a-z0-9\-]/g, "-");
 }
 
 export async function readFile(
   file: string,
-  directory: string,
+  bucketName: string,
 ): Promise<Buffer> {
   return new Promise(async (resolve, reject) => {
     const client = getClient();
-    const bucket = resolveBucket(directory);
+    const bucket = resolveBucket(bucketName);
 
     const dataStream = await client.getObject(bucket, file);
     // Create an empty Buffer to store the object data
@@ -37,64 +37,64 @@ export async function readFile(
   });
 }
 
-export async function saveFile(file: string, directory: string, data: Buffer) {
+export async function saveFile(file: string, bucketName: string, data: Buffer) {
   const client = getClient();
-  const bucket = resolveBucket(directory);
+  const bucket = resolveBucket(bucketName);
   await client.putObject(bucket, file, data);
 }
 
-export async function readFileStream(file: string, directory: string) {
+export async function readFileStream(file: string, bucketName: string) {
   const client = getClient();
-  const bucket = resolveBucket(directory);
+  const bucket = resolveBucket(bucketName);
   return await client.getObject(bucket, file);
 }
 
 export async function saveFileStream(
   file: string,
-  directory: string,
+  bucketName: string,
   data: Readable,
 ) {
   const client = getClient();
-  const bucket = resolveBucket(directory);
+  const bucket = resolveBucket(bucketName);
   return await client.putObject(bucket, file, data);
 }
 
-export async function deleteFile(file: string, directory: string) {
+export async function deleteFile(file: string, bucketName: string) {
   const client = getClient();
-  const bucket = resolveBucket(directory);
+  const bucket = resolveBucket(bucketName);
 
   await client.removeObject(bucket, file);
 }
 
-export async function deleteBucket(directory: string) {
+export async function deleteBucket(bucketName: string) {
   const client = getClient();
-  const bucket = resolveBucket(directory);
+  const bucket = resolveBucket(bucketName);
 
   await client.removeBucket(bucket);
 }
 
-export async function ensureBucket(directory: string): Promise<string> {
+export async function ensureBucket(bucketName: string): Promise<string> {
   const client = getClient();
-  const bucket = resolveBucket(directory);
+  const bucket = resolveBucket(bucketName);
 
   const bucketExists = await client.bucketExists(bucket);
   if (!bucketExists) {
     await client.makeBucket(bucket);
   }
 
-  return directory;
+  return bucketName;
 }
 
-export async function checkBucketExists(directory: string) {
+export async function checkBucketExists(bucketName: string) {
   const client = getClient();
-  const bucket = resolveBucket(directory);
+  const bucket = resolveBucket(bucketName);
   return client.bucketExists(bucket);
 }
 
-export async function checkFileExists(file: string, directory: string) {
+export async function checkFileExists(file: string, bucketName: string) {
   try {
     const client = getClient();
-    const bucket = resolveBucket(directory);
+    const bucket = resolveBucket(bucketName);
     await client.statObject(bucket, file);
     return true;
   } catch (err) {
@@ -102,16 +102,16 @@ export async function checkFileExists(file: string, directory: string) {
   }
 }
 
-export async function getFileInfo(file: string, directory: string) {
+export async function getFileInfo(file: string, bucketName: string) {
   const client = getClient();
-  const bucket = resolveBucket(directory);
+  const bucket = resolveBucket(bucketName);
   return client.statObject(bucket, file);
 }
 
-export async function listFilesInBucket(directory: string) {
+export async function listFilesInBucket(bucketName: string) {
   return new Promise<string[]>((resolve, reject) => {
     const client = getClient();
-    const bucket = resolveBucket(directory);
+    const bucket = resolveBucket(bucketName);
     const files: string[] = [];
     const objectStream = client.listObjects(bucket);
 
@@ -128,12 +128,12 @@ export async function listFilesInBucket(directory: string) {
   });
 }
 
-export async function getFilesInBucketAsZip(directory: string) {
-  const files = await listFilesInBucket(directory);
+export async function getFilesInBucketAsZip(bucketName: string) {
+  const files = await listFilesInBucket(bucketName);
   const archive = new ZipArchive();
 
   for (const file of files) {
-    const data = await readFile(file, directory);
+    const data = await readFile(file, bucketName);
     await archive.set(file, data);
   }
 

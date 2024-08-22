@@ -9,7 +9,7 @@ import {
   deleteBucket,
   deleteFile,
   ensureBucket,
-  getUserModelBucketName,
+  getModelBucketName,
   saveFileStream,
 } from "@features/storage";
 import { createReadStream, ReadStream } from "fs";
@@ -74,7 +74,7 @@ export const testWithFixtures = test.extend<Fixtures>({
       user: { id: user.id },
     });
 
-    const bucketName = getUserModelBucketName(user.id, model.id);
+    const bucketName = getModelBucketName(model.id);
     await ensureBucket(bucketName);
 
     const fileStream = Readable.fromWeb(file.stream() as ReadableStream);

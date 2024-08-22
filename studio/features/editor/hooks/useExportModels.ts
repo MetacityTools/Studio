@@ -2,16 +2,33 @@ import { EditorModel, EditorModelData } from "@editor/data/EditorModel";
 import { exportModel } from "@editor/utils/formats/metacity/write";
 import { vec3 } from "gl-matrix";
 import { useCallback } from "react";
+import { ProjectData } from "../utils/formats/metacity/types";
 import { useEditorContext } from "./useEditorContext";
 
 export function useExportModels() {
   const { models } = useEditorContext();
+  const ctx = useEditorContext();
 
   const exportProject = useCallback(() => {
     const modelData = extractModels(models);
     if (!modelData) return;
-    return exportModel(modelData);
-  }, [models]);
+
+    const view = ctx.renderer.views?.[ctx.activeView];
+    if (!view) return;
+
+    //export project settings
+    const projectData: ProjectData = {
+      style: ctx.styles,
+      globalShift: ctx.globalShift ?? vec3.create(),
+      activeMetadataColumn: ctx.activeMetadataColumn,
+      cameraView: view.view.cameraLock.mode,
+      cameraPosition: view.view.camera.position,
+      cameraTarget: view.view.camera.target,
+      projectionType: view.view.camera.projectionType,
+    };
+
+    return exportModel(modelData, projectData);
+  }, [ctx, models]);
 
   return exportProject;
 }
@@ -56,6 +73,7 @@ function extractModels(models: EditorModel[]) {
         name: model.name,
         primitive: model.primitive,
       },
+      geometryMode: model.geometryMode,
     };
 
     //add to processed

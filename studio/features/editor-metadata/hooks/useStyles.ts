@@ -4,7 +4,7 @@ import { vec3 } from "gl-matrix";
 import { useCallback } from "react";
 
 export default function useStyles() {
-  const { styles, setStyles } = useEditorContext();
+  const { setStyles } = useEditorContext();
 
   const setStyle = useCallback(
     (column: string, value: string | number, color: Color) => {
