@@ -18,15 +18,17 @@ export function viewRenderPass(
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT | gl.STENCIL_BUFFER_BIT);
   gl.disable(gl.DEPTH_TEST);
   gl.disable(gl.BLEND);
+  gl.depthMask(false);
   const noDepth = scene.noDepthObjects;
   renderObjectGroup(noDepth, renderer, camera);
 
   gl.enable(gl.DEPTH_TEST);
+  gl.depthMask(true);
   const opaque = scene.opaqueObjects;
   renderObjectGroup(opaque, renderer, camera);
 
   gl.enable(gl.BLEND);
-  gl.disable(gl.DEPTH_TEST);
+  gl.depthMask(false);
   const transparent = scene.transparentObjects;
   renderObjectGroup(transparent, renderer, camera);
 }

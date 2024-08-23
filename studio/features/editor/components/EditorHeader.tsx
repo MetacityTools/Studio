@@ -15,6 +15,7 @@ import { useGetProjectById } from "@features/projects/hooks/useGetProjectById";
 import { useCallback, useEffect, useState } from "react";
 import { useExportModels } from "../hooks/useExportModels";
 import useLoadLatestVersion from "../hooks/useLoadLatestVersion";
+import { useRenderer } from "../hooks/useRender";
 
 type EditorHeaderProps = {
   sanitizedId: number;
@@ -37,24 +38,45 @@ export default function EditorHeader({ sanitizedId }: EditorHeaderProps) {
   }, [sanitizedId]);
 
   const exportModels = useExportModels();
+  const renderer = useRenderer();
+
+  const saveProject = useCallback(() => {
+    async function uploadProjectVersion(
+      dataFile: File,
+      thumbnailFileContents: string,
+    ) {
+      await uploadProjectVerion(sanitizedId, dataFile, thumbnailFileContents);
+
+      setIsSavingDialogOpen(false);
+    }
+
+    renderer.afterRenderOnce = async () => {
+      //save contents of the canvas to a png file
+      setIsSavingDialogOpen(true);
+      const canvas: HTMLCanvasElement = renderer.window.rawCanvas;
+      const image = canvas.toDataURL("image/png");
+
+      //export project data
+      const dataFile = exportModels();
+      if (!dataFile) return;
+
+      //upload project version
+      void uploadProjectVersion(dataFile, image);
+    };
+  }, [renderer, sanitizedId, exportModels]);
 
   const handleAction = useCallback(
     async (action: Key) => {
       switch (action) {
         case "save":
-          setIsSavingDialogOpen(true);
-          const file = exportModels();
-          if (!file) return;
-          await uploadProjectVerion(sanitizedId, file);
-          setIsSavingDialogOpen(false);
-          // Save
-          break;
+          saveProject();
+        // break;
         case "share":
           // Share
           break;
       }
     },
-    [exportModels, sanitizedId],
+    [saveProject],
   );
 
   return (

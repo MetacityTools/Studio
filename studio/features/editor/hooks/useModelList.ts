@@ -13,6 +13,7 @@ export default function useModelList() {
         key: model.uuid,
         totalSubmodels: Object.keys(model.metadata).length,
         selectedSubmodels: selected.get(model)?.size || 0,
+        geometryMode: model.geometryMode,
       })),
     [models, selected],
   );

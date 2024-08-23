@@ -19,8 +19,8 @@ import ProjectionToolbar from "@features/editor-toolbar/components/ProjectionToo
 import SelectionToolbar from "@features/editor-toolbar/components/SelectionToolbar";
 import ShaderToolbar from "@features/editor-toolbar/components/ShaderToolbar";
 import BoxExport from "@spectrum-icons/workflow/BoxExport";
+import Data from "@spectrum-icons/workflow/Building";
 import Code from "@spectrum-icons/workflow/Code";
-import Data from "@spectrum-icons/workflow/Data";
 import { Allotment } from "allotment";
 import "allotment/dist/style.css";
 import { CanvasWrapper } from "./Canvas/CanvasWrapper";

@@ -8,7 +8,7 @@ import {
 } from "typeorm";
 import { Project } from "./project";
 
-@Entity("projectVersion")
+@Entity("project_version")
 export class ProjectVersion {
   @PrimaryGeneratedColumn()
   id!: number;
@@ -21,6 +21,9 @@ export class ProjectVersion {
 
   @Column()
   bucketName!: string;
+
+  @Column()
+  thumbnailContents!: string;
 
   @CreateDateColumn() created_at!: Date;
   @UpdateDateColumn() updated_at!: Date;

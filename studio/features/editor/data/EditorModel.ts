@@ -72,6 +72,8 @@ export class EditorModel extends GL.Pickable implements GL.Selectable {
       this.shader = this.wireframeShader;
     } else if (mode === GeometryMode.NOEDGES && this.noEdgesShader) {
       this.shader = this.noEdgesShader;
+    } else {
+      console.warn("No shader found for mode", mode);
     }
   }
 

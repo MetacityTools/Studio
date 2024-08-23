@@ -61,7 +61,7 @@ export default function EditorAddModelButton({}: EditorAddModelDialogProps) {
       acceptedFileTypes={supportedFileTypes}
       onSelect={handleSubmit}
     >
-      <Button variant="primary">Upload your files</Button>
+      <Button variant="primary">Add models</Button>
       <DialogContainer onDismiss={() => {}}>
         {loading && (
           <Dialog>

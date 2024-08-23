@@ -130,3 +130,13 @@ export type StyleRecord = {
     vec: vec3;
   };
 };
+
+export type ModelStyle = {
+  [key: string]: ModelStyleRecord;
+};
+
+export type ModelStyleRecord = {
+  [modelId: string]: {
+    geometryMode: GeometryMode;
+  };
+};

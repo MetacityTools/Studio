@@ -94,7 +94,7 @@ export default function ProjectList() {
 }
 
 type ProjectItemProps = {
-  project: Project;
+  project: Project & { thumbnail_contents: string };
   dispatchAction: (projectId: number, action: Key) => void;
 };
 
@@ -112,13 +112,14 @@ function ProjectItem({ project, dispatchAction }: ProjectItemProps) {
       <Link
         href={`/projects/${project.id}`}
         passHref
+        target="_blank"
         style={{
           textDecoration: "none",
           color: "inherit",
         }}
       >
         <Image
-          src={project.thumbnail || "/viewer.png"}
+          src={project.thumbnail_contents || "/viewer.png"}
           width="size-3000"
           height="size-3000"
           marginBottom="size-100"

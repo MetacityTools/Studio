@@ -6,12 +6,15 @@ import {
   TooltipTrigger,
   View,
 } from "@adobe/react-spectrum";
-import { TriangleFull, TriangleFullFilled } from "@core/components/Icons";
+import {
+  TriangleEmpty,
+  TriangleFull,
+  TriangleFullFilled,
+} from "@core/components/Icons";
 import { EditorModel } from "@features/editor/data/EditorModel";
 import { GeometryMode } from "@features/editor/data/types";
 import { useScene } from "@features/editor/hooks/useScene";
 import { useCallback, useState } from "react";
-import { TbVectorTriangle } from "react-icons/tb";
 
 export default function ShaderToolbar() {
   const [geometryMode, setGeometryMode] = useState<GeometryMode>(
@@ -104,7 +107,7 @@ export default function ShaderToolbar() {
         </TooltipTrigger>
         <TooltipTrigger delay={0} placement="bottom">
           <Item key={GeometryMode.WIREFRAME}>
-            <TbVectorTriangle />
+            <TriangleEmpty />
           </Item>
           <Tooltip>Wireframe</Tooltip>
         </TooltipTrigger>

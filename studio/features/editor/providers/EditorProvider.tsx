@@ -1,7 +1,7 @@
 import { useProvider } from "@adobe/react-spectrum";
 import * as GL from "@bananagl/bananagl";
 import { EditorModel } from "@editor/data/EditorModel";
-import { Style } from "@editor/data/types";
+import { ModelStyle, Style } from "@editor/data/types";
 import { vec3 } from "gl-matrix";
 import {
   Dispatch,
@@ -40,6 +40,8 @@ type EditorContextProps = {
   setGlobalShift: Dispatch<SetStateAction<vec3 | null>>;
   styles: Style;
   setStyles: Dispatch<SetStateAction<Style>>;
+  modelStyles: ModelStyle;
+  setModelStyles: Dispatch<SetStateAction<ModelStyle>>;
   greyscale: boolean;
   setGreyscale: Dispatch<SetStateAction<boolean>>;
   activeMetadataColumn: string;
@@ -61,6 +63,7 @@ export function EditorProvider(props: { children: ReactNode }) {
   const [maxShade, setMaxShade] = useState<number>(10);
   const [globalShift, setGlobalShift] = useState<vec3 | null>(null);
   const [styles, setStyles] = useState<Style>({});
+  const [modelStyles, setModelStyles] = useState<ModelStyle>({});
   const [greyscale, setGreyscale] = useState<boolean>(false);
   const [activeMetadataColumn, setActiveMetadataColumn] = useState<string>("");
 
@@ -149,6 +152,8 @@ export function EditorProvider(props: { children: ReactNode }) {
         setGlobalShift,
         styles,
         setStyles,
+        modelStyles,
+        setModelStyles,
         greyscale,
         setGreyscale,
         activeMetadataColumn,

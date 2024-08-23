@@ -16,7 +16,8 @@ import { ReadableStream } from "stream/web";
 
 export async function createProjectVersion(
   projectId: number,
-  file: File,
+  dataFile: File,
+  thumbnailFileContents: string,
 ): Promise<ProjectVersion> {
   if (!(await canCreateModel())) throw new Error("Unauthorized");
 
@@ -32,14 +33,17 @@ export async function createProjectVersion(
 
   const projectVersion = await ProjectVersionRepository.save({
     bucketName: bucketName,
+    thumbnailContents: thumbnailFileContents,
     project: { id: projectId },
     user: { id: user.id, email: user.email },
   });
 
   try {
     await ensureBucket(bucketName);
-    const fileStream = Readable.fromWeb(file.stream() as ReadableStream);
-    await saveFileStream(file.name, bucketName, fileStream);
+    const dataFileStream = Readable.fromWeb(
+      dataFile.stream() as ReadableStream,
+    );
+    await saveFileStream(dataFile.name, bucketName, dataFileStream);
   } catch (e) {
     await ProjectVersionRepository.remove(projectVersion);
     throw e;
