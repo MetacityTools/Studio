@@ -3,7 +3,12 @@ import { getUserToken } from "@features/auth/user";
 import { Embed } from "@features/db/entities/embed";
 import { injectRepository } from "@features/db/helpers";
 import { toPlain } from "@features/helpers/objects";
-import { deleteBucket, deleteFile, listFilesInBucket } from "@features/storage";
+import {
+  checkBucketExists,
+  deleteBucket,
+  deleteFile,
+  listFilesInBucket,
+} from "@features/storage";
 
 export async function deleteEmbed(embedId: number) {
   if (!(await canEditProject())) throw new Error("Unauthorized");
@@ -18,7 +23,7 @@ export async function deleteEmbed(embedId: number) {
   });
   if (!embed) throw new Error("Embed not found");
 
-  if (embed.bucketId) {
+  if (embed.bucketId && (await checkBucketExists(embed.bucketId))) {
     // delete all files in the embed bucket
     const files = await listFilesInBucket(embed.bucketId);
 
