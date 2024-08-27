@@ -17,7 +17,6 @@ import CameraViewToolbar from "@features/editor-toolbar/components/CameraViewToo
 import ColorSchemeToolbar from "@features/editor-toolbar/components/ColorSchemeToolbar";
 import ProjectionToolbar from "@features/editor-toolbar/components/ProjectionToolbar";
 import SelectionToolbar from "@features/editor-toolbar/components/SelectionToolbar";
-import ShaderToolbar from "@features/editor-toolbar/components/ShaderToolbar";
 import BoxExport from "@spectrum-icons/workflow/BoxExport";
 import Data from "@spectrum-icons/workflow/Building";
 import Code from "@spectrum-icons/workflow/Code";
@@ -41,7 +40,7 @@ export default function Editor(props: EditorProps) {
           <TooltipOverlay />
           <View position="absolute" top="size-100" left="size-100">
             <Grid
-              areas={["projection camera shader selection scheme"]}
+              areas={["projection camera selection scheme"]}
               columns={["auto auto auto auto"]}
               rows={["auto"]}
               gap="size-100"
@@ -49,7 +48,7 @@ export default function Editor(props: EditorProps) {
             >
               <ProjectionToolbar />
               <CameraViewToolbar />
-              <ShaderToolbar />
+              {/* <ShaderToolbar /> */}
               <SelectionToolbar />
               <ColorSchemeToolbar />
             </Grid>

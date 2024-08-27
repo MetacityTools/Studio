@@ -10,16 +10,15 @@ export default function useStyles() {
     (column: string, value: string | number, color: Color) => {
       setStyles((prev) => {
         const next = { ...prev };
-        if (!next[column]) {
-          next[column] = {};
-        }
+        const columnValues = next[column] ?? {};
 
         const nextColor = {
           code: color.toString("css"),
           vec: getColor(color),
         };
 
-        next[column][value] = nextColor;
+        columnValues[value] = nextColor;
+        next[column] = columnValues;
         return next;
       });
     },

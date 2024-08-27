@@ -29,7 +29,8 @@ export default function CameraViewToolbar() {
       if (keys === "all") return;
 
       //get first key
-      const viewMode = keys.values().next().value as CameraView;
+      const viewMode =
+        (keys.values().next().value as CameraView) ?? CameraView.Free;
       const view = renderer.views?.[activeView].view;
       if (!view) return;
       view.cameraLock.mode = viewMode;

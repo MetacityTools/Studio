@@ -10,6 +10,7 @@ export function exportModel(models: EditorModelData[], params: ProjectData) {
   //write version
   writeString("mtctv3", stream);
 
+  //write project data
   writeProjectData(params, stream);
 
   //write models
@@ -46,6 +47,7 @@ export function exportModel(models: EditorModelData[], params: ProjectData) {
 }
 
 function writeModel(model: EditorModelData, stream: WriteOnlyMemoryStream) {
+  writeString(model.uuid, stream);
   writeTypedArray(model.geometry.position, stream);
   writeTypedArray(model.geometry.submodel, stream);
   const metadata = JSON.stringify(model.metadata.data);
@@ -55,10 +57,12 @@ function writeModel(model: EditorModelData, stream: WriteOnlyMemoryStream) {
 }
 
 function writeProjectData(params: ProjectData, stream: WriteOnlyMemoryStream) {
-  writeString(params.activeMetadataColumn, stream);
-  writeString(params.projectionType, stream);
   const style = JSON.stringify(params.style);
   writeString(style, stream);
+  const modelStyle = JSON.stringify(params.modelStyle);
+  writeString(modelStyle, stream);
+  writeString(params.activeMetadataColumn, stream);
+  writeString(params.projectionType, stream);
   writeString(params.cameraView, stream);
   writeTypedArray(new Float32Array(params.cameraPosition), stream);
   writeTypedArray(new Float32Array(params.cameraTarget), stream);

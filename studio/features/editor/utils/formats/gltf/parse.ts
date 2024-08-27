@@ -15,6 +15,7 @@ export async function parse(model: UserInputModel): Promise<ModelData> {
   const { position, submodel, metadata } = unindexGeometry(gltf);
 
   return {
+    uuid: self.crypto.randomUUID(),
     geometry: {
       position,
       submodel,

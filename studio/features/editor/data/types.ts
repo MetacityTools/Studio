@@ -83,6 +83,7 @@ export type ShapefileData = {
 //hierarchy is optional because some models don't use
 //the hierarchical structure
 export type ModelData = {
+  uuid: string;
   geometry: ModelGeometry;
   metadata: ModelMetadata;
 };
@@ -121,22 +122,26 @@ export enum GeometryMode {
 
 //------------------------------------------------------------
 export type Style = {
-  [key: string]: StyleRecord;
+  [key: string]: StyleRecord | undefined;
 };
 
 export type StyleRecord = {
-  [value: string | number]: {
-    code: string;
-    vec: vec3;
-  };
+  [value: string | number]:
+    | {
+        code: string;
+        vec: vec3;
+      }
+    | undefined;
 };
 
 export type ModelStyle = {
-  [key: string]: ModelStyleRecord;
+  [key: string]: ModelStyleRecord | undefined;
 };
 
 export type ModelStyleRecord = {
-  [modelId: string]: {
-    geometryMode: GeometryMode;
-  };
+  [modelId: string]:
+    | {
+        geometryMode: GeometryMode;
+      }
+    | undefined;
 };

@@ -1,8 +1,9 @@
 import { useMemo } from "react";
+import { EditorModelListItem } from "../types";
 import { useModels } from "./useModels";
 import { useSelected } from "./useSelected";
 
-export default function useModelList() {
+export default function useModelList(): [EditorModelListItem[], Set<string>] {
   const [models] = useModels();
   const selected = useSelected();
 
@@ -13,7 +14,6 @@ export default function useModelList() {
         key: model.uuid,
         totalSubmodels: Object.keys(model.metadata).length,
         selectedSubmodels: selected.get(model)?.size || 0,
-        geometryMode: model.geometryMode,
       })),
     [models, selected],
   );

@@ -36,9 +36,9 @@ export default function ColorSchemeToolbar() {
         <TooltipTrigger delay={0} placement="bottom">
           <Item key="toggleScheme">
             {colorScheme === "dark" ? (
-              <Moon aria-label="In dark theme" />
+              <Light aria-label="In dark theme" />
             ) : (
-              <Light aria-label="In light theme" />
+              <Moon aria-label="In light theme" />
             )}
           </Item>
           <Tooltip>

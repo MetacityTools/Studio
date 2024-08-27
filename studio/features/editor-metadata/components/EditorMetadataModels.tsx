@@ -21,49 +21,28 @@ import useModelSelection from "@features/editor-models/hooks/useModelSelection";
 import { GeometryMode } from "@features/editor/data/types";
 import { useEditorContext } from "@features/editor/hooks/useEditorContext";
 import useModelList from "@features/editor/hooks/useModelList";
-import { useCallback, useEffect } from "react";
+import { useCallback } from "react";
 import useMetadataContext from "../hooks/useMetadataContext";
-import useMetadataModelColors from "../hooks/useMetadataModelColors";
+import useMetadataModelStyle from "../hooks/useMetadataModelStyle";
+import useMetadataModels from "../hooks/useMetadataModels";
 
 export default function EditorMetadataModels() {
   const {
     activeMetadataColumn,
     setActiveMetadataColumn,
-    modelStyles,
     setModelStyles,
-    scene,
     setModels,
   } = useEditorContext();
   const { columns } = useMetadataContext();
 
-  useMetadataModelColors();
+  useMetadataModelStyle();
 
   const [modelList, selectedModelKeys] = useModelList();
-  const { handleSelection, select } = useModelSelection(selectedModelKeys);
-
-  useEffect(() => {
-    if (activeMetadataColumn) {
-      const modelStyleColumn = modelStyles[activeMetadataColumn];
-      if (!modelStyleColumn) return;
-
-      setModels((prev) => {
-        prev.forEach((model) => {
-          const modelStyle = modelStyleColumn[model.uuid];
-          if (!modelStyle) return;
-          model.geometryMode = modelStyle.geometryMode;
-          model.attributes.needsRebind = true;
-        });
-
-        return prev.slice();
-      });
-
-      scene.shadersChanged = true;
-    }
-  }, [activeMetadataColumn, modelStyles, scene, setModels]);
+  const { handleSelection } = useModelSelection(selectedModelKeys);
+  const modelMetadataList = useMetadataModels(modelList);
 
   const handleAction = useCallback(
     (keys: Selection, modelKey: string) => {
-      console.log(keys, modelKey);
       //ignore if all keys are selected
       if (keys === "all") return;
 
@@ -74,11 +53,6 @@ export default function EditorMetadataModels() {
       const models = modelList.filter((model) => model.key === modelKey);
       if (models.length === 0) return;
       const model = models[0];
-
-      console.log(model.item, key);
-      model.item.geometryMode = key;
-      model.item.attributes.needsRebind = true;
-      scene.shadersChanged = true;
 
       setModelStyles((prev) => {
         return {
@@ -94,7 +68,7 @@ export default function EditorMetadataModels() {
 
       setModels((prev) => [...prev]);
     },
-    [modelList, scene, activeMetadataColumn, setModelStyles, setModels],
+    [modelList, activeMetadataColumn, setModelStyles, setModels],
   );
 
   return (
@@ -127,7 +101,7 @@ export default function EditorMetadataModels() {
             marginBottom="size-100"
             height="100%"
             onSelectionChange={handleSelection}
-            items={activeMetadataColumn ? modelList : []}
+            items={activeMetadataColumn ? modelMetadataList : []}
             selectedKeys={selectedModelKeys}
             renderEmptyState={() => (
               <NoData heading="No models or no column selected" />

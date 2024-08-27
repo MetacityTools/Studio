@@ -1,4 +1,5 @@
 import { ModelMetadataRecord } from "@features/editor/data/types";
+import { EditorModelListItem } from "@features/editor/types";
 
 export type MetadataListItem = {
   mid: string;
@@ -12,4 +13,8 @@ export type MetadataAggListItem = {
   count: number;
   selected: number;
   color: string;
+};
+
+export type MetadataModelListItem = EditorModelListItem & {
+  geometryMode: string;
 };

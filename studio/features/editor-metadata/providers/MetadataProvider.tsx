@@ -162,7 +162,6 @@ export function MetadataProvider({ children }: { children: ReactNode }) {
         aggregatedRows: colorizedAggregatedRows,
         undefinedItems,
         selectedValueKeys,
-        //colorizedAggregatedRows,
       }}
     >
       {children}

@@ -36,6 +36,7 @@ export async function parse(model: UserInputModel): Promise<ModelData> {
   const { position, submodel } = unifyBuffers(buffers, submodelIdx, coordType);
 
   return {
+    uuid: self.crypto.randomUUID(),
     geometry: {
       position,
       submodel,

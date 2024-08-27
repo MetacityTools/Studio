@@ -37,6 +37,7 @@ function removeSubmodelsFc(model: EditorModel, idsToRemove: Set<number>) {
 
   const metadata: ModelMetadataRecords = {};
   const modelData: EditorModelData = {
+    uuid: self.crypto.randomUUID(),
     geometry: {
       position: new Float32Array(originalModelVertexCount * 3),
       submodel: new Uint32Array(originalModelVertexCount),

@@ -1,4 +1,4 @@
-import { ModelData, Style } from "@editor/data/types";
+import { ModelData, ModelStyle, Style } from "@editor/data/types";
 
 import { CameraView, ProjectionType } from "@features/bananagl/bananagl";
 import { vec3 } from "gl-matrix";
@@ -41,14 +41,15 @@ function readV3(stream: ReadOnlyMemoryStream): EditorData {
   const project = readProjectData(stream);
 
   while (!stream.empty()) {
-    const model = readModel(stream);
+    const model = readModel(stream, true);
     models.push(model);
   }
 
   return { models, project };
 }
 
-function readModel(stream: ReadOnlyMemoryStream) {
+function readModel(stream: ReadOnlyMemoryStream, hasUUID = false): ModelData {
+  const uuid = hasUUID ? readString(stream) : self.crypto.randomUUID();
   const positions = readTypedArray(stream, Float32Array) as Float32Array;
   const submodel = readTypedArray(stream, Uint32Array) as Uint32Array;
   const metaString = readString(stream);
@@ -57,6 +58,7 @@ function readModel(stream: ReadOnlyMemoryStream) {
   const primitive = stream.readInt32();
 
   return {
+    uuid: uuid,
     geometry: {
       position: positions,
       submodel: submodel,
@@ -86,18 +88,20 @@ function readString(stream: ReadOnlyMemoryStream) {
 }
 
 function readProjectData(stream: ReadOnlyMemoryStream): ProjectData {
+  const style = JSON.parse(readString(stream)) as Style;
+  const modelStyle = JSON.parse(readString(stream)) as ModelStyle;
   const activeMetadataColumn = readString(stream);
   const projectionType = readString(stream) as ProjectionType;
-  const style = JSON.parse(readString(stream)) as Style;
   const cameraView = readString(stream) as CameraView;
   const cameraPosition = readTypedArray(stream, Float32Array) as vec3;
   const cameraTarget = readTypedArray(stream, Float32Array) as vec3;
   const globalShift = readTypedArray(stream, Float32Array) as vec3;
 
   return {
+    style,
+    modelStyle,
     activeMetadataColumn,
     projectionType,
-    style,
     cameraView,
     cameraPosition,
     cameraTarget,

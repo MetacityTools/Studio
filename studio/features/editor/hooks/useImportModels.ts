@@ -27,6 +27,7 @@ export function useImportModels() {
     setModels,
     setActiveMetadataColumn,
     setStyles,
+    setModelStyles,
     renderer,
     activeView,
   } = useEditorContext();
@@ -48,8 +49,9 @@ export function useImportModels() {
 
       //handle project data setup
       if (projectData) {
-        setActiveMetadataColumn(projectData.activeMetadataColumn);
         setStyles(projectData.style);
+        setModelStyles(projectData.modelStyle);
+        setActiveMetadataColumn(projectData.activeMetadataColumn);
         shift = projectData.globalShift;
 
         const view = renderer.views?.[activeView];
@@ -109,6 +111,7 @@ export function useImportModels() {
       scene,
       setGlobalShift,
       setModels,
+      setModelStyles,
       activeView,
       setActiveMetadataColumn,
       setStyles,
@@ -165,6 +168,7 @@ async function addTriangleModel(data: EditorModelData) {
     new GL.Attribute("submodel", new GL.Buffer(byteSubmodel), 4),
   );
   glmodel.attributes.add(new GL.Attribute("barCoord", new GL.Buffer(bar), 1));
+  glmodel.uuid = data.uuid;
   glmodel.shader = solidShader;
   glmodel.solidShader = solidShader;
   glmodel.wireframeShader = wireframeShader;

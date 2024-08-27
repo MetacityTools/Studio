@@ -19,6 +19,7 @@ export function useExportModels() {
     //export project settings
     const projectData: ProjectData = {
       style: ctx.styles,
+      modelStyle: ctx.modelStyles,
       globalShift: ctx.globalShift ?? vec3.create(),
       activeMetadataColumn: ctx.activeMetadataColumn,
       cameraView: view.view.cameraLock.mode,
@@ -64,6 +65,7 @@ function extractModels(models: EditorModel[]) {
 
     //create model data
     const modelData: EditorModelData = {
+      uuid: model.uuid,
       geometry: {
         position: pi,
         submodel: sv,
@@ -73,7 +75,6 @@ function extractModels(models: EditorModel[]) {
         name: model.name,
         primitive: model.primitive,
       },
-      geometryMode: model.geometryMode,
     };
 
     //add to processed

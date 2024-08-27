@@ -27,7 +27,9 @@ export default function ProjectionToolbar() {
       if (keys === "all") return;
 
       //get first key
-      const key = keys.values().next().value as ProjectionType;
+      const key =
+        (keys.values().next().value as ProjectionType) ??
+        ProjectionType.ORTHOGRAPHIC;
       const view = renderer.views?.[activeView].view;
       if (!view) return;
       view.camera.projectionType = key;

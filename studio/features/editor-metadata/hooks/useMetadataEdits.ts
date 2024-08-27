@@ -10,6 +10,9 @@ export default function useMetadataEdits() {
     (value: number | string, columnName?: string) => {
       if (!columnName) return;
 
+      const numValue = typeof value === "string" ? parseFloat(value) : value;
+      if (!isNaN(numValue)) value = numValue;
+
       for (const [model, submodelIds] of selected) {
         for (const submodelId of submodelIds) {
           model.metadata[submodelId] = {
