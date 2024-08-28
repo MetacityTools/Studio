@@ -12,6 +12,7 @@ import { ToastContainer } from "@react-spectrum/toast";
 //import Brush from "@spectrum-icons/workflow/Brush";
 import { PositioningContainer } from "@core/components/PositioningContainer";
 import EditorMetadata from "@features/editor-metadata/components/EditorMetadata";
+import useMetadataModelStyle from "@features/editor-metadata/hooks/useMetadataModelStyle";
 import EditorModels from "@features/editor-models/components/EditorModels";
 import CameraViewToolbar from "@features/editor-toolbar/components/CameraViewToolbar";
 import ColorSchemeToolbar from "@features/editor-toolbar/components/ColorSchemeToolbar";
@@ -29,6 +30,8 @@ import "./Editor.css";
 type EditorProps = SidePanelProps;
 
 export default function Editor(props: EditorProps) {
+  useMetadataModelStyle();
+
   return (
     <Allotment>
       <Allotment.Pane snap minSize={100} preferredSize={500}>

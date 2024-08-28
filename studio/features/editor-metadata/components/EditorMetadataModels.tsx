@@ -23,7 +23,6 @@ import { useEditorContext } from "@features/editor/hooks/useEditorContext";
 import useModelList from "@features/editor/hooks/useModelList";
 import { useCallback } from "react";
 import useMetadataContext from "../hooks/useMetadataContext";
-import useMetadataModelStyle from "../hooks/useMetadataModelStyle";
 import useMetadataModels from "../hooks/useMetadataModels";
 
 export default function EditorMetadataModels() {
@@ -34,8 +33,6 @@ export default function EditorMetadataModels() {
     setModels,
   } = useEditorContext();
   const { columns } = useMetadataContext();
-
-  useMetadataModelStyle();
 
   const [modelList, selectedModelKeys] = useModelList();
   const { handleSelection } = useModelSelection(selectedModelKeys);

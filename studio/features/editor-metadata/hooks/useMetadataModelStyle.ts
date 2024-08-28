@@ -22,8 +22,7 @@ export default function useMetadataModelStyle() {
     if (!stylesheet) return; //TODO color all to default
 
     const colorMap = new Map<number, vec3>();
-    const modelsCopy = [...models];
-    for (const model of modelsCopy) {
+    for (const model of models) {
       const submodelIds = model.submodelIDs;
       for (const submodelId of submodelIds) {
         const metadata = model.metadata[submodelId];
@@ -34,7 +33,7 @@ export default function useMetadataModelStyle() {
     }
 
     return () => {
-      for (const model of modelsCopy) {
+      for (const model of models) {
         model.whiten();
       }
     };
@@ -44,29 +43,22 @@ export default function useMetadataModelStyle() {
     if (activeMetadataColumn) {
       const modelStyleColumn = modelStyles[activeMetadataColumn];
 
-      setModels((prev) => {
-        prev.forEach((model) => {
-          const modelStyle = modelStyleColumn?.[model.uuid];
-          model.geometryMode = modelStyle?.geometryMode ?? GeometryMode.SOLID;
-          model.attributes.needsRebind = true;
-        });
-
-        return prev.slice();
+      models.forEach((model) => {
+        const modelStyle = modelStyleColumn?.[model.uuid];
+        model.geometryMode = modelStyle?.geometryMode ?? GeometryMode.SOLID;
+        model.attributes.needsRebind = true;
       });
 
       scene.shadersChanged = true;
     }
 
     return () => {
-      setModels((prev) => {
-        prev.forEach((model) => {
-          model.geometryMode = GeometryMode.SOLID;
-          model.attributes.needsRebind = true;
-        });
-
-        return prev.slice();
+      models.forEach((model) => {
+        model.geometryMode = GeometryMode.SOLID;
+        model.attributes.needsRebind = true;
       });
+
       scene.shadersChanged = true;
     };
-  }, [activeMetadataColumn, modelStyles, scene, setModels]);
+  }, [models, activeMetadataColumn, modelStyles, scene]);
 }

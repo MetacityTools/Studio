@@ -30,7 +30,6 @@ import SortOrderDown from "@spectrum-icons/workflow/SortOrderDown";
 import { useCallback, useState } from "react";
 import useMetadataContext from "../hooks/useMetadataContext";
 import useMetadataEdits from "../hooks/useMetadataEdits";
-import useMetadataModelStyle from "../hooks/useMetadataModelStyle";
 import useMetadataSelection from "../hooks/useMetadataSelection";
 import useStyles from "../hooks/useStyles";
 import DebouncedColorPicker from "./DebouncedColorPicker";
@@ -65,12 +64,6 @@ export default function EditorMetadataValues() {
       switch (key) {
         case "assignSingleValue":
           if (!activeMetadataColumn) return;
-          const numValue =
-            typeof value === "string" ? parseFloat(value) : value;
-
-          console.log(numValue);
-          if (!isNaN(numValue)) value = numValue;
-
           assignValue(value, activeMetadataColumn);
           break;
       }
@@ -88,8 +81,6 @@ export default function EditorMetadataValues() {
         break;
     }
   }, []);
-
-  useMetadataModelStyle();
 
   return (
     <PositioningContainer>
