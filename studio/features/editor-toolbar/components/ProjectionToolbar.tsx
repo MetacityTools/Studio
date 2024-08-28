@@ -7,19 +7,13 @@ import {
   View,
 } from "@adobe/react-spectrum";
 import { ProjectionType } from "@bananagl/bananagl";
-import { useActiveView } from "@features/editor/hooks/useActiveView";
-import { useRenderer } from "@features/editor/hooks/useRender";
-import { useCallback, useState } from "react";
+import { useEditorContext } from "@features/editor/hooks/useEditorContext";
+import { useCallback } from "react";
 import { BiRectangle } from "react-icons/bi";
 import { TbPerspective } from "react-icons/tb";
 
 export default function ProjectionToolbar() {
-  const renderer = useRenderer();
-  const activeView = useActiveView();
-
-  const [projection, setProjection] = useState<ProjectionType>(
-    ProjectionType.ORTHOGRAPHIC,
-  );
+  const { projection, setProjection } = useEditorContext();
 
   const handleAction = useCallback(
     (keys: Selection) => {
@@ -30,12 +24,10 @@ export default function ProjectionToolbar() {
       const key =
         (keys.values().next().value as ProjectionType) ??
         ProjectionType.ORTHOGRAPHIC;
-      const view = renderer.views?.[activeView].view;
-      if (!view) return;
-      view.camera.projectionType = key;
+
       setProjection(key);
     },
-    [activeView, renderer.views],
+    [setProjection],
   );
 
   return (

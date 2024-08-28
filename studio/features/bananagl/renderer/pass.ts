@@ -18,7 +18,7 @@ export function viewRenderPass(
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT | gl.STENCIL_BUFFER_BIT);
   gl.disable(gl.DEPTH_TEST);
   gl.disable(gl.BLEND);
-  gl.depthMask(false);
+  gl.depthMask(true);
   const noDepth = scene.noDepthObjects;
   renderObjectGroup(noDepth, renderer, camera);
 

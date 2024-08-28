@@ -30,6 +30,8 @@ export function useImportModels() {
     setModelStyles,
     renderer,
     activeView,
+    setViewMode,
+    setProjection,
   } = useEditorContext();
 
   const importModels = useCallback(
@@ -59,11 +61,11 @@ export function useImportModels() {
           view.view.camera.set({
             position: projectData.cameraPosition,
             target: projectData.cameraTarget,
-            projectionType: projectData.projectionType,
           });
-
-          view.view.cameraLock.mode = projectData.cameraView;
         }
+
+        setViewMode(projectData.cameraView);
+        setProjection(projectData.projectionType);
       }
 
       //sort out the alignment
@@ -115,6 +117,8 @@ export function useImportModels() {
       activeView,
       setActiveMetadataColumn,
       setStyles,
+      setViewMode,
+      setProjection,
       renderer,
     ],
   );

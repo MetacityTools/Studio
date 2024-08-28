@@ -22,10 +22,10 @@ export function useExportModels() {
       modelStyle: ctx.modelStyles,
       globalShift: ctx.globalShift ?? vec3.create(),
       activeMetadataColumn: ctx.activeMetadataColumn,
-      cameraView: view.view.cameraLock.mode,
+      cameraView: ctx.viewMode,
       cameraPosition: view.view.camera.position,
       cameraTarget: view.view.camera.target,
-      projectionType: view.view.camera.projectionType,
+      projectionType: ctx.projection,
     };
 
     return exportModel(modelData, projectData);

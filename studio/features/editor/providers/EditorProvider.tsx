@@ -46,6 +46,10 @@ type EditorContextProps = {
   setGreyscale: Dispatch<SetStateAction<boolean>>;
   activeMetadataColumn: string;
   setActiveMetadataColumn: Dispatch<SetStateAction<string>>;
+  projection: GL.ProjectionType;
+  setProjection: Dispatch<SetStateAction<GL.ProjectionType>>;
+  viewMode: GL.CameraView;
+  setViewMode: Dispatch<SetStateAction<GL.CameraView>>;
 };
 
 export const context = createContext<EditorContextProps>(
@@ -66,6 +70,10 @@ export function EditorProvider(props: { children: ReactNode }) {
   const [modelStyles, setModelStyles] = useState<ModelStyle>({});
   const [greyscale, setGreyscale] = useState<boolean>(false);
   const [activeMetadataColumn, setActiveMetadataColumn] = useState<string>("");
+  const [projection, setProjection] = useState<GL.ProjectionType>(
+    GL.ProjectionType.ORTHOGRAPHIC,
+  );
+  const [viewMode, setViewMode] = useState<GL.CameraView>(GL.CameraView.Free);
 
   //TODO darkmode load from user device settings
   const { colorScheme } = useProvider();
@@ -130,6 +138,18 @@ export function EditorProvider(props: { children: ReactNode }) {
     }
   }, [colorScheme, renderer]);
 
+  useEffect(() => {
+    const view = renderer.views?.[activeView].view;
+    if (!view) return;
+    view.camera.projectionType = projection;
+  }, [activeView, renderer.views, projection]);
+
+  useEffect(() => {
+    const view = renderer.views?.[activeView].view;
+    if (!view) return;
+    view.cameraLock.mode = viewMode;
+  }, [activeView, renderer.views, viewMode]);
+
   return (
     <context.Provider
       value={{
@@ -158,6 +178,10 @@ export function EditorProvider(props: { children: ReactNode }) {
         setGreyscale,
         activeMetadataColumn,
         setActiveMetadataColumn,
+        projection,
+        setProjection,
+        viewMode,
+        setViewMode,
       }}
     >
       {props.children}

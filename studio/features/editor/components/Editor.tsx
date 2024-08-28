@@ -14,6 +14,7 @@ import { PositioningContainer } from "@core/components/PositioningContainer";
 import EditorMetadata from "@features/editor-metadata/components/EditorMetadata";
 import useMetadataModelStyle from "@features/editor-metadata/hooks/useMetadataModelStyle";
 import EditorModels from "@features/editor-models/components/EditorModels";
+import ActiveColumnToolbar from "@features/editor-toolbar/components/ActiveColumnToolbar";
 import CameraViewToolbar from "@features/editor-toolbar/components/CameraViewToolbar";
 import ColorSchemeToolbar from "@features/editor-toolbar/components/ColorSchemeToolbar";
 import ProjectionToolbar from "@features/editor-toolbar/components/ProjectionToolbar";
@@ -43,7 +44,7 @@ export default function Editor(props: EditorProps) {
           <TooltipOverlay />
           <View position="absolute" top="size-100" left="size-100">
             <Grid
-              areas={["projection camera selection scheme"]}
+              areas={["projection camera selection scheme style"]}
               columns={["auto auto auto auto"]}
               rows={["auto"]}
               gap="size-100"
@@ -51,9 +52,9 @@ export default function Editor(props: EditorProps) {
             >
               <ProjectionToolbar />
               <CameraViewToolbar />
-              {/* <ShaderToolbar /> */}
               <SelectionToolbar />
               <ColorSchemeToolbar />
+              <ActiveColumnToolbar />
             </Grid>
           </View>
         </View>

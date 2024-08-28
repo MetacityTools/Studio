@@ -46,6 +46,7 @@ export default function useMetadataModelStyle() {
       models.forEach((model) => {
         const modelStyle = modelStyleColumn?.[model.uuid];
         model.geometryMode = modelStyle?.geometryMode ?? GeometryMode.SOLID;
+        model.skipPicking = modelStyle?.geometryMode === GeometryMode.WIREFRAME;
         model.attributes.needsRebind = true;
       });
 
@@ -55,6 +56,7 @@ export default function useMetadataModelStyle() {
     return () => {
       models.forEach((model) => {
         model.geometryMode = GeometryMode.SOLID;
+        model.skipPicking = false;
         model.attributes.needsRebind = true;
       });
 

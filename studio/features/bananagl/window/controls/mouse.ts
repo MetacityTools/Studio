@@ -80,7 +80,7 @@ export class MouseControls {
 
     if (!disableTrace) {
       if (duration < 200) {
-        hit = trace(this.view, x, y);
+        hit = trace(this.view, x, y, true);
       } else if (this.keyMap?.shift && this.range) {
         hit = traceRange(this.view, this.range.from, this.range.to);
       }
@@ -97,7 +97,7 @@ export class MouseControls {
     const { x, y, view } = event;
     let hit = null;
     if (!disableTrace) {
-      hit = trace(view, x, y);
+      hit = trace(view, x, y, true);
     }
     return hit;
   }

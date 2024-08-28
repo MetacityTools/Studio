@@ -13,15 +13,11 @@ import {
   CubeRight,
   CubeTop,
 } from "@core/components/Icons";
-import { useActiveView } from "@features/editor/hooks/useActiveView";
-import { useRenderer } from "@features/editor/hooks/useRender";
-import { useCallback, useState } from "react";
+import { useEditorContext } from "@features/editor/hooks/useEditorContext";
+import { useCallback } from "react";
 
 export default function CameraViewToolbar() {
-  const renderer = useRenderer();
-  const activeView = useActiveView();
-
-  const [mode, setMode] = useState<CameraView>(CameraView.Free);
+  const { viewMode, setViewMode } = useEditorContext();
 
   const handleAction = useCallback(
     (keys: Selection) => {
@@ -31,13 +27,10 @@ export default function CameraViewToolbar() {
       //get first key
       const viewMode =
         (keys.values().next().value as CameraView) ?? CameraView.Free;
-      const view = renderer.views?.[activeView].view;
-      if (!view) return;
-      view.cameraLock.mode = viewMode;
-      setMode(viewMode);
+      setViewMode(viewMode);
     },
 
-    [activeView, renderer.views, setMode],
+    [setViewMode],
   );
 
   return (
@@ -53,7 +46,7 @@ export default function CameraViewToolbar() {
         selectionMode="single"
         overflowMode="collapse"
         onSelectionChange={handleAction}
-        selectedKeys={[mode]}
+        selectedKeys={[viewMode]}
         isQuiet
       >
         <TooltipTrigger delay={0} placement="bottom">
