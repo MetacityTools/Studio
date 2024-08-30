@@ -4,7 +4,11 @@ import { canReadModels } from "@features/auth/acl";
 import { getUserToken } from "@features/auth/user";
 import { injectRepository } from "@features/db/helpers";
 import { toPlain } from "@features/helpers/objects";
-import { getModelBucketName, listFilesInBucket } from "@features/storage";
+import {
+  checkBucketExists,
+  getModelBucketName,
+  listFilesInBucket,
+} from "@features/storage";
 
 import { Model } from "@features/db/entities/model";
 
@@ -22,7 +26,12 @@ export async function getModel(modelId: number) {
   if (!model) return null;
 
   const bucketName = getModelBucketName(model.id);
-  const files = await listFilesInBucket(bucketName);
+
+  const files = (await checkBucketExists(bucketName))
+    ? await listFilesInBucket(bucketName)
+    : [];
+
+  console.log(files);
 
   return toPlain({
     ...model,

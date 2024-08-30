@@ -3,7 +3,7 @@ import { getUserToken } from "@features/auth/user";
 import { Embed } from "@features/db/entities/embed";
 import { injectRepository } from "@features/db/helpers";
 import { toPlain } from "@features/helpers/objects";
-import { listFilesInBucket } from "@features/storage";
+import { checkBucketExists, listFilesInBucket } from "@features/storage";
 
 export async function getEmbed(id: number) {
   if (!(await canReadProjects())) throw new Error("Unauthorized");
@@ -19,9 +19,10 @@ export async function getEmbed(id: number) {
   if (!embed) return null;
 
   // get the filenames in the embed bucket
-  const files = embed.bucketName
-    ? await listFilesInBucket(embed.bucketName)
-    : null;
+  const files =
+    embed.bucketName && (await checkBucketExists(embed.bucketName))
+      ? await listFilesInBucket(embed.bucketName)
+      : null;
 
   // return the embed
   return toPlain({ ...embed, files });
