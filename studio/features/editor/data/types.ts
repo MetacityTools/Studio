@@ -102,6 +102,7 @@ export enum PrimitiveType {
 
 export type ModelMetadata = {
   name: string;
+  visible: boolean;
   primitive: PrimitiveType;
   data: ModelMetadataRecords;
 };

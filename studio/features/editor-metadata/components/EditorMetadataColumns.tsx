@@ -14,12 +14,15 @@ import {
   ListView,
   TagGroup,
   Text,
+  Tooltip,
+  TooltipTrigger,
   View,
 } from "@adobe/react-spectrum";
+
 import { PositioningContainer } from "@core/components/PositioningContainer";
+import { MdiRename } from "@core/icons/MdiRename";
+import { MdiTrash } from "@core/icons/MdiTrash";
 import { useEditorContext } from "@features/editor/hooks/useEditorContext";
-import Delete from "@spectrum-icons/workflow/Delete";
-import Rename from "@spectrum-icons/workflow/Rename";
 import { useCallback, useState } from "react";
 import useMetadataContext from "../hooks/useMetadataContext";
 import useMetadataEdits from "../hooks/useMetadataEdits";
@@ -99,7 +102,7 @@ export default function EditorMetadataColumns() {
           flex
           height="100%"
           overflow="hidden"
-          marginBottom="size-100"
+          marginBottom="size-200"
         >
           <ActionBarContainer height="100%" width="100%">
             <ListView
@@ -124,12 +127,18 @@ export default function EditorMetadataColumns() {
                     isQuiet
                     onAction={(key) => handleItemAction(key, item.key)}
                   >
-                    <Item key="renameColumn" textValue="Rename Column">
-                      <Rename />
-                    </Item>
-                    <Item key="deleteColumn" textValue="Delete Column">
-                      <Delete />
-                    </Item>
+                    <TooltipTrigger delay={0} placement="bottom">
+                      <Item key="renameColumn" textValue="Rename Column">
+                        <MdiRename />
+                      </Item>
+                      <Tooltip>Rename Column</Tooltip>
+                    </TooltipTrigger>
+                    <TooltipTrigger delay={0} placement="bottom">
+                      <Item key="deleteColumn" textValue="Delete Column">
+                        <MdiTrash />
+                      </Item>
+                      <Tooltip>Delete Column</Tooltip>
+                    </TooltipTrigger>
                   </ActionGroup>
                 </Item>
               )}
@@ -141,7 +150,7 @@ export default function EditorMetadataColumns() {
               onClearSelection={() => setSelectedKeys([])}
             >
               <Item key="deleteColumns">
-                <Delete />
+                <MdiTrash />
                 <Text>Delete Columns</Text>
               </Item>
             </ActionBar>
@@ -152,6 +161,7 @@ export default function EditorMetadataColumns() {
         {columnToRename && (
           <RenameColumnDialog
             close={() => setColumnToRename(undefined)}
+            initialColumnName={columnToRename}
             existingColumns={columns}
             onSubmit={handleRenameColumn}
           />

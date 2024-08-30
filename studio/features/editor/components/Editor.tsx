@@ -11,7 +11,13 @@ import {
 import { ToastContainer } from "@react-spectrum/toast";
 //import Brush from "@spectrum-icons/workflow/Brush";
 import { PositioningContainer } from "@core/components/PositioningContainer";
-import EditorMetadata from "@features/editor-metadata/components/EditorMetadata";
+import { MdiCube } from "@core/icons/MdiCube";
+import { MdiExport } from "@core/icons/MdiExport";
+import { MdiPalette } from "@core/icons/MdiPalette";
+import { MdiTable } from "@core/icons/MdiTable";
+import EditorExports from "@features/editor-exports/components/EditorExports";
+import EditorColumns from "@features/editor-metadata/components/EditorColumns";
+import EditorStyle from "@features/editor-metadata/components/EditorStyle";
 import useMetadataModelStyle from "@features/editor-metadata/hooks/useMetadataModelStyle";
 import EditorModels from "@features/editor-models/components/EditorModels";
 import ActiveColumnToolbar from "@features/editor-toolbar/components/ActiveColumnToolbar";
@@ -19,9 +25,6 @@ import CameraViewToolbar from "@features/editor-toolbar/components/CameraViewToo
 import ColorSchemeToolbar from "@features/editor-toolbar/components/ColorSchemeToolbar";
 import ProjectionToolbar from "@features/editor-toolbar/components/ProjectionToolbar";
 import SelectionToolbar from "@features/editor-toolbar/components/SelectionToolbar";
-import BoxExport from "@spectrum-icons/workflow/BoxExport";
-import Data from "@spectrum-icons/workflow/Building";
-import Code from "@spectrum-icons/workflow/Code";
 import { Allotment } from "allotment";
 import "allotment/dist/style.css";
 import { CanvasWrapper } from "./Canvas/CanvasWrapper";
@@ -82,13 +85,16 @@ function SidePanel(props: SidePanelProps) {
             }}
           >
             <Item key="models" textValue="Models">
-              <Data />
+              <MdiCube />
             </Item>
-            <Item key="metadata" textValue="Metadata">
-              <Code />
+            <Item key="columns" textValue="Columns">
+              <MdiTable />
             </Item>
             <Item key="style" textValue="Style">
-              <BoxExport />
+              <MdiPalette />
+            </Item>
+            <Item key="exports" textValue="Exports">
+              <MdiExport />
             </Item>
           </TabList>
         </View>
@@ -105,10 +111,15 @@ function SidePanel(props: SidePanelProps) {
             <Item key="models">
               <EditorModels {...props} />
             </Item>
-            <Item key="metadata">
-              <EditorMetadata {...props} />
+            <Item key="columns">
+              <EditorColumns {...props} />
             </Item>
-            <Item key="style">style</Item>
+            <Item key="style">
+              <EditorStyle {...props} />
+            </Item>
+            <Item key="exports">
+              <EditorExports {...props} />
+            </Item>
           </TabPanels>
         </View>
       </Tabs>

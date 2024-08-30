@@ -44,6 +44,7 @@ function removeSubmodelsFc(model: EditorModel, idsToRemove: Set<number>) {
     },
     metadata: {
       data: metadata,
+      visible: true,
       name: model.name,
       primitive: model.primitive,
     },

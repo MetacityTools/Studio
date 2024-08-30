@@ -12,14 +12,15 @@ import { Project } from "./project";
 export class Embed {
   @PrimaryGeneratedColumn() id!: number;
 
-  @Column({ nullable: true }) bucketId?: string;
-  @Column({ nullable: true }) version?: string;
+  @Column({ nullable: true }) name?: string;
+
+  @Column() bucketName!: string;
 
   @ManyToOne(() => Project, { onDelete: "CASCADE", onUpdate: "CASCADE" })
   project?: Project;
 
+  @Column() thumbnailContents!: string;
+
   @CreateDateColumn() createdAt!: Date;
   @UpdateDateColumn() updatedAt!: Date;
-
-  files?: string[];
 }

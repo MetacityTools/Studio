@@ -19,7 +19,9 @@ export async function getEmbed(id: number) {
   if (!embed) return null;
 
   // get the filenames in the embed bucket
-  const files = embed.bucketId ? await listFilesInBucket(embed.bucketId) : null;
+  const files = embed.bucketName
+    ? await listFilesInBucket(embed.bucketName)
+    : null;
 
   // return the embed
   return toPlain({ ...embed, files });

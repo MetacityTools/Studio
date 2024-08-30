@@ -7,12 +7,11 @@ import {
   View,
 } from "@adobe/react-spectrum";
 import { CameraView } from "@bananagl/bananagl";
-import {
-  CubeEmpty,
-  CubeLeft,
-  CubeRight,
-  CubeTop,
-} from "@core/components/Icons";
+import { CubeEmpty } from "@core/icons/CubeEmpty";
+import { CubeLeft } from "@core/icons/CubeLeft";
+import { CubeRight } from "@core/icons/CubeRight";
+import { CubeTop } from "@core/icons/CubeTop";
+
 import { useEditorContext } from "@features/editor/hooks/useEditorContext";
 import { useCallback } from "react";
 

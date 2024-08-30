@@ -13,6 +13,7 @@ import { useCallback, useMemo, useState } from "react";
 
 type RenameColumnDialogProps = {
   close: () => void;
+  initialColumnName: string;
   existingColumns: { key: string }[];
   onSubmit: (newColumnName: string) => void;
 };
@@ -20,9 +21,10 @@ type RenameColumnDialogProps = {
 export function RenameColumnDialog({
   close,
   onSubmit,
+  initialColumnName,
   existingColumns,
 }: RenameColumnDialogProps) {
-  const [newColumnName, setNewColumnName] = useState("");
+  const [newColumnName, setNewColumnName] = useState(initialColumnName);
 
   const handleSubmit = useCallback(() => {
     if (!newColumnName) {

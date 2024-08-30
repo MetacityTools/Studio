@@ -44,6 +44,7 @@ export async function parse(model: UserInputModel): Promise<ModelData> {
     metadata: {
       name: model.name,
       primitive: type,
+      visible: true,
       data: metadata,
     },
   };

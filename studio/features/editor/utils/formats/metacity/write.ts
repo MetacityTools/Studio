@@ -53,6 +53,7 @@ function writeModel(model: EditorModelData, stream: WriteOnlyMemoryStream) {
   const metadata = JSON.stringify(model.metadata.data);
   writeString(metadata, stream);
   writeString(model.metadata.name, stream);
+  stream.writeInt32(model.metadata.visible ? 1 : 0);
   stream.writeInt32(model.metadata.primitive);
 }
 

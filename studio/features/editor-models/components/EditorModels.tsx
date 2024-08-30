@@ -15,7 +15,13 @@ import {
   View,
 } from "@adobe/react-spectrum";
 import { NoData } from "@core/components/Empty";
+
 import { PositioningContainer } from "@core/components/PositioningContainer";
+import { MdiArrowSplitVertical } from "@core/icons/MdiArrowSplitVertical";
+import { MdiEye } from "@core/icons/MdiEye";
+import { MdiEyeOff } from "@core/icons/MdiEyeOff";
+import { MdiRename } from "@core/icons/MdiRename";
+import { MdiTrash } from "@core/icons/MdiTrash";
 import useModelSelection from "@features/editor-models/hooks/useModelSelection";
 import { EditorModel } from "@features/editor/data/EditorModel";
 import useModelList from "@features/editor/hooks/useModelList";
@@ -26,10 +32,6 @@ import { useSelected } from "@features/editor/hooks/useSelected";
 import useSelectedSubmodelCount from "@features/editor/hooks/useSelectedSubmodelCount";
 import { useSplitModel } from "@features/editor/hooks/useSplitModel";
 import Delete from "@spectrum-icons/workflow/Delete";
-import Rename from "@spectrum-icons/workflow/Rename";
-import SplitView from "@spectrum-icons/workflow/SplitView";
-import Visibility from "@spectrum-icons/workflow/Visibility";
-import VisibilityOff from "@spectrum-icons/workflow/VisibilityOff";
 import { Key, useCallback, useState } from "react";
 import EditorAddModeButton from "./EditorAddModelButton";
 import EditorRenameModelDialog from "./EditorRenameModelDialog";
@@ -164,15 +166,15 @@ function EditorModelList({ projectId }: EditorModelsProps) {
                     onAction={(key) => dispatchAction(model.item, key)}
                   >
                     <Item key="delete" textValue="Delete">
-                      <Delete />
+                      <MdiTrash />
                     </Item>
                     {model.item.visible ? (
                       <Item key="hide" textValue="Hide">
-                        <Visibility />
+                        <MdiEye />
                       </Item>
                     ) : (
                       <Item key="show" textValue="Show">
-                        <VisibilityOff />
+                        <MdiEyeOff />
                       </Item>
                     )}
                   </ActionGroup>
@@ -180,15 +182,15 @@ function EditorModelList({ projectId }: EditorModelsProps) {
                     onAction={(key) => dispatchAction(model.item, key)}
                   >
                     <Item key="rename" textValue="Rename model">
-                      <Rename />
+                      <MdiRename />
                       <Text>Rename model</Text>
                     </Item>
                     <Item key="deleteSubmodels" textValue="Delete submodels">
-                      <Delete />
+                      <MdiTrash />
                       <Text>Delete selected submodels</Text>
                     </Item>
                     <Item key="split" textValue="Split model">
-                      <SplitView />
+                      <MdiArrowSplitVertical />
                       <Text>Split model</Text>
                     </Item>
                   </ActionMenu>

@@ -9,15 +9,13 @@ import {
   View,
 } from "@adobe/react-spectrum";
 import { PositioningContainer } from "@core/components/PositioningContainer";
-import EditorMetadataColumns from "./EditorMetadataColumns";
-import EditorMetadataModels from "./EditorMetadataModels";
-import EditorMetadataValues from "./EditorMetadataValues";
+import EditorExportsCreate from "./EditorExportsCreate";
 
-type EditorMetadataProps = {
+type EditorExportsProps = {
   projectId: number;
 };
 
-export default function EditorMetadata({ projectId }: EditorMetadataProps) {
+export default function EditorExports({ projectId }: EditorExportsProps) {
   return (
     <PositioningContainer>
       <Tabs height="100%" aria-label="Editor tabs">
@@ -28,14 +26,11 @@ export default function EditorMetadata({ projectId }: EditorMetadataProps) {
           backgroundColor="gray-50"
         >
           <TabList>
-            <Item key="columns" textValue="Columns">
-              <Text>Columns</Text>
+            <Item key="create" textValue="Create Export">
+              <Text>Create Export</Text>
             </Item>
-            <Item key="values" textValue="Values">
-              <Text>Values</Text>
-            </Item>
-            <Item key="additional" textValue="Additional Styles">
-              <Text>Model Styles</Text>
+            <Item key="exports" textValue="Exports">
+              <Text>Exports</Text>
             </Item>
           </TabList>
         </View>
@@ -46,14 +41,9 @@ export default function EditorMetadata({ projectId }: EditorMetadataProps) {
           backgroundColor="gray-50"
         >
           <TabPanels height="100%" UNSAFE_className="borderless">
-            <Item key="columns">
-              <EditorMetadataColumns />
-            </Item>
-            <Item key="values">
-              <EditorMetadataValues />
-            </Item>
-            <Item key="additional">
-              <EditorMetadataModels />
+            <Item key="exports">-</Item>
+            <Item key="create">
+              <EditorExportsCreate />
             </Item>
           </TabPanels>
         </View>

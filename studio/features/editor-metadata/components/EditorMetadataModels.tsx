@@ -8,15 +8,16 @@ import {
   ListView,
   Selection,
   Text,
+  Tooltip,
+  TooltipTrigger,
   View,
 } from "@adobe/react-spectrum";
 import { NoData } from "@core/components/Empty";
-import {
-  TriangleEmpty,
-  TriangleFull,
-  TriangleFullFilled,
-} from "@core/components/Icons";
+
 import { PositioningContainer } from "@core/components/PositioningContainer";
+import { TriangleEmpty } from "@core/icons/TriangleEmpty";
+import { TriangleFull } from "@core/icons/TriangleFull";
+import { TriangleFullFilled } from "@core/icons/TriangleFullFilled";
 import useModelSelection from "@features/editor-models/hooks/useModelSelection";
 import { GeometryMode } from "@features/editor/data/types";
 import { useEditorContext } from "@features/editor/hooks/useEditorContext";
@@ -129,15 +130,24 @@ export default function EditorMetadataModels() {
                   selectedKeys={[model.geometryMode]}
                   isQuiet
                 >
-                  <Item key={GeometryMode.NOEDGES}>
-                    <TriangleFullFilled />
-                  </Item>
-                  <Item key={GeometryMode.SOLID}>
-                    <TriangleFull />
-                  </Item>
-                  <Item key={GeometryMode.WIREFRAME}>
-                    <TriangleEmpty />
-                  </Item>
+                  <TooltipTrigger delay={0} placement="bottom">
+                    <Item key={GeometryMode.NOEDGES}>
+                      <TriangleFullFilled />
+                    </Item>
+                    <Tooltip>Solid with No Edges</Tooltip>
+                  </TooltipTrigger>
+                  <TooltipTrigger delay={0} placement="bottom">
+                    <Item key={GeometryMode.SOLID}>
+                      <TriangleFull />
+                    </Item>
+                    <Tooltip>Solid</Tooltip>
+                  </TooltipTrigger>
+                  <TooltipTrigger delay={0} placement="bottom">
+                    <Item key={GeometryMode.WIREFRAME}>
+                      <TriangleEmpty />
+                    </Item>
+                    <Tooltip>Wireframe</Tooltip>
+                  </TooltipTrigger>
                 </ActionGroup>
               </Item>
             )}

@@ -51,6 +51,7 @@ function splitModel(model: EditorModel, submodelIDs: Set<number>) {
     },
     metadata: {
       data: originalMetadata,
+      visible: true,
       name: "partA_" + model.name,
       primitive: model.primitive,
     },
@@ -69,6 +70,7 @@ function splitModel(model: EditorModel, submodelIDs: Set<number>) {
     },
     metadata: {
       data: newMetadata,
+      visible: true,
       name: "partB_" + model.name,
       primitive: model.primitive,
     },

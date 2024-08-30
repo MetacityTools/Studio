@@ -20,13 +20,14 @@ import {
   View,
 } from "@adobe/react-spectrum";
 import { NoData } from "@core/components/Empty";
+
 import { PositioningContainer } from "@core/components/PositioningContainer";
+import { MdiArrowRightBold } from "@core/icons/MdiArrowRightBold";
+import { MdiPalette } from "@core/icons/MdiPalette";
+import { MdiSortAscending } from "@core/icons/MdiSortAscending";
+import { MdiTrash } from "@core/icons/MdiTrash";
 import useSelectedSubmodelCount from "@editor/hooks/useSelectedSubmodelCount";
 import { useEditorContext } from "@features/editor/hooks/useEditorContext";
-import ArrowRight from "@spectrum-icons/workflow/ArrowRight";
-import ColorPalette from "@spectrum-icons/workflow/ColorPalette";
-import Delete from "@spectrum-icons/workflow/Delete";
-import SortOrderDown from "@spectrum-icons/workflow/SortOrderDown";
 import { useCallback, useState } from "react";
 import useMetadataContext from "../hooks/useMetadataContext";
 import useMetadataEdits from "../hooks/useMetadataEdits";
@@ -113,7 +114,7 @@ export default function EditorMetadataValues() {
               <DialogTrigger>
                 <TooltipTrigger delay={0} placement="bottom">
                   <ActionButton isDisabled={activeMetadataColumn === undefined}>
-                    <ColorPalette />
+                    <MdiPalette />
                   </ActionButton>
                   <Tooltip>Assign Color Pallete</Tooltip>
                 </TooltipTrigger>
@@ -125,7 +126,7 @@ export default function EditorMetadataValues() {
                   isSelected={sort}
                   onPress={() => setSort(!sort)}
                 >
-                  <SortOrderDown />
+                  <MdiSortAscending />
                 </ToggleButton>
                 <Tooltip>Sort values</Tooltip>
               </TooltipTrigger>
@@ -185,7 +186,7 @@ export default function EditorMetadataValues() {
                   >
                     <TooltipTrigger delay={0} placement="bottom">
                       <Item key="assignSingleValue" textValue="Assign Value">
-                        <ArrowRight />
+                        <MdiArrowRightBold />
                       </Item>
                       <Tooltip>Assign to selected</Tooltip>
                     </TooltipTrigger>
@@ -200,12 +201,12 @@ export default function EditorMetadataValues() {
               onClearSelection={() => select(new Map())}
             >
               <Item key="assignNewValue">
-                <ArrowRight />
+                <MdiArrowRightBold />
                 <Text>Add new value</Text>
               </Item>
 
               <Item key="deleteAllValues">
-                <Delete />
+                <MdiTrash />
                 <Text>Remove values</Text>
               </Item>
             </ActionBar>

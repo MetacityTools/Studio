@@ -5,10 +5,11 @@ import {
   TooltipTrigger,
   View,
 } from "@adobe/react-spectrum";
+import { MdiSelectAll } from "@core/icons/MdiSelectAll";
+import { MdiSelectRemove } from "@core/icons/MdiSelectRemove";
 import { useModels } from "@features/editor/hooks/useModels";
 import { useSelection } from "@features/editor/hooks/useSelection";
 import { Key, useCallback } from "react";
-import { MdDeselect, MdSelectAll } from "react-icons/md";
 
 export default function SelectionToolbar() {
   const [models] = useModels();
@@ -48,13 +49,13 @@ export default function SelectionToolbar() {
       <ActionGroup overflowMode="collapse" onAction={handleAction} isQuiet>
         <TooltipTrigger delay={0} placement="bottom">
           <Item key="all">
-            <MdSelectAll />
+            <MdiSelectAll />
           </Item>
           <Tooltip>Select all</Tooltip>
         </TooltipTrigger>
         <TooltipTrigger delay={0} placement="bottom">
           <Item key="none">
-            <MdDeselect />
+            <MdiSelectRemove />
           </Item>
           <Tooltip>Deselect all</Tooltip>
         </TooltipTrigger>

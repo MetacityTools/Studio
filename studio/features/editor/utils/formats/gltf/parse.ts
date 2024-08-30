@@ -22,6 +22,7 @@ export async function parse(model: UserInputModel): Promise<ModelData> {
     },
     metadata: {
       name: model.name,
+      visible: true,
       primitive: PrimitiveType.TRIANGLES,
       data: metadata,
     },

@@ -72,6 +72,7 @@ function extractModels(models: EditorModel[]) {
       },
       metadata: {
         data: modelMetadata,
+        visible: model.visible,
         name: model.name,
         primitive: model.primitive,
       },

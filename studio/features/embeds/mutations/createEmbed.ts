@@ -24,8 +24,8 @@ export async function createEmbed(projectId: number, files: File[]) {
   });
 
   // create a bucket for the embed
-  embed.bucketId = getEmbedBucketName(embed.id);
-  await ensureBucket(embed.bucketId);
+  embed.bucketName = getEmbedBucketName(embed.id);
+  await ensureBucket(embed.bucketName);
 
   // save the bucket id to the database
   await embedRepository.save(embed);
@@ -34,7 +34,7 @@ export async function createEmbed(projectId: number, files: File[]) {
   try {
     for (const file of files) {
       const fileStream = Readable.fromWeb(file.stream() as ReadableStream);
-      await saveFileStream(file.name, embed.bucketId, fileStream);
+      await saveFileStream(file.name, embed.bucketName, fileStream);
     }
   } catch (e) {
     await embedRepository.remove(embed);

@@ -178,6 +178,7 @@ async function addTriangleModel(data: EditorModelData) {
   glmodel.wireframeShader = wireframeShader;
   glmodel.noEdgesShader = noEdgesShader;
   glmodel.name = metadata.name;
+  glmodel.visible = metadata.visible;
   glmodel.metadata = metadata.data;
   if (uniforms) glmodel.uniforms = GL.cloneUniforms(uniforms);
   else glmodel.uniforms = DEFAULT_UNIFORMS;

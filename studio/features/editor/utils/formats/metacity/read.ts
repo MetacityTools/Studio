@@ -55,6 +55,7 @@ function readModel(stream: ReadOnlyMemoryStream, hasUUID = false): ModelData {
   const metaString = readString(stream);
   const metadata = JSON.parse(metaString);
   const name = readString(stream);
+  const visible = stream.readInt32() === 1;
   const primitive = stream.readInt32();
 
   return {
@@ -66,6 +67,7 @@ function readModel(stream: ReadOnlyMemoryStream, hasUUID = false): ModelData {
     metadata: {
       data: metadata,
       name: name,
+      visible: visible,
       primitive: primitive,
     },
   };

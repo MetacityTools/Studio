@@ -7,8 +7,8 @@ import {
   View,
 } from "@adobe/react-spectrum";
 import useColorScheme from "@core/hooks/useColorScheme";
-import Light from "@spectrum-icons/workflow/Light";
-import Moon from "@spectrum-icons/workflow/Moon";
+import { MdiMoonWaningCrecnet } from "@core/icons/MdiMoonWaningCrecnet";
+import { MdiWhiteBalanceSunny } from "@core/icons/MdiWhiteBalanceSunny";
 import { useCallback } from "react";
 
 export default function ColorSchemeToolbar() {
@@ -36,9 +36,9 @@ export default function ColorSchemeToolbar() {
         <TooltipTrigger delay={0} placement="bottom">
           <Item key="toggleScheme">
             {colorScheme === "dark" ? (
-              <Light aria-label="In dark theme" />
+              <MdiWhiteBalanceSunny />
             ) : (
-              <Moon aria-label="In light theme" />
+              <MdiMoonWaningCrecnet />
             )}
           </Item>
           <Tooltip>
