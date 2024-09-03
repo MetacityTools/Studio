@@ -7,11 +7,18 @@ export default function useMetadataEdits() {
   const [models, setModels] = useModels();
 
   const assignValue = useCallback(
-    (value: number | string, columnName?: string) => {
+    (
+      value: string | number,
+      columnName?: string,
+      type?: "string" | "number",
+    ) => {
       if (!columnName) return;
 
-      const numValue = typeof value === "string" ? parseFloat(value) : value;
-      if (!isNaN(numValue)) value = numValue;
+      const numValue =
+        typeof value === "string" && type === "number"
+          ? parseFloat(value)
+          : value;
+      if (typeof numValue === "number" && !isNaN(numValue)) value = numValue;
 
       for (const [model, submodelIds] of selected) {
         for (const submodelId of submodelIds) {
@@ -37,7 +44,8 @@ export default function useMetadataEdits() {
 
       for (const [model, submodelIds] of selected) {
         for (const submodelId of submodelIds) {
-          delete model.metadata[submodelId][columnName];
+          const metadata = model.metadata[submodelId];
+          if (metadata !== undefined) delete metadata[columnName];
         }
       }
 
@@ -54,8 +62,10 @@ export default function useMetadataEdits() {
     (columnNames: string[]) => {
       for (const model of models) {
         for (const submodelId of model.submodelIDs) {
-          for (const column of columnNames)
-            delete model.metadata[submodelId][column];
+          for (const column of columnNames) {
+            const metadata = model.metadata[submodelId];
+            if (metadata !== undefined) delete metadata[column];
+          }
         }
       }
 
@@ -75,6 +85,7 @@ export default function useMetadataEdits() {
       for (const model of models) {
         for (const submodelId of model.submodelIDs) {
           const metadata = model.metadata[submodelId];
+          if (!metadata) continue;
           if (metadata[oldColumnName] !== undefined) {
             metadata[newColumnName] = metadata[oldColumnName];
             delete metadata[oldColumnName];

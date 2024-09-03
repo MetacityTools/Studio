@@ -3,9 +3,14 @@
 import {
   ActionBar,
   ActionBarContainer,
+  Content,
+  Dialog,
+  DialogContainer,
   Flex,
   Item,
+  Key,
   ListView,
+  ProgressCircle,
   Text,
   TextField,
   View,
@@ -13,14 +18,61 @@ import {
 
 import { PositioningContainer } from "@core/components/PositioningContainer";
 import { MdiExport } from "@core/icons/MdiExport";
+import uploadEmbed from "@features/api-sdk/uploadEmbed";
 import useMetadataContext from "@features/editor-metadata/hooks/useMetadataContext";
-import { useState } from "react";
+import useExportEmbed from "@features/editor/hooks/useExportModels";
+import { useRenderer } from "@features/editor/hooks/useRender";
+import { useCallback, useState } from "react";
 
-export default function EditorExportsCreate() {
+type EditorExportsCreateProps = {
+  sanitizedId: number;
+};
+
+export default function EditorExportsCreate({
+  sanitizedId,
+}: EditorExportsCreateProps) {
   const { columns } = useMetadataContext();
 
   const [name, setName] = useState<string>("Untitled Embed");
   const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
+  const [isSavingDialogOpen, setIsSavingDialogOpen] = useState(false);
+
+  const exportEmbeds = useExportEmbed();
+  const renderer = useRenderer();
+
+  const saveEmbed = useCallback(() => {
+    async function handleUploadEmbed(
+      dataFile: File,
+      thumbnailFileContents: string,
+    ) {
+      await uploadEmbed(sanitizedId, dataFile, thumbnailFileContents, name);
+
+      setIsSavingDialogOpen(false);
+    }
+
+    renderer.afterRenderOnce = async () => {
+      //save contents of the canvas to a png file
+      setIsSavingDialogOpen(true);
+      const canvas: HTMLCanvasElement = renderer.window.rawCanvas;
+      const image = canvas.toDataURL("image/png");
+
+      //export project data
+      const dataFile = exportEmbeds(new Set(selectedKeys));
+      if (!dataFile) return;
+
+      //upload project version
+      void handleUploadEmbed(dataFile, image);
+    };
+  }, [sanitizedId, name, exportEmbeds, renderer, selectedKeys]);
+
+  const handleGlobalAction = useCallback(
+    (key: Key) => {
+      if (key === "deleteColumns") {
+        saveEmbed();
+      }
+    },
+    [saveEmbed],
+  );
 
   return (
     <PositioningContainer>
@@ -84,6 +136,7 @@ export default function EditorExportsCreate() {
             <ActionBar
               isEmphasized
               selectedItemCount={selectedKeys.length}
+              onAction={handleGlobalAction}
               onClearSelection={() => setSelectedKeys([])}
             >
               <Item key="deleteColumns">
@@ -94,6 +147,18 @@ export default function EditorExportsCreate() {
           </ActionBarContainer>
         </View>
       </Flex>
+      <DialogContainer onDismiss={() => {}}>
+        {isSavingDialogOpen && (
+          <Dialog>
+            <Content>
+              <Flex direction="row" gap="size-200" alignItems="center">
+                <ProgressCircle aria-label="Saving…" isIndeterminate />
+                <Text>Saving embed</Text>
+              </Flex>
+            </Content>
+          </Dialog>
+        )}
+      </DialogContainer>
     </PositioningContainer>
   );
 }

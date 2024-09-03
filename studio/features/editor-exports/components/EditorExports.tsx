@@ -10,6 +10,7 @@ import {
 } from "@adobe/react-spectrum";
 import { PositioningContainer } from "@core/components/PositioningContainer";
 import EditorExportsCreate from "./EditorExportsCreate";
+import EditorExportList from "./EditorExportsList";
 
 type EditorExportsProps = {
   projectId: number;
@@ -41,9 +42,11 @@ export default function EditorExports({ projectId }: EditorExportsProps) {
           backgroundColor="gray-50"
         >
           <TabPanels height="100%" UNSAFE_className="borderless">
-            <Item key="exports">-</Item>
+            <Item key="exports">
+              <EditorExportList projectId={projectId} />
+            </Item>
             <Item key="create">
-              <EditorExportsCreate />
+              <EditorExportsCreate sanitizedId={projectId} />
             </Item>
           </TabPanels>
         </View>

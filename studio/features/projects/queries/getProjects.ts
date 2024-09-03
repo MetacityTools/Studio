@@ -19,7 +19,7 @@ export async function getProjects(): Promise<
     `
     SELECT projects.*, latest_project_version.thumbnail_contents
     FROM projects
-    JOIN (
+    LEFT JOIN (
         SELECT project_id, thumbnail_contents
         FROM project_version
         WHERE (project_id, created_at) IN (

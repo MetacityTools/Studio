@@ -26,8 +26,10 @@ export default function useMetadataModelStyle() {
       const submodelIds = model.submodelIDs;
       for (const submodelId of submodelIds) {
         const metadata = model.metadata[submodelId];
+        if (!metadata) continue;
         const value = metadata[activeMetadataColumn];
-        colorMap.set(submodelId, stylesheet[value]?.vec || [1, 1, 1]);
+        if (typeof value === "string" || typeof value === "number")
+          colorMap.set(submodelId, stylesheet[value]?.vec || [1, 1, 1]);
       }
       model.setColorMap(colorMap);
     }

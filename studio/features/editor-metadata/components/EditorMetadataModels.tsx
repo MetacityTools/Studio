@@ -75,7 +75,7 @@ export default function EditorMetadataModels() {
         <View width="100%" marginTop="size-100">
           <ComboBox
             label="Metadata column"
-            items={columns}
+            defaultItems={columns}
             width="100%"
             onSelectionChange={(key) =>
               setActiveMetadataColumn(key?.toString() || "")

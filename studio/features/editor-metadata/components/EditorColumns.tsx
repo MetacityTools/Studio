@@ -10,6 +10,7 @@ import {
 } from "@adobe/react-spectrum";
 import { PositioningContainer } from "@core/components/PositioningContainer";
 import EditorMetadataColumns from "./EditorMetadataColumns";
+import EditorMetadataImport from "./EditorMetadataImport";
 
 type EditorMetadataProps = {
   projectId: number;
@@ -29,6 +30,9 @@ export default function EditorColumns({ projectId }: EditorMetadataProps) {
             <Item key="columns" textValue="Columns">
               <Text>Columns</Text>
             </Item>
+            <Item key="import" textValue="Import Data from CSV">
+              <Text>Import Data from CSV</Text>
+            </Item>
           </TabList>
         </View>
         <View
@@ -40,6 +44,9 @@ export default function EditorColumns({ projectId }: EditorMetadataProps) {
           <TabPanels height="100%" UNSAFE_className="borderless">
             <Item key="columns">
               <EditorMetadataColumns />
+            </Item>
+            <Item key="import">
+              <EditorMetadataImport />
             </Item>
           </TabPanels>
         </View>

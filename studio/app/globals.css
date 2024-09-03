@@ -30,15 +30,3 @@ body,
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
 }
-
-iconify-icon {
-  display: inline-block;
-  width: 1em;
-  height: 1em;
-}
-
-svg {
-  display: inline-block;
-  width: 1em;
-  height: 1em;
-}

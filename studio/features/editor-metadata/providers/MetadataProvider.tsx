@@ -36,9 +36,11 @@ export function MetadataProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const columnNames = new Set<string>();
     for (const model of models) {
-      for (const submodelId in Object.values(model.metadata)) {
-        for (const key in model.metadata[submodelId]) {
-          columnNames.add(key);
+      for (const submodelMetadata of Object.values(model.metadata)) {
+        if (submodelMetadata && typeof submodelMetadata === "object") {
+          for (const key in submodelMetadata) {
+            columnNames.add(key);
+          }
         }
       }
     }

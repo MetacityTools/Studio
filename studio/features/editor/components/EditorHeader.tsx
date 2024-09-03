@@ -9,7 +9,7 @@ import {
   ProgressCircle,
   Text,
 } from "@adobe/react-spectrum";
-import uploadProjectVerion from "@features/api-sdk/uploadProjectVersion";
+import uploadProjectVersion from "@features/api-sdk/uploadProjectVersion";
 import Header from "@features/projects/components/Header";
 import { useGetProjectById } from "@features/projects/hooks/useGetProjectById";
 import { useCallback, useEffect, useState } from "react";
@@ -41,11 +41,11 @@ export default function EditorHeader({ sanitizedId }: EditorHeaderProps) {
   const renderer = useRenderer();
 
   const saveProject = useCallback(() => {
-    async function uploadProjectVersion(
+    async function handleUploadProjectVersion(
       dataFile: File,
       thumbnailFileContents: string,
     ) {
-      await uploadProjectVerion(sanitizedId, dataFile, thumbnailFileContents);
+      await uploadProjectVersion(sanitizedId, dataFile, thumbnailFileContents);
 
       setIsSavingDialogOpen(false);
     }
@@ -61,7 +61,7 @@ export default function EditorHeader({ sanitizedId }: EditorHeaderProps) {
       if (!dataFile) return;
 
       //upload project version
-      void uploadProjectVersion(dataFile, image);
+      void handleUploadProjectVersion(dataFile, image);
     };
   }, [renderer, sanitizedId, exportModels]);
 

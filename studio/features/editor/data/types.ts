@@ -112,7 +112,7 @@ export type ModelMetadataRecord = {
 };
 
 export type ModelMetadataRecords = {
-  [submodel: number]: ModelMetadataRecord;
+  [submodel: number]: ModelMetadataRecord | undefined;
 };
 
 export enum GeometryMode {

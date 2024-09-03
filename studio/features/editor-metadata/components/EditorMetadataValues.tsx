@@ -89,7 +89,7 @@ export default function EditorMetadataValues() {
         <View width="100%" marginTop="size-100">
           <ComboBox
             label="Metadata column"
-            items={columns}
+            defaultItems={columns}
             width="100%"
             onSelectionChange={(key) =>
               setActiveMetadataColumn(key?.toString() || "")
@@ -178,7 +178,8 @@ export default function EditorMetadataValues() {
                       opacity: record.selected > 0 ? 1 : 0.6,
                     }}
                   >
-                    {record.count} items, {record.selected} selected
+                    {typeof record.value} - {record.count} items,{" "}
+                    {record.selected} selected{" "}
                   </Text>
                   <ActionGroup
                     isQuiet
@@ -217,7 +218,9 @@ export default function EditorMetadataValues() {
         {addValueDialogOpen && (
           <AddValueDialog
             close={() => setAddValueDialogOpen(false)}
-            onSubmit={(value) => assignValue(value, activeMetadataColumn)}
+            onSubmit={(value, type) =>
+              assignValue(value, activeMetadataColumn, type)
+            }
           />
         )}
       </DialogContainer>

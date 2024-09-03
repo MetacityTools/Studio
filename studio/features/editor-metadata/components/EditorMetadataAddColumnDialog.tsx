@@ -5,6 +5,8 @@ import {
   Dialog,
   Form,
   Heading,
+  Radio,
+  RadioGroup,
   TextField,
 } from "@adobe/react-spectrum";
 import { ToastQueue } from "@react-spectrum/toast";
@@ -12,7 +14,11 @@ import { useCallback, useState } from "react";
 
 type AddColumnDialogProps = {
   close: () => void;
-  onSubmit: (name: string, defaultValue: string | number) => void;
+  onSubmit: (
+    name: string,
+    defaultValue: string | number,
+    defaultType: "string" | "number",
+  ) => void;
 };
 
 export default function AddColumnDialog({
@@ -21,6 +27,7 @@ export default function AddColumnDialog({
 }: AddColumnDialogProps) {
   const [name, setName] = useState("");
   const [defaultValue, setDefaultValue] = useState("");
+  const [defaultType, setDefaultType] = useState<"string" | "number">("string");
 
   const handleSubmit = useCallback(async () => {
     if (!name) {
@@ -29,14 +36,14 @@ export default function AddColumnDialog({
     }
 
     try {
-      onSubmit(name, defaultValue);
+      onSubmit(name, defaultValue, defaultType);
       ToastQueue.positive("Column created successfully");
       close();
     } catch (error) {
       console.error(error);
       ToastQueue.negative("Failed to create column");
     }
-  }, [name, defaultValue, onSubmit, close]);
+  }, [name, defaultValue, defaultType, onSubmit, close]);
 
   return (
     <Dialog onDismiss={close}>
@@ -67,6 +74,14 @@ export default function AddColumnDialog({
             value={defaultValue}
             onChange={setDefaultValue}
           />
+          <RadioGroup
+            label="Assign as number or string?"
+            value={defaultType}
+            onChange={(value) => setDefaultType(value as "string" | "number")}
+          >
+            <Radio value="string">String</Radio>
+            <Radio value="number">Number</Radio>
+          </RadioGroup>
         </Form>
       </Content>
       <ButtonGroup marginTop={20}>

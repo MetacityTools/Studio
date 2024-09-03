@@ -20,7 +20,7 @@ import { Key, useCallback, useState } from "react";
 import useProjects from "../hooks/useProjects";
 
 export default function ProjectList() {
-  const { projects, isLoading, refetch } = useProjects();
+  const { projects, refetch } = useProjects();
 
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -65,7 +65,7 @@ export default function ProjectList() {
           />
         )}
       </DialogTrigger>
-      <Flex direction="row" gap="size-100">
+      <Flex direction="row" wrap gap="size-100">
         {projects.map((project) => (
           <ProjectItem
             key={project.id}

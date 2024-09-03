@@ -2,6 +2,7 @@ import { EditorModel, EditorModelData } from "@editor/data/EditorModel";
 import { exportModel } from "@editor/utils/formats/metacity/write";
 import { vec3 } from "gl-matrix";
 import { useCallback } from "react";
+import { ModelMetadataRecords } from "../data/types";
 import { ProjectData } from "../utils/formats/metacity/types";
 import { useEditorContext } from "./useEditorContext";
 
@@ -30,6 +31,64 @@ export function useExportModels() {
 
     return exportModel(modelData, projectData);
   }, [ctx, models]);
+
+  return exportProject;
+}
+
+export default function useExportEmbed() {
+  const { models } = useEditorContext();
+  const ctx = useEditorContext();
+
+  const exportProject = useCallback(
+    (selectedColumns: Set<string>) => {
+      const modelData = extractModels(models);
+      if (!modelData) return;
+
+      const view = ctx.renderer.views?.[ctx.activeView];
+      if (!view) return;
+
+      //filter styles, keep only keys that are in selectedColumns
+      const filteredStyles = Object.fromEntries(
+        Object.entries(ctx.styles).filter(([key]) => selectedColumns.has(key)),
+      );
+
+      const filteredModels = modelData.map((model) => {
+        const filteredMetadata: ModelMetadataRecords = {};
+        for (const [submodelId, submodelMetadata] of Object.entries(
+          model.metadata.data,
+        )) {
+          if (!submodelMetadata) continue;
+          const filteredSubmodelMetadata = Object.fromEntries(
+            Object.entries(submodelMetadata).filter(([key]) =>
+              selectedColumns.has(key),
+            ),
+          );
+          filteredMetadata[submodelId as unknown as number] =
+            filteredSubmodelMetadata;
+        }
+
+        return {
+          ...model,
+          metadata: { ...model.metadata, data: filteredMetadata },
+        };
+      });
+
+      //export project settings
+      const projectData: ProjectData = {
+        style: filteredStyles,
+        modelStyle: ctx.modelStyles,
+        globalShift: ctx.globalShift ?? vec3.create(),
+        activeMetadataColumn: ctx.activeMetadataColumn,
+        cameraView: ctx.viewMode,
+        cameraPosition: view.view.camera.position,
+        cameraTarget: view.view.camera.target,
+        projectionType: ctx.projection,
+      };
+
+      return exportModel(filteredModels, projectData);
+    },
+    [ctx, models],
+  );
 
   return exportProject;
 }

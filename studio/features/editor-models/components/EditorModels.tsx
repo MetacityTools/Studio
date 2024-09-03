@@ -109,6 +109,17 @@ function EditorModelList({ projectId }: EditorModelsProps) {
     [setVisibility, removeModels, removeSubmodels, splitModel, selected],
   );
 
+  const dispatchGlobalAction = useCallback(
+    (key: Key) => {
+      switch (key) {
+        case "delete":
+          removeModels(Array.from(selected.keys()));
+          break;
+      }
+    },
+    [removeModels, selected],
+  );
+
   const [modelList, selectedModelKeys] = useModelList();
   const { handleSelection, select } = useModelSelection(selectedModelKeys);
 
@@ -200,6 +211,7 @@ function EditorModelList({ projectId }: EditorModelsProps) {
             <ActionBar
               isEmphasized
               selectedItemCount={selectedCount}
+              onAction={dispatchGlobalAction}
               onClearSelection={() => select(new Map())}
             >
               <Item key="delete">

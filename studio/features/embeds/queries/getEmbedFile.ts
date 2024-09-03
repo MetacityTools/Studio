@@ -1,12 +1,13 @@
 "use server";
 
+import archiveFiles from "@core/utils/archiveFiles";
 import { canReadProjects } from "@features/auth/acl";
 import { getUserToken } from "@features/auth/user";
 import { Embed } from "@features/db/entities/embed";
 import { injectRepository } from "@features/db/helpers";
-import { toPlain } from "@features/helpers/objects";
+import { listFilesInBucket } from "@features/storage";
 
-export default async function getEmbed(id: number) {
+export default async function getEnbedFile(id: number) {
   if (!(await canReadProjects())) throw new Error("Unauthorized");
 
   const user = (await getUserToken())!;
@@ -19,5 +20,8 @@ export default async function getEmbed(id: number) {
 
   if (!embed) throw new Error("Not found");
 
-  return toPlain(embed);
+  const files = await listFilesInBucket(embed.bucketName);
+
+  const archive = await archiveFiles(files, embed.bucketName);
+  return archive.to_blob().stream();
 }

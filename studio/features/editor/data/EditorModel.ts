@@ -38,12 +38,6 @@ export class EditorModel extends GL.Pickable implements GL.Selectable {
     const submodelIds = this.submodelIDs;
     const metadataKeys = Object.keys(this.metadata);
 
-    for (const key of submodelIds) {
-      if (metadataKeys.indexOf(key.toString()) === -1) {
-        delete this.metadata[key];
-      }
-    }
-
     for (const key of metadataKeys) {
       const numberKey = parseInt(key);
       if (!submodelIds.has(numberKey)) {

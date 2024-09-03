@@ -40,10 +40,8 @@ export async function createProjectVersion(
 
   try {
     await ensureBucket(bucketName);
-    const dataFileStream = Readable.fromWeb(
-      dataFile.stream() as ReadableStream,
-    );
-    await saveFileStream(dataFile.name, bucketName, dataFileStream);
+    const fileStream = Readable.fromWeb(dataFile.stream() as ReadableStream);
+    await saveFileStream(dataFile.name, bucketName, fileStream);
   } catch (e) {
     await ProjectVersionRepository.remove(projectVersion);
     throw e;

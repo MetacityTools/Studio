@@ -5,6 +5,8 @@ import {
   Dialog,
   Form,
   Heading,
+  Radio,
+  RadioGroup,
   TextField,
 } from "@adobe/react-spectrum";
 import { ToastQueue } from "@react-spectrum/toast";
@@ -12,7 +14,7 @@ import { useCallback, useState } from "react";
 
 type AddValueDialogProps = {
   close: () => void;
-  onSubmit: (value: string | number) => void;
+  onSubmit: (value: string, type: "string" | "number") => void;
 };
 
 export default function AddValueDialog({
@@ -20,6 +22,7 @@ export default function AddValueDialog({
   onSubmit,
 }: AddValueDialogProps) {
   const [value, setValue] = useState("");
+  const [type, setType] = useState<"string" | "number">("string");
 
   const handleSubmit = useCallback(async () => {
     if (!value) {
@@ -28,14 +31,14 @@ export default function AddValueDialog({
     }
 
     try {
-      onSubmit(value);
+      onSubmit(value, type);
       ToastQueue.positive("Value added successfully");
       close();
     } catch (error) {
       console.error(error);
       ToastQueue.negative("Failed to add value");
     }
-  }, [value, onSubmit, close]);
+  }, [value, type, onSubmit, close]);
 
   return (
     <Dialog onDismiss={close}>
@@ -54,6 +57,14 @@ export default function AddValueDialog({
             value={value}
             onChange={setValue}
           />
+          <RadioGroup
+            label="Assign as number or string?"
+            value={type}
+            onChange={(value) => setType(value as "string" | "number")}
+          >
+            <Radio value="string">String</Radio>
+            <Radio value="number">Number</Radio>
+          </RadioGroup>
         </Form>
       </Content>
       <ButtonGroup marginTop={20}>

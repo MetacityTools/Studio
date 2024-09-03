@@ -1,7 +1,6 @@
 import { mat4, vec3 } from "gl-matrix";
 
 import { GLTFMesh, GLTFNode, GLTFParsedData } from "@editor/data/types";
-
 import { swapFromYupToZup } from "./transform";
 
 export function unindexGeometry(gltf: GLTFParsedData) {

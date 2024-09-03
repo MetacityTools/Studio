@@ -54,7 +54,8 @@ export function useImportModels() {
         setStyles(projectData.style);
         setModelStyles(projectData.modelStyle);
         setActiveMetadataColumn(projectData.activeMetadataColumn);
-        shift = projectData.globalShift;
+        //the model is already aligned
+        shift = vec3.create();
 
         const view = renderer.views?.[activeView];
         if (view) {
@@ -103,7 +104,9 @@ export function useImportModels() {
         model.cleanUpMetadata();
       }
 
-      setGlobalShift(shift);
+      //update global shift
+      if (projectData) setGlobalShift(projectData.globalShift);
+      else setGlobalShift(shift);
       setModels(models);
 
       return createdModels;
@@ -306,7 +309,7 @@ type FlatMetadata = {
 
 function flattenModelMetadata(model: EditorModel) {
   Object.entries(model.metadata).forEach(([key, value]) => {
-    if (typeof value === "object") {
+    if (typeof value === "object" && value !== null) {
       model.metadata[parseInt(key)] = flattenMetadata(value);
     }
   });

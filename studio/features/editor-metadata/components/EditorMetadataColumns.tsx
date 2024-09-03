@@ -39,8 +39,12 @@ export default function EditorMetadataColumns() {
   const { assignValue, deleteColumns, renameColumn } = useMetadataEdits();
 
   const handleCreateColumn = useCallback(
-    (columnName: string, defaultValue: string | number) => {
-      assignValue(defaultValue, columnName);
+    (
+      columnName: string,
+      defaultValue: string | number,
+      type: "string" | "number",
+    ) => {
+      assignValue(defaultValue, columnName, type);
     },
     [assignValue],
   );

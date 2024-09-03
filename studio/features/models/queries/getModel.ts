@@ -31,8 +31,6 @@ export async function getModel(modelId: number) {
     ? await listFilesInBucket(bucketName)
     : [];
 
-  console.log(files);
-
   return toPlain({
     ...model,
     files,

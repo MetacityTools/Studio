@@ -17,7 +17,7 @@ export default function ActiveColumnToolbar() {
     >
       <ComboBox
         aria-label="Metadata column"
-        items={columns}
+        defaultItems={columns}
         width="size-3000"
         onSelectionChange={(key) =>
           setActiveMetadataColumn(key?.toString() || "")
