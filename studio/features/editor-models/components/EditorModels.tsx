@@ -21,6 +21,7 @@ import { MdiArrowSplitVertical } from "@core/icons/MdiArrowSplitVertical";
 import { MdiEye } from "@core/icons/MdiEye";
 import { MdiEyeOff } from "@core/icons/MdiEyeOff";
 import { MdiRename } from "@core/icons/MdiRename";
+import { MdiRulerSquare } from "@core/icons/MdiRulerSquare";
 import { MdiTrash } from "@core/icons/MdiTrash";
 import useModelSelection from "@features/editor-models/hooks/useModelSelection";
 import { EditorModel } from "@features/editor/data/EditorModel";
@@ -34,6 +35,7 @@ import { useSplitModel } from "@features/editor/hooks/useSplitModel";
 import Delete from "@spectrum-icons/workflow/Delete";
 import { Key, useCallback, useState } from "react";
 import EditorAddModeButton from "./EditorAddModelButton";
+import EditorProjectModelDialog from "./EditorProjectModelDialog";
 import EditorRenameModelDialog from "./EditorRenameModelDialog";
 
 type EditorModelsProps = {
@@ -82,6 +84,8 @@ function EditorModelList({ projectId }: EditorModelsProps) {
   const selectedCount = useSelectedSubmodelCount();
 
   const [editingModel, setEditingModel] = useState<EditorModel | null>(null);
+  const [projectionSourceModel, setProjectionSourceModel] =
+    useState<EditorModel | null>(null);
 
   const dispatchAction = useCallback(
     async (model: EditorModel, action: Key) => {
@@ -103,6 +107,9 @@ function EditorModelList({ projectId }: EditorModelsProps) {
           break;
         case "rename":
           setEditingModel(model);
+          break;
+        case "project":
+          setProjectionSourceModel(model);
           break;
       }
     },
@@ -133,6 +140,11 @@ function EditorModelList({ projectId }: EditorModelsProps) {
           close={() => setEditingModel(null)}
           model={editingModel}
           open={!!editingModel}
+        />
+        <EditorProjectModelDialog
+          model={projectionSourceModel}
+          open={!!projectionSourceModel}
+          close={() => setProjectionSourceModel(null)}
         />
         <View
           position="relative"
@@ -203,6 +215,10 @@ function EditorModelList({ projectId }: EditorModelsProps) {
                     <Item key="split" textValue="Split model">
                       <MdiArrowSplitVertical />
                       <Text>Split model</Text>
+                    </Item>
+                    <Item key="project" textValue="Project onto other model">
+                      <MdiRulerSquare />
+                      <Text>Project onto other model</Text>
                     </Item>
                   </ActionMenu>
                 </Item>

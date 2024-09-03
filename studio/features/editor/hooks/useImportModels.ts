@@ -17,6 +17,7 @@ import { useEditorContext } from "./useEditorContext";
 
 export interface EditorImportOptions {
   overwriteCurrent?: boolean;
+  disableShift?: boolean;
 }
 
 export function useImportModels() {
@@ -70,9 +71,10 @@ export function useImportModels() {
       }
 
       //sort out the alignment
-      for (const model of modelData) {
-        shift = alignModels(model.geometry.position, shift);
-      }
+      if (!options?.disableShift)
+        for (const model of modelData) {
+          shift = alignModels(model.geometry.position, shift);
+        }
 
       //generate geometry and metadata
       for (const model of modelData) {

@@ -6,9 +6,9 @@ import {
   ProgressCircle,
   Text,
 } from "@adobe/react-spectrum";
+import { useEmbed } from "@features/embeds/hooks/useEmbed";
 import useLoadEmbed from "@features/embeds/hooks/useLoadEmbed";
 import Header from "@features/projects/components/Header";
-import { useGetProjectById } from "@features/projects/hooks/useGetProjectById";
 import { useEffect, useState } from "react";
 
 type ViewerHeaderProps = {
@@ -16,10 +16,9 @@ type ViewerHeaderProps = {
 };
 
 export default function ViewerHeader({ embedId }: ViewerHeaderProps) {
-  const { data } = useGetProjectById(embedId);
+  const { data } = useEmbed(embedId);
   const loadEmbed = useLoadEmbed();
   const [isLoadingDialogOpen, setIsLoadingDialogOpen] = useState(false);
-  const [isSavingDialogOpen, setIsSavingDialogOpen] = useState(false);
 
   useEffect(() => {
     async function loadProject() {
@@ -37,7 +36,7 @@ export default function ViewerHeader({ embedId }: ViewerHeaderProps) {
         nav={[
           {
             key: "projects",
-            children: "Projects",
+            children: "Embeds",
             link: "/projects",
           },
           {
@@ -52,7 +51,7 @@ export default function ViewerHeader({ embedId }: ViewerHeaderProps) {
             <Content>
               <Flex direction="row" gap="size-200" alignItems="center">
                 <ProgressCircle aria-label="Loading…" isIndeterminate />
-                <Text>Loading project data</Text>
+                <Text>Loading embed data</Text>
               </Flex>
             </Content>
           </Dialog>
