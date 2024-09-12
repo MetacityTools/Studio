@@ -48,7 +48,7 @@ export default function ModelUploadDialog({ close }: UploadModelDialogProps) {
     setIsPending(true);
 
     const response = await uploadModel(name, files);
-    if (response.ok) {
+    if (response.status === 201) {
       close();
     } else {
       ToastQueue.negative("Failed to upload model");

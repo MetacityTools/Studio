@@ -5,9 +5,11 @@ import { getUserToken } from "@features/auth/user";
 import { Model } from "@features/db/entities/model";
 import { injectRepository } from "@features/db/helpers";
 import {
-    deleteFile,
-    getUserModelBucketName,
-    listFilesInBucket,
+  checkBucketExists,
+  deleteBucket,
+  deleteFile,
+  getUserModelBucketName,
+  listFilesInBucket,
 } from "@features/storage";
 
 export async function deleteModel(modelId: number) {
@@ -25,9 +27,14 @@ export async function deleteModel(modelId: number) {
   // delete files
   const bucketName = getUserModelBucketName(user.id, model.id);
 
-  const files = await listFilesInBucket(bucketName);
-  for (const file of files) {
-    await deleteFile(file, bucketName);
+  if (await checkBucketExists(bucketName)) {
+    const files = await listFilesInBucket(bucketName);
+
+    for (const file of files) {
+      await deleteFile(file, bucketName);
+    }
+
+    await deleteBucket(bucketName);
   }
 
   // delete model

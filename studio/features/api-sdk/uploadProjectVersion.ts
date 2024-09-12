@@ -1,3 +1,5 @@
+import axios from "axios";
+
 export default async function uploadProjectVerion(
   projectId: number,
   file: File,
@@ -7,12 +9,7 @@ export default async function uploadProjectVerion(
   formData.append("projectId", projectId.toString());
   formData.append("file", file);
 
-  const response = await fetch("/api/projectVersions", {
-    method: "POST",
-    body: formData,
-  });
-
-  console.log(response);
+  const response = await axios.post("/api/projectVersions", formData);
 
   return response;
 }
