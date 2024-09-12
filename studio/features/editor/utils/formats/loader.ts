@@ -1,6 +1,7 @@
 "use client";
 
 import { ModelData, UserInputModel } from "@editor/data/types";
+import { EditorData } from "./metacity/types";
 import { WorkerPool } from "./pool";
 
 export async function load(
@@ -8,43 +9,8 @@ export async function load(
   updateStatus?: (status: string) => void,
 ) {
   const models = await filterModelFiles(files);
-  const styles = await filterStyles(files);
-
   const modelData = await loadModels(models, updateStatus);
-  return { models: modelData, styles };
-}
-
-export async function loadProjectFiles(
-  name: string,
-  buffer: ArrayBuffer,
-  styles: any,
-) {
-  const data = [];
-  data.push({
-    name: name,
-    data: {
-      buffer,
-    },
-  });
-  const models = await loadModels(data);
-  return { models, styles };
-}
-
-async function filterStyles(files: Map<string, Blob>) {
-  if (!files) return [];
-
-  const data = [];
-  for (const [name, file] of files) {
-    if (name.endsWith(".json.metacity") || name.endsWith("mcstyle")) {
-      const content = await file.text();
-      try {
-        data.push(JSON.parse(content));
-      } catch (e) {
-        console.error(e);
-      }
-    }
-  }
-  return data;
+  return modelData;
 }
 
 async function filterModelFiles(files: Map<string, Blob>) {
@@ -63,10 +29,7 @@ async function filterMetacity(
 ): Promise<UserInputModel[]> {
   const data = [];
   for (const [name, file] of files) {
-    if (
-      (name.endsWith("metacity") && !name.endsWith("json.metacity")) ||
-      name.endsWith("mcmodel")
-    ) {
+    if (name.endsWith("metacity") && !name.endsWith("json.metacity")) {
       const buffer = await file.arrayBuffer();
       data.push({
         name: name,
@@ -146,7 +109,10 @@ async function getFile(files: Map<string, Blob>, name: string) {
   return undefined;
 }
 
-const pool = new WorkerPool<UserInputModel, ModelData | ModelData[]>(10);
+const pool = new WorkerPool<
+  UserInputModel,
+  EditorData | ModelData | ModelData[]
+>(10);
 
 function spawnGLTFWorker() {
   return new Worker(new URL("./gltf.worker.ts", import.meta.url));
@@ -164,7 +130,7 @@ export async function loadModels(
   models: UserInputModel[],
   updateStatus?: (status: string) => void,
 ) {
-  const jobs: Promise<ModelData | ModelData[]>[] = [];
+  const jobs: Promise<ModelData | ModelData[] | EditorData>[] = [];
   for (const model of models) {
     if (model.name.endsWith("gltf") || model.name.endsWith("glb")) {
       jobs.push(loadWorker(model, spawnGLTFWorker, updateStatus));
@@ -192,7 +158,7 @@ function loadWorker(
   model: UserInputModel,
   worker: () => Worker,
   updateStatus?: (status: string) => void,
-): Promise<ModelData | ModelData[]> {
+): Promise<ModelData | ModelData[] | EditorData> {
   return new Promise((resolve, reject) => {
     pool.process(
       model,

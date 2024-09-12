@@ -1,13 +1,5 @@
 import { Camera } from "./camera";
-
-export enum CameraView {
-  Free = "Free",
-  Top = "Top",
-  Front = "Front",
-  Right = "Right",
-  Left = "Left",
-  Back = "Back",
-}
+import { CameraView } from "./cameraView";
 
 export class CameraLock {
   private mode_ = CameraView.Free;

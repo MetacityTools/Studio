@@ -6,7 +6,7 @@ import { injectRepository } from "@features/db/helpers";
 import { toPlain } from "@features/helpers/objects";
 import {
   checkBucketExists,
-  getUserModelBucketName,
+  getModelBucketName,
   listFilesInBucket,
 } from "@features/storage";
 
@@ -25,13 +25,11 @@ export async function getModel(modelId: number) {
   });
   if (!model) return null;
 
-  const bucketName = getUserModelBucketName(user.id, model.id);
+  const bucketName = getModelBucketName(model.id);
 
   const files = (await checkBucketExists(bucketName))
     ? await listFilesInBucket(bucketName)
     : [];
-
-  console.log(files);
 
   return toPlain({
     ...model,

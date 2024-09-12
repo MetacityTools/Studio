@@ -8,7 +8,7 @@ import {
   checkBucketExists,
   deleteBucket,
   deleteFile,
-  getUserModelBucketName,
+  getModelBucketName,
   listFilesInBucket,
 } from "@features/storage";
 
@@ -25,7 +25,7 @@ export async function deleteModel(modelId: number) {
   if (!model) throw new Error("Not found");
 
   // delete files
-  const bucketName = getUserModelBucketName(user.id, model.id);
+  const bucketName = getModelBucketName(model.id);
 
   if (await checkBucketExists(bucketName)) {
     const files = await listFilesInBucket(bucketName);

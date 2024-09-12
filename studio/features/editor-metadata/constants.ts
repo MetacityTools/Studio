@@ -1,0 +1,31 @@
+export const defaultColor = "hsb(0, 0%, 100%)";
+import * as d3ScaleChromatic from "d3-scale-chromatic";
+
+export const colorMaps: [string, (t: number) => string][] = Object.entries({
+  interpolateBlues: d3ScaleChromatic.interpolateBlues,
+  interpolateGreens: d3ScaleChromatic.interpolateGreens,
+  interpolateGreys: d3ScaleChromatic.interpolateGreys,
+  interpolateOranges: d3ScaleChromatic.interpolateOranges,
+  interpolatePurples: d3ScaleChromatic.interpolatePurples,
+  interpolateReds: d3ScaleChromatic.interpolateReds,
+  interpolateTurbo: d3ScaleChromatic.interpolateTurbo,
+  interpolateViridis: d3ScaleChromatic.interpolateViridis,
+  interpolateInferno: d3ScaleChromatic.interpolateInferno,
+  interpolateMagma: d3ScaleChromatic.interpolateMagma,
+  interpolatePlasma: d3ScaleChromatic.interpolatePlasma,
+  interpolateCividis: d3ScaleChromatic.interpolateCividis,
+  interpolateWarm: d3ScaleChromatic.interpolateWarm,
+  interpolateCool: d3ScaleChromatic.interpolateCool,
+  interpolateRainbow: d3ScaleChromatic.interpolateRainbow,
+  interpolateSinebow: d3ScaleChromatic.interpolateSinebow,
+  interpolateSpectral: d3ScaleChromatic.interpolateSpectral,
+  interpolateCubehelixDefault: d3ScaleChromatic.interpolateCubehelixDefault,
+  interpolateBrBG: d3ScaleChromatic.interpolateBrBG,
+  interpolatePRGn: d3ScaleChromatic.interpolatePRGn,
+  interpolatePiYG: d3ScaleChromatic.interpolatePiYG,
+  interpolatePuOr: d3ScaleChromatic.interpolatePuOr,
+  interpolateRdBu: d3ScaleChromatic.interpolateRdBu,
+  interpolateRdGy: d3ScaleChromatic.interpolateRdGy,
+  interpolateRdYlBu: d3ScaleChromatic.interpolateRdYlBu,
+  interpolateRdYlGn: d3ScaleChromatic.interpolateRdYlGn,
+});

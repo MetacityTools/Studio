@@ -8,7 +8,7 @@ import { injectRepository } from "@features/db/helpers";
 import { GeoFormat, recognizeFormatFromFiles } from "@features/helpers/formats";
 import {
   getFilesInBucketAsZip,
-  getUserModelBucketName,
+  getModelBucketName,
   listFilesInBucket,
   readFileStream,
 } from "@features/storage";
@@ -34,7 +34,7 @@ export async function convertModel(modelId: number, targetEPSG: string) {
   });
   if (!oldModel) throw new Error("Not found");
 
-  const bucketName = getUserModelBucketName(user.id, oldModel.id);
+  const bucketName = getModelBucketName(oldModel.id);
 
   const modelFiles = await listFilesInBucket(bucketName);
 

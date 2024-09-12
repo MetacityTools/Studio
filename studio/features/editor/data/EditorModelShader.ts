@@ -1,4 +1,4 @@
-import * as GL from '@bananagl/bananagl';
+import * as GL from "@bananagl/bananagl";
 
 //const baseColor = [255, 255, 255];
 //const selectedColor = [255, 180, 50];
@@ -9,6 +9,7 @@ const vertexShader = `
 in vec3 position;
 in vec3 normal;
 in float selected;
+in float highlighted;
 in vec3 color;
 in float barCoord;
 
@@ -38,7 +39,8 @@ void main() {
     oColor = vec3(factor) * 0.2 + vec3(0.7);
     oColor *= mix(vec3(1.0), mix(vec3(0.5), vec3(1.0), smoothstep(uZMin, uZMax, transformed.z)), uUseShading);
     oColor *= mix(color, vec3(1.0, 0.705, 0.196), selected);
-    
+    oColor *= mix(color, vec3(1.0, 0.705, 0.196), highlighted);
+
     int b = int(barCoord);
     if (b == 0) oVbc = vec3(1.0, 0.0, 0.0);
     else if (b == 1) oVbc = vec3(0.0, 1.0, 0.0);
@@ -78,6 +80,7 @@ in vec3 normal;
 in vec3 position;
 in vec3 color;
 in float selected;
+in float highlighted;
 in float barCoord;
 
 const vec3 lightDirection = normalize(vec3(0.25, 0.25, 1.0));
@@ -108,6 +111,7 @@ void main() {
     oColor = vec3(factor) * 0.2 + vec3(0.7);
     oColor *= mix(vec3(1.0), mix(vec3(0.5), vec3(1.0), smoothstep(uZMin, uZMax, transformed.z)), uUseShading);
     oColor *= mix(color, vec3(1.0, 0.705, 0.196), selected);
+    oColor *= mix(color, vec3(1.0, 0.705, 0.196), highlighted);
     
     int b = int(barCoord);
     if (b == 0) oVbc = vec3(1.0, 0.0, 0.0);
@@ -144,12 +148,17 @@ void main() {
 }
 `;
 
-export const wireframeShader = new GL.Shader(wvertexShader, wfragmentShader, true);
+export const wireframeShader = new GL.Shader(
+  wvertexShader,
+  wfragmentShader,
+  true,
+);
 
 const svertexShader = `
 in vec3 normal;
 in vec3 position;
 in float selected;
+in float highlighted;
 in vec3 color;
 
 const vec3 lightDirection = normalize(vec3(0.25, 0.25, 1.0));
@@ -178,6 +187,7 @@ void main() {
     oColor = vec3(factor) * 0.1 + vec3(0.8);
     oColor *= mix(vec3(1.0), mix(vec3(0.5), vec3(1.0), smoothstep(uZMin, uZMax, transformed.z)), uUseShading);
     oColor *= mix(color, vec3(1.0, 0.705, 0.196), selected);
+    oColor *= mix(color, vec3(1.0, 0.705, 0.196), highlighted);
 
     gl_Position = uProjectionMatrix * uViewMatrix * vec4(transformed, 1.0);
 }

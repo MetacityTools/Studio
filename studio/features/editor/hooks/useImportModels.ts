@@ -9,32 +9,75 @@ import {
   solidShader,
   wireframeShader,
 } from "@editor/data/EditorModelShader";
-import { PrimitiveType } from "@editor/data/types";
+import { ModelData, PrimitiveType } from "@editor/data/types";
 import { vec3 } from "gl-matrix";
 import { useCallback } from "react";
+import { EditorData, ProjectData } from "../utils/formats/metacity/types";
 import { useEditorContext } from "./useEditorContext";
-import { useUpdateMetadata } from "./useMetadataUpdate";
 
 export interface EditorImportOptions {
   overwriteCurrent?: boolean;
+  disableShift?: boolean;
 }
 
 export function useImportModels() {
-  const { globalShift, scene, setGlobalShift, setModels } = useEditorContext();
-  const updateMetadata = useUpdateMetadata();
+  const {
+    globalShift,
+    scene,
+    setGlobalShift,
+    setModels,
+    setActiveMetadataColumn,
+    setStyles,
+    setModelStyles,
+    renderer,
+    activeView,
+    setViewMode,
+    setProjection,
+  } = useEditorContext();
 
   const importModels = useCallback(
-    async (data: EditorModelData[], options?: EditorImportOptions) => {
+    async (data: (ModelData | EditorData)[], options?: EditorImportOptions) => {
       let shift = globalShift;
       const createdModels = [];
 
-      //sort out the alignment
-      for (const model of data) {
-        shift = alignModels(model.geometry.position, shift);
+      let modelData: ModelData[];
+      let projectData: ProjectData | undefined;
+
+      if (data.length > 0 && isEditorData(data[0])) {
+        projectData = data[0].project;
+        modelData = data[0].models;
+      } else {
+        modelData = data as ModelData[];
       }
 
+      //handle project data setup
+      if (projectData) {
+        setStyles(projectData.style);
+        setModelStyles(projectData.modelStyle);
+        setActiveMetadataColumn(projectData.activeMetadataColumn);
+        //the model is already aligned
+        shift = vec3.create();
+
+        const view = renderer.views?.[activeView];
+        if (view) {
+          view.view.camera.set({
+            position: projectData.cameraPosition,
+            target: projectData.cameraTarget,
+          });
+        }
+
+        setViewMode(projectData.cameraView);
+        setProjection(projectData.projectionType);
+      }
+
+      //sort out the alignment
+      if (!options?.disableShift)
+        for (const model of modelData) {
+          shift = alignModels(model.geometry.position, shift);
+        }
+
       //generate geometry and metadata
-      for (const model of data) {
+      for (const model of modelData) {
         const glmodel = await importModel(model);
         if (!glmodel) continue;
         createdModels.push(glmodel);
@@ -49,6 +92,7 @@ export function useImportModels() {
 
       //add to scene
       for (const model of createdModels) {
+        flattenModelMetadata(model);
         scene.add(model);
       }
 
@@ -62,16 +106,33 @@ export function useImportModels() {
         model.cleanUpMetadata();
       }
 
-      setGlobalShift(shift);
+      //update global shift
+      if (projectData) setGlobalShift(projectData.globalShift);
+      else setGlobalShift(shift);
       setModels(models);
-      updateMetadata(models);
 
       return createdModels;
     },
-    [globalShift, scene, setGlobalShift, setModels, updateMetadata],
+    [
+      globalShift,
+      scene,
+      setGlobalShift,
+      setModels,
+      setModelStyles,
+      activeView,
+      setActiveMetadataColumn,
+      setStyles,
+      setViewMode,
+      setProjection,
+      renderer,
+    ],
   );
 
   return importModels;
+}
+
+function isEditorData(data: ModelData | EditorData): data is EditorData {
+  return (data as EditorData).models !== undefined;
 }
 
 async function importModel(model: EditorModelData) {
@@ -94,6 +155,7 @@ async function addTriangleModel(data: EditorModelData) {
   const byteSubmodel = new Uint8Array(submodel.buffer);
   const colors = new Uint8Array(vertices.length).fill(255);
   const selected = new Uint8Array(vertices.length).fill(0);
+  const highlighted = new Uint8Array(vertices.length).fill(0);
   const bar = new Uint8Array(vertices.length);
   for (let i = 0; i < vertices.length; i++) bar[i] = i % 3;
 
@@ -109,14 +171,19 @@ async function addTriangleModel(data: EditorModelData) {
     new GL.Attribute("selected", new GL.Buffer(selected), 1, true),
   );
   glmodel.attributes.add(
+    new GL.Attribute("highlighted", new GL.Buffer(highlighted), 1, true),
+  );
+  glmodel.attributes.add(
     new GL.Attribute("submodel", new GL.Buffer(byteSubmodel), 4),
   );
   glmodel.attributes.add(new GL.Attribute("barCoord", new GL.Buffer(bar), 1));
+  glmodel.uuid = data.uuid;
   glmodel.shader = solidShader;
   glmodel.solidShader = solidShader;
   glmodel.wireframeShader = wireframeShader;
   glmodel.noEdgesShader = noEdgesShader;
   glmodel.name = metadata.name;
+  glmodel.visible = metadata.visible;
   glmodel.metadata = metadata.data;
   if (uniforms) glmodel.uniforms = GL.cloneUniforms(uniforms);
   else glmodel.uniforms = DEFAULT_UNIFORMS;
@@ -233,11 +300,38 @@ function computeNormals(positions: number[] | Float32Array) {
 
   return normals;
 }
-function useCalback(
-  arg0: (
-    data: EditorModelData[],
-    options?: EditorImportOptions,
-  ) => Promise<EditorModel[]>,
-) {
-  throw new Error("Function not implemented.");
+
+type HierarchicalMetadata = {
+  [key: string]: string | number | HierarchicalMetadata;
+};
+
+type FlatMetadata = {
+  [key: string]: string | number;
+};
+
+function flattenModelMetadata(model: EditorModel) {
+  Object.entries(model.metadata).forEach(([key, value]) => {
+    if (typeof value === "object" && value !== null) {
+      model.metadata[parseInt(key)] = flattenMetadata(value);
+    }
+  });
+}
+
+function flattenMetadata(metadata: HierarchicalMetadata) {
+  const flatMetadata: FlatMetadata = {};
+  const stack = Object.entries(metadata);
+
+  while (stack.length > 0) {
+    const [key, value] = stack.pop()!;
+    if (value === null || value === undefined) continue;
+    if (typeof value === "object") {
+      for (const [subkey, subvalue] of Object.entries(value)) {
+        stack.push([`${key} - ${subkey}`, subvalue]);
+      }
+    } else {
+      flatMetadata[key] = value;
+    }
+  }
+
+  return flatMetadata;
 }

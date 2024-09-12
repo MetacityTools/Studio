@@ -23,15 +23,15 @@ export async function deleteEmbed(embedId: number) {
   });
   if (!embed) throw new Error("Embed not found");
 
-  if (embed.bucketId && (await checkBucketExists(embed.bucketId))) {
+  if (embed.bucketName && (await checkBucketExists(embed.bucketName))) {
     // delete all files in the embed bucket
-    const files = await listFilesInBucket(embed.bucketId);
+    const files = await listFilesInBucket(embed.bucketName);
 
     for (const file of files) {
-      await deleteFile(file, embed.bucketId);
+      await deleteFile(file, embed.bucketName);
     }
 
-    await deleteBucket(embed.bucketId);
+    await deleteBucket(embed.bucketName);
   }
 
   // delete the embed from the database

@@ -3,7 +3,7 @@ import { canReadModels } from "@features/auth/acl";
 import { getUserToken } from "@features/auth/user";
 import { Model } from "@features/db/entities/model";
 import { injectRepository } from "@features/db/helpers";
-import { getUserModelBucketName, listFilesInBucket } from "@features/storage";
+import { getModelBucketName, listFilesInBucket } from "@features/storage";
 
 export async function getModelArchive(modelId: number) {
   if (!(await canReadModels())) throw new Error("Unauthorized");
@@ -17,7 +17,7 @@ export async function getModelArchive(modelId: number) {
   });
   if (!model) throw new Error("Not found");
 
-  const bucketName = getUserModelBucketName(user.id, model.id);
+  const bucketName = getModelBucketName(model.id);
   const files = await listFilesInBucket(bucketName);
   const archive = await archiveFiles(files, bucketName);
 

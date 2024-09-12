@@ -38,12 +38,6 @@ export class EditorModel extends GL.Pickable implements GL.Selectable {
     const submodelIds = this.submodelIDs;
     const metadataKeys = Object.keys(this.metadata);
 
-    for (const key of submodelIds) {
-      if (metadataKeys.indexOf(key.toString()) === -1) {
-        delete this.metadata[key];
-      }
-    }
-
     for (const key of metadataKeys) {
       const numberKey = parseInt(key);
       if (!submodelIds.has(numberKey)) {
@@ -71,6 +65,8 @@ export class EditorModel extends GL.Pickable implements GL.Selectable {
       this.shader = this.wireframeShader;
     } else if (mode === GeometryMode.NOEDGES && this.noEdgesShader) {
       this.shader = this.noEdgesShader;
+    } else {
+      console.warn("No shader found for mode", mode);
     }
   }
 
@@ -89,6 +85,23 @@ export class EditorModel extends GL.Pickable implements GL.Selectable {
 
   deselect(submodelIDs: Set<number>) {
     this.selectSubmodels(submodelIDs, 0);
+  }
+
+  private lastHighlight = new Set<number>();
+
+  highlight(submodelIDs: Set<number>) {
+    if (this.disposed) return;
+    if (this.lastHighlight.size > 0)
+      this.selectSubmodels(this.lastHighlight, 0, "highlighted");
+    this.selectSubmodels(submodelIDs, 60, "highlighted");
+    this.lastHighlight = submodelIDs;
+  }
+
+  dehighlight() {
+    if (this.disposed) return;
+    if (this.lastHighlight.size > 0)
+      this.selectSubmodels(this.lastHighlight, 0, "highlighted");
+    this.lastHighlight.clear();
   }
 
   setColorMap(colormap: Map<number, vec3>) {
@@ -135,10 +148,14 @@ export class EditorModel extends GL.Pickable implements GL.Selectable {
     color.buffer.toUpdate();
   }
 
-  private selectSubmodels(submodelIDs: Set<number>, s: number) {
+  private selectSubmodels(
+    submodelIDs: Set<number>,
+    s: number,
+    bufferName: "selected" | "highlighted" = "selected",
+  ) {
     if (this.disposed) return;
     if (submodelIDs.size === 0) return;
-    const selected = this.attributes.getAttribute("selected");
+    const selected = this.attributes.getAttribute(bufferName);
     const submodel = this.attributes.getAttribute("submodel");
     const submodelBuffer = submodel!.buffer.getView(Uint32Array);
 

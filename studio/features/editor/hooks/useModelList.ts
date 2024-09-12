@@ -1,8 +1,9 @@
 import { useMemo } from "react";
+import { EditorModelListItem } from "../types";
 import { useModels } from "./useModels";
 import { useSelected } from "./useSelected";
 
-export default function useModelList() {
+export default function useModelList(): [EditorModelListItem[], Set<string>] {
   const [models] = useModels();
   const selected = useSelected();
 

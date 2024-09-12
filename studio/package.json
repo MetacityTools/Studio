@@ -1,5 +1,5 @@
 {
-  "name": "pds-studio",
+  "name": "metacity-studio",
   "version": "1.0.0",
   "private": true,
   "scripts": {
@@ -21,6 +21,8 @@
     "@auth0/nextjs-auth0": "^3.5.0",
     "@loaders.gl/core": "^4.2.2",
     "@loaders.gl/gltf": "^4.2.2",
+    "@metacity/geometry": "^1.0.0",
+    "@react-spectrum/color": "^3.0.0-rc.1",
     "@react-spectrum/toast": "^3.0.0-beta.12",
     "@shortercode/webzip": "^1.1.1-0",
     "@spectrum-icons/illustrations": "^3.6.13",
@@ -28,6 +30,8 @@
     "axios": "^1.7.2",
     "class-transformer": "^0.5.1",
     "clsx": "^2.1.1",
+    "csv-parse": "^5.5.6",
+    "d3-scale-chromatic": "^3.1.0",
     "form-data": "^4.0.0",
     "formidable": "^3.5.1",
     "gl-matrix": "^3.4.3",
@@ -41,7 +45,7 @@
     "react-dom": "^18",
     "react-icons": "^5.2.1",
     "reflect-metadata": "^0.2.2",
-    "shpts": "^1.0.8",
+    "shpts": "^1.0.9",
     "typeorm": "^0.3.20",
     "typeorm-naming-strategies": "^4.1.0",
     "zod-form-data": "^2.0.2"
@@ -50,6 +54,7 @@
     "@swc/core": "^1.5.7",
     "@testing-library/react": "^15.0.7",
     "@trivago/prettier-plugin-sort-imports": "^4.3.0",
+    "@types/d3-scale-chromatic": "^3.0.3",
     "@types/formidable": "^3.4.5",
     "@types/jsonwebtoken": "^9.0.6",
     "@types/node": "^20",
