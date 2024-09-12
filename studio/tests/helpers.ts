@@ -9,9 +9,11 @@ import {
   deleteBucket,
   deleteFile,
   ensureBucket,
+  getEmbedBucketName,
   getModelBucketName,
   saveFileStream,
 } from "@features/storage";
+import { randomUUID } from "crypto";
 import { createReadStream, ReadStream } from "fs";
 import path from "path";
 import { Readable } from "stream";
@@ -97,8 +99,14 @@ export const testWithFixtures = test.extend<Fixtures>({
   embed: async ({ project }, use) => {
     const embedRepository = await injectRepository(Embed);
 
+    const versionFileName = randomUUID();
+
+    const bucketName = getEmbedBucketName(versionFileName);
+
     const embed = await embedRepository.save({
+      bucketName: bucketName,
       project: { id: project.id },
+      thumbnailContents: "test",
     });
 
     await use(embed);
