@@ -1,0 +1,13 @@
+name: Build
+
+on:
+  workflow_call:
+
+jobs:
+  build-studio:
+    name: Build and push studio Docker image
+    uses: ./.github/workflows/build-studio.yml
+
+  build-converter:
+    name: Build and push coordinates converter Docker image
+    uses: ./.github/workflows/build-converter.yml
