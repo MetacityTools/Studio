@@ -6,9 +6,7 @@ import { Project } from "@features/db/entities/project";
 import { injectRepository } from "@features/db/helpers";
 import { toPlain } from "@features/helpers/objects";
 
-export async function getProjects(): Promise<
-  (Project & { thumbnail_contents: string })[]
-> {
+export async function getProjects(): Promise<(Project & { thumbnail_contents: string })[]> {
   if (!(await canReadProjects())) throw new Error("Unauthorized");
 
   const user = await getUserToken();

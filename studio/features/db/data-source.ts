@@ -15,10 +15,10 @@ export const AppDataSource = new DataSource({
   username: Config.db.username,
   password: Config.db.password,
   database: Config.db.database,
-  logging: ["error"],
   entities: [Project, User, Model, Embed, ProjectVersion],
-  subscribers: [],
-  migrationsRun: Config.production ? true : false,
-  migrations: [__dirname + "/migrations/*.js"],
   namingStrategy: new SnakeNamingStrategy(),
+  logging: ["error"],
+  subscribers: [],
+  // workaround to get vitest work with migrations (CommonJS vs ESM issue)
+  migrations: Config.environment === "test" ? undefined : ["features/db/migrations/*.ts"],
 });
