@@ -11,9 +11,7 @@ export async function getDatabaseConnection() {
   return dataSource;
 }
 
-export async function injectRepository<T extends ObjectLiteral>(
-  entity: EntityTarget<T>
-) {
+export async function injectRepository<T extends ObjectLiteral>(entity: EntityTarget<T>) {
   const dataSource = await getDatabaseConnection();
   return dataSource.getRepository(entity);
 }

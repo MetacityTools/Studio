@@ -7,7 +7,14 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "vitest --no-file-parallelism"
+    "test": "NODE_ENV=test vitest --no-file-parallelism",
+    "typeorm": "ts-node -r tsconfig-paths/register node_modules/typeorm/cli -d features/db/data-source.ts",
+    "migrations:run": "npm run typeorm migration:run",
+    "migrations:generate": "npm run typeorm migration:generate",
+    "migrations:revert": "npm run typeorm migration:revert",
+    "migrations:drop-schema": "npm run typeorm schema:drop",
+    "migrations:reset-schema": "npm run migrations:drop-schema && npm run migrations:run",
+    "migrations:create": "typeorm migration:create"
   },
   "dependencies": {
     "@adobe/react-spectrum": "^3.35.1",
@@ -59,6 +66,7 @@
     "eslint-config-next": "14.2.3",
     "jsdom": "^24.1.0",
     "postcss": "^8",
+    "ts-node": "^10.9.2",
     "typescript": "^5",
     "unplugin-swc": "^1.4.5",
     "vitest": "^1.6.0"
