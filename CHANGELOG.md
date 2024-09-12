@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/MetacityTools/Studio/compare/v1.0.0...v1.0.1) (2024-09-12)
+
+### Features
+
+* add migrations ([#73](https://github.com/MetacityTools/Studio/issues/73)) ([98cf933](https://github.com/MetacityTools/Studio/commit/98cf933c3c59ba1525726e2eeccb75776f6f00c4)), closes [#72](https://github.com/MetacityTools/Studio/issues/72)
+* metadata editor ([#72](https://github.com/MetacityTools/Studio/issues/72)) ([1d2106b](https://github.com/MetacityTools/Studio/commit/1d2106bcb92e730e32efe479687c117e2156005f))
+
 ## 1.0.0 (2024-09-12)
 
 ### Features
