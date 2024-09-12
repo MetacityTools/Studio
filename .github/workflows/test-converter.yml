@@ -5,7 +5,7 @@ on:
     types: [opened, reopened, synchronize]
     paths:
       - "coordinates_converter/**"
-      - ".github/workflows/converter-test.yml"
+      - ".github/workflows/test-converter.yml"
   workflow_call:
 
 jobs:
