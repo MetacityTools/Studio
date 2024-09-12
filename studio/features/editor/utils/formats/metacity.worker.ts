@@ -9,7 +9,7 @@ self.onmessage = (e) => {
 async function process(data: any) {
   const models = parse(data);
 
-  const trnsfrbl = models
+  const trnsfrbl = models.models
     .map((model) => [
       model.geometry.position.buffer,
       model.geometry.submodel.buffer,

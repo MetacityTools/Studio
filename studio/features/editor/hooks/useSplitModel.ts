@@ -44,12 +44,14 @@ function splitModel(model: EditorModel, submodelIDs: Set<number>) {
 
   const originalMetadata: ModelMetadataRecords = {};
   const originalModelData: EditorModelData = {
+    uuid: self.crypto.randomUUID(),
     geometry: {
       position: new Float32Array(originalModelVertexCount * 3),
       submodel: new Uint32Array(originalModelVertexCount),
     },
     metadata: {
       data: originalMetadata,
+      visible: true,
       name: "partA_" + model.name,
       primitive: model.primitive,
     },
@@ -61,12 +63,14 @@ function splitModel(model: EditorModel, submodelIDs: Set<number>) {
 
   const newMetadata: ModelMetadataRecords = {};
   const newModelData: EditorModelData = {
+    uuid: self.crypto.randomUUID(),
     geometry: {
       position: new Float32Array(newModelVertexCount * 3),
       submodel: new Uint32Array(newModelVertexCount),
     },
     metadata: {
       data: newMetadata,
+      visible: true,
       name: "partB_" + model.name,
       primitive: model.primitive,
     },

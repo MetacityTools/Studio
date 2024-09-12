@@ -9,6 +9,7 @@ import {
   PointRecord,
   PolyLineRecord,
   PolygonRecord,
+  ShapeReader,
   triangulate,
 } from "shpts";
 
@@ -22,7 +23,12 @@ import {
 export async function parse(model: UserInputModel): Promise<ModelData> {
   const data = model.data as ShapefileData;
 
-  if (!data.shp || !data.shx || !data.dbf)
+  if (data.shp && data.shx && (!data.dbf || !data.cpg)) {
+    const collection = await ShapeReader.fromArrayBuffer(data.shp, data.shx);
+    //TODO here once the shpts is updated
+  }
+
+  if (!data.shp || !data.shx)
     throw new Error(`Missing required files: ${model.name}`);
   const collection = await FeatureReader.fromArrayBuffers(
     data.shp,
@@ -36,6 +42,7 @@ export async function parse(model: UserInputModel): Promise<ModelData> {
   const { position, submodel } = unifyBuffers(buffers, submodelIdx, coordType);
 
   return {
+    uuid: self.crypto.randomUUID(),
     geometry: {
       position,
       submodel,
@@ -43,6 +50,7 @@ export async function parse(model: UserInputModel): Promise<ModelData> {
     metadata: {
       name: model.name,
       primitive: type,
+      visible: true,
       data: metadata,
     },
   };

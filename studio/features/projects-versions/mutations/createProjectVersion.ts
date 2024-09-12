@@ -7,15 +7,17 @@ import { injectRepository } from "@features/db/helpers";
 import { toPlain } from "@features/helpers/objects";
 import {
   ensureBucket,
-  getUserProjectVersionBucketName,
+  getProjectVersionBucketName,
   saveFileStream,
 } from "@features/storage";
+import { randomUUID } from "crypto";
 import { Readable } from "stream";
 import { ReadableStream } from "stream/web";
 
 export async function createProjectVersion(
   projectId: number,
-  file: File,
+  dataFile: File,
+  thumbnailFileContents: string,
 ): Promise<ProjectVersion> {
   if (!(await canCreateModel())) throw new Error("Unauthorized");
 
@@ -23,31 +25,29 @@ export async function createProjectVersion(
 
   const user = await getUserToken();
 
-  const projectVersionRepository = await injectRepository(ProjectVersion);
+  const ProjectVersionRepository = await injectRepository(ProjectVersion);
 
-  const projectVersion = await projectVersionRepository.save({
+  const versionFileName = randomUUID();
+
+  const bucketName = getProjectVersionBucketName(versionFileName);
+
+  const projectVersion = await ProjectVersionRepository.save({
+    bucketName: bucketName,
+    thumbnailContents: thumbnailFileContents,
     project: { id: projectId },
     user: { id: user.id, email: user.email },
   });
 
   try {
-    // save files
-    const bucketName = getUserProjectVersionBucketName(
-      user.id,
-      projectVersion.id,
-    );
-
     await ensureBucket(bucketName);
-
-    const fileStream = Readable.fromWeb(file.stream() as ReadableStream);
-    await saveFileStream(file.name, bucketName, fileStream);
+    const fileStream = Readable.fromWeb(dataFile.stream() as ReadableStream);
+    await saveFileStream(dataFile.name, bucketName, fileStream);
   } catch (e) {
-    await projectVersionRepository.remove(projectVersion);
+    await ProjectVersionRepository.remove(projectVersion);
     throw e;
   }
 
   return toPlain({
     ...projectVersion,
-    files: file.name,
   });
 }

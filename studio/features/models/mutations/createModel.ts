@@ -7,7 +7,7 @@ import { injectRepository } from "@features/db/helpers";
 import { toPlain } from "@features/helpers/objects";
 import {
   ensureBucket,
-  getUserModelBucketName,
+  getModelBucketName,
   saveFileStream,
 } from "@features/storage";
 import { Readable } from "stream";
@@ -30,7 +30,7 @@ export async function createModel(
 
   try {
     // save files
-    const bucketName = getUserModelBucketName(user.id, model.id);
+    const bucketName = getModelBucketName(model.id);
     await ensureBucket(bucketName);
 
     for (const file of files) {

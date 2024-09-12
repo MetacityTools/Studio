@@ -1,8 +1,8 @@
 "use client";
 
+import { useProvider } from "@adobe/react-spectrum";
 import * as GL from "@bananagl/bananagl";
 import { GridModel } from "@editor/data/GridModel";
-import { useDarkmode } from "@editor/hooks/useDarkmode";
 import { useRenderer } from "@editor/hooks/useRender";
 import { useScene } from "@editor/hooks/useScene";
 import { useTooltip } from "@editor/hooks/useTooltip";
@@ -13,7 +13,7 @@ export function CanvasWrapper() {
   const canvasRef = React.useRef<HTMLCanvasElement>(null);
   const scene = useScene();
   const renderer = useRenderer();
-  const darkmode = useDarkmode();
+  const { colorScheme } = useProvider();
   const [_, setTooltip] = useTooltip();
 
   React.useEffect(() => {
@@ -39,7 +39,7 @@ export function CanvasWrapper() {
       const grid = new GridModel();
       scene.add(grid);
 
-      if (darkmode) renderer.clearColor = [0.1, 0.1, 0.1, 1];
+      if (colorScheme === "dark") renderer.clearColor = [0.1, 0.1, 0.1, 1];
       else renderer.clearColor = [1, 1, 1, 1];
 
       const down = (e: KeyboardEvent) => {
@@ -59,6 +59,7 @@ export function CanvasWrapper() {
         GL.unmountRenderer(renderer);
       };
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [renderer, scene]);
 
   const handleTooltip = (data: any, x: number, y: number) => {

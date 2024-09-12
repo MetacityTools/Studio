@@ -1,13 +1,13 @@
-import { mat4 } from "gl-matrix";
+import { mat4, vec3 } from "gl-matrix";
 
 //------------------------------------------------------------
 //GLTF MODEL INTERFACE
 
-export interface GLTFParsedData {
+export type GLTFParsedData = {
   nodes: GLTFNode[];
-}
+};
 
-export interface GLTFNode {
+export type GLTFNode = {
   id: string;
   mesh?: GLTFMesh;
   name: string;
@@ -18,9 +18,9 @@ export interface GLTFNode {
   camera?: any;
   extras?: any;
   children?: any[];
-}
+};
 
-export interface GLTFMesh {
+export type GLTFMesh = {
   id: string;
   name?: string;
   primitives: {
@@ -34,12 +34,12 @@ export interface GLTFMesh {
       value: Uint16Array | Uint32Array;
     };
   }[];
-}
+};
 
 //------------------------------------------------------------
 //IFC MODEL INTERFACE
 
-export interface IFCModelData {
+export type IFCModelData = {
   geometry: {
     expressID: Uint32Array;
     position: Float32Array;
@@ -50,47 +50,48 @@ export interface IFCModelData {
     opacity: number;
   }[];
   matrix: mat4;
-}
+};
 
 //------------------------------------------------------------
 //MAIN MODEL INTERFACE
 
-export interface UserInputModel {
+export type UserInputModel = {
   name: string;
   data: IFCData | GLTFData | ShapefileData | MetacityData;
-}
+};
 
-export interface MetacityData {
+export type MetacityData = {
   buffer: ArrayBuffer;
-}
+};
 
-export interface IFCData {
+export type IFCData = {
   buffer: ArrayBuffer;
-}
+};
 
-export interface GLTFData {
+export type GLTFData = {
   buffer: ArrayBuffer;
-}
+};
 
-export interface ShapefileData {
+export type ShapefileData = {
   shp: ArrayBuffer;
   shx?: ArrayBuffer;
   dbf?: ArrayBuffer;
   prj?: ArrayBuffer;
   cpg?: ArrayBuffer;
-}
+};
 
 //hierarchy is optional because some models don't use
 //the hierarchical structure
-export interface ModelData {
+export type ModelData = {
+  uuid: string;
   geometry: ModelGeometry;
   metadata: ModelMetadata;
-}
+};
 
-export interface ModelGeometry {
+export type ModelGeometry = {
   position: Float32Array;
   submodel: Uint32Array;
-}
+};
 
 export enum PrimitiveType {
   POINTS,
@@ -99,15 +100,20 @@ export enum PrimitiveType {
   UNDEFINED,
 }
 
-export interface ModelMetadata {
+export type ModelMetadata = {
   name: string;
+  visible: boolean;
   primitive: PrimitiveType;
   data: ModelMetadataRecords;
-}
+};
 
-export interface ModelMetadataRecords {
-  [submodel: number]: any;
-}
+export type ModelMetadataRecord = {
+  [key: string]: string | number;
+};
+
+export type ModelMetadataRecords = {
+  [submodel: number]: ModelMetadataRecord | undefined;
+};
 
 export enum GeometryMode {
   WIREFRAME = "WIREFRAME",
@@ -116,34 +122,27 @@ export enum GeometryMode {
 }
 
 //------------------------------------------------------------
-export interface Metadata {
-  values?: any[];
-  children?: Map<string, Metadata>;
-}
+export type Style = {
+  [key: string]: StyleRecord | undefined;
+};
 
-//------------------------------------------------------------
-export interface Style {
-  style?: {
-    scalars?: Scalars;
-    categories?: Categories;
-  };
-  children?: {
-    [key: string]: Style;
-  };
-}
+export type StyleRecord = {
+  [value: string | number]:
+    | {
+        code: string;
+        vec: vec3;
+      }
+    | undefined;
+};
 
-export interface Scalars {
-  colormap: string | string[];
-  min: number;
-  max: number;
-}
+export type ModelStyle = {
+  [key: string]: ModelStyleRecord | undefined;
+};
 
-export interface Categories {
-  [key: string]: string;
-}
-
-export interface Histogram {
-  min: number;
-  max: number;
-  histogram: number[];
-}
+export type ModelStyleRecord = {
+  [modelId: string]:
+    | {
+        geometryMode: GeometryMode;
+      }
+    | undefined;
+};

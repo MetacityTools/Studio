@@ -1,25 +1,29 @@
-import { Model } from '@bananagl/models/model';
-import { BVH } from '@bananagl/picking/bvh';
-import { TriangleBVH } from '@bananagl/picking/triangles/bvh.triangle';
+import { Model } from "@bananagl/models/model";
+import { BVH } from "@bananagl/picking/bvh";
+import { TriangleBVH } from "@bananagl/picking/triangles/bvh.triangle";
 
 export abstract class Pickable extends Model {
-    protected bvh_?: BVH;
+  protected bvh_?: BVH;
 
-    constructor() {
-        super();
-    }
+  //flag for the picking algo
+  //to skip picking this object
+  skipPicking: boolean = false;
 
-    set BVH(bvh: BVH | undefined) {
-        this.bvh_ = bvh;
-    }
+  constructor() {
+    super();
+  }
 
-    get BVH() {
-        return this.bvh_;
-    }
+  set BVH(bvh: BVH | undefined) {
+    this.bvh_ = bvh;
+  }
 
-    async initTrianglePicking() {
-        const bvh = new TriangleBVH(this);
-        await bvh.build();
-        this.BVH = bvh;
-    }
+  get BVH() {
+    return this.bvh_;
+  }
+
+  async initTrianglePicking() {
+    const bvh = new TriangleBVH(this);
+    await bvh.build();
+    this.BVH = bvh;
+  }
 }

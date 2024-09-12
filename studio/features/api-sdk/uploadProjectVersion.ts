@@ -1,13 +1,15 @@
 import axios from "axios";
 
-export default async function uploadProjectVerion(
+export default async function uploadProjectVersion(
   projectId: number,
-  file: File,
+  dataFile: File,
+  thumbnailFileContents: string,
 ) {
   const formData = new FormData();
 
   formData.append("projectId", projectId.toString());
-  formData.append("file", file);
+  formData.append("dataFile", dataFile);
+  formData.append("thumbnailFileContents", thumbnailFileContents);
 
   const response = await axios.post("/api/projectVersions", formData);
 

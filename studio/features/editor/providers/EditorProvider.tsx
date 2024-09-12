@@ -1,6 +1,7 @@
+import { useProvider } from "@adobe/react-spectrum";
 import * as GL from "@bananagl/bananagl";
 import { EditorModel } from "@editor/data/EditorModel";
-import { Metadata, Style } from "@editor/data/types";
+import { ModelStyle, Style } from "@editor/data/types";
 import { vec3 } from "gl-matrix";
 import {
   Dispatch,
@@ -35,22 +36,20 @@ type EditorContextProps = {
   setMinShade: Dispatch<SetStateAction<number>>;
   maxShade: number;
   setMaxShade: Dispatch<SetStateAction<number>>;
-  gridVisible: boolean;
-  setGridVisible: Dispatch<SetStateAction<boolean>>;
   globalShift: vec3 | null;
   setGlobalShift: Dispatch<SetStateAction<vec3 | null>>;
-  metadata: Metadata;
-  setMetadata: Dispatch<SetStateAction<Metadata>>;
   styles: Style;
   setStyles: Dispatch<SetStateAction<Style>>;
-  usedStyle: string[] | null;
-  setUsedStyle: Dispatch<SetStateAction<string[] | null>>;
-  lastUsedStyle: string[] | null;
-  setLastUsedStyle: Dispatch<SetStateAction<string[] | null>>;
+  modelStyles: ModelStyle;
+  setModelStyles: Dispatch<SetStateAction<ModelStyle>>;
   greyscale: boolean;
   setGreyscale: Dispatch<SetStateAction<boolean>>;
-  darkmode: boolean;
-  setDarkmode: Dispatch<SetStateAction<boolean>>;
+  activeMetadataColumn: string;
+  setActiveMetadataColumn: Dispatch<SetStateAction<string>>;
+  projection: GL.ProjectionType;
+  setProjection: Dispatch<SetStateAction<GL.ProjectionType>>;
+  viewMode: GL.CameraView;
+  setViewMode: Dispatch<SetStateAction<GL.CameraView>>;
 };
 
 export const context = createContext<EditorContextProps>(
@@ -66,19 +65,18 @@ export function EditorProvider(props: { children: ReactNode }) {
   const [camTargetZ, setCamTargetZ] = useState<number>(0);
   const [minShade, setMinShade] = useState<number>(0);
   const [maxShade, setMaxShade] = useState<number>(10);
-  const [gridVisible, setGridVisible] = useState<boolean>(false);
   const [globalShift, setGlobalShift] = useState<vec3 | null>(null);
-  const [metadata, setMetadata] = useState<Metadata>({});
   const [styles, setStyles] = useState<Style>({});
-  const [lastUsedStyle, setLastUsedStyle] = useState<string[] | null>(null);
-  const [usedStyle, setUsedStyle] = useState<string[] | null>(null);
+  const [modelStyles, setModelStyles] = useState<ModelStyle>({});
   const [greyscale, setGreyscale] = useState<boolean>(false);
+  const [activeMetadataColumn, setActiveMetadataColumn] = useState<string>("");
+  const [projection, setProjection] = useState<GL.ProjectionType>(
+    GL.ProjectionType.ORTHOGRAPHIC,
+  );
+  const [viewMode, setViewMode] = useState<GL.CameraView>(GL.CameraView.Free);
 
   //TODO darkmode load from user device settings
-  const sd = localStorage.getItem("darkmode");
-  const [darkmode, setDarkmode] = useState<boolean>(
-    true, //sd === "true" ? true : false,
-  );
+  const { colorScheme } = useProvider();
 
   const activeView = 0;
 
@@ -117,7 +115,7 @@ export function EditorProvider(props: { children: ReactNode }) {
   }, [maxShade, models]);
 
   useEffect(() => {
-    console.log("models", models);
+    console.debug("models", models);
   }, [models]);
 
   useEffect(() => {
@@ -127,7 +125,7 @@ export function EditorProvider(props: { children: ReactNode }) {
   }, [activeView, renderer.views, camTargetZ]);
 
   useEffect(() => {
-    if (darkmode) {
+    if (colorScheme === "dark") {
       renderer.clearColor = [0.1, 0.1, 0.1, 1];
       document.documentElement.style.setProperty("color-scheme", "dark");
       document.documentElement.classList.add("dark");
@@ -138,7 +136,19 @@ export function EditorProvider(props: { children: ReactNode }) {
       document.documentElement.classList.remove("dark");
       localStorage.setItem("darkmode", "false");
     }
-  }, [darkmode, renderer]);
+  }, [colorScheme, renderer]);
+
+  useEffect(() => {
+    const view = renderer.views?.[activeView].view;
+    if (!view) return;
+    view.camera.projectionType = projection;
+  }, [activeView, renderer.views, projection]);
+
+  useEffect(() => {
+    const view = renderer.views?.[activeView].view;
+    if (!view) return;
+    view.cameraLock.mode = viewMode;
+  }, [activeView, renderer.views, viewMode]);
 
   return (
     <context.Provider
@@ -158,22 +168,20 @@ export function EditorProvider(props: { children: ReactNode }) {
         setMinShade,
         maxShade,
         setMaxShade,
-        gridVisible,
-        setGridVisible,
         globalShift,
         setGlobalShift,
-        metadata,
-        setMetadata,
         styles,
         setStyles,
-        usedStyle,
-        setUsedStyle,
-        lastUsedStyle,
-        setLastUsedStyle,
-        greyscale: greyscale,
-        setGreyscale: setGreyscale,
-        darkmode,
-        setDarkmode,
+        modelStyles,
+        setModelStyles,
+        greyscale,
+        setGreyscale,
+        activeMetadataColumn,
+        setActiveMetadataColumn,
+        projection,
+        setProjection,
+        viewMode,
+        setViewMode,
       }}
     >
       {props.children}

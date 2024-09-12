@@ -3,14 +3,19 @@ import { TypedArray } from "@bananagl/bananagl";
 import { EditorModelData } from "@editor/data/EditorModel";
 
 import { WriteOnlyMemoryStream } from "./streams";
+import { ProjectData } from "./types";
 
-export function exportModel(models: EditorModelData[]) {
+export function exportModel(models: EditorModelData[], params: ProjectData) {
   const stream = new WriteOnlyMemoryStream();
   //write version
-  writeString("mtctv2", stream);
+  writeString("mtctv3", stream);
+
+  //write project data
+  writeProjectData(params, stream);
 
   //write models
   for (const model of models) writeModel(model, stream);
+
   stream.close();
 
   const file = new File(stream.buffers, "project.metacity", {
@@ -42,13 +47,27 @@ export function exportModel(models: EditorModelData[]) {
 }
 
 function writeModel(model: EditorModelData, stream: WriteOnlyMemoryStream) {
+  writeString(model.uuid, stream);
   writeTypedArray(model.geometry.position, stream);
   writeTypedArray(model.geometry.submodel, stream);
-
   const metadata = JSON.stringify(model.metadata.data);
   writeString(metadata, stream);
   writeString(model.metadata.name, stream);
+  stream.writeInt32(model.metadata.visible ? 1 : 0);
   stream.writeInt32(model.metadata.primitive);
+}
+
+function writeProjectData(params: ProjectData, stream: WriteOnlyMemoryStream) {
+  const style = JSON.stringify(params.style);
+  writeString(style, stream);
+  const modelStyle = JSON.stringify(params.modelStyle);
+  writeString(modelStyle, stream);
+  writeString(params.activeMetadataColumn, stream);
+  writeString(params.projectionType, stream);
+  writeString(params.cameraView, stream);
+  writeTypedArray(new Float32Array(params.cameraPosition), stream);
+  writeTypedArray(new Float32Array(params.cameraTarget), stream);
+  writeTypedArray(new Float32Array(params.globalShift), stream);
 }
 
 export interface ConstructableTypedArray {

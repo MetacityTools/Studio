@@ -1,13 +1,11 @@
 import { EditorModel } from "@editor/data/EditorModel";
 import { context } from "@editor/providers/EditorProvider";
 import React, { useCallback } from "react";
-import { useUpdateMetadata } from "./useMetadataUpdate";
 import { useSelection } from "./useSelection";
 
 export function useRemoveModels() {
   const { scene, setModels } = React.useContext(context);
   const select = useSelection();
-  const updateMetadata = useUpdateMetadata();
 
   const removeModels = useCallback(
     (models: EditorModel[]) => {
@@ -19,9 +17,8 @@ export function useRemoveModels() {
       ) as EditorModel[];
 
       setModels(copy);
-      updateMetadata(copy);
     },
-    [scene, setModels, select, updateMetadata],
+    [scene, setModels, select],
   );
 
   return removeModels;
