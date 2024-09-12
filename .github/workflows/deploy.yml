@@ -1,0 +1,26 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - release
+
+jobs:
+  test:
+    name: Run tests
+    uses: ./.github/workflows/test.yml
+
+  build:
+    name: Build and push Docker images
+    uses: ./.github/workflows/build.yml
+    needs:
+      - test
+
+  deploy:
+    name: Notify Watchtower
+    runs-on: ubuntu-latest
+    needs:
+      - build
+    steps:
+      - name: Notify Watchtower using curl
+        run: 'curl -I -H "Authorization: Bearer ${{ secrets.WATCHTOWER_TOKEN }}" ${{ vars.WATCHTOWER_URL }}'
