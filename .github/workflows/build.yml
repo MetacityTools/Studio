@@ -6,10 +6,8 @@ on:
 jobs:
   build-studio:
     name: Build and push studio Docker image
-    needs: test-studio
-    uses: ./.github/workflows/studio-build.yml
+    uses: ./.github/workflows/build-studio.yml
 
   build-converter:
     name: Build and push coordinates converter Docker image
-    needs: test-converter
-    uses: ./.github/workflows/converter-build.yml
+    uses: ./.github/workflows/build-converter.yml
