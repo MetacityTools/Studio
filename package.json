@@ -1,0 +1,21 @@
+{
+  "name": "metacity",
+  "displayName": "MetaCity Studio",
+  "private": true,
+  "version": "0.0.1",
+  "description": "",
+  "scripts": {
+    "version": "npm run version:changelog && npm run version:sync && git add -A",
+    "version:sync": "node scripts/sync-versions.js",
+    "version:changelog": "conventional-changelog -p conventionalcommits -i CHANGELOG.md -s && code CHANGELOG.md --wait",
+    "release": "git switch release && git merge main --ff-only && git push --follow-tags && git switch main",
+    "release:patch": "git switch main && git pull && npm version patch && git push && npm run release",
+    "release:minor": "git switch main && git pull && npm version minor && git push && npm run release",
+    "release:major": "git switch main && git pull && npm version major && git push && npm run release"
+  },
+  "devDependencies": {
+    "conventional-changelog-cli": "^5.0.0"
+  },
+  "author": "",
+  "license": "ISC"
+}
