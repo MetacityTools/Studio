@@ -51,5 +51,8 @@ jobs:
       - name: Install dependencies
         run: cd studio && npm ci
 
+      - name: Run migrations dependencies
+        run: cd studio && npm run migrations:run
+
       - name: Run tests
         run: cd studio && npm test
