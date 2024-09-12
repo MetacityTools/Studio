@@ -5,6 +5,9 @@ config({
   override: true,
 });
 
+const environment = process.env["NODE_ENV"] || "development";
+const production = environment === "production";
+
 const db = {
   host: process.env["DB_HOST"] || "localhost",
   port: parseInt(process.env["DB_PORT"] || "5432"),
@@ -26,6 +29,8 @@ const converter = {
 };
 
 export const Config = {
+  environment,
+  production,
   db,
   minio,
   converter,

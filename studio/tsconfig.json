@@ -1,6 +1,10 @@
 {
   "compilerOptions": {
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -21,15 +25,41 @@
       }
     ],
     "paths": {
-      "@app/*": ["./app/*"],
-      "@features/*": ["./features/*"],
-      "@bananagl/*": ["./features/bananagl/*"],
-      "@editor/*": ["./features/editor/*"],
-      "@core/*": ["./core/*"]
+      "@app/*": [
+        "./app/*"
+      ],
+      "@features/*": [
+        "./features/*"
+      ],
+      "@bananagl/*": [
+        "./features/bananagl/*"
+      ],
+      "@editor/*": [
+        "./features/editor/*"
+      ],
+      "@core/*": [
+        "./core/*"
+      ]
     },
-    "types": ["reflect-metadata"],
+    "types": [
+      "reflect-metadata"
+    ],
     "declaration": true
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
-  "exclude": ["node_modules"]
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ],
+  "ts-node": {
+    // fix for typeorm cli
+    // https://stackoverflow.com/a/71907867/1812179
+    "compilerOptions": {
+      "module": "commonjs"
+    }
+  },
 }

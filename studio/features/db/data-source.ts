@@ -15,10 +15,10 @@ export const AppDataSource = new DataSource({
   username: Config.db.username,
   password: Config.db.password,
   database: Config.db.database,
-  synchronize: true,
   logging: ["error"],
   entities: [Project, User, Model, Embed, ProjectVersion],
   subscribers: [],
-  migrations: [],
+  migrationsRun: Config.production ? true : false,
+  migrations: [__dirname + "/migrations/*.js"],
   namingStrategy: new SnakeNamingStrategy(),
 });
