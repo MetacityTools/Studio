@@ -1,4 +1,4 @@
-name: Metacity Studio Test
+name: Test Studio
 
 on:
   pull_request:

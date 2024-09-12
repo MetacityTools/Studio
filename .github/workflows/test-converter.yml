@@ -1,4 +1,4 @@
-name: Coordinates Converter Test
+name: Test Coordinates Converter
 
 on:
   pull_request:
