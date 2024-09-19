@@ -66,7 +66,9 @@ export function Canvas(props: CanvasProps) {
       prevSelection.current = selectionObj;
 
       const model = selectionObj.keys().next().value;
+      if (!model) return;
       const submodel = selectionObj.get(model)?.values().next().value;
+      if (!submodel) return;
       const metadata = model.metadata[submodel];
       if (!metadata) return;
       const { xpos, ypos } = getOffset(event);
