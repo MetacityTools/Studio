@@ -1,3 +1,8 @@
+## [1.0.2](https://github.com/MetacityTools/Studio/compare/v1.0.1...v1.0.2) (2024-09-19)
+
+### Bug Fixes
+
+* fix build ([c71aad5](https://github.com/MetacityTools/Studio/commit/c71aad5e51ef76f0b587f8700113023554f16691))
 ## [1.0.1](https://github.com/MetacityTools/Studio/compare/v1.0.0...v1.0.1) (2024-09-12)
 
 ### Features
