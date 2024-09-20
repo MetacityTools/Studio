@@ -1,3 +1,8 @@
+## [1.0.4](https://github.com/MetacityTools/Studio/compare/v1.0.3...v1.0.4) (2024-09-20)
+
+### Bug Fixes
+
+* disable nextjs server minification to prevent circular dependencies in typeorm ([c8991c7](https://github.com/MetacityTools/Studio/commit/c8991c7cc794ba1141d8d824d4eec42f382f252d))
 ## [1.0.3](https://github.com/MetacityTools/Studio/compare/v1.0.2...v1.0.3) (2024-09-20)
 
 ### Bug Fixes
