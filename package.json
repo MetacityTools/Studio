@@ -2,7 +2,7 @@
   "name": "metacity",
   "displayName": "MetaCity Studio",
   "private": true,
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "",
   "scripts": {
     "version": "npm run version:changelog && npm run version:sync && git add -A",

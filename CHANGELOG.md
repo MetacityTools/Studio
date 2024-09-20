@@ -1,3 +1,8 @@
+## [1.0.3](https://github.com/MetacityTools/Studio/compare/v1.0.2...v1.0.3) (2024-09-20)
+
+### Bug Fixes
+
+* fix entrypoint migrations and app start logic ([848eb55](https://github.com/MetacityTools/Studio/commit/848eb55a91649616d29526b16837074e45a75660))
 ## [1.0.2](https://github.com/MetacityTools/Studio/compare/v1.0.1...v1.0.2) (2024-09-19)
 
 ### Bug Fixes
