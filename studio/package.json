@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
+    "build": "next build && mv ./.next/static ./.next/standalone/.next/static",
+    "start": "node .next/standalone/server.js",
     "lint": "next lint",
     "test": "NODE_ENV=test vitest --no-file-parallelism",
     "typeorm": "ts-node -r tsconfig-paths/register node_modules/typeorm/cli -d features/db/data-source.ts",
@@ -46,6 +46,8 @@
     "react-icons": "^5.2.1",
     "reflect-metadata": "^0.2.2",
     "shpts": "^1.0.9",
+    "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
     "typeorm": "^0.3.20",
     "typeorm-naming-strategies": "^4.1.0",
     "zod-form-data": "^2.0.2"
@@ -67,7 +69,6 @@
     "eslint-config-next": "14.2.3",
     "jsdom": "^24.1.0",
     "postcss": "^8",
-    "ts-node": "^10.9.2",
     "typescript": "^5.6.2",
     "unplugin-swc": "^1.4.5",
     "vitest": "^1.6.0"

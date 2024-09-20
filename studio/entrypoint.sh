@@ -1,11 +1,12 @@
 #!/bin/sh
+set -e
 
 export VERSION=$(node -p "require('./package.json').version")
 
 # Run DB migrations
 if [ "$1" = "start" ]; then
   npm run migrations:run
-  HOSTNAME="0.0.0.0" node server.js
+  npm start
 
 elif [ "$1" = "db-reset" ]; then
   npm run migrations:drop-schema
@@ -19,7 +20,7 @@ elif [ "$1" = "version" ] || [ "$1" = "--version" ] || [ "$1" = "-v" ]; then
 
 elif [ -z "$1" ] || [ "$1" = "help" ] || [ "$1" = "--help" ] || [ "$1" = "-h" ]; then
   echo "
-MetaCity Studio CLI v$VERSION
+MetaCity Studio v$VERSION
 
 Usage:
 
