@@ -46,11 +46,7 @@ export class WorkerPool<InputType, ResultType> {
     this.queue = new Queue<InputType, ResultType>();
   }
 
-  process(
-    data: InputType,
-    callback: (output: ResultType | undefined) => void,
-    worker: () => Worker,
-  ) {
+  process(data: InputType, callback: (output: ResultType | undefined) => void, worker: () => Worker) {
     this.queue.enqueue({
       data: data,
       worker: worker,

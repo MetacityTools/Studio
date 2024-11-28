@@ -103,15 +103,21 @@ async function getFile(files: Map<string, Blob>, name: string) {
 const pool = new WorkerPool<UserInputModel, EditorData | ModelData | ModelData[]>(10);
 
 function spawnGLTFWorker() {
-  return new Worker(new URL("./gltf.worker.ts", import.meta.url));
+  return new Worker(new URL("./gltf.worker.ts", import.meta.url), {
+    type: "module",
+  });
 }
 
 function spawnMetacityWorker() {
-  return new Worker(new URL("./metacity.worker.ts", import.meta.url));
+  return new Worker(new URL("./metacity.worker.ts", import.meta.url), {
+    type: "module",
+  });
 }
 
 function spawnShapefileWorker() {
-  return new Worker(new URL("./shapefile.worker.ts", import.meta.url));
+  return new Worker(new URL("./shapefile.worker.ts", import.meta.url), {
+    type: "module",
+  });
 }
 
 export async function loadModels(models: UserInputModel[], updateStatus?: (status: string) => void) {
