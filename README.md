@@ -1,34 +1,98 @@
-# 🏡 [Metacity Studio](https://studio.metacity.cc)
+# Welcome to React Router!
 
-![Screenshot](./docs/studio.png)
+A modern, production-ready template for building full-stack React applications using React Router.
 
-Metacity Studio is an online tool for integrating and visualization of spatial data.
+## Features
 
-Running at [studio.metacity.cc](https://studio.metacity.cc)
+- 🚀 Server-side rendering
+- ⚡️ Hot Module Replacement (HMR)
+- 📦 Asset bundling and optimization
+- 🔄 Data loading and mutations
+- 🔒 TypeScript by default
+- 🎉 TailwindCSS for styling
+- 📖 [React Router docs](https://reactrouter.com/)
 
-## [Studio](./studio)
+## Getting Started
 
-Studio is the frontend and backend of the Metacity Studio application.
+### Installation
 
-See the [README in the `studio` directory](./studio/README.md) for more information.
+Install the dependencies:
 
-## Supporting services
+```bash
+npm install
+```
 
-Supporting services can be run using the [docker-compose.yml](./docker-compose.yml) file in the root of the repository.
+### Development
 
-### [Coordinates converter](coordinates_converter)
+Start the development server with HMR:
 
-Python service to convert models between different coordinate systems.
+```bash
+npm run dev
+```
 
-See the [README in the `coordinates_converter`](./coordinates_converter/README.md) directory for more information.
+Your application will be available at `http://localhost:5173`.
 
-## Development
+## Building for Production
 
-### Devcontainer
+Create a production build:
 
-This repository is set up to be used with the Visual Studio Code Remote - Containers extension. This allows you to develop in a containerized environment with all the necessary dependencies installed.
+```bash
+npm run build
+```
 
-The devcontainer includes:
-* Node.js 20
-* Python 3.12
-* Docker-in-Docker
+## Deployment
+
+### Docker Deployment
+
+This template includes three Dockerfiles optimized for different package managers:
+
+- `Dockerfile` - for npm
+- `Dockerfile.pnpm` - for pnpm
+- `Dockerfile.bun` - for bun
+
+To build and run using Docker:
+
+```bash
+# For npm
+docker build -t my-app .
+
+# For pnpm
+docker build -f Dockerfile.pnpm -t my-app .
+
+# For bun
+docker build -f Dockerfile.bun -t my-app .
+
+# Run the container
+docker run -p 3000:3000 my-app
+```
+
+The containerized application can be deployed to any platform that supports Docker, including:
+
+- AWS ECS
+- Google Cloud Run
+- Azure Container Apps
+- Digital Ocean App Platform
+- Fly.io
+- Railway
+
+### DIY Deployment
+
+If you're familiar with deploying Node applications, the built-in app server is production-ready.
+
+Make sure to deploy the output of `npm run build`
+
+```
+├── package.json
+├── package-lock.json (or pnpm-lock.yaml, or bun.lockb)
+├── build/
+│   ├── client/    # Static assets
+│   └── server/    # Server-side code
+```
+
+## Styling
+
+This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever CSS framework you prefer.
+
+---
+
+Built with ❤️ using React Router.
