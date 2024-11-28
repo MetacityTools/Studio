@@ -1,34 +1,4 @@
-volumes:
-  postgres:
-
 services:
   devcontainer:
     build: .
     command: sleep infinity
-    environment:
-      DB_HOST: postgres
-      DB_USERNAME: pds
-      DB_PASSWORD: pds-pass
-      DB_DATABASE: pds
-      MINIO_ENDPOINT: minio
-      MINIO_ACCESS_KEY: pds
-      MINIO_SECRET_KEY: pdspdspds
-
-  postgres:
-    image: postgres:16
-    shm_size: 2g
-    environment:
-      POSTGRES_USER: pds
-      POSTGRES_PASSWORD: pds-pass
-      POSTGRES_DB: pds
-      PGDATA: /data/postgres
-    volumes:
-      - postgres:/data/postgres
-
-  minio:
-    image: minio/minio
-    command: minio server --console-address ":9090"
-    environment:
-      MINIO_VOLUMES: /data
-      MINIO_ROOT_USER: pds
-      MINIO_ROOT_PASSWORD: pdspdspds
