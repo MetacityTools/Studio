@@ -1,37 +1,27 @@
 import {
-  ActionGroup,
+  ActionButton,
   Content,
   Dialog,
   DialogContainer,
   Flex,
   Item,
   Key,
+  Menu,
+  MenuTrigger,
   ProgressCircle,
   Text,
 } from "@adobe/react-spectrum";
 import Header from "@core/components/Header";
+import { MdiCube } from "@core/icons/MdiCube";
+import { MdiTable } from "@core/icons/MdiTable";
 import { useCallback, useState } from "react";
 import { useExportModels } from "../hooks/useExportModels";
-import useLoadLatestVersion from "../hooks/useLoadLatestVersion";
+import useModelImport from "../hooks/useModelImport";
 import { useRenderer } from "../hooks/useRender";
 
 export default function EditorHeader() {
-  //TODO initialize data
-  const data = {};
-  const loadLatestVersion = useLoadLatestVersion();
   const [isLoadingDialogOpen, setIsLoadingDialogOpen] = useState(false);
   const [isSavingDialogOpen, setIsSavingDialogOpen] = useState(false);
-
-  //TODO do this after user uploads model
-  // useEffect(() => {
-  //   async function loadProject() {
-  //     setIsLoadingDialogOpen(true);
-  //     await loadLatestVersion();
-  //     setIsLoadingDialogOpen(false);
-  //   }
-  //   void loadProject();
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
 
   const exportModels = useExportModels();
   const renderer = useRenderer();
@@ -58,16 +48,24 @@ export default function EditorHeader() {
     };
   }, [renderer, exportModels]);
 
+  const handleModelLoad = useModelImport();
+
   const handleAction = useCallback(
     async (action: Key) => {
+      setIsLoadingDialogOpen(true);
       switch (action) {
-        case "save":
-          saveProject();
-        // break;
-        case "share":
-          // Share
+        case "shp":
+          await handleModelLoad([".shp", ".shx", ".dbf", ".prj", ".cpg"]);
           break;
+        case "gltf":
+          await handleModelLoad([".gltf", ".glb"]);
+          break;
+        case "metacity":
+          await handleModelLoad([".metacity"]);
+          break;
+        //TODO handle CSV import
       }
+      setIsLoadingDialogOpen(false);
     },
     [saveProject]
   );
@@ -82,9 +80,27 @@ export default function EditorHeader() {
           },
         ]}
       >
-        <ActionGroup isQuiet onAction={handleAction}>
-          <Item key="save">Save</Item>
-        </ActionGroup>
+        <MenuTrigger>
+          <ActionButton isQuiet>Import</ActionButton>
+          <Menu onAction={handleAction}>
+            <Item key="shp">
+              <MdiCube />
+              <Text>Import Shapefile</Text>
+            </Item>
+            <Item key="gltf">
+              <MdiCube />
+              <Text>Import GLTF</Text>
+            </Item>
+            <Item key="metacity">
+              <MdiCube />
+              <Text>Import Metacity</Text>
+            </Item>
+            <Item key="csv">
+              <MdiTable />
+              <Text>Import CSV</Text>
+            </Item>
+          </Menu>
+        </MenuTrigger>
       </Header>
       <DialogContainer onDismiss={() => {}}>
         {isLoadingDialogOpen && (
@@ -92,7 +108,7 @@ export default function EditorHeader() {
             <Content>
               <Flex direction="row" gap="size-200" alignItems="center">
                 <ProgressCircle aria-label="Loading…" isIndeterminate />
-                <Text>Loading project data</Text>
+                <Text>Loading model data</Text>
               </Flex>
             </Content>
           </Dialog>

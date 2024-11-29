@@ -26,7 +26,7 @@ import { MdiSortAscending } from "@core/icons/MdiSortAscending";
 import { MdiTrash } from "@core/icons/MdiTrash";
 import useSelectedSubmodelCount from "@editor/hooks/useSelectedSubmodelCount";
 import { useEditorContext } from "@features/editor/hooks/useEditorContext";
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import useMetadataContext from "../hooks/useMetadataContext";
 import useMetadataEdits from "../hooks/useMetadataEdits";
 import useMetadataSelection from "../hooks/useMetadataSelection";
@@ -70,6 +70,11 @@ export default function EditorMetadataValues() {
         break;
     }
   }, []);
+
+  const disabledKeysOnNoSelection = useMemo(
+    () => (selectedCount === 0 ? ["assignSingleValue"] : undefined),
+    [selectedCount]
+  );
 
   return (
     <PositioningContainer>
@@ -145,7 +150,11 @@ export default function EditorMetadataValues() {
                   >
                     {typeof record.value} - {record.count} items, {record.selected} selected{" "}
                   </Text>
-                  <ActionGroup isQuiet onAction={(key) => handleItemAction(key, record.value)}>
+                  <ActionGroup
+                    isQuiet
+                    onAction={(key) => handleItemAction(key, record.value)}
+                    disabledKeys={disabledKeysOnNoSelection}
+                  >
                     <TooltipTrigger delay={0} placement="bottom">
                       <Item key="assignSingleValue" textValue="Assign Value">
                         <MdiArrowRightBold />

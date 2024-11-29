@@ -32,7 +32,6 @@ import useSelectedSubmodelCount from "@features/editor/hooks/useSelectedSubmodel
 import { useSplitModel } from "@features/editor/hooks/useSplitModel";
 import Delete from "@spectrum-icons/workflow/Delete";
 import { Key, useCallback, useState } from "react";
-import EditorAddModeButton from "./EditorAddModelButton";
 import EditorProjectModelDialog from "./EditorProjectModelDialog";
 import EditorRenameModelDialog from "./EditorRenameModelDialog";
 
@@ -116,16 +115,16 @@ function EditorModelList() {
   return (
     <PositioningContainer>
       <Flex direction="column" height="100%" gap="size-100" marginX="size-200">
-        <View position="relative" overflow="hidden" marginTop="size-200">
+        {/* <View position="relative" overflow="hidden" marginTop="size-200">
           <EditorAddModeButton />
-        </View>
+        </View> */}
         <EditorRenameModelDialog close={() => setEditingModel(null)} model={editingModel} open={!!editingModel} />
         <EditorProjectModelDialog
           model={projectionSourceModel}
           open={!!projectionSourceModel}
           close={() => setProjectionSourceModel(null)}
         />
-        <View position="relative" flex height="100%" overflow="hidden" marginBottom="size-100">
+        <View position="relative" flex height="100%" overflow="hidden" marginBottom="size-100" marginTop="size-200">
           <ActionBarContainer height="100%" width="100%">
             <ListView
               selectionMode="multiple"

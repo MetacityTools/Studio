@@ -26,8 +26,8 @@ export default function Header(props: HeaderProps) {
       paddingY="size-100"
       backgroundColor="gray-50"
     >
-      <Flex direction="row" width="100%" gap="size-10" justifyContent="space-between" alignItems="center">
-        <Breadcrumbs marginX="size-100" flex="1">
+      <Flex direction="row" width="100%" gap="size-10" justifyContent="start" alignItems="center">
+        <Breadcrumbs marginX="size-100">
           {nav.map((item) => (
             <Item key={item.key} href={item.link}>
               {item.children}
