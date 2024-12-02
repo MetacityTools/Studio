@@ -1,0 +1,46 @@
+/* Base CSS Reset */
+html,
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 100%; /* Adjust this if needed */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  line-height: 1.5;
+  min-height: 100vh;
+}
+
+input,
+button,
+textarea,
+select {
+  font: inherit; /* Use the same font as the rest of the app */
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+:root {
+  --border-radius: 4px; /* Example base radius for customization */
+  --transition-duration: 0.3s; /* Example transition duration */
+}
