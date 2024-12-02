@@ -1,6 +1,5 @@
 import {
   ActionGroup,
-  ComboBox,
   Flex,
   Item,
   ListView,
@@ -13,18 +12,29 @@ import {
 import { NoData } from "@core/components/Empty";
 
 import { PositioningContainer } from "@core/components/PositioningContainer";
+import SidebarHeader from "@core/components/SidebarHeader";
 import { TriangleEmpty } from "@core/icons/TriangleEmpty";
 import { TriangleFull } from "@core/icons/TriangleFull";
 import { TriangleFullFilled } from "@core/icons/TriangleFullFilled";
-import useModelSelection from "@features/editor-models/hooks/useModelSelection";
 import { GeometryMode } from "@features/editor/data/types";
 import { useEditorContext } from "@features/editor/hooks/useEditorContext";
 import useModelList from "@features/editor/hooks/useModelList";
+import useMetadataContext from "@features/metadata/hooks/useMetadataContext";
+import useModelSelection from "@features/model/hooks/useModelSelection";
 import { useCallback } from "react";
-import useMetadataContext from "../hooks/useMetadataContext";
 import useMetadataModels from "../hooks/useMetadataModels";
 
 export default function EditorMetadataModels() {
+  return (
+    <PositioningContainer>
+      <View position="relative" height="100%" overflow="auto" backgroundColor="gray-50">
+        <EditorMetadataModelList />
+      </View>
+    </PositioningContainer>
+  );
+}
+
+function EditorMetadataModelList() {
   const { activeMetadataColumn, setActiveMetadataColumn, setModelStyles, setModels } = useEditorContext();
   const { columns } = useMetadataContext();
 
@@ -64,20 +74,12 @@ export default function EditorMetadataModels() {
 
   return (
     <PositioningContainer>
-      <Flex direction="column" height="100%" gap="size-100" marginX="size-200">
-        <View width="100%" marginTop="size-100">
-          <ComboBox
-            label="Metadata column"
-            defaultItems={columns}
-            width="100%"
-            onSelectionChange={(key) => setActiveMetadataColumn(key?.toString() || "")}
-            selectedKey={activeMetadataColumn}
-          >
-            {(item) => <Item key={item.key}>{item.key}</Item>}
-          </ComboBox>
-        </View>
+      <Flex direction="column" height="100%">
+        <SidebarHeader title="Model Shaders" />
         <View position="relative" flex height="100%" overflow="hidden" marginBottom="size-200">
           <ListView
+            isQuiet
+            density="spacious"
             selectionMode="multiple"
             aria-label="Model list"
             width="100%"
@@ -97,14 +99,14 @@ export default function EditorMetadataModels() {
                 >
                   {model.item.name}
                 </Text>
-                <Text
+                {/* <Text
                   slot="description"
                   UNSAFE_style={{
                     opacity: model.selectedSubmodels > 0 ? 1 : 0.6,
                   }}
                 >
                   {model.selectedSubmodels} of {model.totalSubmodels} submodels selected
-                </Text>
+                </Text> */}
                 <ActionGroup
                   selectionMode="single"
                   overflowMode="collapse"

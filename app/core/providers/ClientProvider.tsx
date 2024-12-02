@@ -16,11 +16,9 @@ export function ClientProviders(props: ClientProvidersProps) {
 
   //get OS default color scheme
   let colorScheme: "light" | "dark" = "light";
-  // if (typeof window !== "undefined") {
-  //   colorScheme = window.matchMedia("(prefers-color-scheme: dark)").matches
-  //     ? "dark"
-  //     : "light";
-  // }
+  if (typeof window !== "undefined") {
+    colorScheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  }
 
   const [colorSchemeState, setColorSchemeState] = useState<"light" | "dark">(colorScheme);
 

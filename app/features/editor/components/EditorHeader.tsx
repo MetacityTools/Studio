@@ -9,16 +9,16 @@ import {
   Text,
 } from "@adobe/react-spectrum";
 import Header from "@core/components/Header";
-import AddColumnDialog from "@features/editor-metadata/components/EditorMetadataAddColumnDialog";
-import useMetadataAssignValue from "@features/editor-metadata/hooks/useMetadataAssignValue";
-import ActiveColumnToolbar from "@features/editor-toolbar/components/ActiveColumnToolbar";
-import CameraViewToolbar from "@features/editor-toolbar/components/CameraViewToolbar";
-import ColorSchemeToolbar from "@features/editor-toolbar/components/ColorSchemeToolbar";
-import ProjectionToolbar from "@features/editor-toolbar/components/ProjectionToolbar";
-import SelectionToolbar from "@features/editor-toolbar/components/SelectionToolbar";
+import ActiveColumnToolbar from "@features/editor/components/Header/ActiveColumnToolbar";
+import CameraViewToolbar from "@features/editor/components/Header/CameraViewToolbar";
+import ColorSchemeToolbar from "@features/editor/components/Header/ColorSchemeToolbar";
+import ProjectionToolbar from "@features/editor/components/Header/ProjectionToolbar";
+import SelectionToolbar from "@features/editor/components/Header/SelectionToolbar";
+import AddColumnDialog from "@features/metadata/components/EditorMetadataAddColumnDialog";
+import useMetadataAssignValue from "@features/metadata/hooks/useMetadataAssignValue";
 import { useCallback, useState } from "react";
 import { useEditorContext } from "../hooks/useEditorContext";
-import EditorAddModelMenu from "./Header/EditorAddModelMenu";
+import AddModelMenu from "./Header/AddModelMenu";
 
 export default function EditorHeader() {
   const [isSavingDialogOpen, setIsSavingDialogOpen] = useState(false);
@@ -36,10 +36,10 @@ export default function EditorHeader() {
     <>
       <Header>
         <Flex gap="size-100" flex="1" justifyContent="start" marginStart="size-100" alignItems="center">
-          <EditorAddModelMenu />
+          <AddModelMenu />
           <DialogTrigger>
             <ActionButton isDisabled={selection.size === 0} isQuiet>
-              <Text>Add Column to Selection</Text>
+              <Text>Add Data Column to Selection</Text>
             </ActionButton>
             {(close) => <AddColumnDialog close={close} onSubmit={handleCreateColumn} />}
           </DialogTrigger>

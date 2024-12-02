@@ -148,11 +148,7 @@ void main() {
 }
 `;
 
-export const wireframeShader = new GL.Shader(
-  wvertexShader,
-  wfragmentShader,
-  true,
-);
+export const wireframeShader = new GL.Shader(wvertexShader, wfragmentShader, true);
 
 const svertexShader = `
 in vec3 normal;
@@ -185,7 +181,7 @@ void main() {
     float factor = max(factorA, factorB);
     //the weight of the 
     oColor = vec3(factor) * 0.1 + vec3(0.8);
-    oColor *= mix(vec3(1.0), mix(vec3(0.5), vec3(1.0), smoothstep(uZMin, uZMax, transformed.z)), uUseShading);
+    //oColor *= mix(vec3(1.0), mix(vec3(0.5), vec3(1.0), smoothstep(uZMin, uZMax, transformed.z)), uUseShading);
     oColor *= mix(color, vec3(1.0, 0.705, 0.196), selected);
     oColor *= mix(color, vec3(1.0, 0.705, 0.196), highlighted);
 

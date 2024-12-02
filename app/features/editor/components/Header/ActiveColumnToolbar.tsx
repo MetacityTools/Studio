@@ -1,6 +1,6 @@
 import { ComboBox, Item } from "@adobe/react-spectrum";
-import useMetadataContext from "@features/editor-metadata/hooks/useMetadataContext";
 import { useEditorContext } from "@features/editor/hooks/useEditorContext";
+import useMetadataContext from "@features/metadata/hooks/useMetadataContext";
 
 export default function ActiveColumnToolbar() {
   const { columns } = useMetadataContext();
@@ -8,7 +8,7 @@ export default function ActiveColumnToolbar() {
 
   return (
     <ComboBox
-      label="Active Column"
+      label="Active Data Column"
       labelPosition="side"
       gridArea="style"
       aria-label="Metadata column"

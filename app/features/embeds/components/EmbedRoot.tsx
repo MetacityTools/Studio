@@ -1,5 +1,5 @@
 import { Flex, View } from "@adobe/react-spectrum";
-import { MetadataProvider } from "@features/editor-metadata/providers/MetadataProvider";
+import { MetadataProvider } from "@features/metadata/providers/MetadataProvider";
 
 import { EditorProvider } from "@features/editor/providers/EditorProvider";
 import Viewer from "@features/viewer/components/Viewer";

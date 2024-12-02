@@ -16,9 +16,9 @@ import {
 
 import { PositioningContainer } from "@core/components/PositioningContainer";
 import { MdiExport } from "@core/icons/MdiExport";
-import useMetadataContext from "@features/editor-metadata/hooks/useMetadataContext";
 import useExportEmbed from "@features/editor/hooks/useExportModels";
 import { useRenderer } from "@features/editor/hooks/useRender";
+import useMetadataContext from "@features/metadata/hooks/useMetadataContext";
 import { useCallback, useState } from "react";
 
 export default function EditorExportsCreate() {

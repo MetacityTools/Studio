@@ -19,8 +19,8 @@ import { PositioningContainer } from "@core/components/PositioningContainer";
 import SidebarHeader from "@core/components/SidebarHeader";
 import { MdiRename } from "@core/icons/MdiRename";
 import { MdiTrash } from "@core/icons/MdiTrash";
-import useMetadataContext from "@features/editor-metadata/hooks/useMetadataContext";
-import useMetadataEdits from "@features/editor-metadata/hooks/useMetadataEdits";
+import useMetadataContext from "@features/metadata/hooks/useMetadataContext";
+import useMetadataEdits from "@features/metadata/hooks/useMetadataEdits";
 import { useCallback, useState } from "react";
 import { RenameColumnDialog } from "./EditorRenameColumnDialog";
 
@@ -81,8 +81,8 @@ function EditorColumnsList() {
 
   return (
     <PositioningContainer>
-      <Flex direction="column" height="100%" gap="size-100">
-        <SidebarHeader title="Metadata Columns" />
+      <Flex direction="column" height="100%">
+        <SidebarHeader title="Data Columns" />
         <View position="relative" height="100%" overflow="hidden">
           <ActionBarContainer height="100%" width="100%">
             <ListView

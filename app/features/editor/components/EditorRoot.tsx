@@ -1,8 +1,8 @@
 import { Flex, View } from "@adobe/react-spectrum";
-import { MetadataProvider } from "@features/editor-metadata/providers/MetadataProvider";
 import Editor from "@features/editor/components/Editor";
 import EditorHeader from "@features/editor/components/EditorHeader";
 import { EditorProvider } from "@features/editor/providers/EditorProvider";
+import { MetadataProvider } from "@features/metadata/providers/MetadataProvider";
 
 export default function EditorRoot() {
   return (

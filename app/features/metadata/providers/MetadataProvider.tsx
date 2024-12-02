@@ -1,6 +1,6 @@
 import { useEditorContext } from "@features/editor/hooks/useEditorContext";
 import { createContext, ReactNode, useEffect, useState } from "react";
-import { defaultColor } from "../../editor-metadata-color/constants";
+import { defaultColor } from "../../model-color/constants";
 import { MetadataAggListItem } from "../type";
 
 type MetadataContextType = {

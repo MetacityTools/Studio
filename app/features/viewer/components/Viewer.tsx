@@ -1,11 +1,11 @@
 import { Grid, View } from "@adobe/react-spectrum";
 //import Brush from "@spectrum-icons/workflow/Brush";
-import useMetadataModelStyle from "@features/editor-metadata/hooks/useMetadataModelStyle";
-import ActiveColumnToolbar from "@features/editor-toolbar/components/ActiveColumnToolbar";
-import CameraViewToolbar from "@features/editor-toolbar/components/CameraViewToolbar";
-import ColorSchemeToolbar from "@features/editor-toolbar/components/ColorSchemeToolbar";
-import ProjectionToolbar from "@features/editor-toolbar/components/ProjectionToolbar";
-import SelectionToolbar from "@features/editor-toolbar/components/SelectionToolbar";
+import ActiveColumnToolbar from "@features/editor/components/Header/ActiveColumnToolbar";
+import CameraViewToolbar from "@features/editor/components/Header/CameraViewToolbar";
+import ColorSchemeToolbar from "@features/editor/components/Header/ColorSchemeToolbar";
+import ProjectionToolbar from "@features/editor/components/Header/ProjectionToolbar";
+import SelectionToolbar from "@features/editor/components/Header/SelectionToolbar";
+import useMetadataModelStyle from "@features/metadata/hooks/useMetadataModelStyle";
 
 import { CanvasWrapper } from "@features/editor/components/Canvas/CanvasWrapper";
 import { TooltipOverlay } from "@features/editor/components/Canvas/TooltipOverlay";

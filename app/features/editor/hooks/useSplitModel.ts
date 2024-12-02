@@ -15,10 +15,12 @@ export function useSplitModel() {
     async (oldModel: EditorModel, submodels: Set<number>) => {
       const newModels = splitModel(oldModel, submodels);
       if (!newModels) return;
-      await importModels(newModels);
+      await importModels(newModels, {
+        disableShift: true,
+      });
       removeModels([oldModel]);
     },
-    [importModels, removeModels],
+    [importModels, removeModels]
   );
 
   return split;

@@ -19,7 +19,6 @@ import { MdiEyeOff } from "@core/icons/MdiEyeOff";
 import { MdiRename } from "@core/icons/MdiRename";
 import { MdiRulerSquare } from "@core/icons/MdiRulerSquare";
 import { MdiTrash } from "@core/icons/MdiTrash";
-import useModelSelection from "@features/editor-models/hooks/useModelSelection";
 import { EditorModel } from "@features/editor/data/EditorModel";
 import useModelList from "@features/editor/hooks/useModelList";
 import useModelToggleVisibility from "@features/editor/hooks/useModelToggleVisibility";
@@ -28,6 +27,7 @@ import { useRemoveSubmodels } from "@features/editor/hooks/useRemoveSubmodels";
 import { useSelected } from "@features/editor/hooks/useSelected";
 import useSelectedSubmodelCount from "@features/editor/hooks/useSelectedSubmodelCount";
 import { useSplitModel } from "@features/editor/hooks/useSplitModel";
+import useModelSelection from "@features/model/hooks/useModelSelection";
 import Delete from "@spectrum-icons/workflow/Delete";
 import { Key, useCallback, useState } from "react";
 import EditorProjectModelDialog from "./EditorProjectModelDialog";
@@ -99,7 +99,7 @@ function EditorModelList() {
 
   return (
     <PositioningContainer>
-      <Flex direction="column" height="100%" gap="size-100">
+      <Flex direction="column" height="100%">
         <EditorRenameModelDialog close={() => setEditingModel(null)} model={editingModel} open={!!editingModel} />
         <EditorProjectModelDialog
           model={projectionSourceModel}

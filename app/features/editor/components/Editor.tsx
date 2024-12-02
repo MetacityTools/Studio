@@ -6,11 +6,13 @@ import { MdiCube } from "@core/icons/MdiCube";
 import { MdiExport } from "@core/icons/MdiExport";
 import { MdiPalette } from "@core/icons/MdiPalette";
 import { MdiTable } from "@core/icons/MdiTable";
-import EditorExports from "@features/editor-exports/components/EditorExports";
-import EditorMetadataColor from "@features/editor-metadata-color/components/EditorMetadataColor";
-import EditorColumns from "@features/editor-metadata-columns/components/EditorColumns";
-import useMetadataModelStyle from "@features/editor-metadata/hooks/useMetadataModelStyle";
-import EditorModels from "@features/editor-models/components/EditorModels";
+import { TriangleEmpty } from "@core/icons/TriangleEmpty";
+import EditorColumns from "@features/data-columns/components/EditorColumns";
+import EditorExports from "@features/exports/components/EditorExports";
+import useMetadataModelStyle from "@features/metadata/hooks/useMetadataModelStyle";
+import EditorMetadataColor from "@features/model-color/components/EditorMetadataColor";
+import EditorMetadataModels from "@features/model-shader/components/EditorMetadataModels";
+import EditorModels from "@features/model/components/EditorModels";
 import { Allotment } from "allotment";
 import "allotment/dist/style.css";
 import { CanvasWrapper } from "./Canvas/CanvasWrapper";
@@ -54,6 +56,9 @@ function SidePanel() {
             <Item key="style" textValue="Style">
               <MdiPalette />
             </Item>
+            <Item key="shaders" textValue="Shaders">
+              <TriangleEmpty />
+            </Item>
             <Item key="exports" textValue="Exports">
               <MdiExport />
             </Item>
@@ -77,6 +82,9 @@ function SidePanel() {
             </Item>
             <Item key="style">
               <EditorMetadataColor />
+            </Item>
+            <Item key="shaders">
+              <EditorMetadataModels />
             </Item>
             <Item key="exports">
               <EditorExports />

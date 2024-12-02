@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import useMetadataContext from "../../editor-metadata/hooks/useMetadataContext";
+import useMetadataContext from "../../metadata/hooks/useMetadataContext";
 
 export default function useMetadataStats() {
   const { aggregatedRows } = useMetadataContext();

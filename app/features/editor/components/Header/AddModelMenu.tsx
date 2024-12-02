@@ -16,7 +16,7 @@ import { MdiTable } from "@core/icons/MdiTable";
 import { useCallback, useState } from "react";
 import useModelImport from "../../hooks/useModelImport";
 
-export default function EditorAddModelMenu() {
+export default function AddModelMenu() {
   const [isLoadingDialogOpen, setIsLoadingDialogOpen] = useState(false);
   const handleModelLoad = useModelImport();
 

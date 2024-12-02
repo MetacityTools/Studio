@@ -23,13 +23,13 @@ import { MdiArrowRightBold } from "@core/icons/MdiArrowRightBold";
 import { MdiPalette } from "@core/icons/MdiPalette";
 import { MdiTrash } from "@core/icons/MdiTrash";
 import useSelectedSubmodelCount from "@editor/hooks/useSelectedSubmodelCount";
-import ColorPaletteDialog from "@features/editor-metadata-color/components/EditorMetadataColorPaletteDialog";
-import useMetadataAssignValue from "@features/editor-metadata/hooks/useMetadataAssignValue";
-import useMetadataContext from "@features/editor-metadata/hooks/useMetadataContext";
-import useMetadataEdits from "@features/editor-metadata/hooks/useMetadataEdits";
-import useMetadataSelection from "@features/editor-metadata/hooks/useMetadataSelection";
-import useStyles from "@features/editor-metadata/hooks/useStyles";
 import { useEditorContext } from "@features/editor/hooks/useEditorContext";
+import useMetadataAssignValue from "@features/metadata/hooks/useMetadataAssignValue";
+import useMetadataContext from "@features/metadata/hooks/useMetadataContext";
+import useMetadataEdits from "@features/metadata/hooks/useMetadataEdits";
+import useMetadataSelection from "@features/metadata/hooks/useMetadataSelection";
+import useStyles from "@features/metadata/hooks/useStyles";
+import ColorPaletteDialog from "@features/model-color/components/EditorMetadataColorPaletteDialog";
 import { useCallback, useMemo, useState } from "react";
 import DebouncedColorPicker from "./DebouncedColorPicker";
 import AddValueDialog from "./EditorMetadataAddValueDialog";
@@ -88,29 +88,8 @@ function EditorMetadataColorList() {
 
   return (
     <PositioningContainer>
-      <Flex direction="column" height="100%" gap="size-100">
-        {/* <View position="relative" overflow="hidden" marginTop="size-100">
-          <Flex marginY="size-100" direction="row" width="100%" alignItems="center" gap="size-100">
-            <Text flex>{undefinedItems?.count} additional items with undefined value</Text>
-            <DialogTrigger>
-              <TooltipTrigger delay={0} placement="bottom">
-                <ActionButton isDisabled={activeMetadataColumn === undefined}>
-                  <MdiPalette />
-                </ActionButton>
-                <Tooltip>Assign Color Pallete</Tooltip>
-              </TooltipTrigger>
-              {(close) => <ColorPaletteDialog close={close} />}
-            </DialogTrigger>
-            <TooltipTrigger delay={0} placement="bottom">
-              <ToggleButton aria-label="Sort" isSelected={sort} onPress={() => setSort(!sort)}>
-                <MdiSortAscending />
-              </ToggleButton>
-              <Tooltip>Sort values</Tooltip>
-            </TooltipTrigger>
-          </Flex>
-        </View> */}
-
-        <SidebarHeader title="Metadata Values in Active Column">
+      <Flex direction="column" height="100%">
+        <SidebarHeader title="Model Colors">
           <DialogTrigger>
             <TooltipTrigger delay={0} placement="bottom">
               <ActionButton isDisabled={activeMetadataColumn === undefined} isQuiet>
