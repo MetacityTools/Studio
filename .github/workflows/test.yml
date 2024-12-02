@@ -7,7 +7,3 @@ jobs:
   test-studio:
     name: Run studio tests
     uses: ./.github/workflows/test-studio.yml
-
-  test-converter:
-    name: Run coordinates converter tests
-    uses: ./.github/workflows/test-converter.yml
