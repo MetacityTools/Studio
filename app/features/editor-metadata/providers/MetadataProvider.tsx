@@ -1,6 +1,6 @@
 import { useEditorContext } from "@features/editor/hooks/useEditorContext";
 import { createContext, ReactNode, useEffect, useState } from "react";
-import { defaultColor } from "../constants";
+import { defaultColor } from "../../editor-metadata-color/constants";
 import { MetadataAggListItem } from "../type";
 
 type MetadataContextType = {
@@ -12,26 +12,17 @@ type MetadataContextType = {
   selectedValueKeys: Set<string>;
 };
 
-export const MetadataContext = createContext<MetadataContextType>(
-  {} as MetadataContextType,
-);
+export const MetadataContext = createContext<MetadataContextType>({} as MetadataContextType);
 
 export function MetadataProvider({ children }: { children: ReactNode }) {
-  const { models, selection, activeMetadataColumn, styles } =
-    useEditorContext();
+  const { models, selection, activeMetadataColumn, styles } = useEditorContext();
 
   const [columns, setColumns] = useState<{ key: string }[]>([]);
   const [sort, setSort] = useState<boolean>(false);
-  const [aggregatedRows, setAggregatedColumns] = useState<
-    MetadataAggListItem[]
-  >([]);
+  const [aggregatedRows, setAggregatedColumns] = useState<MetadataAggListItem[]>([]);
   const [undefinedItems, setUndefinedItems] = useState<MetadataAggListItem>();
-  const [selectedValueKeys, setSelectedValueKeys] = useState<Set<string>>(
-    new Set(),
-  );
-  const [colorizedAggregatedRows, setColorizedAggregatedRows] = useState<
-    MetadataAggListItem[]
-  >([]);
+  const [selectedValueKeys, setSelectedValueKeys] = useState<Set<string>>(new Set());
+  const [colorizedAggregatedRows, setColorizedAggregatedRows] = useState<MetadataAggListItem[]>([]);
 
   useEffect(() => {
     const columnNames = new Set<string>();
@@ -137,8 +128,7 @@ export function MetadataProvider({ children }: { children: ReactNode }) {
   }, [models, activeMetadataColumn, selection, sort]);
 
   useEffect(() => {
-    if (!activeMetadataColumn)
-      return setColorizedAggregatedRows(aggregatedRows);
+    if (!activeMetadataColumn) return setColorizedAggregatedRows(aggregatedRows);
 
     const columnStyles = styles[activeMetadataColumn];
     if (!columnStyles) return setColorizedAggregatedRows(aggregatedRows);

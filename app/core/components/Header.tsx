@@ -1,19 +1,12 @@
-import { Breadcrumbs, Flex, Item, View } from "@adobe/react-spectrum";
+import { Flex, View } from "@adobe/react-spectrum";
 import { useUser } from "@core/hooks/useUser";
 
-type BreadcrumbItem = {
-  key: string;
-  children: string;
-  link?: string;
-};
-
 type HeaderProps = {
-  nav: BreadcrumbItem[];
   children?: React.ReactNode;
 };
 
 export default function Header(props: HeaderProps) {
-  const { nav, children } = props;
+  const { children } = props;
   const user = useUser();
 
   return (
@@ -27,13 +20,6 @@ export default function Header(props: HeaderProps) {
       backgroundColor="gray-50"
     >
       <Flex direction="row" width="100%" gap="size-10" justifyContent="start" alignItems="center">
-        <Breadcrumbs marginX="size-100">
-          {nav.map((item) => (
-            <Item key={item.key} href={item.link}>
-              {item.children}
-            </Item>
-          ))}
-        </Breadcrumbs>
         {children}
       </Flex>
     </View>

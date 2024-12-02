@@ -1,4 +1,4 @@
-import { Grid, Item, TabList, TabPanels, Tabs, View } from "@adobe/react-spectrum";
+import { Item, TabList, TabPanels, Tabs, View } from "@adobe/react-spectrum";
 import { ToastContainer } from "@react-spectrum/toast";
 //import Brush from "@spectrum-icons/workflow/Brush";
 import { PositioningContainer } from "@core/components/PositioningContainer";
@@ -7,15 +7,10 @@ import { MdiExport } from "@core/icons/MdiExport";
 import { MdiPalette } from "@core/icons/MdiPalette";
 import { MdiTable } from "@core/icons/MdiTable";
 import EditorExports from "@features/editor-exports/components/EditorExports";
-import EditorColumns from "@features/editor-metadata/components/EditorColumns";
-import EditorStyle from "@features/editor-metadata/components/EditorStyle";
+import EditorMetadataColor from "@features/editor-metadata-color/components/EditorMetadataColor";
+import EditorColumns from "@features/editor-metadata-columns/components/EditorColumns";
 import useMetadataModelStyle from "@features/editor-metadata/hooks/useMetadataModelStyle";
 import EditorModels from "@features/editor-models/components/EditorModels";
-import ActiveColumnToolbar from "@features/editor-toolbar/components/ActiveColumnToolbar";
-import CameraViewToolbar from "@features/editor-toolbar/components/CameraViewToolbar";
-import ColorSchemeToolbar from "@features/editor-toolbar/components/ColorSchemeToolbar";
-import ProjectionToolbar from "@features/editor-toolbar/components/ProjectionToolbar";
-import SelectionToolbar from "@features/editor-toolbar/components/SelectionToolbar";
 import { Allotment } from "allotment";
 import "allotment/dist/style.css";
 import { CanvasWrapper } from "./Canvas/CanvasWrapper";
@@ -34,21 +29,6 @@ export default function Editor() {
         <View width="100%" height="100%" position="relative">
           <CanvasWrapper />
           <TooltipOverlay />
-          <View position="absolute" top="size-100" left="size-100">
-            <Grid
-              areas={["projection camera selection scheme style"]}
-              columns={["auto auto auto auto"]}
-              rows={["auto"]}
-              gap="size-100"
-              width="size-100"
-            >
-              <ProjectionToolbar />
-              <CameraViewToolbar />
-              <SelectionToolbar />
-              <ColorSchemeToolbar />
-              <ActiveColumnToolbar />
-            </Grid>
-          </View>
         </View>
       </Allotment.Pane>
     </Allotment>
@@ -96,7 +76,7 @@ function SidePanel() {
               <EditorColumns />
             </Item>
             <Item key="style">
-              <EditorStyle />
+              <EditorMetadataColor />
             </Item>
             <Item key="exports">
               <EditorExports />

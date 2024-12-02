@@ -1,14 +1,7 @@
-import {
-  Button,
-  Checkbox,
-  ComboBox,
-  Flex,
-  Item,
-  Text,
-  View,
-} from "@adobe/react-spectrum";
+import { Button, Checkbox, ComboBox, Flex, Item, Text, View } from "@adobe/react-spectrum";
 import { NoData } from "@core/components/Empty";
 import { PositioningContainer } from "@core/components/PositioningContainer";
+import { toasterOptions } from "@core/defaults";
 import { ToastQueue } from "@react-spectrum/toast";
 import { useCallback, useMemo, useState } from "react";
 import useMetadataContext from "../hooks/useMetadataContext";
@@ -31,29 +24,14 @@ export default function EditorMetadataImport() {
   const { columns } = useMetadataContext();
   const handleMapping = useMetadataMap();
 
-  useMetadataMappingStyle(
-    sourceMetadataColumn,
-    tableData,
-    targetMetadataColumn,
-  );
+  useMetadataMappingStyle(sourceMetadataColumn, tableData, targetMetadataColumn);
 
   const onSubmit = useCallback(() => {
     if (!tableData) return;
 
-    handleMapping(
-      sourceMetadataColumn,
-      tableData,
-      targetMetadataColumn,
-      removeExisting,
-    );
-    ToastQueue.positive("Data mapped successfully");
-  }, [
-    handleMapping,
-    sourceMetadataColumn,
-    tableData,
-    targetMetadataColumn,
-    removeExisting,
-  ]);
+    handleMapping(sourceMetadataColumn, tableData, targetMetadataColumn, removeExisting);
+    ToastQueue.positive("Data mapped successfully", toasterOptions);
+  }, [handleMapping, sourceMetadataColumn, tableData, targetMetadataColumn, removeExisting]);
 
   return (
     <PositioningContainer>
@@ -71,20 +49,13 @@ export default function EditorMetadataImport() {
             </Flex>
           )}
           {tableData && (
-            <Flex
-              height="100%"
-              direction="column"
-              gap="size-100"
-              marginTop="size-200"
-            >
+            <Flex height="100%" direction="column" gap="size-100" marginTop="size-200">
               <Text>Map data from the table based on:</Text>
               <ComboBox
                 label="Identification column"
                 defaultItems={sourceColumns}
                 width="100%"
-                onSelectionChange={(key) =>
-                  setSourceMetadataColumn(key?.toString() || "")
-                }
+                onSelectionChange={(key) => setSourceMetadataColumn(key?.toString() || "")}
                 selectedKey={sourceMetadataColumn}
               >
                 {(item) => <Item key={item.key}>{item.key}</Item>}
@@ -94,26 +65,18 @@ export default function EditorMetadataImport() {
                 label="Existing Metadata column"
                 defaultItems={columns}
                 width="100%"
-                onSelectionChange={(key) =>
-                  setTargetMetadataColumn(key?.toString() || "")
-                }
+                onSelectionChange={(key) => setTargetMetadataColumn(key?.toString() || "")}
                 selectedKey={targetMetadataColumn}
               >
                 {(item) => <Item key={item.key}>{item.key}</Item>}
               </ComboBox>
-              <Checkbox
-                marginTop="size-100"
-                isSelected={removeExisting}
-                onChange={setRemoveExisting}
-              >
+              <Checkbox marginTop="size-100" isSelected={removeExisting} onChange={setRemoveExisting}>
                 Remove all existing data
               </Checkbox>
               <Button
                 variant="accent"
                 marginTop="size-100"
-                isDisabled={
-                  targetMetadataColumn === "" || sourceMetadataColumn === ""
-                }
+                isDisabled={targetMetadataColumn === "" || sourceMetadataColumn === ""}
                 onPress={onSubmit}
               >
                 Map data

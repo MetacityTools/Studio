@@ -3,117 +3,55 @@ import {
   Content,
   Dialog,
   DialogContainer,
+  DialogTrigger,
   Flex,
-  Item,
-  Key,
-  Menu,
-  MenuTrigger,
   ProgressCircle,
   Text,
 } from "@adobe/react-spectrum";
 import Header from "@core/components/Header";
-import { MdiCube } from "@core/icons/MdiCube";
-import { MdiTable } from "@core/icons/MdiTable";
+import AddColumnDialog from "@features/editor-metadata/components/EditorMetadataAddColumnDialog";
+import useMetadataAssignValue from "@features/editor-metadata/hooks/useMetadataAssignValue";
+import ActiveColumnToolbar from "@features/editor-toolbar/components/ActiveColumnToolbar";
+import CameraViewToolbar from "@features/editor-toolbar/components/CameraViewToolbar";
+import ColorSchemeToolbar from "@features/editor-toolbar/components/ColorSchemeToolbar";
+import ProjectionToolbar from "@features/editor-toolbar/components/ProjectionToolbar";
+import SelectionToolbar from "@features/editor-toolbar/components/SelectionToolbar";
 import { useCallback, useState } from "react";
-import { useExportModels } from "../hooks/useExportModels";
-import useModelImport from "../hooks/useModelImport";
-import { useRenderer } from "../hooks/useRender";
+import { useEditorContext } from "../hooks/useEditorContext";
+import EditorAddModelMenu from "./Header/EditorAddModelMenu";
 
 export default function EditorHeader() {
-  const [isLoadingDialogOpen, setIsLoadingDialogOpen] = useState(false);
   const [isSavingDialogOpen, setIsSavingDialogOpen] = useState(false);
+  const { selection } = useEditorContext();
+  const assignValue = useMetadataAssignValue();
 
-  const exportModels = useExportModels();
-  const renderer = useRenderer();
-
-  const saveProject = useCallback(() => {
-    async function handleUploadProjectVersion(dataFile: File, thumbnailFileContents: string) {
-      //TODO offer to download file
-
-      setIsSavingDialogOpen(false);
-    }
-
-    renderer.afterRenderOnce = async () => {
-      //save contents of the canvas to a png file
-      setIsSavingDialogOpen(true);
-      const canvas: HTMLCanvasElement = renderer.window.rawCanvas;
-      const image = canvas.toDataURL("image/png");
-
-      //export project data
-      const dataFile = exportModels();
-      if (!dataFile) return;
-
-      //upload project version
-      void handleUploadProjectVersion(dataFile, image);
-    };
-  }, [renderer, exportModels]);
-
-  const handleModelLoad = useModelImport();
-
-  const handleAction = useCallback(
-    async (action: Key) => {
-      setIsLoadingDialogOpen(true);
-      switch (action) {
-        case "shp":
-          await handleModelLoad([".shp", ".shx", ".dbf", ".prj", ".cpg"]);
-          break;
-        case "gltf":
-          await handleModelLoad([".gltf", ".glb"]);
-          break;
-        case "metacity":
-          await handleModelLoad([".metacity"]);
-          break;
-        //TODO handle CSV import
-      }
-      setIsLoadingDialogOpen(false);
+  const handleCreateColumn = useCallback(
+    (columnName: string, defaultValue: string | number, type: "string" | "number") => {
+      assignValue(defaultValue, columnName, type);
     },
-    [saveProject]
+    [assignValue]
   );
 
   return (
     <>
-      <Header
-        nav={[
-          {
-            key: "metacity-studio",
-            children: "Metacity Studio",
-          },
-        ]}
-      >
-        <MenuTrigger>
-          <ActionButton isQuiet>Import</ActionButton>
-          <Menu onAction={handleAction}>
-            <Item key="shp">
-              <MdiCube />
-              <Text>Import Shapefile</Text>
-            </Item>
-            <Item key="gltf">
-              <MdiCube />
-              <Text>Import GLTF</Text>
-            </Item>
-            <Item key="metacity">
-              <MdiCube />
-              <Text>Import Metacity</Text>
-            </Item>
-            <Item key="csv">
-              <MdiTable />
-              <Text>Import CSV</Text>
-            </Item>
-          </Menu>
-        </MenuTrigger>
+      <Header>
+        <Flex gap="size-100" flex="1" justifyContent="start" marginStart="size-100" alignItems="center">
+          <EditorAddModelMenu />
+          <DialogTrigger>
+            <ActionButton isDisabled={selection.size === 0} isQuiet>
+              <Text>Add Column to Selection</Text>
+            </ActionButton>
+            {(close) => <AddColumnDialog close={close} onSubmit={handleCreateColumn} />}
+          </DialogTrigger>
+        </Flex>
+        <Flex gap="size-300" flex="1" justifyContent="end" marginEnd="size-100" alignItems="center">
+          <ActiveColumnToolbar />
+          <ProjectionToolbar />
+          <CameraViewToolbar />
+          <SelectionToolbar />
+          <ColorSchemeToolbar />
+        </Flex>
       </Header>
-      <DialogContainer onDismiss={() => {}}>
-        {isLoadingDialogOpen && (
-          <Dialog>
-            <Content>
-              <Flex direction="row" gap="size-200" alignItems="center">
-                <ProgressCircle aria-label="Loading…" isIndeterminate />
-                <Text>Loading model data</Text>
-              </Flex>
-            </Content>
-          </Dialog>
-        )}
-      </DialogContainer>
       <DialogContainer onDismiss={() => {}}>
         {isSavingDialogOpen && (
           <Dialog>

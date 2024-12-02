@@ -1,11 +1,9 @@
 import {
   ActionBar,
   ActionBarContainer,
-  ActionButton,
   ActionGroup,
   AlertDialog,
   DialogContainer,
-  DialogTrigger,
   Flex,
   Item,
   Key,
@@ -16,32 +14,33 @@ import {
   TooltipTrigger,
   View,
 } from "@adobe/react-spectrum";
-
+import { NoData } from "@core/components/Empty";
 import { PositioningContainer } from "@core/components/PositioningContainer";
+import SidebarHeader from "@core/components/SidebarHeader";
 import { MdiRename } from "@core/icons/MdiRename";
 import { MdiTrash } from "@core/icons/MdiTrash";
-import { useEditorContext } from "@features/editor/hooks/useEditorContext";
+import useMetadataContext from "@features/editor-metadata/hooks/useMetadataContext";
+import useMetadataEdits from "@features/editor-metadata/hooks/useMetadataEdits";
 import { useCallback, useState } from "react";
-import useMetadataContext from "../hooks/useMetadataContext";
-import useMetadataEdits from "../hooks/useMetadataEdits";
-import AddColumnDialog from "./EditorMetadataAddColumnDialog";
-import { RenameColumnDialog } from "./EditorMetadataRenameColumnDialog";
+import { RenameColumnDialog } from "./EditorRenameColumnDialog";
 
-export default function EditorMetadataColumns() {
-  const { selection } = useEditorContext();
+export default function EditorColumns() {
+  return (
+    <PositioningContainer>
+      <View position="relative" height="100%" overflow="auto" backgroundColor="gray-50">
+        <EditorColumnsList />
+      </View>
+    </PositioningContainer>
+  );
+}
+
+function EditorColumnsList() {
   const { columns } = useMetadataContext();
 
   const [columnsToDelete, setColumnsToDelete] = useState<string[]>([]);
   const [columnToRename, setColumnToRename] = useState<string>();
 
-  const { assignValue, deleteColumns, renameColumn } = useMetadataEdits();
-
-  const handleCreateColumn = useCallback(
-    (columnName: string, defaultValue: string | number, type: "string" | "number") => {
-      assignValue(defaultValue, columnName, type);
-    },
-    [assignValue]
-  );
+  const { deleteColumns, renameColumn } = useMetadataEdits();
 
   const handleRenameColumn = useCallback(
     (newColumnName: string) => {
@@ -82,26 +81,20 @@ export default function EditorMetadataColumns() {
 
   return (
     <PositioningContainer>
-      <Flex direction="column" height="100%" gap="size-100" marginX="size-200">
-        <View width="100%" marginTop="size-200">
-          <Flex gap="size-100" direction="row" alignItems="end">
-            <DialogTrigger>
-              <ActionButton isDisabled={selection.size === 0}>
-                <Text>Add Column</Text>
-              </ActionButton>
-              {(close) => <AddColumnDialog close={close} onSubmit={handleCreateColumn} />}
-            </DialogTrigger>
-          </Flex>
-        </View>
-        <View position="relative" flex height="100%" overflow="hidden" marginBottom="size-200">
+      <Flex direction="column" height="100%" gap="size-100">
+        <SidebarHeader title="Metadata Columns" />
+        <View position="relative" height="100%" overflow="hidden">
           <ActionBarContainer height="100%" width="100%">
             <ListView
+              isQuiet
+              density="spacious"
               aria-label="Column list"
               width="100%"
               height="100%"
               items={columns}
               selectionMode="multiple"
               selectedKeys={selectedKeys}
+              renderEmptyState={() => <NoData heading="No metadata columns available" />}
               onSelectionChange={(keys) => {
                 if (keys === "all") {
                   setSelectedKeys(columns.map((item) => item.key));
@@ -112,7 +105,13 @@ export default function EditorMetadataColumns() {
             >
               {(item) => (
                 <Item key={item.key} textValue={item.key}>
-                  <Text>{item.key}</Text>
+                  <Text
+                    UNSAFE_style={{
+                      fontFamily: "monospace",
+                    }}
+                  >
+                    {item.key}
+                  </Text>
                   <ActionGroup isQuiet onAction={(key) => handleItemAction(key, item.key)}>
                     <TooltipTrigger delay={0} placement="bottom">
                       <Item key="renameColumn" textValue="Rename Column">

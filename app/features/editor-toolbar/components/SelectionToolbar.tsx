@@ -1,10 +1,4 @@
-import {
-  ActionGroup,
-  Item,
-  Tooltip,
-  TooltipTrigger,
-  View,
-} from "@adobe/react-spectrum";
+import { ActionGroup, Item, Tooltip, TooltipTrigger, View } from "@adobe/react-spectrum";
 import { MdiSelectAll } from "@core/icons/MdiSelectAll";
 import { MdiSelectRemove } from "@core/icons/MdiSelectRemove";
 import { useModels } from "@features/editor/hooks/useModels";
@@ -34,18 +28,11 @@ export default function SelectionToolbar() {
       else if (key === "none") deselect();
     },
 
-    [selectAll, deselect],
+    [selectAll, deselect]
   );
 
   return (
-    <View
-      backgroundColor="gray-50"
-      padding="size-50"
-      borderRadius="medium"
-      borderColor="gray-300"
-      borderWidth="thin"
-      gridArea="selection"
-    >
+    <View padding="size-50" borderRadius="medium" gridArea="selection">
       <ActionGroup overflowMode="collapse" onAction={handleAction} isQuiet>
         <TooltipTrigger delay={0} placement="bottom">
           <Item key="all">

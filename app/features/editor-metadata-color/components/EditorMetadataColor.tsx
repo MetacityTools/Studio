@@ -4,7 +4,6 @@ import {
   ActionButton,
   ActionGroup,
   AlertDialog,
-  ComboBox,
   DialogContainer,
   DialogTrigger,
   Flex,
@@ -12,7 +11,6 @@ import {
   Key,
   ListView,
   Text,
-  ToggleButton,
   Tooltip,
   TooltipTrigger,
   View,
@@ -20,33 +18,45 @@ import {
 import { NoData } from "@core/components/Empty";
 
 import { PositioningContainer } from "@core/components/PositioningContainer";
+import SidebarHeader from "@core/components/SidebarHeader";
 import { MdiArrowRightBold } from "@core/icons/MdiArrowRightBold";
 import { MdiPalette } from "@core/icons/MdiPalette";
-import { MdiSortAscending } from "@core/icons/MdiSortAscending";
 import { MdiTrash } from "@core/icons/MdiTrash";
 import useSelectedSubmodelCount from "@editor/hooks/useSelectedSubmodelCount";
+import ColorPaletteDialog from "@features/editor-metadata-color/components/EditorMetadataColorPaletteDialog";
+import useMetadataAssignValue from "@features/editor-metadata/hooks/useMetadataAssignValue";
+import useMetadataContext from "@features/editor-metadata/hooks/useMetadataContext";
+import useMetadataEdits from "@features/editor-metadata/hooks/useMetadataEdits";
+import useMetadataSelection from "@features/editor-metadata/hooks/useMetadataSelection";
+import useStyles from "@features/editor-metadata/hooks/useStyles";
 import { useEditorContext } from "@features/editor/hooks/useEditorContext";
 import { useCallback, useMemo, useState } from "react";
-import useMetadataContext from "../hooks/useMetadataContext";
-import useMetadataEdits from "../hooks/useMetadataEdits";
-import useMetadataSelection from "../hooks/useMetadataSelection";
-import useStyles from "../hooks/useStyles";
 import DebouncedColorPicker from "./DebouncedColorPicker";
 import AddValueDialog from "./EditorMetadataAddValueDialog";
-import ColorPaletteDialog from "./EditorMetadataColorPaletteDialog";
 
-export default function EditorMetadataValues() {
-  const { activeMetadataColumn, setActiveMetadataColumn } = useEditorContext();
+export default function EditorMetadataColor() {
+  return (
+    <PositioningContainer>
+      <View position="relative" height="100%" overflow="auto" backgroundColor="gray-50">
+        <EditorMetadataColorList />
+      </View>
+    </PositioningContainer>
+  );
+}
+
+function EditorMetadataColorList() {
+  const { activeMetadataColumn } = useEditorContext();
   const selectedCount = useSelectedSubmodelCount();
   const { setStyle } = useStyles();
 
   const [addValueDialogOpen, setAddValueDialogOpen] = useState(false);
   const [deleteValuesDialogOpen, setDeleteValuesDialogOpen] = useState(false);
 
-  const { aggregatedRows, undefinedItems, columns, selectedValueKeys, sort, setSort } = useMetadataContext();
+  const { aggregatedRows, selectedValueKeys } = useMetadataContext();
 
   const { handleSelection, select } = useMetadataSelection(selectedValueKeys, activeMetadataColumn);
-  const { assignValue, removeValue } = useMetadataEdits();
+  const assignValue = useMetadataAssignValue();
+  const { removeValue } = useMetadataEdits();
 
   const handleItemAction = useCallback(
     (key: Key, value: string | number) => {
@@ -78,48 +88,47 @@ export default function EditorMetadataValues() {
 
   return (
     <PositioningContainer>
-      <Flex direction="column" height="100%" gap="size-100" marginX="size-200">
-        <View width="100%" marginTop="size-100">
-          <ComboBox
-            label="Metadata column"
-            defaultItems={columns}
-            width="100%"
-            onSelectionChange={(key) => setActiveMetadataColumn(key?.toString() || "")}
-            selectedKey={activeMetadataColumn}
-          >
-            {(item) => <Item key={item.key}>{item.key}</Item>}
-          </ComboBox>
-        </View>
-        {undefinedItems && (
-          <View position="relative" overflow="hidden">
-            <Flex marginY="size-100" direction="row" width="100%" alignItems="center" gap="size-100">
-              <Text flex>{undefinedItems?.count} additional items with undefined value</Text>
-              <DialogTrigger>
-                <TooltipTrigger delay={0} placement="bottom">
-                  <ActionButton isDisabled={activeMetadataColumn === undefined}>
-                    <MdiPalette />
-                  </ActionButton>
-                  <Tooltip>Assign Color Pallete</Tooltip>
-                </TooltipTrigger>
-                {(close) => <ColorPaletteDialog close={close} />}
-              </DialogTrigger>
+      <Flex direction="column" height="100%" gap="size-100">
+        {/* <View position="relative" overflow="hidden" marginTop="size-100">
+          <Flex marginY="size-100" direction="row" width="100%" alignItems="center" gap="size-100">
+            <Text flex>{undefinedItems?.count} additional items with undefined value</Text>
+            <DialogTrigger>
               <TooltipTrigger delay={0} placement="bottom">
-                <ToggleButton aria-label="Sort" isSelected={sort} onPress={() => setSort(!sort)}>
-                  <MdiSortAscending />
-                </ToggleButton>
-                <Tooltip>Sort values</Tooltip>
+                <ActionButton isDisabled={activeMetadataColumn === undefined}>
+                  <MdiPalette />
+                </ActionButton>
+                <Tooltip>Assign Color Pallete</Tooltip>
               </TooltipTrigger>
-            </Flex>
-          </View>
-        )}
-        <View position="relative" flex height="100%" overflow="hidden" marginBottom="size-100">
-          <ActionBarContainer height="100%" width="100%">
+              {(close) => <ColorPaletteDialog close={close} />}
+            </DialogTrigger>
+            <TooltipTrigger delay={0} placement="bottom">
+              <ToggleButton aria-label="Sort" isSelected={sort} onPress={() => setSort(!sort)}>
+                <MdiSortAscending />
+              </ToggleButton>
+              <Tooltip>Sort values</Tooltip>
+            </TooltipTrigger>
+          </Flex>
+        </View> */}
+
+        <SidebarHeader title="Metadata Values in Active Column">
+          <DialogTrigger>
+            <TooltipTrigger delay={0} placement="bottom">
+              <ActionButton isDisabled={activeMetadataColumn === undefined} isQuiet>
+                <MdiPalette />
+              </ActionButton>
+              <Tooltip>Assign Color Pallete</Tooltip>
+            </TooltipTrigger>
+            {(close) => <ColorPaletteDialog close={close} />}
+          </DialogTrigger>
+        </SidebarHeader>
+
+        <View position="relative" overflow="hidden" height="100%">
+          <ActionBarContainer height="100%">
             <ListView
+              isQuiet
+              density="spacious"
               selectionMode="multiple"
               aria-label="Model list"
-              width="100%"
-              height="100%"
-              marginBottom="size-100"
               items={aggregatedRows}
               selectedKeys={selectedValueKeys}
               renderEmptyState={() => <NoData heading="No column selected" />}
@@ -137,18 +146,12 @@ export default function EditorMetadataValues() {
                   </Text>
                   <Text
                     UNSAFE_style={{
+                      fontFamily: "monospace",
                       opacity: record.selected > 0 ? 1 : 0.6,
                     }}
                   >
+                    [{String(record.selected).padStart(4, "0")} of {String(record.count).padStart(4, "0")}]{" "}
                     {record.value}
-                  </Text>
-                  <Text
-                    slot="description"
-                    UNSAFE_style={{
-                      opacity: record.selected > 0 ? 1 : 0.6,
-                    }}
-                  >
-                    {typeof record.value} - {record.count} items, {record.selected} selected{" "}
                   </Text>
                   <ActionGroup
                     isQuiet

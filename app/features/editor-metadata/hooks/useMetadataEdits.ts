@@ -6,38 +6,6 @@ export default function useMetadataEdits() {
   const selected = useSelected();
   const [models, setModels] = useModels();
 
-  const assignValue = useCallback(
-    (
-      value: string | number,
-      columnName?: string,
-      type?: "string" | "number",
-    ) => {
-      if (!columnName) return;
-
-      const numValue =
-        typeof value === "string" && type === "number"
-          ? parseFloat(value)
-          : value;
-      if (typeof numValue === "number" && !isNaN(numValue)) value = numValue;
-
-      for (const [model, submodelIds] of selected) {
-        for (const submodelId of submodelIds) {
-          model.metadata[submodelId] = {
-            ...model.metadata[submodelId],
-            [columnName]: value,
-          };
-        }
-      }
-
-      //here just to trigger a rerender
-      setModels((prev) => {
-        const next = prev.slice();
-        return next;
-      });
-    },
-    [selected, setModels],
-  );
-
   const removeValue = useCallback(
     (columnName?: string) => {
       if (!columnName) return;
@@ -55,7 +23,7 @@ export default function useMetadataEdits() {
         return next;
       });
     },
-    [selected, setModels],
+    [selected, setModels]
   );
 
   const deleteColumns = useCallback(
@@ -75,7 +43,7 @@ export default function useMetadataEdits() {
         return next;
       });
     },
-    [models, setModels],
+    [models, setModels]
   );
 
   const renameColumn = useCallback(
@@ -99,11 +67,10 @@ export default function useMetadataEdits() {
         return next;
       });
     },
-    [models, setModels],
+    [models, setModels]
   );
 
   return {
-    assignValue,
     removeValue,
     deleteColumns,
     renameColumn,

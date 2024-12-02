@@ -9,6 +9,7 @@ import {
   RadioGroup,
   TextField,
 } from "@adobe/react-spectrum";
+import { toasterOptions } from "@core/defaults";
 import { ToastQueue } from "@react-spectrum/toast";
 import { useCallback, useState } from "react";
 
@@ -17,26 +18,23 @@ type AddValueDialogProps = {
   onSubmit: (value: string, type: "string" | "number") => void;
 };
 
-export default function AddValueDialog({
-  close,
-  onSubmit,
-}: AddValueDialogProps) {
+export default function AddValueDialog({ close, onSubmit }: AddValueDialogProps) {
   const [value, setValue] = useState("");
   const [type, setType] = useState<"string" | "number">("string");
 
   const handleSubmit = useCallback(async () => {
     if (!value) {
-      ToastQueue.negative("Value is required");
+      ToastQueue.negative("Value is required", toasterOptions);
       return;
     }
 
     try {
       onSubmit(value, type);
-      ToastQueue.positive("Value added successfully");
+      ToastQueue.positive("Value added successfully", toasterOptions);
       close();
     } catch (error) {
       console.error(error);
-      ToastQueue.negative("Failed to add value");
+      ToastQueue.negative("Failed to add value", toasterOptions);
     }
   }, [value, type, onSubmit, close]);
 

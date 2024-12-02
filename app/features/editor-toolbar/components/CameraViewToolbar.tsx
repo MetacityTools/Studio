@@ -1,11 +1,4 @@
-import {
-  ActionGroup,
-  Item,
-  Selection,
-  Tooltip,
-  TooltipTrigger,
-  View,
-} from "@adobe/react-spectrum";
+import { ActionGroup, Item, Selection, Tooltip, TooltipTrigger, View } from "@adobe/react-spectrum";
 import { CameraView } from "@bananagl/bananagl";
 import { CubeEmpty } from "@core/icons/CubeEmpty";
 import { CubeLeft } from "@core/icons/CubeLeft";
@@ -24,23 +17,15 @@ export default function CameraViewToolbar() {
       if (keys === "all") return;
 
       //get first key
-      const viewMode =
-        (keys.values().next().value as CameraView) ?? CameraView.Free;
+      const viewMode = (keys.values().next().value as CameraView) ?? CameraView.Free;
       setViewMode(viewMode);
     },
 
-    [setViewMode],
+    [setViewMode]
   );
 
   return (
-    <View
-      backgroundColor="gray-50"
-      padding="size-50"
-      borderRadius="medium"
-      borderColor="gray-300"
-      borderWidth="thin"
-      gridArea="camera"
-    >
+    <View padding="size-50" borderRadius="medium" gridArea="camera">
       <ActionGroup
         selectionMode="single"
         overflowMode="collapse"

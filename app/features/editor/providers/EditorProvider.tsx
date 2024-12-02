@@ -3,20 +3,9 @@ import * as GL from "@bananagl/bananagl";
 import { EditorModel } from "@editor/data/EditorModel";
 import { ModelStyle, Style } from "@editor/data/types";
 import { vec3 } from "gl-matrix";
-import {
-  Dispatch,
-  ReactNode,
-  SetStateAction,
-  createContext,
-  useEffect,
-  useState,
-} from "react";
+import { Dispatch, ReactNode, SetStateAction, createContext, useEffect, useState } from "react";
 
-export type SelectFunction = (
-  selection: SelectionType,
-  toggle?: boolean,
-  extend?: boolean,
-) => void;
+export type SelectFunction = (selection: SelectionType, toggle?: boolean, extend?: boolean) => void;
 export type SelectionType = Map<EditorModel, Set<number>>;
 export type Tooltip = { data: any; x: number; y: number } | null;
 
@@ -52,9 +41,7 @@ type EditorContextProps = {
   setViewMode: Dispatch<SetStateAction<GL.CameraView>>;
 };
 
-export const context = createContext<EditorContextProps>(
-  {} as EditorContextProps,
-);
+export const context = createContext<EditorContextProps>({} as EditorContextProps);
 
 export function EditorProvider(props: { children: ReactNode }) {
   const [renderer] = useState(new GL.Renderer());
@@ -70,9 +57,7 @@ export function EditorProvider(props: { children: ReactNode }) {
   const [modelStyles, setModelStyles] = useState<ModelStyle>({});
   const [greyscale, setGreyscale] = useState<boolean>(false);
   const [activeMetadataColumn, setActiveMetadataColumn] = useState<string>("");
-  const [projection, setProjection] = useState<GL.ProjectionType>(
-    GL.ProjectionType.ORTHOGRAPHIC,
-  );
+  const [projection, setProjection] = useState<GL.ProjectionType>(GL.ProjectionType.ORTHOGRAPHIC);
   const [viewMode, setViewMode] = useState<GL.CameraView>(GL.CameraView.Free);
 
   //TODO darkmode load from user device settings

@@ -6,15 +6,13 @@ import {
   Flex,
   Item,
   ListView,
-  TabList,
-  TabPanels,
-  Tabs,
   Text,
   View,
 } from "@adobe/react-spectrum";
 import { NoData } from "@core/components/Empty";
 
 import { PositioningContainer } from "@core/components/PositioningContainer";
+import SidebarHeader from "@core/components/SidebarHeader";
 import { MdiArrowSplitVertical } from "@core/icons/MdiArrowSplitVertical";
 import { MdiEye } from "@core/icons/MdiEye";
 import { MdiEyeOff } from "@core/icons/MdiEyeOff";
@@ -38,22 +36,9 @@ import EditorRenameModelDialog from "./EditorRenameModelDialog";
 export default function EditorModels() {
   return (
     <PositioningContainer>
-      <Tabs height="100%" aria-label="Editor tabs">
-        <View borderBottomWidth="thin" borderBottomColor="light" paddingX="size-200" backgroundColor="gray-50">
-          <TabList>
-            <Item key="models" textValue="Models">
-              <Text>Models</Text>
-            </Item>
-          </TabList>
-        </View>
-        <View position="relative" height="100%" overflow="auto" backgroundColor="gray-50">
-          <TabPanels height="100%" UNSAFE_className="borderless">
-            <Item key="models">
-              <EditorModelList />
-            </Item>
-          </TabPanels>
-        </View>
-      </Tabs>
+      <View position="relative" height="100%" overflow="auto" backgroundColor="gray-50">
+        <EditorModelList />
+      </View>
     </PositioningContainer>
   );
 }
@@ -114,19 +99,19 @@ function EditorModelList() {
 
   return (
     <PositioningContainer>
-      <Flex direction="column" height="100%" gap="size-100" marginX="size-200">
-        {/* <View position="relative" overflow="hidden" marginTop="size-200">
-          <EditorAddModeButton />
-        </View> */}
+      <Flex direction="column" height="100%" gap="size-100">
         <EditorRenameModelDialog close={() => setEditingModel(null)} model={editingModel} open={!!editingModel} />
         <EditorProjectModelDialog
           model={projectionSourceModel}
           open={!!projectionSourceModel}
           close={() => setProjectionSourceModel(null)}
         />
-        <View position="relative" flex height="100%" overflow="hidden" marginBottom="size-100" marginTop="size-200">
+        <SidebarHeader title="Models" />
+        <View position="relative" height="100%" overflow="hidden">
           <ActionBarContainer height="100%" width="100%">
             <ListView
+              isQuiet
+              density="spacious"
               selectionMode="multiple"
               aria-label="Model list"
               width="100%"
@@ -141,19 +126,21 @@ function EditorModelList() {
                 <Item key={model.key} textValue={model.item.name}>
                   <Text
                     UNSAFE_style={{
+                      fontFamily: "monospace",
                       opacity: model.selectedSubmodels > 0 ? 1 : 0.6,
                     }}
                   >
-                    {model.item.name}
+                    [{String(model.selectedSubmodels).padStart(4, "0")} of{" "}
+                    {String(model.totalSubmodels).padStart(4, "0")}] {model.item.name}
                   </Text>
-                  <Text
+                  {/* <Text
                     slot="description"
                     UNSAFE_style={{
                       opacity: model.selectedSubmodels > 0 ? 1 : 0.6,
                     }}
                   >
                     {model.selectedSubmodels} of {model.totalSubmodels} submodels selected
-                  </Text>
+                  </Text> */}
                   <ActionGroup onAction={(key) => dispatchAction(model.item, key)}>
                     <Item key="delete" textValue="Delete">
                       <MdiTrash />

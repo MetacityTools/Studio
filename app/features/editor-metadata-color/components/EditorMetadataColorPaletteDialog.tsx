@@ -10,6 +10,7 @@ import {
   Text,
   View,
 } from "@adobe/react-spectrum";
+import { toasterOptions } from "@core/defaults";
 import { Style } from "@features/editor/data/types";
 import { useEditorContext } from "@features/editor/hooks/useEditorContext";
 import { parseColor } from "@react-spectrum/color";
@@ -48,8 +49,7 @@ export default function ColorPaletteDialog({ close }: AddValueDialogProps) {
         const next: Style = { ...prev };
 
         //get colorizer function
-        const mappingRecord =
-          colorMaps.find(([name]) => name === value) ?? NoneMapping;
+        const mappingRecord = colorMaps.find(([name]) => name === value) ?? NoneMapping;
         const colorizer = mappingRecord[1];
 
         //get active style column
@@ -60,11 +60,7 @@ export default function ColorPaletteDialog({ close }: AddValueDialogProps) {
           const value = row.value;
           //if value is number, apply color based on range
           if (typeof value === "number") {
-            const indicator = clamp(
-              (value - range.start) / (range.end - range.start),
-              0,
-              1,
-            );
+            const indicator = clamp((value - range.start) / (range.end - range.start), 0, 1);
             const color = colorizer(indicator);
             const colorParsed = parseColor(color).toFormat("rgb");
             column[value] = {
@@ -95,11 +91,11 @@ export default function ColorPaletteDialog({ close }: AddValueDialogProps) {
         return next;
       });
 
-      ToastQueue.positive("Color map applied successfully");
+      ToastQueue.positive("Color map applied successfully", toasterOptions);
       close();
     } catch (error) {
       console.error(error);
-      ToastQueue.negative("Applying color map failed");
+      ToastQueue.negative("Applying color map failed", toasterOptions);
     }
   }, [value, close, setStyles, activeMetadataColumn, aggregatedRows, range]);
 
@@ -120,8 +116,7 @@ export default function ColorPaletteDialog({ close }: AddValueDialogProps) {
   const mappedGradientCss = useMemo(() => {
     if (value === "none") return undefined;
     if (stats.numberCount === 0) return undefined;
-    const mappingRecord =
-      colorMaps.find(([name]) => name === value) ?? NoneMapping;
+    const mappingRecord = colorMaps.find(([name]) => name === value) ?? NoneMapping;
 
     const colorizer = mappingRecord[1];
     const { min, max } = stats;
@@ -146,10 +141,7 @@ export default function ColorPaletteDialog({ close }: AddValueDialogProps) {
     <Dialog onDismiss={close}>
       <Heading>Pick color palette</Heading>
       <Content>
-        <Text>
-          Select color palette. The selected palette will be applied to the
-          active data column.
-        </Text>
+        <Text>Select color palette. The selected palette will be applied to the active data column.</Text>
         <Grid
           columns={repeat("auto-fit", "size-600")}
           autoRows="size-600"
@@ -178,9 +170,7 @@ export default function ColorPaletteDialog({ close }: AddValueDialogProps) {
             <Heading level={4} marginBottom="size-50">
               Number values
             </Heading>
-            <Text>
-              {stats.numberCount} unique number values found in the column.
-            </Text>
+            <Text>{stats.numberCount} unique number values found in the column.</Text>
             <View marginTop="size-100">
               <RangeSlider
                 label="Mappable range"
@@ -221,8 +211,8 @@ export default function ColorPaletteDialog({ close }: AddValueDialogProps) {
               String values
             </Heading>
             <Text>
-              {stats.stringCount} unique string values found in the column.
-              Colors will be assigned randomly to each unique string value.
+              {stats.stringCount} unique string values found in the column. Colors will be assigned randomly to each
+              unique string value.
             </Text>
           </View>
         )}
@@ -246,12 +236,7 @@ type ColorMapButtonProps = {
   selected: boolean;
 };
 
-function ColorMapButton({
-  name,
-  onClick,
-  selected,
-  background,
-}: ColorMapButtonProps) {
+function ColorMapButton({ name, onClick, selected, background }: ColorMapButtonProps) {
   return (
     <button
       onClick={onClick}
@@ -261,9 +246,8 @@ function ColorMapButton({
         color: "inherit",
         borderRadius: "var(--spectrum-alias-border-radius-regular)",
         cursor: "pointer",
-        boxShadow: selected
-          ? "0 0 0 2px var(--spectrum-global-color-gray-800)"
-          : "none",
+        boxShadow: selected ? "0 0 0 2px var(--spectrum-global-color-gray-800)" : "none",
+        WebkitBoxShadow: selected ? "0 0 0 2px var(--spectrum-global-color-gray-800)" : "none",
         background: background,
       }}
     />

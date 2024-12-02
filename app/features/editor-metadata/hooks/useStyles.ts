@@ -9,20 +9,25 @@ export default function useStyles() {
   const setStyle = useCallback(
     (column: string, value: string | number, color: Color) => {
       setStyles((prev) => {
-        const next = { ...prev };
-        const columnValues = next[column] ?? {};
+        const columnValues = prev[column] ?? {};
 
         const nextColor = {
           code: color.toString("css"),
           vec: getColor(color),
         };
 
+        //check if the value is already in the column
+        if (columnValues[value]?.code === nextColor.code) {
+          return prev;
+        }
+
+        const next = { ...prev };
         columnValues[value] = nextColor;
         next[column] = columnValues;
         return next;
       });
     },
-    [setStyles],
+    [setStyles]
   );
 
   return { setStyle };

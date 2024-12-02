@@ -1,3 +1,4 @@
+import { toasterOptions } from "@core/defaults";
 import { useImportModels } from "@features/editor/hooks/useImportModels";
 import { load } from "@features/editor/utils/formats/loader";
 import { ToastQueue } from "@react-spectrum/toast";
@@ -11,7 +12,7 @@ export default function useModelImport() {
       if (!files) return;
       const modelList = Array.from(files);
       if (modelList.length === 0) {
-        ToastQueue.info("No models selected");
+        ToastQueue.info("No models selected", toasterOptions);
         return;
       }
       const fileMap = new Map<string, Blob>();
@@ -29,18 +30,23 @@ export default function useModelImport() {
     (acceptedFormats: string[]) =>
       new Promise<void>((resolve, reject) => {
         const input = document.createElement("input");
+        document.body.appendChild(input);
         input.type = "file";
         input.accept = acceptedFormats.join(",");
         input.multiple = true;
-        input.onchange = async () => {
+
+        input.addEventListener("change", async () => {
           await handleSubmit(input.files);
           input.remove();
           resolve();
-        };
-        input.oncancel = () => {
+        });
+
+        input.addEventListener("cancel", () => {
+          console.log("cancel");
           input.remove();
           resolve();
-        };
+        });
+
         input.click();
       }),
     [handleSubmit]

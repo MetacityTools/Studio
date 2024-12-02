@@ -1,11 +1,4 @@
-import {
-  ActionGroup,
-  Item,
-  Selection,
-  Tooltip,
-  TooltipTrigger,
-  View,
-} from "@adobe/react-spectrum";
+import { ActionGroup, Item, Selection, Tooltip, TooltipTrigger, View } from "@adobe/react-spectrum";
 import { ProjectionType } from "@bananagl/bananagl";
 import { useEditorContext } from "@features/editor/hooks/useEditorContext";
 import { useCallback } from "react";
@@ -21,24 +14,15 @@ export default function ProjectionToolbar() {
       if (keys === "all") return;
 
       //get first key
-      const key =
-        (keys.values().next().value as ProjectionType) ??
-        ProjectionType.ORTHOGRAPHIC;
+      const key = (keys.values().next().value as ProjectionType) ?? ProjectionType.ORTHOGRAPHIC;
 
       setProjection(key);
     },
-    [setProjection],
+    [setProjection]
   );
 
   return (
-    <View
-      backgroundColor="gray-50"
-      padding="size-50"
-      borderRadius="medium"
-      borderColor="gray-300"
-      borderWidth="thin"
-      gridArea="projection"
-    >
+    <View padding="size-50" borderRadius="medium" gridArea="projection">
       <ActionGroup
         selectionMode="single"
         overflowMode="collapse"

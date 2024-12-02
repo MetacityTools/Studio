@@ -9,39 +9,33 @@ import {
   RadioGroup,
   TextField,
 } from "@adobe/react-spectrum";
+import { toasterOptions } from "@core/defaults";
 import { ToastQueue } from "@react-spectrum/toast";
 import { useCallback, useState } from "react";
 
 type AddColumnDialogProps = {
   close: () => void;
-  onSubmit: (
-    name: string,
-    defaultValue: string | number,
-    defaultType: "string" | "number",
-  ) => void;
+  onSubmit: (name: string, defaultValue: string | number, defaultType: "string" | "number") => void;
 };
 
-export default function AddColumnDialog({
-  close,
-  onSubmit,
-}: AddColumnDialogProps) {
+export default function AddColumnDialog({ close, onSubmit }: AddColumnDialogProps) {
   const [name, setName] = useState("");
   const [defaultValue, setDefaultValue] = useState("");
   const [defaultType, setDefaultType] = useState<"string" | "number">("string");
 
   const handleSubmit = useCallback(async () => {
     if (!name) {
-      ToastQueue.negative("Column name is required");
+      ToastQueue.negative("Column name is required", toasterOptions);
       return;
     }
 
     try {
       onSubmit(name, defaultValue, defaultType);
-      ToastQueue.positive("Column created successfully");
+      ToastQueue.positive("Column created successfully", toasterOptions);
       close();
     } catch (error) {
       console.error(error);
-      ToastQueue.negative("Failed to create column");
+      ToastQueue.negative("Failed to create column", toasterOptions);
     }
   }, [name, defaultValue, defaultType, onSubmit, close]);
 
